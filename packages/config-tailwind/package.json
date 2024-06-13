@@ -5,8 +5,12 @@
   "exports": {
     ".": "./tailwind.config.ts"
   },
+  "dependencies": {
+    "@tailwindcss/typography": "^0.5.13",
+    "mini-svg-data-uri": "^1.4.4",
+    "tailwindcss-animate": "^1.0.7"
+  },
   "devDependencies": {
-    "@repo/typescript-config": "workspace:*",
     "tailwindcss": "^3.4.1"
   }
 }

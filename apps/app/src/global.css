@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/**
+ * Patch to make browser autofill color white
+ * https://github.com/tailwindlabs/tailwindcss/discussions/8679
+ */
+.text-input {
+  @apply autofill:shadow-[inset_0_0_0px_1000px_#fff];
+}
+
+/**
+ * Editor stuff
+ */
+.revert-tailwind {
+  all: initial;
+  font-size: initial;
+}
+
+.revert-tailwind * {
+  font-size: revert;
+  margin: revert;
+  font-weight: revert;
+  cursor: pointer;
+}
+
+.revert-tailwind *[data-selected] {
+  @apply outline-2 outline-blue-600 outline-dashed bg-blue-600/25;
+}
