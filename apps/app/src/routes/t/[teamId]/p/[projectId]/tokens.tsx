@@ -44,7 +44,7 @@ export default function Tokens() {
 
   return (
     <main class="p-8 flex flex-col grow gap-8 max-w-2xl">
-      <Title>API tokens - Voramail</Title>
+      <Title>API tokens - Volamail</Title>
 
       <div class="flex flex-col gap-2">
         <h1 class="text-3xl font-bold">API Tokens</h1>

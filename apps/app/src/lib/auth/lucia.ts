@@ -31,4 +31,5 @@ declare module "lucia" {
 interface DatabaseUserAttributes {
   email: string;
   githubId: string;
+  personalTeamId: string;
 }

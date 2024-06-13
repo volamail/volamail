@@ -4,10 +4,16 @@ import {
   type RouteSectionProps,
   createAsync,
 } from "@solidjs/router";
-import { PlusIcon } from "lucide-solid";
+import { PlusIcon, Trash2Icon } from "lucide-solid";
 import { For, Show, Suspense, createSignal } from "solid-js";
-import { createAddress } from "~/lib/addresses/actions";
+import { createAddress, deleteAddress } from "~/lib/addresses/actions";
 import { getTeamAddresses } from "~/lib/addresses/queries";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogTitle,
+} from "~/lib/ui/components/alert-dialog";
 import { Button } from "~/lib/ui/components/button";
 import {
   Dialog,
@@ -29,15 +35,18 @@ export const route: RouteDefinition = {
 export default function AddressesPage(props: RouteSectionProps) {
   const addresses = createAsync(() => getTeamAddresses(props.params.teamId));
 
-  const [dialogOpen, setDialogOpen] = createSignal(false);
+  const [createAddressDialogOpen, setCreateAddressDialogOpen] =
+    createSignal(false);
+
+  const [addressIdToDelete, setAddressIdToDelete] = createSignal<string>();
 
   const createAddressMutation = useMutation({
     action: createAddress,
     onSuccess() {
-      setDialogOpen(false);
+      setCreateAddressDialogOpen(false);
 
       showToast({
-        title: "Check your email for verification.",
+        title: "Check your email for verification",
         variant: "success",
       });
     },
@@ -49,9 +58,27 @@ export default function AddressesPage(props: RouteSectionProps) {
     },
   });
 
+  const deleteAddressMutation = useMutation({
+    action: deleteAddress,
+    onSuccess() {
+      setAddressIdToDelete();
+
+      showToast({
+        title: "Address deleted",
+        variant: "success",
+      });
+    },
+    onError(e) {
+      showToast({
+        title: "Unable to delete address",
+        variant: "error",
+      });
+    },
+  });
+
   return (
-    <main class="p-8 flex flex-col grow gap-8 max-w-2xl">
-      <Title>Addresses - Voramail</Title>
+    <main class="p-8 flex flex-col grow gap-4 max-w-2xl">
+      <Title>Addresses - Volamail</Title>
 
       <div class="flex flex-col gap-2">
         <h1 class="text-3xl font-bold">Addresses</h1>
@@ -85,7 +112,7 @@ export default function AddressesPage(props: RouteSectionProps) {
           <ul class="flex flex-col gap-2 grow">
             <For each={addresses()}>
               {(address) => (
-                <li class="border border-gray-300 bg-gray-50 rounded-lg px-3 py-2 text-sm">
+                <li class="border flex justify-between border-gray-300 bg-gray-50 rounded-lg px-3 py-2 text-sm">
                   <div class="flex flex-col gap-0.5">
                     <p class="text-sm font-semibold">{address.address}</p>
                     <Show
@@ -103,13 +130,26 @@ export default function AddressesPage(props: RouteSectionProps) {
                       </div>
                     </Show>
                   </div>
+                  <Button
+                    color="destructive"
+                    variant="ghost"
+                    even
+                    class="self-start"
+                    icon={() => <Trash2Icon class="size-4" />}
+                    aria-label="Delete address"
+                    type="button"
+                    onClick={() => setAddressIdToDelete(address.id)}
+                  />
                 </li>
               )}
             </For>
           </ul>
         </Show>
 
-        <Dialog open={dialogOpen()} onOpenChange={setDialogOpen}>
+        <Dialog
+          open={createAddressDialogOpen()}
+          onOpenChange={setCreateAddressDialogOpen}
+        >
           <DialogTrigger
             as={Button}
             class="self-start"
@@ -157,6 +197,53 @@ export default function AddressesPage(props: RouteSectionProps) {
             </form>
           </DialogContent>
         </Dialog>
+
+        <AlertDialog
+          open={addressIdToDelete() !== undefined}
+          onOpenChange={() => setAddressIdToDelete()}
+        >
+          <AlertDialogContent class="flex flex-col gap-6">
+            <div class="flex flex-col gap-2">
+              <AlertDialogTitle>Delete address</AlertDialogTitle>
+              <AlertDialogDescription>
+                Are you sure you want to delete this address?
+              </AlertDialogDescription>
+            </div>
+
+            <form
+              method="post"
+              action={deleteAddress}
+              class="flex gap-2 justify-end"
+            >
+              <input type="hidden" name="teamId" value={props.params.teamId} />
+
+              <input
+                type="hidden"
+                name="addressId"
+                value={addressIdToDelete()}
+              />
+
+              <Button
+                type="button"
+                variant="outline"
+                class="self-end"
+                onClick={() => setAddressIdToDelete()}
+              >
+                Cancel
+              </Button>
+
+              <Button
+                type="submit"
+                color="destructive"
+                class="self-end"
+                icon={() => <Trash2Icon class="size-4" />}
+                loading={deleteAddressMutation.pending}
+              >
+                Delete
+              </Button>
+            </form>
+          </AlertDialogContent>
+        </AlertDialog>
       </Suspense>
     </main>
   );

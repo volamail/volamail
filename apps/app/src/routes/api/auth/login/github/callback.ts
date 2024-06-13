@@ -84,7 +84,7 @@ export async function GET({ nativeEvent }: APIEvent) {
 
       return sendRedirect(
         nativeEvent,
-        `/dashboard/t/${project.teamId || 0}/p/${project.id}/emails`
+        `/t/${project.teamId || 0}/p/${project.id}/emails`
       );
     }
 
@@ -137,7 +137,7 @@ export async function GET({ nativeEvent }: APIEvent) {
 
     return sendRedirect(
       nativeEvent,
-      `/dashboard/t/${defaultTeamId}/p/${defaultProjectId}/emails`
+      `/t/${defaultTeamId}/p/${defaultProjectId}/emails`
     );
   } catch (e) {
     if (e instanceof OAuth2RequestError) {

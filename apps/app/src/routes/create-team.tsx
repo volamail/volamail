@@ -28,7 +28,7 @@ export default function CreateTeam() {
 
   return (
     <GridBgContainer>
-      <Title>Create team - Voramail</Title>
+      <Title>Create team - Volamail</Title>
       <form
         method="post"
         action={createTeam}

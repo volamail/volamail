@@ -12,7 +12,7 @@ export default function Login() {
 
   return (
     <GridBgContainer>
-      <Title>Login - Voramail</Title>
+      <Title>Login - Volamail</Title>
       <form
         action={loginWithGithub}
         method="post"

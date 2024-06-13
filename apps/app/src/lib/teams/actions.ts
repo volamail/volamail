@@ -52,5 +52,5 @@ export const createTeam = action(async (formData: FormData) => {
     return { teamId, projectId };
   });
 
-  throw redirect(`/dashboard/t/${teamId}/p/${projectId}/templates`);
+  throw redirect(`/t/${teamId}/p/${projectId}/templates`);
 });

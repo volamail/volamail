@@ -53,7 +53,7 @@ export default function DashboardLayout(props: Props) {
           <ul class="flex flex-col gap-1 grow">
             <li>
               <NavLink
-                href={`/dashboard/t/${params.teamId}/p/${params.projectId}/emails`}
+                href={`/t/${params.teamId}/p/${params.projectId}/emails`}
               >
                 <Table2Icon class="size-4" />
                 Emails
@@ -61,7 +61,7 @@ export default function DashboardLayout(props: Props) {
             </li>
             <li>
               <NavLink
-                href={`/dashboard/t/${params.teamId}/p/${params.projectId}/addresses`}
+                href={`/t/${params.teamId}/p/${params.projectId}/addresses`}
               >
                 <AtSignIcon class="size-4" />
                 Addresses
@@ -69,7 +69,7 @@ export default function DashboardLayout(props: Props) {
             </li>
             <li>
               <NavLink
-                href={`/dashboard/t/${params.teamId}/p/${params.projectId}/tokens`}
+                href={`/t/${params.teamId}/p/${params.projectId}/tokens`}
               >
                 <KeyIcon class="size-4" />
                 API tokens

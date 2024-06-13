@@ -14,7 +14,7 @@ export default function Dashboard() {
 
   return (
     <main class="grow p-8 flex flex-col gap-1.5 max-w-2xl">
-      <Title>Emails - Voramail</Title>
+      <Title>Emails - Volamail</Title>
 
       <div class="flex flex-col gap-2">
         <h1 class="text-3xl font-bold">Emails</h1>
@@ -27,7 +27,7 @@ export default function Dashboard() {
       <Suspense
         fallback={
           <div class="flex flex-col gap-2">
-            <div class="bg-gray-100 animate-pulse rounded-md h-12 p-4 mb-1 mt-8">
+            <div class="bg-gray-100 animate-pulse rounded-md h-12 p-4">
               <div class="bg-gray-300 animate-pulse rounded-md h-4 w-48" />
             </div>
             <div class="bg-gray-100 animate-pulse rounded-md h-12 p-4">

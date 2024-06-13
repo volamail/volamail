@@ -1,57 +1,21 @@
-import {
-  createAsync,
-  type RouteDefinition,
-  type RouteSectionProps,
-} from "@solidjs/router";
+// @refresh reload
 import { Title } from "@solidjs/meta";
-import { createEffect, createSignal } from "solid-js";
+import { createSignal } from "solid-js";
+import type { RouteSectionProps } from "@solidjs/router";
 import { CircleCheckBigIcon, SendIcon } from "lucide-solid";
 
 import { Input } from "~/lib/ui/components/input";
 import { sendTestMail } from "~/lib/mail/actions";
 import { Button } from "~/lib/ui/components/button";
-import { getTemplate } from "~/lib/templates/queries";
-import { editTemplate } from "~/lib/templates/actions";
 import { showToast } from "~/lib/ui/components/toasts";
 import { Textarea } from "~/lib/ui/components/textarea";
 import { Editor } from "~/lib/editor/components/editor";
+import { createTemplate } from "~/lib/templates/actions";
 import { useMutation } from "~/lib/ui/hooks/useMutation";
 import { Breadcrumbs } from "~/lib/ui/components/breadcrumbs";
 
-export const route: RouteDefinition = {
-  load({ params }) {
-    void getTemplate(params.id);
-  },
-};
-
-export default function EditTemplate(props: RouteSectionProps) {
-  const template = createAsync(() => getTemplate(props.params.id), {
-    deferStream: true,
-  });
-
-  const [html, setHtml] = createSignal(template()?.body);
-
-  createEffect(() => {
-    if (template()?.body && !html()) {
-      setHtml(template()?.body);
-    }
-  });
-
-  const saveAction = useMutation({
-    action: editTemplate,
-    onSuccess() {
-      showToast({
-        title: "Changes saved!",
-        variant: "success",
-      });
-    },
-    onError() {
-      showToast({
-        title: "Unable to save changes",
-        variant: "error",
-      });
-    },
-  });
+export default function NewTemplate(props: RouteSectionProps) {
+  const [html, setHtml] = createSignal("");
 
   const sendTestMailAction = useMutation({
     action: sendTestMail,
@@ -71,11 +35,11 @@ export default function EditTemplate(props: RouteSectionProps) {
 
   return (
     <main class="h-dvh flex flex-col grow bg-gray-100">
-      <Title>Edit email - Voramail</Title>
+      <Title>New email - Volamail</Title>
 
       <div class="flex justify-between items-center px-4 py-3 border-b gap-8 border-gray-200 text-sm bg-white">
         <Breadcrumbs
-          crumbs={[{ label: "Emails", href: ".." }, { label: "Edit email" }]}
+          crumbs={[{ label: "Emails", href: ".." }, { label: "New email" }]}
         />
 
         <div class="flex gap-2">
@@ -83,20 +47,18 @@ export default function EditTemplate(props: RouteSectionProps) {
             variant="outline"
             type="submit"
             icon={() => <SendIcon class="size-4" />}
-            form="edit-email-form"
+            form="create-email-form"
             formAction={sendTestMail}
             loading={sendTestMailAction.pending}
           >
             Send test mail
           </Button>
-
           <Button
             icon={() => <CircleCheckBigIcon class="size-4" />}
             type="submit"
-            form="edit-email-form"
-            loading={saveAction.pending}
+            form="create-email-form"
           >
-            Save changes
+            Create email
           </Button>
         </div>
       </div>
@@ -104,8 +66,8 @@ export default function EditTemplate(props: RouteSectionProps) {
       <div class="flex h-full">
         <form
           method="post"
-          id="edit-email-form"
-          action={editTemplate}
+          id="create-email-form"
+          action={createTemplate}
           class="bg-white h-full border-r p-4 w-72 gap-4 flex flex-col"
         >
           <input
@@ -125,10 +87,8 @@ export default function EditTemplate(props: RouteSectionProps) {
               name="slug"
               id="slug"
               required
-              value={template()?.slug}
             />
           </div>
-
           <div class="flex flex-col gap-1">
             <label for="subject" class="font-medium text-sm">
               Subject
@@ -139,7 +99,6 @@ export default function EditTemplate(props: RouteSectionProps) {
               id="subject"
               resizeable
               required
-              value={template()?.subject}
             />
           </div>
 

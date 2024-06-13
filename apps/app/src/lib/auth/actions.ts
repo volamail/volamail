@@ -47,5 +47,5 @@ export const logout = action(async () => {
     lucia.createBlankSessionCookie().serialize()
   );
 
-  throw redirect("/");
+  throw redirect("/login");
 }, "user");

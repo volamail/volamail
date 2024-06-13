@@ -5,7 +5,7 @@ export function requireUser() {
   const event = getRequestEvent();
 
   if (!event) {
-    throw new Error("[voramail] Requested event outside of a request");
+    throw new Error("[volamail] Requested event outside of a request");
   }
 
   const user = event.locals.user;

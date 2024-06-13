@@ -53,7 +53,7 @@ export function ProjectSelector() {
         </For>
 
         <A
-          href="/dashboard/create-team"
+          href="/create-team"
           class={buttonVariants({
             class: "m-2 justify-center rounded-md",
           })}
@@ -74,7 +74,7 @@ function ProjectsNavigation(props: TeamsProjectsProps) {
   const params = useParams();
   const location = useLocation();
 
-  const currentDashboardSection = location.pathname.split("/").slice(6)[0];
+  const currentDashboardSection = location.pathname.split("/").slice(5)[0];
 
   return (
     <div class="px-2 pt-4 pb-2 flex flex-col gap-1">
@@ -84,9 +84,7 @@ function ProjectsNavigation(props: TeamsProjectsProps) {
           {(project) => (
             <li class="text-sm w-full">
               <A
-                href={`/dashboard/t/${project.teamId || 0}/p/${
-                  project.id
-                }/${currentDashboardSection}`}
+                href={`/t/${project.teamId}/p/${project.id}/${currentDashboardSection}`}
                 class={buttonVariants({
                   variant: "ghost",
                   class: "rounded-md justify-between px-2.5",
