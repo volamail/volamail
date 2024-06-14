@@ -5,8 +5,8 @@ export const github = new GitHub(
   env.GITHUB_CLIENT_ID,
   env.GITHUB_CLIENT_SECRET,
   {
-    redirectURI: import.meta.env.DEV
-      ? "http://localhost:3000/api/auth/login/github/callback"
-      : `https://${env.VERCEL_PROJECT_PRODUCTION_URL}/api/auth/login/github/callback`,
+    redirectURI: import.meta.env.PROD
+      ? `https://${env.SITE_URL}/api/auth/login/github/callback`
+      : "http://localhost:3000/api/auth/login/github/callback",
   }
 );

@@ -1,0 +1,23 @@
+{
+  "name": "marketing-site",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.7.0",
+    "@astrojs/solid-js": "^4.3.0",
+    "@astrojs/tailwind": "^5.1.0",
+    "@repo/tailwind-config": "workspace:*",
+    "astro": "^4.10.2",
+    "lucide-solid": "^0.378.0",
+    "solid-js": "^1.8.17",
+    "tailwindcss": "^3.4.4",
+    "typescript": "^5.4.5"
+  }
+}

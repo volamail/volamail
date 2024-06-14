@@ -4,7 +4,7 @@ import { action, redirect } from "@solidjs/router";
 import { appendHeader, createError, setCookie } from "vinxi/http";
 
 import { lucia } from "./lucia";
-import { github } from "~/lib/auth/github";
+import { github } from "./github";
 
 export const loginWithGithub = action(async () => {
   "use server";
@@ -19,7 +19,7 @@ export const loginWithGithub = action(async () => {
 
   setCookie(nativeEvent, "github_oauth_state", state, {
     path: "/",
-    secure: !import.meta.env.DEV,
+    secure: import.meta.env.PROD,
     httpOnly: true,
     sameSite: "lax",
     maxAge: 60 * 10,

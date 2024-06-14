@@ -1,0 +1,51 @@
+---
+import { ArrowRightIcon } from "lucide-solid";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>Simple email for everyone - Volamail</title>
+  </head>
+  <body>
+    <div
+      class="flex flex-col h-dvh justify-center items-center bg-grid-black/5"
+    >
+      <div
+        class="absolute pointer-events-none inset-0 flex items-center justify-center bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,white)]"
+      >
+      </div>
+
+      <div
+        class="max-w-5xl w-full flex justify-between items-center p-8 relative"
+      >
+        <div class="flex flex-col gap-4 max-w-md">
+          <h1 class="text-5xl font-black text-left">
+            Simple email
+            <br /> for everyone
+          </h1>
+          <p class="text-left text-gray-700">
+            Write email templates with the help of AI and send them with an API
+            call. E-mail shouldn't be so difficult.
+          </p>
+
+          <a
+            href="https://app.volamail.com/login"
+            class="py-2 rounded-full self-start px-4 mt-8 bg-black text-white inline-flex gap-2 items-center text-sm cursor-default hover:bg-gray-600 transition-colors"
+          >
+            Sign in <ArrowRightIcon class="size-4" />
+          </a>
+        </div>
+        <img
+          src="/assets/mockup.png"
+          class="md:opacity-100 opacity-20 w-96 absolute top-1/2 -translate-y-1/2 right-0"
+          alt=""
+        />
+      </div>
+    </div>
+  </body>
+</html>

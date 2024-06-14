@@ -12,10 +12,10 @@ import type { APIEvent } from "@solidjs/start/server";
 
 import { db } from "~/lib/db";
 import { lucia } from "~/lib/auth/lucia";
-import { github } from "~/lib/auth/github";
 import { getUserProjects } from "~/lib/projects/utils";
-import { teamMembersTable, teamsTable, usersTable } from "~/lib/db/schema";
 import { projectsTable } from "~/lib/db/schema/projects.sql";
+import { teamMembersTable, teamsTable, usersTable } from "~/lib/db/schema";
+import { github } from "~/lib/auth/github";
 
 export async function GET({ nativeEvent }: APIEvent) {
   const query = getQuery(nativeEvent);
