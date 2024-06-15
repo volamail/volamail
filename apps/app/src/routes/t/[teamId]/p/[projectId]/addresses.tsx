@@ -92,7 +92,7 @@ export default function AddressesPage(props: RouteSectionProps) {
       <Suspense
         fallback={
           <div class="flex flex-col gap-2">
-            <div class="bg-gray-100 animate-pulse rounded-md h-12 p-4 mb-1 mt-8">
+            <div class="bg-gray-100 animate-pulse rounded-md h-12 p-4 mb-1">
               <div class="bg-gray-300 animate-pulse rounded-md h-4 w-48" />
             </div>
             <div class="bg-gray-100 animate-pulse rounded-md h-12 p-4">
