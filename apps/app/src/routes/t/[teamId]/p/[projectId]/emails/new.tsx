@@ -17,6 +17,22 @@ import { Breadcrumbs } from "~/lib/ui/components/breadcrumbs";
 export default function NewTemplate(props: RouteSectionProps) {
   const [html, setHtml] = createSignal("");
 
+  const createEmailAction = useMutation({
+    action: createTemplate,
+    onSuccess() {
+      showToast({
+        title: "Email created!",
+        variant: "success",
+      });
+    },
+    onError() {
+      showToast({
+        title: "Unable to create email",
+        variant: "error",
+      });
+    },
+  });
+
   const sendTestMailAction = useMutation({
     action: sendTestMail,
     onSuccess() {
@@ -57,6 +73,7 @@ export default function NewTemplate(props: RouteSectionProps) {
             icon={() => <CircleCheckBigIcon class="size-4" />}
             type="submit"
             form="create-email-form"
+            loading={createEmailAction.pending}
           >
             Create email
           </Button>
