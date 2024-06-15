@@ -1,20 +1,12 @@
-import { Title } from "@solidjs/meta";
 import {
+  createAsync,
   type RouteDefinition,
   type RouteSectionProps,
-  createAsync,
 } from "@solidjs/router";
+import { Title } from "@solidjs/meta";
 import { PlusIcon, Trash2Icon } from "lucide-solid";
 import { For, Show, Suspense, createSignal } from "solid-js";
-import { createAddress, deleteAddress } from "~/lib/addresses/actions";
-import { getTeamAddresses } from "~/lib/addresses/queries";
-import {
-  AlertDialog,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogTitle,
-} from "~/lib/ui/components/alert-dialog";
-import { Button } from "~/lib/ui/components/button";
+
 import {
   Dialog,
   DialogContent,
@@ -23,8 +15,12 @@ import {
   DialogTrigger,
 } from "~/lib/ui/components/dialog";
 import { Input } from "~/lib/ui/components/input";
+import { Button } from "~/lib/ui/components/button";
 import { showToast } from "~/lib/ui/components/toasts";
+import { createAddress } from "~/lib/addresses/actions";
 import { useMutation } from "~/lib/ui/hooks/useMutation";
+import { getTeamAddresses } from "~/lib/addresses/queries";
+import { DeleteAddressDialog } from "~/lib/addresses/components/DeleteAddressDialog";
 
 export const route: RouteDefinition = {
   load({ params }) {
@@ -58,29 +54,11 @@ export default function AddressesPage(props: RouteSectionProps) {
     },
   });
 
-  const deleteAddressMutation = useMutation({
-    action: deleteAddress,
-    onSuccess() {
-      setAddressIdToDelete();
-
-      showToast({
-        title: "Address deleted",
-        variant: "success",
-      });
-    },
-    onError(e) {
-      showToast({
-        title: "Unable to delete address",
-        variant: "error",
-      });
-    },
-  });
-
   return (
     <main class="p-8 flex flex-col grow gap-4 max-w-2xl">
       <Title>Addresses - Volamail</Title>
 
-      <div class="flex flex-col gap-2">
+      <div class="flex flex-col gap-2 mb-6">
         <h1 class="text-3xl font-bold">Addresses</h1>
 
         <p class="text-gray-600">
@@ -198,52 +176,11 @@ export default function AddressesPage(props: RouteSectionProps) {
           </DialogContent>
         </Dialog>
 
-        <AlertDialog
-          open={addressIdToDelete() !== undefined}
-          onOpenChange={() => setAddressIdToDelete()}
-        >
-          <AlertDialogContent class="flex flex-col gap-6">
-            <div class="flex flex-col gap-2">
-              <AlertDialogTitle>Delete address</AlertDialogTitle>
-              <AlertDialogDescription>
-                Are you sure you want to delete this address?
-              </AlertDialogDescription>
-            </div>
-
-            <form
-              method="post"
-              action={deleteAddress}
-              class="flex gap-2 justify-end"
-            >
-              <input type="hidden" name="teamId" value={props.params.teamId} />
-
-              <input
-                type="hidden"
-                name="addressId"
-                value={addressIdToDelete()}
-              />
-
-              <Button
-                type="button"
-                variant="outline"
-                class="self-end"
-                onClick={() => setAddressIdToDelete()}
-              >
-                Cancel
-              </Button>
-
-              <Button
-                type="submit"
-                color="destructive"
-                class="self-end"
-                icon={() => <Trash2Icon class="size-4" />}
-                loading={deleteAddressMutation.pending}
-              >
-                Delete
-              </Button>
-            </form>
-          </AlertDialogContent>
-        </AlertDialog>
+        <DeleteAddressDialog
+          teamId={props.params.teamId}
+          addressId={addressIdToDelete()}
+          onClose={() => setAddressIdToDelete()}
+        />
       </Suspense>
     </main>
   );

@@ -168,3 +168,35 @@ export const editTemplateElement = action(async (formData: FormData) => {
     code: result.text,
   };
 });
+
+export const deleteTemplate = action(async (formData: FormData) => {
+  "use server";
+
+  const user = requireUser();
+
+  const values = Object.fromEntries(formData);
+
+  const payload = await parseAsync(
+    object({
+      projectId: string(),
+      id: string(),
+    }),
+    values
+  );
+
+  await requireUserToBeMemberOfProject({
+    userId: user.id,
+    projectId: payload.projectId,
+  });
+
+  await db
+    .delete(schema.templatesTable)
+    .where(
+      and(
+        eq(schema.templatesTable.id, payload.id),
+        eq(schema.templatesTable.projectId, payload.projectId)
+      )
+    );
+
+  throw redirect("..");
+}, "templates");
