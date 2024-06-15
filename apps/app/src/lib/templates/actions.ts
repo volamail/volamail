@@ -49,7 +49,7 @@ export const createTemplate = action(async (formData: FormData) => {
   await db.insert(schema.templatesTable).values(result);
 
   throw redirect(
-    `/t/${meta.project.team?.id || 0}/p/${result.projectId}/templates`
+    `/t/${meta.project.team?.id || 0}/p/${result.projectId}/emails`
   );
 }, "templates");
 
