@@ -1,7 +1,10 @@
 import { Loader2Icon } from "lucide-solid";
-import { type JSX, splitProps, Show } from "solid-js";
+import { type JSX, splitProps, Show, ValidComponent } from "solid-js";
 import { type VariantProps, tv } from "tailwind-variants";
-import { Button as KobalteButton } from "@kobalte/core/button";
+import {
+  Button as KobalteButton,
+  ButtonRootProps as KobalteButtonRootProps,
+} from "@kobalte/core/button";
 import type { PolymorphicProps } from "@kobalte/core/polymorphic";
 
 export const buttonVariants = tv({
@@ -87,18 +90,21 @@ export const buttonVariants = tv({
   },
 });
 
-export type ButtonProps = PolymorphicProps<
-  typeof KobalteButton,
-  VariantProps<typeof buttonVariants> & {
-    loading?: boolean;
-    icon?: () => JSX.Element;
-  }
->;
+export type ButtonProps<T extends ValidComponent = "button"> =
+  KobalteButtonRootProps<T> &
+    VariantProps<typeof buttonVariants> & {
+      class?: string | undefined;
+      loading?: boolean;
+      icon?: () => JSX.Element;
+      children?: JSX.Element;
+    };
 
-export function Button(props: ButtonProps) {
-  const [local, rest] = splitProps(props, [
-    "class",
+export function Button<T extends ValidComponent = "button">(
+  props: PolymorphicProps<T, ButtonProps<T>>
+) {
+  const [local, rest] = splitProps(props as ButtonProps, [
     "variant",
+    "class",
     "even",
     "round",
     "loading",

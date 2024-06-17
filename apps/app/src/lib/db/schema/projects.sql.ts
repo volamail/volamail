@@ -18,7 +18,9 @@ export const projectsTable = pgTable(
       .references(() => usersTable.id),
     teamId: text("team_id")
       .notNull()
-      .references(() => teamsTable.id),
+      .references(() => teamsTable.id, {
+        onDelete: "cascade",
+      }),
   },
   (table) => ({
     creatorIdx: index("projects_creator_idx").on(table.creatorId),

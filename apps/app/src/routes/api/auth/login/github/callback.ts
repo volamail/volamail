@@ -1,8 +1,8 @@
 import {
-  appendHeader,
-  createError,
-  getCookie,
   getQuery,
+  getCookie,
+  createError,
+  appendHeader,
   sendRedirect,
 } from "vinxi/http";
 import { eq } from "drizzle-orm";
@@ -10,12 +10,18 @@ import { OAuth2RequestError } from "arctic";
 import { generateIdFromEntropySize } from "lucia";
 import type { APIEvent } from "@solidjs/start/server";
 
+import {
+  teamsTable,
+  usersTable,
+  teamMembersTable,
+  subscriptionsTable,
+} from "~/lib/db/schema";
 import { db } from "~/lib/db";
 import { lucia } from "~/lib/auth/lucia";
+import { github } from "~/lib/auth/github";
 import { getUserProjects } from "~/lib/projects/utils";
 import { projectsTable } from "~/lib/db/schema/projects.sql";
-import { teamMembersTable, teamsTable, usersTable } from "~/lib/db/schema";
-import { github } from "~/lib/auth/github";
+import { SUBSCRIPTION_QUOTAS } from "~/lib/subscriptions/constants";
 
 export async function GET({ nativeEvent }: APIEvent) {
   const query = getQuery(nativeEvent);
@@ -92,10 +98,25 @@ export async function GET({ nativeEvent }: APIEvent) {
 
     const { defaultProjectId, defaultTeamId } = await db.transaction(
       async (db) => {
+        const [{ insertedId: subscriptionId }] = await db
+          .insert(subscriptionsTable)
+          .values({
+            tier: "FREE",
+            status: "ACTIVE",
+            monthlyQuota: SUBSCRIPTION_QUOTAS["FREE"],
+            remainingQuota: SUBSCRIPTION_QUOTAS["FREE"],
+            renewsAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
+            lastRefilledAt: new Date(),
+            periodType: "MONTHLY",
+            price: "0.00",
+          })
+          .returning({ insertedId: subscriptionsTable.id });
+
         const [{ insertedId: defaultTeamId }] = await db
           .insert(teamsTable)
           .values({
             name: `${userEmail}'s team`,
+            subscriptionId,
           })
           .returning({ insertedId: teamsTable.id });
 

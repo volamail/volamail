@@ -12,7 +12,9 @@ export const addressesTable = pgTable("addresses", {
   verified: boolean("verified").notNull().default(false),
   teamId: text("team_id")
     .notNull()
-    .references(() => teamsTable.id),
+    .references(() => teamsTable.id, {
+      onDelete: "cascade",
+    }),
 });
 
 export const addressesRelations = relations(addressesTable, ({ one }) => ({

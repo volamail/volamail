@@ -50,7 +50,7 @@ export default function Dashboard() {
                 <li>
                   <A
                     href={template.id.toString()}
-                    class="flex flex-col gap-0.5 hover:bg-gray-100 border rounded-lg border-gray-300 px-2.5 py-2 text-sm bg-gray-50 transition-colors cursor-default"
+                    class="flex flex-col gap-0.5 hover:bg-gray-200 rounded-lg px-2.5 py-2 text-sm bg-gray-100 shadow-sm transition-colors cursor-default"
                   >
                     <p class="font-semibold">{template.slug}</p>
                     <p class="text-xs text-gray-500">

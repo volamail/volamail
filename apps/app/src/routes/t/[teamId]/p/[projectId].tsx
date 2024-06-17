@@ -9,6 +9,7 @@ import { twMerge } from "tailwind-merge";
 import { splitProps, type ComponentProps, type JSX } from "solid-js";
 import {
   AtSignIcon,
+  CreditCardIcon,
   GlobeIcon,
   KeyIcon,
   LogOutIcon,
@@ -73,6 +74,12 @@ export default function DashboardLayout(props: Props) {
               >
                 <KeyIcon class="size-4" />
                 API tokens
+              </NavLink>
+            </li>
+            <li>
+              <NavLink href={`/t/${params.teamId}/p/${params.projectId}/usage`}>
+                <CreditCardIcon class="size-4" />
+                Usage & Billing
               </NavLink>
             </li>
           </ul>

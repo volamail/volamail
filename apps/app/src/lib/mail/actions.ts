@@ -1,9 +1,12 @@
+import { eq, sql } from "drizzle-orm";
 import { action } from "@solidjs/router";
 import { createError } from "vinxi/http";
 import { object, optional, parseAsync, record, string } from "valibot";
 
+import { db } from "../db";
 import { sendMail } from "./send";
 import { requireUser } from "../auth/utils";
+import { subscriptionsTable } from "../db/schema";
 import { requireUserToBeMemberOfProject } from "../projects/utils";
 
 export const sendTestMail = action(async (formData: FormData) => {
@@ -30,10 +33,28 @@ export const sendTestMail = action(async (formData: FormData) => {
     values
   );
 
-  await requireUserToBeMemberOfProject({
+  const { meta } = await requireUserToBeMemberOfProject({
     userId: user.id,
     projectId: payload.projectId,
   });
+
+  const subcription = await db.query.subscriptionsTable.findFirst({
+    where: eq(subscriptionsTable.id, meta.project.team.subscriptionId),
+  });
+
+  if (!subcription) {
+    throw createError({
+      statusCode: 404,
+      statusMessage: "Subscription associated with this project not found",
+    });
+  }
+
+  if (subcription.remainingQuota <= 0) {
+    throw createError({
+      statusCode: 429,
+      statusMessage: "You have reached your monthly quota",
+    });
+  }
 
   try {
     await sendMail({
@@ -50,6 +71,14 @@ export const sendTestMail = action(async (formData: FormData) => {
       statusMessage: "Internal server error",
     });
   }
+
+  // TODO: wrap this (and above) in a transaction
+  await db
+    .update(subscriptionsTable)
+    .set({
+      remainingQuota: sql`${subscriptionsTable.remainingQuota} - 1`,
+    })
+    .where(eq(subscriptionsTable.id, subcription.id));
 
   return {
     success: true,

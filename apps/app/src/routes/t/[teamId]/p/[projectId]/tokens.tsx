@@ -134,7 +134,7 @@ function Token(props: TokenProps) {
     if (hidden()) {
       return props.children
         .split("")
-        .map((c, i) => (i > 4 ? "*" : c))
+        .map((c, i) => (i > 6 ? "*" : c))
         .join("");
     }
 

@@ -27,7 +27,7 @@ export const createApiToken = action(async (formData: FormData) => {
   });
 
   await db.insert(apiTokensTable).values({
-    token: nanoid(32),
+    token: `vl_${nanoid(32)}`,
     projectId: payload.projectId,
     creatorId: user.id,
   });

@@ -109,6 +109,27 @@ export function Editor(props: Props) {
 
   return (
     <div class="grow flex flex-col gap-2 justify-center items-center p-16 relative">
+      <Show when={props.value}>
+        <div class="relative overflow-y-auto grow bg-white border border-gray-200 w-full rounded-xl shadow">
+          <div
+            ref={handleTemplatePreviewMounted}
+            class="revert-tailwind"
+            innerHTML={displayedCode()}
+          />
+
+          <Show when={selectedElement()}>
+            {(element) => (
+              <FloatingMenu
+                element={element()}
+                onClose={() => setSelectedElement()}
+                onComplete={modifyElement}
+                onDelete={deleteElement}
+              />
+            )}
+          </Show>
+        </div>
+      </Show>
+
       <form
         method="post"
         action={generateTemplate}
@@ -158,27 +179,6 @@ export function Editor(props: Props) {
           placeholder="A welcome e-mail using a magic link button..."
         />
       </form>
-
-      <Show when={props.value}>
-        <div class="relative overflow-y-auto bg-white border border-gray-200 w-full rounded-xl shadow">
-          <div
-            ref={handleTemplatePreviewMounted}
-            class="revert-tailwind"
-            innerHTML={displayedCode()}
-          />
-
-          <Show when={selectedElement()}>
-            {(element) => (
-              <FloatingMenu
-                element={element()}
-                onClose={() => setSelectedElement()}
-                onComplete={modifyElement}
-                onDelete={deleteElement}
-              />
-            )}
-          </Show>
-        </div>
-      </Show>
 
       <input type="hidden" name={props.name} value={props.value} />
     </div>

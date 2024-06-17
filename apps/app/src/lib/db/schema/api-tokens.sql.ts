@@ -11,7 +11,9 @@ export const apiTokensTable = pgTable("api_tokens", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
   projectId: text("project_id")
     .notNull()
-    .references(() => projectsTable.id),
+    .references(() => projectsTable.id, {
+      onDelete: "cascade",
+    }),
   creatorId: text("creator_id")
     .notNull()
     .references(() => usersTable.id),
