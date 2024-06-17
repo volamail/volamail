@@ -5,31 +5,32 @@ import {
   AlertDialogDescription,
   AlertDialogTitle,
 } from "~/lib/ui/components/alert-dialog";
-import { deleteAddress } from "../actions";
+import { deleteDomain } from "../actions";
 import { Button } from "~/lib/ui/components/button";
 import { useMutation } from "~/lib/ui/hooks/useMutation";
 import { showToast } from "~/lib/ui/components/toasts";
 
 type Props = {
-  teamId: string;
-  addressId?: string;
+  projectId: string;
+  domainId?: string;
   onClose: () => void;
 };
 
-export function DeleteAddressDialog(props: Props) {
-  const deleteAddressMutation = useMutation({
-    action: deleteAddress,
+export function DeleteDomainDialog(props: Props) {
+  const deleteDomainMutation = useMutation({
+    action: deleteDomain,
     onSuccess() {
       showToast({
-        title: "Address deleted",
+        title: "Domain deleted",
         variant: "success",
       });
 
       props.onClose();
     },
     onError(e) {
+      console.log(e);
       showToast({
-        title: "Unable to delete address",
+        title: "Unable to delete domain",
         variant: "error",
       });
     },
@@ -37,25 +38,25 @@ export function DeleteAddressDialog(props: Props) {
 
   return (
     <AlertDialog
-      open={props.addressId !== undefined}
+      open={props.domainId !== undefined}
       onOpenChange={props.onClose}
     >
       <AlertDialogContent class="flex flex-col gap-6">
         <div class="flex flex-col gap-2">
-          <AlertDialogTitle>Delete address</AlertDialogTitle>
+          <AlertDialogTitle>Delete domain</AlertDialogTitle>
           <AlertDialogDescription>
-            Are you sure you want to delete this address?
+            Are you sure you want to delete this domain?
           </AlertDialogDescription>
         </div>
 
         <form
           method="post"
-          action={deleteAddress}
+          action={deleteDomain}
           class="flex gap-2 justify-end"
         >
-          <input type="hidden" name="teamId" value={props.teamId} />
+          <input type="hidden" name="projectId" value={props.projectId} />
 
-          <input type="hidden" name="addressId" value={props.addressId} />
+          <input type="hidden" name="domainId" value={props.domainId} />
 
           <Button
             type="button"
@@ -71,7 +72,7 @@ export function DeleteAddressDialog(props: Props) {
             color="destructive"
             class="self-end"
             icon={() => <Trash2Icon class="size-4" />}
-            loading={deleteAddressMutation.pending}
+            loading={deleteDomainMutation.pending}
           >
             Delete
           </Button>

@@ -1,0 +1,1 @@
+ALTER TABLE "domains" ADD COLUMN "tokens" text[] NOT NULL;

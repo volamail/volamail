@@ -141,6 +141,20 @@
       "when": 1718575566825,
       "tag": "0019_tired_rictor",
       "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "6",
+      "when": 1718617153216,
+      "tag": "0020_calm_reavers",
+      "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "6",
+      "when": 1718618166825,
+      "tag": "0021_neat_firestar",
+      "breakpoints": true
     }
   ]
 }

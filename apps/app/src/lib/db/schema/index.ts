@@ -1,4 +1,4 @@
-export * from "./addresses.sql";
+export * from "./domains.sql";
 export * from "./api-tokens.sql";
 export * from "./projects.sql";
 export * from "./sessions.sql";

@@ -4,7 +4,7 @@ import { pgTable, primaryKey, text } from "drizzle-orm/pg-core";
 
 import { usersTable } from "./users.sql";
 import { projectsTable } from "./projects.sql";
-import { addressesTable } from "./addresses.sql";
+import { domainsTable } from "./domains.sql";
 import { subscriptionsTable } from "./subscriptions.sql";
 
 export const teamsTable = pgTable("teams", {
@@ -41,7 +41,7 @@ export const teamMembersTable = pgTable(
 export const teamsRelations = relations(teamsTable, ({ many, one }) => ({
   projects: many(projectsTable),
   members: many(teamMembersTable),
-  addresses: many(addressesTable),
+  domains: many(domainsTable),
   personalTeamOwner: one(usersTable),
   subscription: one(subscriptionsTable, {
     fields: [teamsTable.subscriptionId],

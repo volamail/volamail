@@ -45,7 +45,7 @@ export default function DashboardLayout(props: Props) {
 
   return (
     <div class="flex">
-      <nav class="bg-gray-100 overflow-y-auto border-r h-dvh flex flex-col gap-4 max-w-64 w-full">
+      <nav class="bg-gray-100 overflow-y-auto border-r h-dvh flex flex-col gap-4 w-64 shrink-0">
         <div class="grow p-4 w-full flex flex-col gap-4">
           <ProjectSelector />
 
@@ -62,10 +62,10 @@ export default function DashboardLayout(props: Props) {
             </li>
             <li>
               <NavLink
-                href={`/t/${params.teamId}/p/${params.projectId}/addresses`}
+                href={`/t/${params.teamId}/p/${params.projectId}/domains`}
               >
                 <AtSignIcon class="size-4" />
-                Addresses
+                Domains
               </NavLink>
             </li>
             <li>

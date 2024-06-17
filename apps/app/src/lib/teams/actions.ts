@@ -4,7 +4,13 @@ import { action, redirect } from "@solidjs/router";
 import { object, parseAsync, string } from "valibot";
 
 import { db } from "../db";
-import { projectsTable, teamMembersTable, teamsTable } from "../db/schema";
+import {
+  projectsTable,
+  subscriptionsTable,
+  teamMembersTable,
+  teamsTable,
+} from "../db/schema";
+import { SUBSCRIPTION_QUOTAS } from "../subscriptions/constants";
 
 export const createTeam = action(async (formData: FormData) => {
   "use server";
@@ -29,9 +35,26 @@ export const createTeam = action(async (formData: FormData) => {
   );
 
   const { teamId, projectId } = await db.transaction(async (db) => {
+    const [{ insertedId: subscriptionId }] = await db
+      .insert(subscriptionsTable)
+      .values({
+        tier: "FREE",
+        monthlyQuota: SUBSCRIPTION_QUOTAS["FREE"],
+        periodType: "MONTHLY",
+        lastRefilledAt: new Date(),
+        price: "0.00",
+        remainingQuota: SUBSCRIPTION_QUOTAS["FREE"],
+        renewsAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
+        status: "ACTIVE",
+      })
+      .returning({ insertedId: subscriptionsTable.id });
+
     const [{ insertedId: teamId }] = await db
       .insert(teamsTable)
-      .values(payload)
+      .values({
+        ...payload,
+        subscriptionId,
+      })
       .returning({ insertedId: teamsTable.id });
 
     const [, [{ insertedId: projectId }]] = await Promise.all([
@@ -52,5 +75,5 @@ export const createTeam = action(async (formData: FormData) => {
     return { teamId, projectId };
   });
 
-  throw redirect(`/t/${teamId}/p/${projectId}/templates`);
+  throw redirect(`/t/${teamId}/p/${projectId}/emails`);
 });
