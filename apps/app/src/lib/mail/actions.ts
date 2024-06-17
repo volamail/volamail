@@ -60,7 +60,7 @@ export const sendTestMail = action(async (formData: FormData) => {
     await sendMail({
       // TODO: Unmock this
       from: "luca.farci@vlkstudio.com",
-      to: "luca.farci@vlkstudio.com",
+      to: "info@volamail.com",
       body: payload.body,
       subject: payload.subject,
       data: payload.data || {},

@@ -1,5 +1,11 @@
 import { Show, createMemo } from "solid-js";
-import { LinkIcon, SendIcon, Trash2Icon, SaveAllIcon } from "lucide-solid";
+import {
+  LinkIcon,
+  SendIcon,
+  Trash2Icon,
+  SaveAllIcon,
+  ArrowUpNarrowWideIcon,
+} from "lucide-solid";
 
 import { Input } from "~/lib/ui/components/input";
 import { Button } from "~/lib/ui/components/button";
@@ -11,6 +17,7 @@ type Props = {
   element: HTMLElement;
   onClose: () => void;
   onComplete: (changes: string) => void;
+  onChangeSelection: (element: HTMLElement) => void;
   onDelete: () => void;
 };
 
@@ -65,6 +72,8 @@ export function FloatingMenu(props: Props) {
 
             element.src = formData.get("src") as string;
 
+            delete element.dataset.selected;
+
             props.onComplete(element.outerHTML);
           }}
         >
@@ -90,7 +99,7 @@ export function FloatingMenu(props: Props) {
     >
       <PopoverContent class="flex flex-col gap-2">
         <>
-          <form method="post" action={editTemplateElement}>
+          <form method="post" action={editTemplateElement} autocomplete="off">
             <input
               type="hidden"
               name="element"
@@ -119,13 +128,26 @@ export function FloatingMenu(props: Props) {
             <hr />
             {content()}
           </Show>
-          <Button
-            icon={() => <Trash2Icon class="size-4" />}
-            color="destructive"
-            onClick={props.onDelete}
-          >
-            Delete
-          </Button>
+          <div class="flex gap-1 w-full border-t pt-2">
+            <Button
+              icon={() => <Trash2Icon class="size-4" />}
+              color="destructive"
+              onClick={props.onDelete}
+              class="grow"
+            >
+              Delete
+            </Button>
+            <Button
+              icon={() => <ArrowUpNarrowWideIcon class="size-4" />}
+              variant="outline"
+              onClick={() =>
+                props.onChangeSelection(props.element.parentElement!)
+              }
+              class="grow"
+            >
+              Parent
+            </Button>
+          </div>
         </>
       </PopoverContent>
     </PopoverRoot>

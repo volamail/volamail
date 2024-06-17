@@ -67,7 +67,7 @@ export async function POST({ request }: APIEvent) {
   await sendMail({
     // TODO: Unmock this
     from: "luca.farci@vlkstudio.com",
-    to: "luca.farci@vlkstudio.com",
+    to: "info@volamail.com",
     subject: template.subject,
     body: template.body,
     data: payload.data,

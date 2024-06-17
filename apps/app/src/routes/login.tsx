@@ -20,7 +20,7 @@ export default function Login() {
       >
         <h1 class="text-2xl font-semibold">Login</h1>
         <p class="text-gray-600 text-sm">
-          Sign in to your account to start collaborating on your emails.
+          Sign in to your account to start working on your team's emails.
         </p>
 
         <Button

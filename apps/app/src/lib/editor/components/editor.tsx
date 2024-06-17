@@ -110,7 +110,7 @@ export function Editor(props: Props) {
   return (
     <div class="grow flex flex-col gap-2 justify-center items-center p-16 relative">
       <Show when={props.value}>
-        <div class="relative overflow-y-auto grow bg-white border border-gray-200 w-full rounded-xl shadow">
+        <div class="relative overflow-y-auto max-h-[80%] bg-white border border-gray-200 w-full rounded-xl shadow">
           <div
             ref={handleTemplatePreviewMounted}
             class="revert-tailwind"
@@ -124,6 +124,7 @@ export function Editor(props: Props) {
                 onClose={() => setSelectedElement()}
                 onComplete={modifyElement}
                 onDelete={deleteElement}
+                onChangeSelection={setSelectedElement}
               />
             )}
           </Show>
@@ -176,7 +177,7 @@ export function Editor(props: Props) {
             />
           )}
           class="py-1"
-          placeholder="A welcome e-mail using a magic link button..."
+          placeholder="A welcome e-mail with a magic link button..."
         />
       </form>
 
