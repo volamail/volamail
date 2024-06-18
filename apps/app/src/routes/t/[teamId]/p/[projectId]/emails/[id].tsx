@@ -104,12 +104,12 @@ export default function EditTemplate(props: RouteSectionProps) {
         </div>
       </div>
 
-      <div class="flex h-full">
+      <div class="flex h-full min-h-0">
         <form
           method="post"
           id="edit-email-form"
           action={editTemplate}
-          class="bg-white h-full border-r p-4 w-72 gap-4 flex flex-col"
+          class="bg-white h-full border-r p-4 w-72 gap-4 flex flex-col shrink-0"
         >
           <div class="flex flex-col grow gap-4">
             <input

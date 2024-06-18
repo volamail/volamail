@@ -5,13 +5,14 @@ import {
   createSignal,
   onCleanup,
 } from "solid-js";
-import { PaperclipIcon, SendIcon } from "lucide-solid";
+import { CodeIcon, EyeIcon, PaperclipIcon, SendIcon } from "lucide-solid";
 
 import { FloatingMenu } from "./floating-menu";
 import { Button } from "~/lib/ui/components/button";
 import { Textarea } from "~/lib/ui/components/textarea";
 import { useMutation } from "~/lib/ui/hooks/useMutation";
 import { generateTemplate } from "~/lib/templates/actions";
+import { Tabs } from "@kobalte/core/tabs";
 
 type Props = {
   name?: string;
@@ -108,27 +109,56 @@ export function Editor(props: Props) {
   });
 
   return (
-    <div class="grow flex flex-col gap-2 justify-center items-center p-16 relative">
+    <div class="grow min-h-0 flex flex-col gap-2 justify-center items-center p-8 relative">
       <Show when={props.value}>
-        <div class="relative overflow-y-auto max-h-[80%] bg-white border border-gray-200 w-full rounded-xl shadow">
-          <div
-            ref={handleTemplatePreviewMounted}
-            class="revert-tailwind"
-            innerHTML={displayedCode()}
-          />
+        <Tabs class="grow min-h-0 flex flex-col gap-2 w-full relative">
+          <Tabs.List class="border border-gray-300 inline-flex self-start text-sm items-center bg-gray-200 rounded-lg p-1">
+            <Tabs.Trigger
+              value="preview"
+              class="rounded-lg inline-flex gap-1.5 items-center data-[selected]:bg-gray-100 px-3 py-1 data-[selected]:font-medium data-[selected]:text-black text-gray-600"
+            >
+              Preview
+              <EyeIcon class="size-4" />
+            </Tabs.Trigger>
+            <Tabs.Trigger
+              value="html"
+              class="rounded-lg inline-flex gap-1.5 items-center data-[selected]:bg-gray-100 px-3 py-1 data-[selected]:font-medium data-[selected]:text-black text-gray-600"
+            >
+              HTML
+              <CodeIcon class="size-4" />
+            </Tabs.Trigger>
+          </Tabs.List>
+          <Tabs.Content
+            value="preview"
+            class="relative overflow-y-auto grow bg-white border border-gray-200 w-full rounded-xl shadow"
+          >
+            <div
+              ref={handleTemplatePreviewMounted}
+              class="revert-tailwind"
+              innerHTML={displayedCode()}
+            />
 
-          <Show when={selectedElement()}>
-            {(element) => (
-              <FloatingMenu
-                element={element()}
-                onClose={() => setSelectedElement()}
-                onComplete={modifyElement}
-                onDelete={deleteElement}
-                onChangeSelection={setSelectedElement}
-              />
-            )}
-          </Show>
-        </div>
+            <Show when={selectedElement()}>
+              {(element) => (
+                <FloatingMenu
+                  element={element()}
+                  onClose={() => setSelectedElement()}
+                  onComplete={modifyElement}
+                  onDelete={deleteElement}
+                  onChangeSelection={setSelectedElement}
+                />
+              )}
+            </Show>
+          </Tabs.Content>
+          <Tabs.Content
+            value="html"
+            class="relative overflow-y-auto grow min-h-0 flex flex-col bg-white border border-gray-200 w-full rounded-xl shadow"
+          >
+            <pre class="p-4 min-h-0 text-sm whitespace-pre-wrap">
+              {props.value}
+            </pre>
+          </Tabs.Content>
+        </Tabs>
       </Show>
 
       <form
