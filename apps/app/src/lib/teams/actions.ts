@@ -1,15 +1,18 @@
+import { eq } from "drizzle-orm";
 import { createError } from "vinxi/http";
 import { getRequestEvent } from "solid-js/web";
 import { action, redirect } from "@solidjs/router";
 import { object, parseAsync, string } from "valibot";
 
-import { db } from "../db";
 import {
-  projectsTable,
-  subscriptionsTable,
-  teamMembersTable,
   teamsTable,
+  projectsTable,
+  teamMembersTable,
+  subscriptionsTable,
 } from "../db/schema";
+import { db } from "../db";
+import { requireUser } from "../auth/utils";
+import { requireUserToBeMemberOfTeam } from "../projects/utils";
 import { SUBSCRIPTION_QUOTAS } from "../subscriptions/constants";
 
 export const createTeam = action(async (formData: FormData) => {
@@ -76,4 +79,32 @@ export const createTeam = action(async (formData: FormData) => {
   });
 
   throw redirect(`/t/${teamId}/p/${projectId}/emails`);
+});
+
+export const editTeam = action(async (formData: FormData) => {
+  "use server";
+
+  const user = requireUser();
+
+  const values = Object.fromEntries(formData);
+
+  const payload = await parseAsync(
+    object({
+      id: string(),
+      name: string(),
+    }),
+    values
+  );
+
+  await requireUserToBeMemberOfTeam({
+    userId: user.id,
+    teamId: payload.id,
+  });
+
+  await db
+    .update(teamsTable)
+    .set({
+      name: payload.name,
+    })
+    .where(eq(teamsTable.id, payload.id));
 });

@@ -14,6 +14,7 @@ import {
   KeyIcon,
   LogOutIcon,
   Table2Icon,
+  UsersIcon,
 } from "lucide-solid";
 
 import { Button } from "~/lib/ui/components/button";
@@ -80,6 +81,12 @@ export default function DashboardLayout(props: Props) {
               <NavLink href={`/t/${params.teamId}/p/${params.projectId}/usage`}>
                 <CreditCardIcon class="size-4" />
                 Usage & Billing
+              </NavLink>
+            </li>
+            <li>
+              <NavLink href={`/t/${params.teamId}/p/${params.projectId}/team`}>
+                <UsersIcon class="size-4" />
+                Team
               </NavLink>
             </li>
           </ul>
