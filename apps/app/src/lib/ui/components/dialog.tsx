@@ -1,14 +1,31 @@
 import { XIcon } from "lucide-solid";
-import { splitProps } from "solid-js";
+import { Show, splitProps } from "solid-js";
 import * as DialogPrimitive from "@kobalte/core/dialog";
 import type { PolymorphicProps } from "@kobalte/core/polymorphic";
 import type { Component, ComponentProps, JSX, ValidComponent } from "solid-js";
 
 import { cn } from "../utils/cn";
-import { Button, type ButtonProps } from "./button";
+import { Button } from "./button";
 
-const Dialog = DialogPrimitive.Root;
 const DialogTrigger = DialogPrimitive.Trigger;
+
+const Dialog: Component<
+  DialogPrimitive.DialogRootProps & {
+    preventClose?: boolean;
+  }
+> = (props) => {
+  const [local, others] = splitProps(props, ["preventClose", "onOpenChange"]);
+
+  function handleOpenChange(open: boolean) {
+    if (local.preventClose) {
+      return;
+    }
+
+    local.onOpenChange?.(open);
+  }
+
+  return <DialogPrimitive.Root {...others} onOpenChange={handleOpenChange} />;
+};
 
 const DialogPortal: Component<DialogPrimitive.DialogPortalProps> = (props) => {
   const [, rest] = splitProps(props, ["children"]);
@@ -43,15 +60,18 @@ type DialogContentProps<T extends ValidComponent = "div"> =
   DialogPrimitive.DialogContentProps<T> & {
     class?: string | undefined;
     children?: JSX.Element;
+    hideCloseButton?: boolean;
   };
 
 const DialogContent = <T extends ValidComponent = "div">(
   props: PolymorphicProps<T, DialogContentProps<T>>
 ) => {
-  const [, rest] = splitProps(props as DialogContentProps, [
+  const [local, rest] = splitProps(props as DialogContentProps, [
     "class",
     "children",
+    "hideCloseButton",
   ]);
+
   return (
     <DialogPortal>
       <DialogOverlay />
@@ -63,16 +83,18 @@ const DialogContent = <T extends ValidComponent = "div">(
         {...rest}
       >
         {props.children}
-        <DialogPrimitive.CloseButton
-          as={Button}
-          class="absolute right-4 top-4 p-1"
-          even
-          rounded
-          variant="ghost"
-        >
-          <XIcon class="size-4" />
-          <span class="sr-only">Close</span>
-        </DialogPrimitive.CloseButton>
+        <Show when={!local.hideCloseButton}>
+          <DialogPrimitive.CloseButton
+            as={Button}
+            class="absolute right-4 top-4 p-1"
+            even
+            rounded
+            variant="ghost"
+          >
+            <XIcon class="size-4" />
+            <span class="sr-only">Close</span>
+          </DialogPrimitive.CloseButton>
+        </Show>
       </DialogPrimitive.Content>
     </DialogPortal>
   );

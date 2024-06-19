@@ -2,10 +2,15 @@ import { For, Show, createMemo } from "solid-js";
 import { CheckIcon, ChevronsUpDownIcon, PlusIcon } from "lucide-solid";
 import { A, createAsync, useLocation, useParams } from "@solidjs/router";
 
-import { buttonVariants } from "./button";
+import { buttonVariants } from "../../ui/components/button";
 import type { DbProject } from "../../db/schema";
 import { getUserProjects } from "~/lib/projects/queries";
-import { PopoverContent, PopoverRoot, PopoverTrigger } from "./popover";
+import {
+  PopoverContent,
+  PopoverRoot,
+  PopoverTrigger,
+} from "../../ui/components/popover";
+import { CreateProjectDialog } from "./CreateProjectDialog";
 
 export function ProjectSelector() {
   const params = useParams();
@@ -78,7 +83,15 @@ function ProjectsNavigation(props: TeamsProjectsProps) {
 
   return (
     <div class="px-2 pt-4 pb-2 flex flex-col gap-1">
-      <p class="text-sm text-gray-500 pl-2.5">{props.title}</p>
+      <div class="text-sm text-gray-500 pr-2 pl-2.5 inline-flex justify-start gap-1.5">
+        <p>{props.title}</p>
+        <CreateProjectDialog
+          team={{
+            id: params.teamId,
+            name: props.title,
+          }}
+        />
+      </div>
       <ul class="flex flex-col gap-1 w-full">
         <For each={props.projects}>
           {(project) => (

@@ -21,7 +21,7 @@ import { Button } from "~/lib/ui/components/button";
 import { logout } from "~/lib/auth/actions";
 import { getCurrentUser } from "~/lib/auth/queries";
 import { getUserProjects } from "~/lib/projects/queries";
-import { ProjectSelector } from "~/lib/ui/components/project-selector";
+import { ProjectSelector } from "~/lib/projects/components/project-selector";
 import { Avatar } from "~/lib/ui/components/avatar";
 
 type Props = {
@@ -95,10 +95,10 @@ export default function DashboardLayout(props: Props) {
         <form
           action={logout}
           method="post"
-          class="flex justify-between items-center gap-2 border-t border-gray-300 p-3"
+          class="flex justify-start items-center gap-2 border-t border-gray-300 p-3"
         >
-          <Avatar src={user()?.imageUrl} fallback={user()?.email.charAt(0)!} />
-          <span class="text-sm truncate">{user()?.email}</span>
+          <Avatar src={user()?.imageUrl} fallback={user()?.name.charAt(0)!} />
+          <p class="text-sm truncate grow">{user()?.name}</p>
           <Button
             even
             type="submit"
