@@ -12,12 +12,23 @@ import {
 } from "solid-js";
 import { Title } from "@solidjs/meta";
 import { twMerge } from "tailwind-merge";
-import { createAsync, useParams, useSubmission } from "@solidjs/router";
+import {
+  RouteDefinition,
+  createAsync,
+  useParams,
+  useSubmission,
+} from "@solidjs/router";
 
 import { Button } from "~/lib/ui/components/button";
 import { showToast } from "~/lib/ui/components/toasts";
 import { createApiToken } from "~/lib/api-tokens/actions";
 import { getProjectTokens } from "~/lib/api-tokens/queries";
+
+export const route: RouteDefinition = {
+  load({ params }) {
+    void getProjectTokens(params.projectId);
+  },
+};
 
 export default function Tokens() {
   const params = useParams();
