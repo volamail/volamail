@@ -7,6 +7,7 @@ import { teamMembersTable, teamsTable } from "./teams.sql";
 export const usersTable = pgTable("users", {
   id: text("id").primaryKey(),
   email: text("email").notNull(),
+  name: text("name").notNull(),
   githubId: integer("github_id"),
   personalTeamId: text("personal_team_id")
     .notNull()

@@ -1,6 +1,6 @@
 import { nanoid } from "nanoid";
 import { relations } from "drizzle-orm";
-import { pgTable, primaryKey, text } from "drizzle-orm/pg-core";
+import { pgTable, primaryKey, text, timestamp } from "drizzle-orm/pg-core";
 
 import { usersTable } from "./users.sql";
 import { projectsTable } from "./projects.sql";
@@ -30,6 +30,7 @@ export const teamMembersTable = pgTable(
       .references(() => usersTable.id, {
         onDelete: "cascade",
       }),
+    joinedAt: timestamp("joined_at").notNull().defaultNow(),
   },
   (table) => ({
     pk: primaryKey({
@@ -38,10 +39,29 @@ export const teamMembersTable = pgTable(
   })
 );
 
+export const teamInvitesTable = pgTable(
+  "team_invites",
+  {
+    teamId: text("team_id")
+      .notNull()
+      .references(() => teamsTable.id, {
+        onDelete: "cascade",
+      }),
+    email: text("email").notNull(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (table) => ({
+    pk: primaryKey({
+      columns: [table.teamId, table.email],
+    }),
+  })
+);
+
 export const teamsRelations = relations(teamsTable, ({ many, one }) => ({
-  projects: many(projectsTable),
-  members: many(teamMembersTable),
   domains: many(domainsTable),
+  projects: many(projectsTable),
+  invites: many(teamInvitesTable),
+  members: many(teamMembersTable),
   personalTeamOwner: one(usersTable),
   subscription: one(subscriptionsTable, {
     fields: [teamsTable.subscriptionId],
@@ -57,6 +77,13 @@ export const teamMembersRelations = relations(teamMembersTable, ({ one }) => ({
   user: one(usersTable, {
     fields: [teamMembersTable.userId],
     references: [usersTable.id],
+  }),
+}));
+
+export const teamInvitesRelations = relations(teamInvitesTable, ({ one }) => ({
+  team: one(teamsTable, {
+    fields: [teamInvitesTable.teamId],
+    references: [teamsTable.id],
   }),
 }));
 

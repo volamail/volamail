@@ -22,12 +22,10 @@ export function useMutation<T extends Array<unknown>, U>(params: {
     }
 
     if (result.error && prevResult?.pending) {
-      params.onError?.(result.error);
+      return params.onError?.(result.error);
     }
 
-    if (result.result && prevResult?.pending) {
-      params.onSuccess?.(result.result);
-    }
+    params.onSuccess?.(result.result!);
 
     return result;
   });

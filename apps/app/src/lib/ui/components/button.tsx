@@ -1,4 +1,4 @@
-import { Loader2Icon } from "lucide-solid";
+import { LoaderIcon } from "lucide-solid";
 import { type JSX, splitProps, Show, ValidComponent } from "solid-js";
 import { type VariantProps, tv } from "tailwind-variants";
 import {
@@ -121,7 +121,7 @@ export function Button<T extends ValidComponent = "button">(
       {props.children}
 
       <Show when={local.loading} fallback={local.icon ? local.icon() : null}>
-        <Loader2Icon class="animate-spin size-4" />
+        <LoaderIcon class="animate-spin size-4" />
       </Show>
     </KobalteButton>
   );

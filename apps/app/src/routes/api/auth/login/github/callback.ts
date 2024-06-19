@@ -18,7 +18,7 @@ import {
 } from "~/lib/db/schema";
 import { db } from "~/lib/db";
 import { lucia } from "~/lib/auth/lucia";
-import { github } from "~/lib/auth/github";
+import { createGithubAuth } from "~/lib/auth/github";
 import { getUserProjects } from "~/lib/projects/utils";
 import { projectsTable } from "~/lib/db/schema/projects.sql";
 import { SUBSCRIPTION_QUOTAS } from "~/lib/subscriptions/constants";
@@ -37,6 +37,8 @@ export async function GET({ nativeEvent }: APIEvent) {
   }
 
   try {
+    const github = createGithubAuth();
+
     const tokens = await github.validateAuthorizationCode(code);
 
     const githubUserResponse = await fetch("https://api.github.com/user", {
@@ -79,22 +81,28 @@ export async function GET({ nativeEvent }: APIEvent) {
         getUserProjects(existingUser.id),
       ]);
 
-      const project = projects.teams.find((t) => t.projects.length > 0)
-        ?.projects[0]!;
-
       appendHeader(
         nativeEvent,
         "Set-Cookie",
         lucia.createSessionCookie(session.id).serialize()
       );
 
+      if (query.to?.toString()) {
+        return sendRedirect(nativeEvent, query.to.toString());
+      }
+
+      const project = projects.teams.find((t) => t.projects.length > 0)
+        ?.projects[0]!;
+
       return sendRedirect(
         nativeEvent,
-        `/t/${project.teamId || 0}/p/${project.id}/emails`
+        `/t/${project.teamId}/p/${project.id}/emails`
       );
     }
 
     const userId = generateIdFromEntropySize(10);
+
+    const name = userEmail.split("@")[0];
 
     const { defaultProjectId, defaultTeamId } = await db.transaction(
       async (db) => {
@@ -115,13 +123,14 @@ export async function GET({ nativeEvent }: APIEvent) {
         const [{ insertedId: defaultTeamId }] = await db
           .insert(teamsTable)
           .values({
-            name: `${userEmail}'s team`,
+            name: `${name}'s team`,
             subscriptionId,
           })
           .returning({ insertedId: teamsTable.id });
 
         await db.insert(usersTable).values({
           id: userId,
+          name,
           email: userEmail,
           githubId: githubUser.id,
           personalTeamId: defaultTeamId,
@@ -155,6 +164,10 @@ export async function GET({ nativeEvent }: APIEvent) {
       "Set-Cookie",
       lucia.createSessionCookie(session.id).serialize()
     );
+
+    if (query.to?.toString()) {
+      return sendRedirect(nativeEvent, query.to.toString());
+    }
 
     return sendRedirect(
       nativeEvent,

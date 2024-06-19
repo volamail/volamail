@@ -1,5 +1,11 @@
+import {
+  XIcon,
+  Trash2Icon,
+  LoaderIcon,
+  CircleCheckBigIcon,
+} from "lucide-solid";
 import { Title } from "@solidjs/meta";
-import { CircleCheckBigIcon } from "lucide-solid";
+import { For, Show, createSignal } from "solid-js";
 import { RouteSectionProps, createAsync } from "@solidjs/router";
 
 import { getTeam } from "~/lib/teams/queries";
@@ -8,9 +14,13 @@ import { Input } from "~/lib/ui/components/input";
 import { Button } from "~/lib/ui/components/button";
 import { showToast } from "~/lib/ui/components/toasts";
 import { useMutation } from "~/lib/ui/hooks/useMutation";
+import { InviteMemberDialog } from "~/lib/teams/components/InviteMemberDialog";
+import { DeleteInviteDialog } from "~/lib/teams/components/DeleteInviteDialog";
 
 export default function TeamPage(props: RouteSectionProps) {
   const team = createAsync(() => getTeam(props.params.teamId));
+
+  const [inviteToDelete, setInviteToDelete] = createSignal<string>();
 
   const editTeamAction = useMutation({
     action: editTeam,
@@ -36,12 +46,103 @@ export default function TeamPage(props: RouteSectionProps) {
         <h1 class="text-3xl font-bold">Team</h1>
 
         <p class="text-gray-600">
-          In this page you can manage the team members and its settings.
+          In this page you can manage the team's settings and members.
         </p>
       </div>
 
       <section class="flex flex-col gap-4">
-        <h2 class="text-2xl font-semibold">Settings</h2>
+        <h2 class="text-xl font-semibold">Members</h2>
+
+        <table class="text-sm">
+          <thead>
+            <tr class="border-b">
+              <th class="text-left font-medium py-2">Email</th>
+              <th class="text-left font-medium py-2">Member since</th>
+            </tr>
+          </thead>
+          <tbody>
+            <For each={team()?.members}>
+              {(member) => (
+                <tr>
+                  <td class="py-2 pr-4">{member.user.email}</td>
+                  <td class="py-2 pr-4">
+                    {member.joinedAt.toLocaleDateString("en-US")}
+                  </td>
+
+                  {/* @ts-expect-error idk align attribute is deprecated or something*/}
+                  <td align="right">
+                    <Button
+                      color="destructive"
+                      variant="ghost"
+                      class="self-end p-1"
+                      icon={() => <XIcon class="size-4" />}
+                      aria-label="Remove member"
+                      type="button"
+                      even
+                    />
+                  </td>
+                </tr>
+              )}
+            </For>
+          </tbody>
+        </table>
+
+        <Show when={team()?.invites.length}>
+          <section class="flex flex-col gap-1 mt-3">
+            <h2 class="font-semibold inline-flex gap-2 items-center">
+              Pending invites{" "}
+              <LoaderIcon class="size-4 animate-spin text-gray-500" />
+            </h2>
+
+            <table class="text-sm">
+              <thead>
+                <tr class="border-b">
+                  <th class="text-left font-medium py-2">Email</th>
+                  <th class="text-left font-medium py-2">Sent at</th>
+                </tr>
+              </thead>
+              <tbody>
+                <For each={team()?.invites}>
+                  {(invite) => (
+                    <tr>
+                      <td class="py-2 pr-4">{invite.email}</td>
+                      <td class="py-2 pr-4">
+                        {invite.createdAt.toLocaleString("en-US")}
+                      </td>
+                      {/* @ts-expect-error idk align attribute is deprecated or something*/}
+                      <td align="right">
+                        <Button
+                          color="destructive"
+                          variant="ghost"
+                          class="self-end p-1"
+                          icon={() => <XIcon class="size-4" />}
+                          aria-label="Revoke invitation"
+                          type="button"
+                          even
+                          onClick={() => setInviteToDelete(invite.email)}
+                        />
+                      </td>
+                    </tr>
+                  )}
+                </For>
+              </tbody>
+            </table>
+          </section>
+        </Show>
+
+        <InviteMemberDialog teamId={props.params.teamId} />
+
+        <DeleteInviteDialog
+          teamId={props.params.teamId}
+          email={inviteToDelete()}
+          onClose={() => setInviteToDelete()}
+        />
+      </section>
+
+      <hr class="w-full border-gray-200" />
+
+      <section class="flex flex-col gap-4">
+        <h2 class="text-xl font-semibold">Settings</h2>
 
         <form class="flex flex-col gap-6" method="post" action={editTeam}>
           <input type="hidden" name="id" value={props.params.teamId} />
@@ -79,6 +180,21 @@ export default function TeamPage(props: RouteSectionProps) {
             Save
           </Button>
         </form>
+      </section>
+
+      <hr class="w-full border-gray-200" />
+
+      <section class="flex flex-col gap-4">
+        <h2 class="text-xl font-semibold">Danger zone</h2>
+
+        <Button
+          class="self-start"
+          color="destructive"
+          variant="outline"
+          icon={() => <Trash2Icon class="size-4" />}
+        >
+          Delete team
+        </Button>
       </section>
     </main>
   );

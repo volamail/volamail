@@ -1,0 +1,1 @@
+ALTER TABLE "team_members" RENAME COLUMN "join_at" TO "joined_at";

@@ -4,14 +4,28 @@ import { action, redirect } from "@solidjs/router";
 import { appendHeader, createError, setCookie } from "vinxi/http";
 
 import { lucia } from "./lucia";
-import { github } from "./github";
+import { createGithubAuth } from "./github";
+import { object, optional, parseAsync, string } from "valibot";
 
-export const loginWithGithub = action(async () => {
+export const loginWithGithub = action(async (formData: FormData) => {
   "use server";
+
+  const entries = Object.fromEntries(formData);
+
+  const body = await parseAsync(
+    object({
+      to: optional(string()),
+    }),
+    entries
+  );
 
   const state = generateState();
 
   const { nativeEvent } = getRequestEvent()!;
+
+  const github = createGithubAuth({
+    to: body.to,
+  });
 
   const url = await github.createAuthorizationURL(state, {
     scopes: ["user:email"],

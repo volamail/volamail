@@ -123,7 +123,7 @@ export default function DomainsPage(props: RouteSectionProps) {
                   </div>
 
                   <Show when={!domain.verified}>
-                    <div class="flex flex-col">
+                    <div class="flex flex-col gap-1">
                       <h3 class="font-medium text-lg">DNS records</h3>
                       <p class="text-gray-600 text-sm">
                         Add the following DNS records to your domain's DNS

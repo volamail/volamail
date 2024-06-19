@@ -27,8 +27,6 @@ export const getProjectDomains = cache(async (projectId: string) => {
         EmailIdentity: row.domain,
       });
 
-      console.log({ identity });
-
       const verified = identity.VerifiedForSendingStatus;
 
       await db
