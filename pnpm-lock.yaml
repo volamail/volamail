@@ -20,6 +20,9 @@ importers:
       '@aws-sdk/client-sesv2':
         specifier: ^3.576.0
         version: 3.596.0
+      '@corvu/otp-field':
+        specifier: ^0.1.1
+        version: 0.1.1(solid-js@1.8.17)
       '@kobalte/core':
         specifier: ^0.13.3
         version: 0.13.3(solid-js@1.8.17)
@@ -654,8 +657,18 @@ packages:
     resolution: {integrity: sha512-EeEjMobfuJrwoctj7FA1y1KEbM0+Q1xSjobIEyie9k4haVEBB7vkDvsasw1pM3rO39mL2akxIAzLMUAtrMHZhA==}
     engines: {node: '>=16.13'}
 
+  '@corvu/otp-field@0.1.1':
+    resolution: {integrity: sha512-ffGaENNcEhDBZG27tPWGXix3M99Aw8KulNEbDwzsfnUaANoD2LSXtqIoL8qC6WKq3Ukv0JmirZcRnE3U5EejCg==}
+    peerDependencies:
+      solid-js: ^1.8
+
   '@corvu/utils@0.2.0':
     resolution: {integrity: sha512-cY0w+SotjOtBX+9oE90vis1Mu2spwGhtcAn4jmrl7JPqQrm68DH/0Rh3R52dN2MbgPVZL06N3mvys18myF5/0Q==}
+    peerDependencies:
+      solid-js: ^1.8
+
+  '@corvu/utils@0.3.1':
+    resolution: {integrity: sha512-M8ztDGmVuYsoF9+WHvhz+UtVtvqPeJa9KgwM3JETp770lMmpL8TG3ThAZIpHAl8OjUjDaLvMkd/f6FuyA/n50A==}
     peerDependencies:
       solid-js: ^1.8
 
@@ -6313,7 +6326,17 @@ snapshots:
     dependencies:
       mime: 3.0.0
 
+  '@corvu/otp-field@0.1.1(solid-js@1.8.17)':
+    dependencies:
+      '@corvu/utils': 0.3.1(solid-js@1.8.17)
+      solid-js: 1.8.17
+
   '@corvu/utils@0.2.0(solid-js@1.8.17)':
+    dependencies:
+      '@floating-ui/dom': 1.6.5
+      solid-js: 1.8.17
+
+  '@corvu/utils@0.3.1(solid-js@1.8.17)':
     dependencies:
       '@floating-ui/dom': 1.6.5
       solid-js: 1.8.17

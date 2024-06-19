@@ -25,7 +25,9 @@ export function useMutation<T extends Array<unknown>, U>(params: {
       return params.onError?.(result.error);
     }
 
-    params.onSuccess?.(result.result!);
+    if (prevResult?.pending && !result.pending) {
+      params.onSuccess?.(result.result!);
+    }
 
     return result;
   });

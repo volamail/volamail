@@ -22,6 +22,7 @@ import { createGithubAuth } from "~/lib/auth/github";
 import { getUserProjects } from "~/lib/projects/utils";
 import { projectsTable } from "~/lib/db/schema/projects.sql";
 import { SUBSCRIPTION_QUOTAS } from "~/lib/subscriptions/constants";
+import { bootstrapUser } from "~/lib/users/server-utils";
 
 export async function GET({ nativeEvent }: APIEvent) {
   const query = getQuery(nativeEvent);
@@ -100,62 +101,11 @@ export async function GET({ nativeEvent }: APIEvent) {
       );
     }
 
-    const userId = generateIdFromEntropySize(10);
-
-    const name = userEmail.split("@")[0];
-
-    const { defaultProjectId, defaultTeamId } = await db.transaction(
-      async (db) => {
-        const [{ insertedId: subscriptionId }] = await db
-          .insert(subscriptionsTable)
-          .values({
-            tier: "FREE",
-            status: "ACTIVE",
-            monthlyQuota: SUBSCRIPTION_QUOTAS["FREE"],
-            remainingQuota: SUBSCRIPTION_QUOTAS["FREE"],
-            renewsAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
-            lastRefilledAt: new Date(),
-            periodType: "MONTHLY",
-            price: "0.00",
-          })
-          .returning({ insertedId: subscriptionsTable.id });
-
-        const [{ insertedId: defaultTeamId }] = await db
-          .insert(teamsTable)
-          .values({
-            name: `${name}'s team`,
-            subscriptionId,
-          })
-          .returning({ insertedId: teamsTable.id });
-
-        await db.insert(usersTable).values({
-          id: userId,
-          name,
-          email: userEmail,
-          githubId: githubUser.id,
-          personalTeamId: defaultTeamId,
-        });
-
-        await db.insert(teamMembersTable).values({
-          userId: userId,
-          teamId: defaultTeamId,
-        });
-
-        const [{ insertedId: defaultProjectId }] = await db
-          .insert(projectsTable)
-          .values({
-            name: "Untitled project",
-            teamId: defaultTeamId,
-            creatorId: userId,
-          })
-          .returning({ insertedId: projectsTable.id });
-
-        return {
-          defaultProjectId,
-          defaultTeamId,
-        };
-      }
-    );
+    const {
+      id: userId,
+      defaultProjectId,
+      defaultTeamId,
+    } = await bootstrapUser(userEmail);
 
     const session = await lucia.createSession(userId, {});
 
