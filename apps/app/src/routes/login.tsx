@@ -35,7 +35,7 @@ export default function Login() {
   const [searchParams] = useSearchParams();
 
   return (
-    <GridBgContainer>
+    <GridBgContainer class="h-dvh">
       <Title>Login - Volamail</Title>
 
       <form

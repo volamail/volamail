@@ -27,7 +27,7 @@ export default function CreateTeam() {
   });
 
   return (
-    <GridBgContainer>
+    <GridBgContainer class="h-dvh">
       <Title>Create team - Volamail</Title>
       <form
         method="post"

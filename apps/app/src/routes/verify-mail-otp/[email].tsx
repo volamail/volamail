@@ -37,7 +37,7 @@ export default function VerifyMailOtp(props: RouteSectionProps) {
   let formRef!: HTMLFormElement;
 
   return (
-    <GridBgContainer>
+    <GridBgContainer class="h-dvh">
       <Title>Verify OTP - Volamail</Title>
 
       <form

@@ -39,7 +39,7 @@ export default function JoinTeam(props: RouteSectionProps) {
   });
 
   return (
-    <GridBgContainer>
+    <GridBgContainer class="h-dvh">
       <Title>Join team - Volamail</Title>
 
       <form
