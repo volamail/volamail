@@ -46,7 +46,7 @@ export function CreateProjectDialog(props: Props) {
       <DialogTrigger
         as={Button}
         class="self-start p-0.5 "
-        icon={() => <PlusIcon class="size-4" />}
+        icon={() => <PlusIcon class="size-4 text-gray-500" />}
         round
         even
         variant="ghost"

@@ -1,11 +1,4 @@
 import {
-  createAsync,
-  type RouteDefinition,
-  type RouteSectionProps,
-} from "@solidjs/router";
-import { Title } from "@solidjs/meta";
-import { Loader2Icon, LoaderIcon, PlusIcon, Trash2Icon } from "lucide-solid";
-import {
   For,
   Show,
   Suspense,
@@ -14,6 +7,9 @@ import {
   onCleanup,
   onMount,
 } from "solid-js";
+import { Title } from "@solidjs/meta";
+import { LoaderIcon, PlusIcon, Trash2Icon } from "lucide-solid";
+import { type RouteDefinition, type RouteSectionProps } from "@solidjs/router";
 
 import {
   Dialog,
@@ -114,14 +110,14 @@ export default function DomainsPage(props: RouteSectionProps) {
                 <li
                   class="border flex flex-col gap-6 border-gray-300 bg-gray-50 rounded-lg px-3 py-2 text-sm"
                   classList={{
-                    "opacity-50": domains.loading,
+                    "opacity-50": domains.loading && !domain.verified,
                   }}
                 >
                   <div class="flex justify-between">
                     <div class="flex flex-col gap-0.5">
                       <div class="text-xl font-semibold inline-flex gap-2 items-center">
                         <p>{domain.domain} </p>
-                        <Show when={domains.loading}>
+                        <Show when={domains.loading && !domain.verified}>
                           <LoaderIcon class="size-4 animate-spin" />
                         </Show>
                       </div>

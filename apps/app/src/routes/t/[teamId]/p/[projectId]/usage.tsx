@@ -39,11 +39,11 @@ export default function Usage(props: RouteSectionProps) {
           <Suspense
             fallback={
               <div class="flex flex-col gap-2">
-                <div class="bg-gray-400 animate-pulse rounded-md h-4 w-full" />
+                <div class="bg-gray-300 animate-pulse rounded-md h-4 w-full" />
 
                 <div class="bg-gray-200 animate-pulse rounded-md h-3 w-32" />
 
-                <div class="bg-gray-300 animate-pulse rounded-md h-3 w-48 mt-4" />
+                <div class="bg-gray-200 animate-pulse rounded-md h-3 w-48 mt-4" />
               </div>
             }
           >
@@ -80,7 +80,7 @@ export default function Usage(props: RouteSectionProps) {
             fallback={
               <div class="flex flex-col gap-2">
                 <div class="bg-gray-200 animate-pulse rounded-md h-4 w-48" />
-                <div class="bg-gray-400 animate-pulse rounded-md h-8 p-4" />
+                <div class="bg-gray-300 animate-pulse rounded-md h-8 p-4" />
               </div>
             }
           >

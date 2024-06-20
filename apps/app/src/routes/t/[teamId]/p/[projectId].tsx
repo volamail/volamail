@@ -6,7 +6,7 @@ import {
   type RouteDefinition,
 } from "@solidjs/router";
 import { twMerge } from "tailwind-merge";
-import { splitProps, type ComponentProps, type JSX } from "solid-js";
+import { Show, splitProps, type ComponentProps, type JSX } from "solid-js";
 import {
   AtSignIcon,
   CreditCardIcon,
@@ -48,7 +48,9 @@ export default function DashboardLayout(props: Props) {
     <div class="flex">
       <nav class="bg-gray-100 overflow-y-auto border-r h-dvh flex flex-col gap-4 w-64 shrink-0">
         <div class="grow p-4 w-full flex flex-col gap-4">
-          <ProjectSelector />
+          <Show when={params.projectId} keyed>
+            <ProjectSelector />
+          </Show>
 
           <hr class="w-full border-gray-200" />
 

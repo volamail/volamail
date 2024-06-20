@@ -11,6 +11,7 @@ import {
   PopoverTrigger,
 } from "../../ui/components/popover";
 import { CreateProjectDialog } from "./CreateProjectDialog";
+import { cn } from "~/lib/ui/utils/cn";
 
 export function ProjectSelector() {
   const params = useParams();
@@ -92,7 +93,7 @@ function ProjectsNavigation(props: TeamsProjectsProps) {
           }}
         />
       </div>
-      <ul class="flex flex-col gap-1 w-full">
+      <ul class="flex flex-col gap-0.5 w-full">
         <For each={props.projects}>
           {(project) => (
             <li class="text-sm w-full">
@@ -100,7 +101,10 @@ function ProjectsNavigation(props: TeamsProjectsProps) {
                 href={`/t/${project.teamId}/p/${project.id}/${currentDashboardSection}`}
                 class={buttonVariants({
                   variant: "ghost",
-                  class: "rounded-md justify-between px-2.5",
+                  class: cn(
+                    "rounded-md justify-between px-2.5",
+                    project.id === params.projectId && "bg-gray-100"
+                  ),
                 })}
               >
                 {project.name}
