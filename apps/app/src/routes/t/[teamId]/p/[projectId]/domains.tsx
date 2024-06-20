@@ -5,7 +5,15 @@ import {
 } from "@solidjs/router";
 import { Title } from "@solidjs/meta";
 import { Loader2Icon, LoaderIcon, PlusIcon, Trash2Icon } from "lucide-solid";
-import { For, Show, Suspense, createSignal } from "solid-js";
+import {
+  For,
+  Show,
+  Suspense,
+  createResource,
+  createSignal,
+  onCleanup,
+  onMount,
+} from "solid-js";
 
 import {
   Dialog,
@@ -29,7 +37,10 @@ export const route: RouteDefinition = {
 };
 
 export default function DomainsPage(props: RouteSectionProps) {
-  const domains = createAsync(() => getProjectDomains(props.params.projectId));
+  const [domains, { refetch }] = createResource(
+    () => props.params.projectId,
+    getProjectDomains
+  );
 
   const [createDomainDialogOpen, setCreateDomainDialogOpen] =
     createSignal(false);
@@ -52,6 +63,16 @@ export default function DomainsPage(props: RouteSectionProps) {
         variant: "error",
       });
     },
+  });
+
+  onMount(() => {
+    const interval = setInterval(() => {
+      refetch();
+
+      console.log("Refetching");
+    }, 10000);
+
+    onCleanup(() => clearInterval(interval));
   });
 
   return (
@@ -80,7 +101,7 @@ export default function DomainsPage(props: RouteSectionProps) {
         }
       >
         <Show
-          when={domains()?.length}
+          when={domains.latest?.length}
           fallback={
             <div class="p-4 text-sm max-w-2xl text-gray-600 bg-gray-100 border border-gray-300 rounded-lg text-center">
               No domains set up for this team.
@@ -88,19 +109,28 @@ export default function DomainsPage(props: RouteSectionProps) {
           }
         >
           <ul class="flex flex-col gap-2 grow">
-            <For each={domains()}>
+            <For each={domains.latest}>
               {(domain) => (
-                <li class="border flex flex-col gap-6 border-gray-300 bg-gray-50 rounded-lg px-3 py-2 text-sm">
+                <li
+                  class="border flex flex-col gap-6 border-gray-300 bg-gray-50 rounded-lg px-3 py-2 text-sm"
+                  classList={{
+                    "opacity-50": domains.loading,
+                  }}
+                >
                   <div class="flex justify-between">
                     <div class="flex flex-col gap-0.5">
-                      <p class="text-xl font-semibold">{domain.domain}</p>
+                      <div class="text-xl font-semibold inline-flex gap-2 items-center">
+                        <p>{domain.domain} </p>
+                        <Show when={domains.loading}>
+                          <LoaderIcon class="size-4 animate-spin" />
+                        </Show>
+                      </div>
                       <Show
                         when={domain.verified}
                         fallback={
                           <div class="text-xs text-gray-500 inline-flex gap-1 items-center">
                             <div class="size-2 bg-yellow-500 rounded-full" />
                             Pending verification
-                            <LoaderIcon class="size-3 animate-spin " />
                           </div>
                         }
                       >

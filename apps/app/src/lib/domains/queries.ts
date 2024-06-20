@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { cache } from "@solidjs/router";
 
 import { db } from "../db";
@@ -19,6 +19,7 @@ export const getProjectDomains = cache(async (projectId: string) => {
 
   const domainRows = await db.query.domainsTable.findMany({
     where: eq(domainsTable.projectId, projectId),
+    orderBy: desc(domainsTable.createdAt),
   });
 
   return await Promise.all(
@@ -29,10 +30,12 @@ export const getProjectDomains = cache(async (projectId: string) => {
 
       const verified = identity.VerifiedForSendingStatus;
 
-      await db
-        .update(domainsTable)
-        .set({ verified })
-        .where(eq(domainsTable.id, row.id));
+      if (verified !== row.verified) {
+        await db
+          .update(domainsTable)
+          .set({ verified })
+          .where(eq(domainsTable.id, row.id));
+      }
 
       return {
         ...row,
