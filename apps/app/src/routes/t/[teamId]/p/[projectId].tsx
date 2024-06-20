@@ -52,44 +52,59 @@ export default function DashboardLayout(props: Props) {
 
           <hr class="w-full border-gray-200" />
 
-          <ul class="flex flex-col gap-1 grow">
-            <li>
-              <NavLink
-                href={`/t/${params.teamId}/p/${params.projectId}/emails`}
-              >
-                <Table2Icon class="size-4" />
-                Emails
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                href={`/t/${params.teamId}/p/${params.projectId}/domains`}
-              >
-                <AtSignIcon class="size-4" />
-                Domains
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                href={`/t/${params.teamId}/p/${params.projectId}/tokens`}
-              >
-                <KeyIcon class="size-4" />
-                API tokens
-              </NavLink>
-            </li>
-            <li>
-              <NavLink href={`/t/${params.teamId}/p/${params.projectId}/usage`}>
-                <CreditCardIcon class="size-4" />
-                Usage & Billing
-              </NavLink>
-            </li>
-            <li>
-              <NavLink href={`/t/${params.teamId}/p/${params.projectId}/team`}>
-                <UsersIcon class="size-4" />
-                Team
-              </NavLink>
-            </li>
-          </ul>
+          <section class="flex flex-col gap-2">
+            <h3 class="font-semibold text-xs text-gray-500 pl-2.5">PROJECT</h3>
+
+            <ul class="flex flex-col gap-1 grow">
+              <li>
+                <NavLink
+                  href={`/t/${params.teamId}/p/${params.projectId}/emails`}
+                >
+                  <Table2Icon class="size-4" />
+                  Emails
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  href={`/t/${params.teamId}/p/${params.projectId}/tokens`}
+                >
+                  <KeyIcon class="size-4" />
+                  API tokens
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  href={`/t/${params.teamId}/p/${params.projectId}/domains`}
+                >
+                  <AtSignIcon class="size-4" />
+                  Domains
+                </NavLink>
+              </li>
+            </ul>
+          </section>
+
+          <section class="flex flex-col gap-2">
+            <h3 class="font-semibold text-xs text-gray-500 pl-2.5">TEAM</h3>
+
+            <ul class="flex flex-col gap-1 grow">
+              <li>
+                <NavLink
+                  href={`/t/${params.teamId}/p/${params.projectId}/usage`}
+                >
+                  <CreditCardIcon class="size-4" />
+                  Usage & Billing
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  href={`/t/${params.teamId}/p/${params.projectId}/team`}
+                >
+                  <UsersIcon class="size-4" />
+                  Team settings
+                </NavLink>
+              </li>
+            </ul>
+          </section>
         </div>
 
         <form
