@@ -109,7 +109,7 @@ export const generateTemplate = action(async (formData: FormData) => {
   );
 
   const INITIAL_GENERATION_PROMPT =
-    "You are a HTML email template generator. You will be given a prompt and you should generate a HTML email based on the prompt. Respond with just the HTML code, nothing else, no markdown, no backticks. Use Helvetica unless told otherwise. Remember that HTML must be old e-mail compatible, so use tables for layouts. Feel free to clean up the HTML if it looks invalid or contains errors. Remember the <style> tag doesn't work in email clients, so use inline styles on the elements instead. Don't output any meta tags or doctype, just the email <body>. For variables use double curly brackets with snake_case like {{variable_name}}";
+    "You are a HTML email template generator. You will be given a prompt and you should generate a HTML email based on the prompt. Respond with just the HTML code, nothing else, no markdown, no backticks. Use Helvetica and put the email's main contents inside a centered container unless told otherwise. Remember that HTML must be old e-mail compatible, so use tables for layouts. Feel free to clean up the HTML if it looks invalid or contains errors. Remember the <style> tag doesn't work in email clients, so use inline styles on the elements instead. Don't output any meta tags or doctype, just the email <body>. If variables are requested, use double curly brackets with snake_case like {{variable_name}}. For images use a placeholder (from via.placeholder.com) unless an image is specified.";
 
   const EDIT_PROMPT =
     "You are a HTML email template editor. You will be given an existing HTML email template and a prompt. Your task is to edit the HTML email template based on the prompt. Respond with just the HTML code, nothing else, no markdown, no backticks. Remember that HTML must be old e-mail compatible, so use tables for layouts. Feel free to clean up the HTML if it looks invalid or contains errors. Remember the <style> tag doesn't work in email clients, so use inline styles on the elements instead. Don't output any meta tags or doctype, just the email <body>. Remember margins don't work on td elements, if a global margin is needed add it to the upper table. Don't output any meta tags or doctype, just the email <body>. If the user requests changes that need refactoring the whole HTML structure of the email, you can do so as long as the appearance stays the same.";
@@ -158,8 +158,6 @@ export const editTemplateElement = action(async (formData: FormData) => {
       },
     ],
   });
-
-  console.log(result.text);
 
   return {
     code: result.text,

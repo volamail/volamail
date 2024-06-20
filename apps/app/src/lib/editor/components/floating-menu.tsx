@@ -5,10 +5,13 @@ import {
   Trash2Icon,
   SaveAllIcon,
   ArrowUpNarrowWideIcon,
+  TextIcon,
+  CheckIcon,
 } from "lucide-solid";
 
 import { Input } from "~/lib/ui/components/input";
 import { Button } from "~/lib/ui/components/button";
+import { Textarea } from "~/lib/ui/components/textarea";
 import { useMutation } from "~/lib/ui/hooks/useMutation";
 import { editTemplateElement } from "~/lib/templates/actions";
 import { PopoverContent, PopoverRoot } from "~/lib/ui/components/popover";
@@ -43,6 +46,8 @@ export function FloatingMenu(props: Props) {
 
             element.href = formData.get("href") as string;
 
+            element.removeAttribute("data-selected");
+
             props.onComplete(element.outerHTML);
           }}
         >
@@ -52,7 +57,11 @@ export function FloatingMenu(props: Props) {
             leading={() => <LinkIcon class="size-4" />}
             value={props.element.href}
           />
-          <Button type="submit" icon={() => <SaveAllIcon class="size-4" />}>
+          <Button
+            type="submit"
+            icon={() => <SaveAllIcon class="size-4" />}
+            class="self-end"
+          >
             Save
           </Button>
         </form>
@@ -72,7 +81,7 @@ export function FloatingMenu(props: Props) {
 
             element.src = formData.get("src") as string;
 
-            delete element.dataset.selected;
+            element.removeAttribute("data-selected");
 
             props.onComplete(element.outerHTML);
           }}
@@ -83,8 +92,51 @@ export function FloatingMenu(props: Props) {
             leading={() => <LinkIcon class="size-4" />}
             value={props.element.src}
           />
-          <Button type="submit" icon={() => <SaveAllIcon class="size-4" />}>
+          <Button
+            type="submit"
+            icon={() => <SaveAllIcon class="size-4" />}
+            class="self-end"
+          >
             Save
+          </Button>
+        </form>
+      );
+    }
+
+    if (
+      props.element instanceof HTMLParagraphElement ||
+      props.element instanceof HTMLHeadingElement
+    ) {
+      return (
+        <form
+          class="flex flex-col gap-2"
+          onSubmit={(e) => {
+            e.preventDefault();
+
+            const element = props.element as HTMLParagraphElement;
+
+            const formData = new FormData(e.target as HTMLFormElement);
+
+            element.textContent = formData.get("contents") as string;
+
+            element.removeAttribute("data-selected");
+
+            props.onComplete(element.outerHTML);
+          }}
+        >
+          <Textarea
+            name="contents"
+            resizeable
+            leading={() => <TextIcon class="size-4" />}
+          >
+            {props.element.textContent}
+          </Textarea>
+          <Button
+            type="submit"
+            icon={() => <CheckIcon class="size-4" />}
+            class="self-end"
+          >
+            Apply
           </Button>
         </form>
       );
@@ -97,7 +149,7 @@ export function FloatingMenu(props: Props) {
       onOpenChange={props.onClose}
       anchorRef={() => props.element}
     >
-      <PopoverContent class="flex flex-col gap-2">
+      <PopoverContent class="flex flex-col w-96">
         <>
           <form method="post" action={editTemplateElement} autocomplete="off">
             <input
@@ -124,30 +176,37 @@ export function FloatingMenu(props: Props) {
               )}
             />
           </form>
-          <Show when={content()}>
-            <hr />
-            {content()}
-          </Show>
-          <div class="flex gap-1 w-full border-t pt-2">
+          <div class="flex gap-1 w-full justify-start mt-1.5">
             <Button
               icon={() => <Trash2Icon class="size-4" />}
               color="destructive"
               onClick={props.onDelete}
-              class="grow"
-            >
-              Delete
-            </Button>
+              aria-label="Delete element"
+              even
+              variant="ghost"
+            />
             <Button
               icon={() => <ArrowUpNarrowWideIcon class="size-4" />}
-              variant="outline"
+              variant="ghost"
               onClick={() =>
                 props.onChangeSelection(props.element.parentElement!)
               }
-              class="grow"
-            >
-              Parent
-            </Button>
+              aria-label="Select parent element"
+              even
+            />
           </div>
+          <Show when={content()}>
+            <div class="flex flex-col gap-1">
+              <div class="flex gap-2 items-center w-full">
+                <hr class="grow border-gray-200" />
+                <span class="text-sm font-medium text-gray-500">
+                  Element settings
+                </span>
+                <hr class="grow border-gray-200" />
+              </div>
+              {content()}
+            </div>
+          </Show>
         </>
       </PopoverContent>
     </PopoverRoot>

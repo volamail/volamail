@@ -1,10 +1,11 @@
 import {
   Show,
-  createEffect,
-  createMemo,
-  createSignal,
   onCleanup,
+  createMemo,
+  createEffect,
+  createSignal,
 } from "solid-js";
+import { Tabs } from "@kobalte/core/tabs";
 import { CodeIcon, EyeIcon, PaperclipIcon, SendIcon } from "lucide-solid";
 
 import { FloatingMenu } from "./floating-menu";
@@ -12,7 +13,6 @@ import { Button } from "~/lib/ui/components/button";
 import { Textarea } from "~/lib/ui/components/textarea";
 import { useMutation } from "~/lib/ui/hooks/useMutation";
 import { generateTemplate } from "~/lib/templates/actions";
-import { Tabs } from "@kobalte/core/tabs";
 import { GridBgContainer } from "~/lib/ui/components/grid-bg-container";
 
 type Props = {
@@ -43,6 +43,11 @@ export function Editor(props: Props) {
     event.preventDefault();
 
     const target = event.target as HTMLElement;
+
+    // for now let's ignore the containing div
+    if (target instanceof HTMLDivElement) {
+      return;
+    }
 
     setSelectedElement(target);
   }
@@ -225,9 +230,25 @@ export function Editor(props: Props) {
  */
 
 function serializeCode(code: string) {
-  return code.replace("<body", "<div").replace("</body>", "</div>");
+  return replaceLast(
+    code.replaceAll(`data-selected="true"`, "").replace("<body", "<div"),
+    "</body>",
+    "</div>"
+  );
 }
 
 function deserializeCode(code: string) {
-  return code.replace("<div", "<body").replace("</div>", "</body>");
+  return replaceLast(
+    code.replaceAll(`data-selected="true"`, "").replace("<div", "<body"),
+    "</div>",
+    "</body>"
+  );
+}
+
+function replaceLast(text: string, searchValue: string, replaceValue: string) {
+  const lastOccurrenceIndex = text.lastIndexOf(searchValue);
+
+  return `${text.slice(0, lastOccurrenceIndex)}${replaceValue}${text.slice(
+    lastOccurrenceIndex + searchValue.length
+  )}`;
 }

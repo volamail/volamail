@@ -16,6 +16,11 @@
 .revert-tailwind {
   all: initial;
   font-size: initial;
+  position: relative;
+}
+
+.revert-tailwind > div {
+  min-height: 100%;
 }
 
 .revert-tailwind * {
