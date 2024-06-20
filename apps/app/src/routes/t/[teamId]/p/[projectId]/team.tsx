@@ -16,10 +16,12 @@ import { showToast } from "~/lib/ui/components/toasts";
 import { useMutation } from "~/lib/ui/hooks/useMutation";
 import { InviteMemberDialog } from "~/lib/teams/components/InviteMemberDialog";
 import { DeleteInviteDialog } from "~/lib/teams/components/DeleteInviteDialog";
+import { DeleteMemberDialog } from "~/lib/teams/components/DeleteMemberDialog";
 
 export default function TeamPage(props: RouteSectionProps) {
   const team = createAsync(() => getTeam(props.params.teamId));
 
+  const [memberToDelete, setMemberToDelete] = createSignal<string>();
   const [inviteToDelete, setInviteToDelete] = createSignal<string>();
 
   const editTeamAction = useMutation({
@@ -79,6 +81,7 @@ export default function TeamPage(props: RouteSectionProps) {
                       aria-label="Remove member"
                       type="button"
                       even
+                      onClick={() => setMemberToDelete(member.userId)}
                     />
                   </td>
                 </tr>
@@ -86,6 +89,12 @@ export default function TeamPage(props: RouteSectionProps) {
             </For>
           </tbody>
         </table>
+
+        <DeleteMemberDialog
+          teamId={props.params.teamId}
+          userId={memberToDelete()}
+          onClose={() => setMemberToDelete()}
+        />
 
         <Show when={team()?.invites.length}>
           <section class="flex flex-col gap-1 mt-3">
@@ -192,6 +201,7 @@ export default function TeamPage(props: RouteSectionProps) {
           color="destructive"
           variant="outline"
           icon={() => <Trash2Icon class="size-4" />}
+          disabled
         >
           Delete team
         </Button>

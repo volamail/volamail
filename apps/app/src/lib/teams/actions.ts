@@ -2,7 +2,7 @@ import { and, eq } from "drizzle-orm";
 import { createError } from "vinxi/http";
 import { getRequestEvent } from "solid-js/web";
 import { action, redirect } from "@solidjs/router";
-import { email, object, parseAsync, pipe, string } from "valibot";
+import { email, object, pipe, string } from "valibot";
 
 import {
   teamsTable,
@@ -15,10 +15,10 @@ import { db } from "../db";
 import { env } from "../env";
 import { sendMail } from "../mail/send";
 import { requireUser } from "../auth/utils";
+import { parseFormData } from "../server-utils";
 import { requireUserToBeMemberOfTeam } from "../projects/utils";
 import { SUBSCRIPTION_QUOTAS } from "../subscriptions/constants";
 import teamInviteTemplate from "~/lib/static-templates/team-invite.html?raw";
-import { parseFormData } from "../server-utils";
 
 export const createTeam = action(async (formData: FormData) => {
   "use server";
@@ -108,7 +108,7 @@ export const editTeam = action(async (formData: FormData) => {
       name: payload.name,
     })
     .where(eq(teamsTable.id, payload.id));
-});
+}, "team");
 
 export const inviteTeamMember = action(async (formData: FormData) => {
   "use server";
@@ -241,3 +241,35 @@ export const deleteInvite = action(async (formData: FormData) => {
     success: true,
   };
 }, "invites");
+
+export const deleteMember = action(async (formData: FormData) => {
+  "use server";
+
+  const user = requireUser();
+
+  const payload = await parseFormData(
+    object({
+      teamId: string(),
+      userId: string(),
+    }),
+    formData
+  );
+
+  await requireUserToBeMemberOfTeam({
+    userId: user.id,
+    teamId: payload.teamId,
+  });
+
+  await db
+    .delete(teamMembersTable)
+    .where(
+      and(
+        eq(teamMembersTable.teamId, payload.teamId),
+        eq(teamMembersTable.userId, payload.userId)
+      )
+    );
+
+  return {
+    success: true,
+  };
+}, "members");
