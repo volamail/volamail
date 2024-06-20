@@ -44,22 +44,21 @@ export const sendTestMail = action(async (formData: FormData) => {
   if (!subcription) {
     throw createError({
       statusCode: 404,
-      statusMessage: "Subscription associated with this project not found",
+      statusMessage: "No subscription",
     });
   }
 
   if (subcription.remainingQuota <= 0) {
     throw createError({
       statusCode: 429,
-      statusMessage: "You have reached your monthly quota",
+      statusMessage: "Quota reached",
     });
   }
 
   try {
     await sendMail({
-      // TODO: Unmock this
-      from: "luca.farci@vlkstudio.com",
-      to: "info@volamail.com",
+      from: "noreply@volamail.com",
+      to: user.email,
       body: payload.body,
       subject: payload.subject,
       data: payload.data || {},
