@@ -50,7 +50,7 @@ export default function NewTemplate(props: RouteSectionProps) {
   });
 
   return (
-    <main class="h-dvh flex flex-col grow bg-gray-100">
+    <main class="h-dvh flex flex-col bg-gray-100 min-h-0">
       <Title>New email - Volamail</Title>
 
       <div class="flex justify-between items-center px-4 py-3 border-b gap-8 border-gray-200 text-sm bg-white">
@@ -80,13 +80,13 @@ export default function NewTemplate(props: RouteSectionProps) {
         </div>
       </div>
 
-      <div class="flex h-full">
+      <div class="flex grow min-h-0 overflow-hidden">
         <form
           method="post"
           id="create-email-form"
           autocomplete="off"
           action={createTemplate}
-          class="bg-white h-full border-r p-4 w-72 gap-4 flex flex-col"
+          class="bg-white border-r p-4 w-72 gap-4 flex flex-col"
         >
           <input
             type="hidden"

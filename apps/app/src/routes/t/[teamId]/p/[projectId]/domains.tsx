@@ -48,7 +48,7 @@ export default function DomainsPage(props: RouteSectionProps) {
     },
     onError(e) {
       showToast({
-        title: "Unable to create domain",
+        title: e.statusMessage || "Unable to create domain",
         variant: "error",
       });
     },

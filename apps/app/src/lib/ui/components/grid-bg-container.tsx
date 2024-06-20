@@ -8,7 +8,7 @@ export function GridBgContainer(props: Props) {
   return (
     <div
       class={twMerge(
-        "flex flex-col h-dvh justify-center items-center bg-grid-black/5",
+        "flex flex-col justify-center items-center bg-grid-black/5 relative",
         props.class
       )}
     >

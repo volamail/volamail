@@ -1,10 +1,11 @@
 import { createEffect } from "solid-js";
 import { type Action, useSubmission } from "@solidjs/router";
+import { H3Error } from "vinxi/http";
 
 export function useMutation<T extends Array<unknown>, U>(params: {
   action: Action<T, U>;
   onSuccess?: (result: U) => void;
-  onError?: (error: unknown) => void;
+  onError?: (error: H3Error) => void;
 }) {
   const submission = useSubmission(params.action);
 

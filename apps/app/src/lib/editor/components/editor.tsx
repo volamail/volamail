@@ -13,6 +13,7 @@ import { Textarea } from "~/lib/ui/components/textarea";
 import { useMutation } from "~/lib/ui/hooks/useMutation";
 import { generateTemplate } from "~/lib/templates/actions";
 import { Tabs } from "@kobalte/core/tabs";
+import { GridBgContainer } from "~/lib/ui/components/grid-bg-container";
 
 type Props = {
   name?: string;
@@ -109,7 +110,7 @@ export function Editor(props: Props) {
   });
 
   return (
-    <div class="grow min-h-0 flex flex-col gap-2 justify-center items-center p-8 relative">
+    <GridBgContainer class="grow min-h-0 flex flex-col gap-2 justify-center items-center p-8">
       <Show when={props.value}>
         <Tabs class="grow min-h-0 flex flex-col gap-2 w-full relative">
           <Tabs.List class="border border-gray-300 inline-flex self-start text-sm items-center bg-gray-200 rounded-lg p-1">
@@ -212,7 +213,7 @@ export function Editor(props: Props) {
       </form>
 
       <input type="hidden" name={props.name} value={props.value} />
-    </div>
+    </GridBgContainer>
   );
 }
 

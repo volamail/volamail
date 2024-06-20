@@ -9,6 +9,7 @@ import { requireUser } from "../auth/utils";
 import { domainsTable } from "../db/schema";
 import { parseFormData } from "../server-utils";
 import { requireUserToBeMemberOfProject } from "../projects/utils";
+import { AlreadyExistsException } from "@aws-sdk/client-sesv2";
 
 export const createDomain = action(async (formData: FormData) => {
   "use server";
@@ -28,15 +29,29 @@ export const createDomain = action(async (formData: FormData) => {
     projectId: body.projectId,
   });
 
-  const identity = await sesClient.createEmailIdentity({
-    EmailIdentity: body.domain,
-  });
+  try {
+    const identity = await sesClient.createEmailIdentity({
+      EmailIdentity: body.domain,
+    });
 
-  await db.insert(domainsTable).values({
-    domain: body.domain,
-    projectId: body.projectId,
-    tokens: identity.DkimAttributes!.Tokens!,
-  });
+    await db.insert(domainsTable).values({
+      domain: body.domain,
+      projectId: body.projectId,
+      tokens: identity.DkimAttributes!.Tokens!,
+    });
+  } catch (e) {
+    if (e instanceof AlreadyExistsException) {
+      throw createError({
+        statusCode: 409,
+        statusMessage: "Domain already registered",
+      });
+    }
+
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Internal server error",
+    });
+  }
 
   return {
     success: true,
