@@ -9,6 +9,7 @@ import { email, object, optional, parseAsync, pipe, string } from "valibot";
 import { db } from "../db";
 import { lucia } from "./lucia";
 import { createGithubAuth } from "./github";
+import { parseFormData } from "../server-utils";
 import { getUserProjects } from "../projects/utils";
 import { bootstrapUser } from "../users/server-utils";
 import { mailCodesTable, usersTable } from "../db/schema";
@@ -16,13 +17,11 @@ import { mailCodesTable, usersTable } from "../db/schema";
 export const loginWithGithub = action(async (formData: FormData) => {
   "use server";
 
-  const entries = Object.fromEntries(formData);
-
-  const body = await parseAsync(
+  const body = await parseFormData(
     object({
       to: optional(string()),
     }),
-    entries
+    formData
   );
 
   const state = generateState();
@@ -73,14 +72,12 @@ export const logout = action(async () => {
 export const sendEmailOtp = action(async (formData: FormData) => {
   "use server";
 
-  const entries = Object.fromEntries(formData);
-
-  const body = await parseAsync(
+  const body = await parseFormData(
     object({
       email: pipe(string(), email()),
       to: optional(string()),
     }),
-    entries
+    formData
   );
 
   const [user] = await Promise.all([
@@ -122,15 +119,13 @@ export const sendEmailOtp = action(async (formData: FormData) => {
 export const verifyEmailOtp = action(async (formData: FormData) => {
   "use server";
 
-  const entries = Object.fromEntries(formData);
-
-  const body = await parseAsync(
+  const body = await parseFormData(
     object({
       email: pipe(string(), email()),
       code: string(),
       to: optional(string()),
     }),
-    entries
+    formData
   );
 
   const code = await db.query.mailCodesTable.findFirst({

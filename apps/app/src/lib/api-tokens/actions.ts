@@ -1,10 +1,11 @@
 import { nanoid } from "nanoid";
 import { action } from "@solidjs/router";
-import { object, parseAsync, string } from "valibot";
+import { object, string } from "valibot";
 
 import { db } from "../db";
 import { requireUser } from "../auth/utils";
 import { apiTokensTable } from "../db/schema";
+import { parseFormData } from "../server-utils";
 import { requireUserToBeMemberOfProject } from "../projects/utils";
 
 export const createApiToken = action(async (formData: FormData) => {
@@ -12,13 +13,11 @@ export const createApiToken = action(async (formData: FormData) => {
 
   const user = requireUser();
 
-  const values = Object.fromEntries(formData);
-
-  const payload = await parseAsync(
+  const payload = await parseFormData(
     object({
       projectId: string(),
     }),
-    values
+    formData
   );
 
   await requireUserToBeMemberOfProject({

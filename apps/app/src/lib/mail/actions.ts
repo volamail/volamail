@@ -1,13 +1,14 @@
 import { eq, sql } from "drizzle-orm";
 import { action } from "@solidjs/router";
 import { createError } from "vinxi/http";
-import { object, optional, parseAsync, record, string } from "valibot";
+import { object, optional, record, string } from "valibot";
 
 import { db } from "../db";
 import { sendMail } from "./send";
 import { requireUser } from "../auth/utils";
 import { subscriptionsTable } from "../db/schema";
 import { requireUserToBeMemberOfProject } from "../projects/utils";
+import { parseFormData } from "../server-utils";
 
 export const sendTestMail = action(async (formData: FormData) => {
   "use server";
@@ -21,16 +22,14 @@ export const sendTestMail = action(async (formData: FormData) => {
     });
   }
 
-  const values = Object.fromEntries(formData);
-
-  const payload = await parseAsync(
+  const payload = await parseFormData(
     object({
       projectId: string(),
       subject: string(),
       body: string(),
       data: optional(record(string(), string())),
     }),
-    values
+    formData
   );
 
   const { meta } = await requireUserToBeMemberOfProject({

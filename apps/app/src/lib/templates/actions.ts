@@ -3,26 +3,25 @@ import { eq, and } from "drizzle-orm";
 import { createError } from "vinxi/http";
 import { anthropic } from "@ai-sdk/anthropic";
 import { action, redirect } from "@solidjs/router";
-import { parseAsync, object, string, optional } from "valibot";
+import { object, string, optional } from "valibot";
 
 import { db } from "~/lib/db";
 import * as schema from "~/lib/db/schema";
 import { requireUser } from "~/lib/auth/utils";
+import { parseFormData } from "../server-utils";
 import { requireUserToBeMemberOfProject } from "~/lib/projects/utils";
 
 export const createTemplate = action(async (formData: FormData) => {
   "use server";
 
-  const values = Object.fromEntries(formData);
-
-  const result = await parseAsync(
+  const result = await parseFormData(
     object({
       projectId: string(),
       body: string(),
       slug: string(),
       subject: string(),
     }),
-    values
+    formData
   );
 
   const user = requireUser();
@@ -58,16 +57,14 @@ export const editTemplate = action(async (formData: FormData) => {
 
   const user = requireUser();
 
-  const values = Object.fromEntries(formData);
-
-  const result = await parseAsync(
+  const result = await parseFormData(
     object({
       id: string(),
       slug: string(),
       subject: string(),
       body: string(),
     }),
-    values
+    formData
   );
 
   const template = await db.query.templatesTable.findFirst({
@@ -103,14 +100,12 @@ export const generateTemplate = action(async (formData: FormData) => {
 
   requireUser();
 
-  const values = Object.fromEntries(formData);
-
-  const payload = await parseAsync(
+  const payload = await parseFormData(
     object({
       prompt: string(),
       currentHtml: optional(string()),
     }),
-    values
+    formData
   );
 
   const INITIAL_GENERATION_PROMPT =
@@ -144,14 +139,12 @@ export const editTemplateElement = action(async (formData: FormData) => {
 
   requireUser();
 
-  const values = Object.fromEntries(formData);
-
-  const payload = await parseAsync(
+  const payload = await parseFormData(
     object({
       element: string(),
       prompt: string(),
     }),
-    values
+    formData
   );
 
   const result = await generateText({
@@ -178,14 +171,12 @@ export const deleteTemplate = action(async (formData: FormData) => {
 
   const user = requireUser();
 
-  const values = Object.fromEntries(formData);
-
-  const payload = await parseAsync(
+  const payload = await parseFormData(
     object({
       projectId: string(),
       id: string(),
     }),
-    values
+    formData
   );
 
   await requireUserToBeMemberOfProject({

@@ -18,6 +18,7 @@ import { requireUser } from "../auth/utils";
 import { requireUserToBeMemberOfTeam } from "../projects/utils";
 import { SUBSCRIPTION_QUOTAS } from "../subscriptions/constants";
 import teamInviteTemplate from "~/lib/static-templates/team-invite.html?raw";
+import { parseFormData } from "../server-utils";
 
 export const createTeam = action(async (formData: FormData) => {
   "use server";
@@ -32,13 +33,11 @@ export const createTeam = action(async (formData: FormData) => {
     });
   }
 
-  const values = Object.fromEntries(formData);
-
-  const payload = await parseAsync(
+  const payload = await parseFormData(
     object({
       name: string(),
     }),
-    values
+    formData
   );
 
   const { teamId, projectId } = await db.transaction(async (db) => {
@@ -90,14 +89,12 @@ export const editTeam = action(async (formData: FormData) => {
 
   const user = requireUser();
 
-  const values = Object.fromEntries(formData);
-
-  const payload = await parseAsync(
+  const payload = await parseFormData(
     object({
       id: string(),
       name: string(),
     }),
-    values
+    formData
   );
 
   await requireUserToBeMemberOfTeam({
@@ -118,14 +115,12 @@ export const inviteTeamMember = action(async (formData: FormData) => {
 
   const user = requireUser();
 
-  const values = Object.fromEntries(formData);
-
-  const payload = await parseAsync(
+  const payload = await parseFormData(
     object({
       teamId: string(),
       email: pipe(string(), email()),
     }),
-    values
+    formData
   );
 
   const { meta } = await requireUserToBeMemberOfTeam({
@@ -157,13 +152,11 @@ export const acceptInvite = action(async (formData: FormData) => {
 
   const user = requireUser();
 
-  const values = Object.fromEntries(formData);
-
-  const payload = await parseAsync(
+  const payload = await parseFormData(
     object({
       teamId: string(),
     }),
-    values
+    formData
   );
 
   const invite = await db.query.teamInvitesTable.findFirst({
@@ -222,14 +215,12 @@ export const deleteInvite = action(async (formData: FormData) => {
 
   const user = requireUser();
 
-  const values = Object.fromEntries(formData);
-
-  const payload = await parseAsync(
+  const payload = await parseFormData(
     object({
       teamId: string(),
       email: string(),
     }),
-    values
+    formData
   );
 
   await requireUserToBeMemberOfTeam({

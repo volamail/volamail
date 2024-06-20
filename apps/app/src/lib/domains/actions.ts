@@ -1,12 +1,13 @@
 import { and, eq } from "drizzle-orm";
 import { action } from "@solidjs/router";
 import { createError } from "vinxi/http";
-import { object, parseAsync, string } from "valibot";
+import { object, string } from "valibot";
 
 import { db } from "../db";
 import { sesClient } from "../mail/send";
 import { requireUser } from "../auth/utils";
 import { domainsTable } from "../db/schema";
+import { parseFormData } from "../server-utils";
 import { requireUserToBeMemberOfProject } from "../projects/utils";
 
 export const createDomain = action(async (formData: FormData) => {
@@ -14,14 +15,12 @@ export const createDomain = action(async (formData: FormData) => {
 
   const user = requireUser();
 
-  const values = Object.fromEntries(formData);
-
-  const body = await parseAsync(
+  const body = await parseFormData(
     object({
       projectId: string(),
       domain: string(),
     }),
-    values
+    formData
   );
 
   await requireUserToBeMemberOfProject({
@@ -49,14 +48,12 @@ export const deleteDomain = action(async (formData: FormData) => {
 
   const user = requireUser();
 
-  const values = Object.fromEntries(formData);
-
-  const body = await parseAsync(
+  const body = await parseFormData(
     object({
       projectId: string(),
       domainId: string(),
     }),
-    values
+    formData
   );
 
   await requireUserToBeMemberOfProject({

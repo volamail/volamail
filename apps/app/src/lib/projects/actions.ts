@@ -5,20 +5,19 @@ import { db } from "../db";
 import { requireUser } from "../auth/utils";
 import { projectsTable } from "../db/schema";
 import { requireUserToBeMemberOfTeam } from "./utils";
+import { parseFormData } from "../server-utils";
 
 export const createProject = action(async (formData: FormData) => {
   "use server";
 
   const user = requireUser();
 
-  const values = Object.fromEntries(formData);
-
-  const payload = await parseAsync(
+  const payload = await parseFormData(
     object({
       teamId: string(),
       name: string(),
     }),
-    values
+    formData
   );
 
   await requireUserToBeMemberOfTeam({
