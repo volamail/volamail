@@ -1,4 +1,4 @@
-import { Show, createMemo } from "solid-js";
+import { JSX, Show, createMemo } from "solid-js";
 import {
   LinkIcon,
   SendIcon,
@@ -32,115 +32,49 @@ export function FloatingMenu(props: Props) {
     },
   });
 
-  const content = createMemo(() => {
+  const elementSettingsElements = createMemo(() => {
+    const elements: Array<JSX.Element> = [];
+
     if (props.element instanceof HTMLAnchorElement) {
-      return (
-        <form
-          class="flex flex-col gap-2"
-          onSubmit={(e) => {
-            e.preventDefault();
-
-            const element = props.element as HTMLAnchorElement;
-
-            const formData = new FormData(e.target as HTMLFormElement);
-
-            element.href = formData.get("href") as string;
-
-            element.removeAttribute("data-selected");
-
-            props.onComplete(element.outerHTML);
-          }}
-        >
-          <Input
-            type="text"
-            name="href"
-            leading={() => <LinkIcon class="size-4" />}
-            value={props.element.href}
-          />
-          <Button
-            type="submit"
-            icon={() => <SaveAllIcon class="size-4" />}
-            class="self-end"
-          >
-            Save
-          </Button>
-        </form>
+      elements.push(
+        <Input
+          type="text"
+          name="href"
+          leading={() => <LinkIcon class="size-4" />}
+          value={props.element.href}
+        />
       );
     }
 
     if (props.element instanceof HTMLImageElement) {
-      return (
-        <form
-          class="flex flex-col gap-2"
-          onSubmit={(e) => {
-            e.preventDefault();
-
-            const element = props.element as HTMLImageElement;
-
-            const formData = new FormData(e.target as HTMLFormElement);
-
-            element.src = formData.get("src") as string;
-
-            element.removeAttribute("data-selected");
-
-            props.onComplete(element.outerHTML);
-          }}
-        >
-          <Input
-            type="text"
-            name="src"
-            leading={() => <LinkIcon class="size-4" />}
-            value={props.element.src}
-          />
-          <Button
-            type="submit"
-            icon={() => <SaveAllIcon class="size-4" />}
-            class="self-end"
-          >
-            Save
-          </Button>
-        </form>
+      elements.push(
+        <Input
+          type="text"
+          name="src"
+          leading={() => <LinkIcon class="size-4" />}
+          value={props.element.src}
+        />
       );
     }
 
     if (
-      props.element instanceof HTMLParagraphElement ||
-      props.element instanceof HTMLHeadingElement
+      (props.element instanceof HTMLParagraphElement ||
+        props.element instanceof HTMLHeadingElement ||
+        props.element instanceof HTMLTableCellElement) &&
+      elementHasOnlyText(props.element)
     ) {
-      return (
-        <form
-          class="flex flex-col gap-2"
-          onSubmit={(e) => {
-            e.preventDefault();
-
-            const element = props.element as HTMLParagraphElement;
-
-            const formData = new FormData(e.target as HTMLFormElement);
-
-            element.textContent = formData.get("contents") as string;
-
-            element.removeAttribute("data-selected");
-
-            props.onComplete(element.outerHTML);
-          }}
+      elements.push(
+        <Textarea
+          name="contents"
+          leading={() => <TextIcon class="size-4" />}
+          resizeable
         >
-          <Textarea
-            name="contents"
-            resizeable
-            leading={() => <TextIcon class="size-4" />}
-          >
-            {props.element.textContent}
-          </Textarea>
-          <Button
-            type="submit"
-            icon={() => <CheckIcon class="size-4" />}
-            class="self-end"
-          >
-            Apply
-          </Button>
-        </form>
+          {props.element.textContent || ""}
+        </Textarea>
       );
     }
+
+    return elements;
   });
 
   return (
@@ -195,20 +129,65 @@ export function FloatingMenu(props: Props) {
               even
             />
           </div>
-          <Show when={content()}>
+          <Show when={elementSettingsElements().length}>
             <div class="flex flex-col gap-1">
               <div class="flex gap-2 items-center w-full">
                 <hr class="grow border-gray-200" />
                 <span class="text-sm font-medium text-gray-500">
-                  Element settings
+                  Element settings (&lt;{props.element.tagName.toLowerCase()}
+                  &gt;)
                 </span>
                 <hr class="grow border-gray-200" />
               </div>
-              {content()}
+              <form
+                class="flex flex-col gap-2"
+                onSubmit={(e) => {
+                  e.preventDefault();
+
+                  const element = props.element as HTMLElement;
+
+                  const formData = new FormData(e.target as HTMLFormElement);
+
+                  element.removeAttribute("data-selected");
+
+                  if (formData.get("src")) {
+                    (element as HTMLImageElement).src = formData.get(
+                      "src"
+                    ) as string;
+                  }
+
+                  if (formData.get("href")) {
+                    (element as HTMLAnchorElement).href = formData.get(
+                      "href"
+                    ) as string;
+                  }
+
+                  if (formData.get("contents")) {
+                    element.textContent = formData.get("contents") as string;
+                  }
+
+                  props.onComplete(element.outerHTML);
+                }}
+              >
+                {elementSettingsElements()}
+                <Button
+                  type="submit"
+                  icon={() => <SaveAllIcon class="size-4" />}
+                  class="self-end"
+                >
+                  Save
+                </Button>
+              </form>
             </div>
           </Show>
         </>
       </PopoverContent>
     </PopoverRoot>
   );
+}
+
+function elementHasOnlyText(el: HTMLElement) {
+  const pattern = /<.*>.*<\/.*>/;
+
+  return !pattern.test(el.innerHTML);
 }

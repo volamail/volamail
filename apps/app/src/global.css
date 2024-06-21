@@ -31,7 +31,7 @@
 }
 
 .revert-tailwind *[data-selected] {
-  @apply outline-2 outline-blue-600 outline-dashed bg-blue-600/25 animate-in fade-in;
+  @apply outline-2 outline-blue-600 outline-dashed bg-blue-600/25;
 }
 
 .revert-tailwind *[align=center] {

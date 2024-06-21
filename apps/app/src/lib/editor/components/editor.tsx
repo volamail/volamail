@@ -128,14 +128,14 @@ export function Editor(props: Props) {
           <Tabs.List class="border border-gray-300 inline-flex self-start text-sm items-center bg-gray-200 rounded-lg p-1">
             <Tabs.Trigger
               value="preview"
-              class="rounded-lg inline-flex gap-1.5 items-center data-[selected]:bg-gray-100 px-3 py-1 data-[selected]:font-medium data-[selected]:text-black text-gray-600"
+              class="rounded-lg inline-flex transition-colors gap-1.5 items-center data-[selected]:bg-gray-100 px-3 py-1 data-[selected]:font-medium data-[selected]:text-black text-gray-600"
             >
               Preview
               <EyeIcon class="size-4" />
             </Tabs.Trigger>
             <Tabs.Trigger
               value="html"
-              class="rounded-lg inline-flex gap-1.5 items-center data-[selected]:bg-gray-100 px-3 py-1 data-[selected]:font-medium data-[selected]:text-black text-gray-600"
+              class="rounded-lg inline-flex transition-colors gap-1.5 items-center data-[selected]:bg-gray-100 px-3 py-1 data-[selected]:font-medium data-[selected]:text-black text-gray-600"
             >
               HTML
               <CodeIcon class="size-4" />
@@ -198,7 +198,6 @@ export function Editor(props: Props) {
               <div class="flex gap-4">
                 <button
                   type="button"
-                  disabled
                   class="font-medium disabled:opacity-50 cursor-default flex-1 rounded-lg bg-gray-200 shadow p-4 text-sm inline-flex gap-2 items-center not:disabled:hover:bg-gray-300 transition-colors"
                 >
                   <Table2Icon class="size-8 bg-black text-white rounded-lg p-2" />
