@@ -86,7 +86,7 @@ export default function NewTemplate(props: RouteSectionProps) {
           id="create-email-form"
           autocomplete="off"
           action={createTemplate}
-          class="bg-white border-r p-4 w-72 gap-4 flex flex-col"
+          class="bg-white border-r p-4 w-72 gap-4 flex flex-col shrink-0"
         >
           <input
             type="hidden"

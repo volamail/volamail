@@ -5,11 +5,18 @@ import {
   createEffect,
   createSignal,
 } from "solid-js";
+import {
+  EyeIcon,
+  CodeIcon,
+  SendIcon,
+  Table2Icon,
+  PaperclipIcon,
+} from "lucide-solid";
 import { Tabs } from "@kobalte/core/tabs";
-import { CodeIcon, EyeIcon, PaperclipIcon, SendIcon } from "lucide-solid";
 
 import { FloatingMenu } from "./floating-menu";
 import { Button } from "~/lib/ui/components/button";
+import { PasteHtmlButton } from "./paste-html-button";
 import { Textarea } from "~/lib/ui/components/textarea";
 import { useMutation } from "~/lib/ui/hooks/useMutation";
 import { generateTemplate } from "~/lib/templates/actions";
@@ -177,44 +184,69 @@ export function Editor(props: Props) {
           <input type="hidden" name="currentHtml" value={props.value} />
         </Show>
 
-        <Textarea
-          name="prompt"
-          required
-          loading={generateTemplateAction.pending}
-          resizeable
-          submitOnEnter
-          autofocus
-          leading={() => (
-            <Button
-              icon={() => <PaperclipIcon class="size-4" />}
-              as="label"
-              variant="ghost"
-              round
-              even
-              aria-label="Upload image"
-            >
-              <input
-                type="file"
-                name="image"
-                accept="image/png, image/jpeg"
-                class="sr-only"
-                tabIndex={-1}
+        <div class="flex flex-col gap-64">
+          <Show when={!props.value}>
+            <div class="flex flex-col gap-12">
+              <div class="flex flex-col gap-2">
+                <h1 class="text-4xl font-bold text-center">Create email</h1>
+                <p class="text-center text-gray-600 text-sm">
+                  Use an existing email as a starting point or start from
+                  scratch.
+                </p>
+              </div>
+
+              <div class="flex gap-4">
+                <button
+                  type="button"
+                  disabled
+                  class="font-medium disabled:opacity-50 cursor-default flex-1 rounded-lg bg-gray-200 shadow p-4 text-sm inline-flex gap-2 items-center not:disabled:hover:bg-gray-300 transition-colors"
+                >
+                  <Table2Icon class="size-8 bg-black text-white rounded-lg p-2" />
+                  Start from another email
+                </button>
+                <PasteHtmlButton onPaste={props.onChange} />
+              </div>
+            </div>
+          </Show>
+
+          <Textarea
+            name="prompt"
+            required
+            loading={generateTemplateAction.pending}
+            resizeable
+            submitOnEnter
+            autofocus
+            leading={() => (
+              <Button
+                as="label"
+                variant="ghost"
+                icon={() => <PaperclipIcon class="size-4" />}
+                round
+                even
+                aria-label="Attach image"
+              >
+                <input
+                  type="file"
+                  name="image"
+                  accept="image/png, image/jpeg"
+                  class="sr-only"
+                />
+              </Button>
+            )}
+            trailing={() => (
+              <Button
+                type="submit"
+                aria-label="Request changes"
+                class="p-2"
+                round
+                even
+                icon={() => <SendIcon class="size-3" />}
               />
-            </Button>
-          )}
-          trailing={() => (
-            <Button
-              type="submit"
-              aria-label="Request changes"
-              class="p-2"
-              round
-              even
-              icon={() => <SendIcon class="size-3" />}
-            />
-          )}
-          class="py-1"
-          placeholder="A welcome e-mail with a magic link button..."
-        />
+            )}
+            class="py-1"
+            placeholder="A welcome e-mail with a magic link button..."
+          />
+        </div>
       </form>
 
       <input type="hidden" name={props.name} value={props.value} />
