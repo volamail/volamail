@@ -11,6 +11,9 @@ export default defineConfig({
       "/assets/**": {
         proxy: `https://${process.env.AWS_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/**`,
       },
+      "/api/**": {
+        cors: true,
+      },
     },
   },
   middleware: "./src/middleware.ts",

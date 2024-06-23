@@ -1,9 +1,38 @@
 ---
 import { Image } from "astro:assets";
 import Logo from "../components/Logo.astro";
-import { ArrowRightIcon, HourglassIcon } from "lucide-solid";
 import mockupImage from "../assets/mockup.png";
 import FeatureCard from "../components/FeatureCard.astro";
+import { WaitlistForm } from "../components/WaitlistForm.tsx";
+
+import "../global.css";
+
+let success = false;
+let error: string | undefined;
+
+if (Astro.request.method === "POST") {
+  try {
+    const data = await Astro.request.formData();
+
+    const response = await fetch(
+      "https://app.volamail.com/api/waitlist/request-approval",
+      {
+        method: "POST",
+        body: data,
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Bad response" + response.statusText + response.status);
+    }
+
+    success = true;
+  } catch (e) {
+    console.log(e);
+
+    error = "An error occurred";
+  }
+}
 ---
 
 <html lang="en">
@@ -52,18 +81,8 @@ import FeatureCard from "../components/FeatureCard.astro";
               API call. E-mail shouldn't be so difficult.
             </p>
 
-            <div class="flex items-center gap-6 mt-8">
-              <button
-                disabled
-                class="font-medium disabled:bg-gray-700 py-2 rounded-full px-4 bg-black text-white inline-flex gap-2 items-center text-sm cursor-default hover:bg-gray-600 transition-colors"
-              >
-                Coming soon <HourglassIcon class="size-4" />
-              </button>
-              <a
-                href="mailto:info@volamail.com"
-                class="text-sm flex items-center gap-2"
-                >Contact us<ArrowRightIcon class="size-4" /></a
-              >
+            <div class="flex items-center gap-6 mt-8 max-w-sm w-full">
+              <WaitlistForm client:load error={error} success={success} />
             </div>
           </div>
           <Image
@@ -82,18 +101,17 @@ import FeatureCard from "../components/FeatureCard.astro";
             AI to make changes to it.
           </FeatureCard>
           <FeatureCard title="Importing emails">
-            Our AI integration and editor works with plain HTML, so you can
-            gradually try out the platform by import your existing emails.
+            The AI-based editor works with plain HTML, so you can gradually try
+            out the platform by import your existing emails.
           </FeatureCard>
           <FeatureCard title="Self-hosting">
-            Volamail is open source and fully self-hostable. There are very few
+            Volamail is 100% open source and self-hostable. There are very few
             moving parts so you can easily deploy it to your own infrastructure.
           </FeatureCard>
           <FeatureCard title="Marketing and transactional">
-            A core vision is support for both marketing, developer-less emails
-            and transactional emails that can be invoked from an API. Editing
-            teams will be able to lay out marketing emails and send them to an
-            audience straight from the Volamail dashboard.
+            Editing teams will be able to lay out marketing emails and send them
+            to an audience straight from the dashboard. Transactional emails can
+            be sent by developers via a simple fetch call.
           </FeatureCard>
         </div>
       </section>
@@ -101,9 +119,13 @@ import FeatureCard from "../components/FeatureCard.astro";
       <section class="flex flex-col gap-4 max-w-5xl w-full px-8 py-32">
         <h2 class="text-3xl font-bold">Why</h2>
         <p class="text-gray-600">
-          Working in modern web development we found existing email tooling to
-          be a bit of a pain. There's a huge gap between the startup-level email
-          setup and what large enterprise companies are using.
+          Working in modern web development <a
+            href="https://vlkstudio.com"
+            target="_blank"
+            class="font-medium underline">we</a
+          > found existing email tooling to be a bit of a pain. There's a huge gap
+          between the startup-level email setup and what large enterprise companies
+          are using.
         </p>
         <p class="text-gray-600">
           Volamail wants to unify this flow by providing an extremely fast
@@ -120,7 +142,7 @@ import FeatureCard from "../components/FeatureCard.astro";
     <footer
       class="w-full border-t max-w-5xl mx-auto justify-between border-gray-100 p-8 flex items-center"
     >
-      <Logo class="w-24" />
+      <Logo class="w-6" />
       <div class="flex gap-6 items-center text-sm">
         <a
           href="https://github.com/volamail/volamail"

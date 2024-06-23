@@ -1,0 +1,7 @@
+/**
+ * Patch to make browser autofill color white
+ * https://github.com/tailwindlabs/tailwindcss/discussions/8679
+ */
+ .text-input {
+  @apply autofill:shadow-[inset_0_0_0px_1000px_#fff];
+}
