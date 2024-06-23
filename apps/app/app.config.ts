@@ -13,6 +13,10 @@ export default defineConfig({
       },
       "/api/**": {
         cors: true,
+        headers: {
+          "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type,Authorization",
+        },
       },
     },
   },
