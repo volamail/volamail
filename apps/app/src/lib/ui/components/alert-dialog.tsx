@@ -35,7 +35,7 @@ const AlertDialogOverlay = <T extends ValidComponent = "div">(
   return (
     <AlertDialogPrimitive.Overlay
       class={cn(
-        "fixed inset-0 z-50 bg-white/50 backdrop-blur-sm data-[expanded]:animate-in data-[closed]:animate-out data-[closed]:fade-out-0 data-[expanded]:fade-in-0",
+        "fixed inset-0 z-50 bg-white/70 backdrop-blur-sm data-[expanded]:animate-in data-[closed]:animate-out data-[closed]:fade-out-0 data-[expanded]:fade-in-0",
         props.class
       )}
       {...rest}

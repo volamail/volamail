@@ -5,18 +5,14 @@ import {
   createEffect,
   createSignal,
 } from "solid-js";
-import {
-  EyeIcon,
-  CodeIcon,
-  SendIcon,
-  Table2Icon,
-  PaperclipIcon,
-} from "lucide-solid";
 import { Tabs } from "@kobalte/core/tabs";
+import { EyeIcon, CodeIcon, SendIcon, Table2Icon } from "lucide-solid";
 
+import { ImagePicker } from "./image-picker";
 import { FloatingMenu } from "./floating-menu";
 import { Button } from "~/lib/ui/components/button";
 import { PasteHtmlButton } from "./paste-html-button";
+import { showToast } from "~/lib/ui/components/toasts";
 import { Textarea } from "~/lib/ui/components/textarea";
 import { useMutation } from "~/lib/ui/hooks/useMutation";
 import { generateTemplate } from "~/lib/templates/actions";
@@ -25,24 +21,32 @@ import { GridBgContainer } from "~/lib/ui/components/grid-bg-container";
 type Props = {
   name?: string;
   value?: string;
+  projectId: string;
   onChange: (value: string | undefined) => void;
 };
 
 export function Editor(props: Props) {
   let mainForm!: HTMLFormElement;
   let templatePreview!: HTMLDivElement;
+  let promptInput!: HTMLTextAreaElement;
 
   const [selectedElement, setSelectedElement] = createSignal<HTMLElement>();
+  const [selectedImageUrl, setSelectedImageUrl] = createSignal<string>();
 
   const generateTemplateAction = useMutation({
     action: generateTemplate,
     onSuccess(result) {
       mainForm.reset();
 
+      setSelectedImageUrl();
+
       props.onChange(result.code);
     },
-    onError(error) {
-      console.log(error);
+    onError() {
+      showToast({
+        title: "Unable to generate template",
+        variant: "error",
+      });
     },
   });
 
@@ -109,6 +113,12 @@ export function Editor(props: Props) {
     props.onChange(deserializeCode(templatePreview.innerHTML));
 
     setSelectedElement();
+  }
+
+  function handleSelectImage(imageUrl?: string) {
+    setSelectedImageUrl(imageUrl);
+
+    promptInput.focus();
   }
 
   const displayedCode = createMemo(() => {
@@ -180,6 +190,8 @@ export function Editor(props: Props) {
         class="w-full max-w-2xl"
         ref={mainForm}
       >
+        <input type="hidden" name="projectId" value={props.projectId} />
+
         <Show when={props.value}>
           <input type="hidden" name="currentHtml" value={props.value} />
         </Show>
@@ -216,34 +228,38 @@ export function Editor(props: Props) {
             submitOnEnter
             autofocus
             leading={() => (
-              <Button
-                as="label"
-                variant="ghost"
-                icon={() => <PaperclipIcon class="size-4" />}
-                round
-                even
-                aria-label="Attach image"
-              >
-                <input
-                  type="file"
-                  name="image"
-                  accept="image/png, image/jpeg"
-                  class="sr-only"
+              <div class="flex gap-1 shrink-0 items-center py-1">
+                <ImagePicker
+                  projectId={props.projectId}
+                  onSelect={handleSelectImage}
                 />
-              </Button>
+                <Show when={selectedImageUrl()}>
+                  <span class="text-gray-500 text-sm">Using this image,</span>
+                  <input
+                    type="hidden"
+                    name="image"
+                    value={selectedImageUrl()}
+                  />
+                </Show>
+              </div>
             )}
+            ref={promptInput}
             trailing={() => (
               <Button
                 type="submit"
                 aria-label="Request changes"
-                class="p-2"
+                class="p-2 mt-0.5"
                 round
                 even
                 icon={() => <SendIcon class="size-3" />}
               />
             )}
-            class="py-1"
-            placeholder="A welcome e-mail with a magic link button..."
+            class="py-1 gap-1"
+            placeholder={
+              selectedImageUrl()
+                ? "create an invite email and put the image on top."
+                : "A welcome e-mail with a magic link button..."
+            }
           />
         </div>
       </form>

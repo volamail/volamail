@@ -11,7 +11,7 @@ import { Input } from "~/lib/ui/components/input";
 import { sendTestMail } from "~/lib/mail/actions";
 import { Button } from "~/lib/ui/components/button";
 import { getTemplate } from "~/lib/templates/queries";
-import { deleteTemplate, editTemplate } from "~/lib/templates/actions";
+import { editTemplate } from "~/lib/templates/actions";
 import { showToast } from "~/lib/ui/components/toasts";
 import { Textarea } from "~/lib/ui/components/textarea";
 import { Editor } from "~/lib/editor/components/editor";
@@ -162,7 +162,11 @@ export default function EditTemplate(props: RouteSectionProps) {
           />
         </form>
 
-        <Editor value={html()} onChange={setHtml} />
+        <Editor
+          value={html()}
+          onChange={setHtml}
+          projectId={props.params.projectId}
+        />
       </div>
 
       <DeleteTemplateDialog

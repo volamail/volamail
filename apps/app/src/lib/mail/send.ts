@@ -11,7 +11,7 @@ type Params = {
 };
 
 export const sesClient = new SESv2({
-  region: "eu-central-1",
+  region: env.AWS_REGION,
   credentials: {
     accessKeyId: env.AWS_ACCESS_KEY_ID,
     secretAccessKey: env.AWS_SECRET_ACCESS_KEY,

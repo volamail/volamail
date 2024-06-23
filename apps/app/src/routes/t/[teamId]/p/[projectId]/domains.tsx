@@ -8,7 +8,7 @@ import {
   onMount,
 } from "solid-js";
 import { Title } from "@solidjs/meta";
-import { LoaderIcon, PlusIcon, Trash2Icon } from "lucide-solid";
+import { LoaderIcon, PlusIcon, XIcon } from "lucide-solid";
 import { type RouteDefinition, type RouteSectionProps } from "@solidjs/router";
 
 import {
@@ -24,7 +24,7 @@ import { createDomain } from "~/lib/domains/actions";
 import { showToast } from "~/lib/ui/components/toasts";
 import { useMutation } from "~/lib/ui/hooks/useMutation";
 import { getProjectDomains } from "~/lib/domains/queries";
-import { DeleteDomainDialog } from "~/lib/domains/components/DeleteDomainDialog";
+import { DeleteDomainDialog } from "~/lib/domains/components/delete-domain-dialog";
 
 export const route: RouteDefinition = {
   load({ params }) {
@@ -64,8 +64,6 @@ export default function DomainsPage(props: RouteSectionProps) {
   onMount(() => {
     const interval = setInterval(() => {
       refetch();
-
-      console.log("Refetching");
     }, 10000);
 
     onCleanup(() => clearInterval(interval));
@@ -141,7 +139,7 @@ export default function DomainsPage(props: RouteSectionProps) {
                       variant="ghost"
                       even
                       class="self-start"
-                      icon={() => <Trash2Icon class="size-4" />}
+                      icon={() => <XIcon class="size-4" />}
                       aria-label="Delete address"
                       type="button"
                       onClick={() => setDomainIdToDelete(domain.id)}

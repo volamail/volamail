@@ -11,6 +11,7 @@ import {
   AtSignIcon,
   CreditCardIcon,
   GlobeIcon,
+  ImageIcon,
   KeyIcon,
   LogOutIcon,
   Table2Icon,
@@ -80,6 +81,14 @@ export default function DashboardLayout(props: Props) {
                 >
                   <AtSignIcon class="size-4" />
                   Domains
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  href={`/t/${params.teamId}/p/${params.projectId}/media`}
+                >
+                  <ImageIcon class="size-4" />
+                  Media
                 </NavLink>
               </li>
             </ul>

@@ -14,9 +14,9 @@ import { Input } from "~/lib/ui/components/input";
 import { Button } from "~/lib/ui/components/button";
 import { showToast } from "~/lib/ui/components/toasts";
 import { useMutation } from "~/lib/ui/hooks/useMutation";
-import { InviteMemberDialog } from "~/lib/teams/components/InviteMemberDialog";
-import { DeleteInviteDialog } from "~/lib/teams/components/DeleteInviteDialog";
-import { DeleteMemberDialog } from "~/lib/teams/components/DeleteMemberDialog";
+import { InviteMemberDialog } from "~/lib/teams/components/invite-member-dialog";
+import { DeleteInviteDialog } from "~/lib/teams/components/delete-invite-dialog";
+import { DeleteMemberDialog } from "~/lib/teams/components/delete-member-dialog";
 
 export default function TeamPage(props: RouteSectionProps) {
   const team = createAsync(() => getTeam(props.params.teamId));

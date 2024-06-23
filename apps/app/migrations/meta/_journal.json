@@ -204,6 +204,41 @@
       "when": 1718871616586,
       "tag": "0028_rainy_lord_tyger",
       "breakpoints": true
+    },
+    {
+      "idx": 29,
+      "version": "6",
+      "when": 1719000133410,
+      "tag": "0029_lame_titania",
+      "breakpoints": true
+    },
+    {
+      "idx": 30,
+      "version": "6",
+      "when": 1719003170034,
+      "tag": "0030_thin_omega_red",
+      "breakpoints": true
+    },
+    {
+      "idx": 31,
+      "version": "6",
+      "when": 1719007386573,
+      "tag": "0031_youthful_silhouette",
+      "breakpoints": true
+    },
+    {
+      "idx": 32,
+      "version": "6",
+      "when": 1719067782988,
+      "tag": "0032_nifty_shinobi_shaw",
+      "breakpoints": true
+    },
+    {
+      "idx": 33,
+      "version": "6",
+      "when": 1719148921678,
+      "tag": "0033_rainy_multiple_man",
+      "breakpoints": true
     }
   ]
 }

@@ -4,6 +4,7 @@ import { index, pgTable, text } from "drizzle-orm/pg-core";
 
 import { usersTable } from "./users.sql";
 import { teamsTable } from "./teams.sql";
+import { imagesTable } from "./images.sql";
 import { templatesTable } from "./templates.sql";
 
 export const projectsTable = pgTable(
@@ -37,6 +38,7 @@ export const projectsRelations = relations(projectsTable, ({ one, many }) => ({
     references: [teamsTable.id],
   }),
   templates: many(templatesTable),
+  images: many(imagesTable),
 }));
 
 export type DbProject = typeof projectsTable.$inferSelect;

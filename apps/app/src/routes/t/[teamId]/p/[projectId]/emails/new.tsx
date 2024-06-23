@@ -123,7 +123,11 @@ export default function NewTemplate(props: RouteSectionProps) {
           <input type="hidden" name="body" value={html()} />
         </form>
 
-        <Editor value={html()} onChange={setHtml} />
+        <Editor
+          value={html()}
+          onChange={setHtml}
+          projectId={props.params.projectId}
+        />
       </div>
     </main>
   );

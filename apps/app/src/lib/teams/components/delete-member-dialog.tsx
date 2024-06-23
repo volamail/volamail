@@ -29,8 +29,6 @@ export function DeleteMemberDialog(props: Props) {
       props.onClose();
     },
     onError() {
-      props.onClose();
-
       showToast({
         title: "Unable to remove member",
         variant: "error",

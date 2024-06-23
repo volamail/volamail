@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^0.0.19",
+    "@aws-sdk/client-s3": "^3.600.0",
     "@aws-sdk/client-sesv2": "^3.600.0",
     "@corvu/otp-field": "^0.1.1",
     "@kobalte/core": "^0.13.3",
@@ -19,7 +20,9 @@
     "@solidjs/start": "^1.0.2",
     "ai": "^3.2.1",
     "arctic": "^1.9.1",
+    "dotenv": "^16.4.5",
     "drizzle-orm": "^0.30.10",
+    "image-size": "^1.1.1",
     "lucia": "^3.2.0",
     "lucide-solid": "^0.378.0",
     "nanoid": "^5.0.7",

@@ -6,8 +6,9 @@ export function useMutation<T extends Array<unknown>, U>(params: {
   action: Action<T, U>;
   onSuccess?: (result: U) => void;
   onError?: (error: H3Error) => void;
+  filter?: (arg: T) => boolean;
 }) {
-  const submission = useSubmission(params.action);
+  const submission = useSubmission(params.action, params.filter);
 
   createEffect((prev) => {
     const result = {
