@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { generateState } from "arctic";
 import { customAlphabet } from "nanoid";
 import { getRequestEvent } from "solid-js/web";
@@ -12,7 +12,7 @@ import { createGithubAuth } from "./github";
 import { parseFormData } from "../server-utils";
 import { getUserProjects } from "../projects/utils";
 import { bootstrapUser } from "../users/server-utils";
-import { mailCodesTable, usersTable } from "../db/schema";
+import { mailCodesTable, usersTable, waitlistTable } from "../db/schema";
 
 export const loginWithGithub = action(async (formData: FormData) => {
   "use server";
@@ -80,13 +80,24 @@ export const sendEmailOtp = action(async (formData: FormData) => {
     formData
   );
 
-  const [user] = await Promise.all([
-    db.query.usersTable.findFirst({
-      where: eq(usersTable.email, body.email),
-      columns: { id: true },
-    }),
-    db.delete(mailCodesTable).where(eq(mailCodesTable.email, body.email)),
-  ]);
+  const waitlistApproval = await db.query.waitlistTable.findFirst({
+    where: and(
+      eq(waitlistTable.email, body.email),
+      eq(waitlistTable.approved, true)
+    ),
+    columns: {
+      email: true,
+    },
+  });
+
+  if (!waitlistApproval) {
+    throw createError({
+      statusCode: 403,
+      statusMessage: "Email not approved yet",
+    });
+  }
+
+  await db.delete(mailCodesTable).where(eq(mailCodesTable.email, body.email));
 
   const nanoid = customAlphabet("0123456789", 6);
 

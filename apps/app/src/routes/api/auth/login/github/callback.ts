@@ -5,23 +5,15 @@ import {
   appendHeader,
   sendRedirect,
 } from "vinxi/http";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { OAuth2RequestError } from "arctic";
-import { generateIdFromEntropySize } from "lucia";
 import type { APIEvent } from "@solidjs/start/server";
 
-import {
-  teamsTable,
-  usersTable,
-  teamMembersTable,
-  subscriptionsTable,
-} from "~/lib/db/schema";
 import { db } from "~/lib/db";
 import { lucia } from "~/lib/auth/lucia";
+import { usersTable, waitlistTable } from "~/lib/db/schema";
 import { createGithubAuth } from "~/lib/auth/github";
 import { getUserProjects } from "~/lib/projects/utils";
-import { projectsTable } from "~/lib/db/schema/projects.sql";
-import { SUBSCRIPTION_QUOTAS } from "~/lib/subscriptions/constants";
 import { bootstrapUser } from "~/lib/users/server-utils";
 
 export async function GET({ nativeEvent }: APIEvent) {
@@ -98,6 +90,20 @@ export async function GET({ nativeEvent }: APIEvent) {
       return sendRedirect(
         nativeEvent,
         `/t/${project.teamId}/p/${project.id}/emails`
+      );
+    }
+
+    const approval = await db.query.waitlistTable.findFirst({
+      where: and(
+        eq(waitlistTable.email, userEmail),
+        eq(waitlistTable.approved, true)
+      ),
+    });
+
+    if (!approval) {
+      return sendRedirect(
+        nativeEvent,
+        `/login?error=${encodeURI("Email not approved yet")}`
       );
     }
 

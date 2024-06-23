@@ -1,7 +1,7 @@
 import { Show } from "solid-js";
 import { Title } from "@solidjs/meta";
-import { GithubIcon, SendIcon } from "lucide-solid";
-import { useIsRouting, useSearchParams } from "@solidjs/router";
+import { useSearchParams } from "@solidjs/router";
+import { AlertCircleIcon, GithubIcon, SendIcon } from "lucide-solid";
 
 import { Input } from "~/lib/ui/components/input";
 import { Button } from "~/lib/ui/components/button";
@@ -11,6 +11,8 @@ import { loginWithGithub, sendEmailOtp } from "~/lib/auth/actions";
 import { GridBgContainer } from "~/lib/ui/components/grid-bg-container";
 
 export default function Login() {
+  const [searchParams] = useSearchParams();
+
   const loginWithGithubAction = useMutation({
     action: loginWithGithub,
   });
@@ -24,15 +26,12 @@ export default function Login() {
       });
     },
     onError(e) {
-      console.log(e);
       showToast({
-        title: "Unable to send OTP",
+        title: e.statusMessage || "Unable to send OTP",
         variant: "error",
       });
     },
   });
-
-  const [searchParams] = useSearchParams();
 
   return (
     <GridBgContainer class="h-dvh">
@@ -87,6 +86,13 @@ export default function Login() {
             Sign in with GitHub
           </Button>
         </div>
+
+        <Show when={searchParams.error}>
+          <div class="text-red-500 mt-4 bg-red-100 rounded-lg border-red-500 p-3 text-sm inline-flex gap-2 items-start">
+            <AlertCircleIcon class="size-5 shrink-0" />
+            <p>{searchParams.error}</p>
+          </div>
+        </Show>
       </form>
     </GridBgContainer>
   );
