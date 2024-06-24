@@ -8,7 +8,7 @@ type GithubAuthParams = {
 export function createGithubAuth({ to }: GithubAuthParams = {}) {
   const url = new URL(
     import.meta.env.PROD
-      ? `https://${env.SITE_URL}/api/auth/login/github/callback`
+      ? `https://${env.SITE_DOMAIN}/api/auth/login/github/callback`
       : "http://localhost:3000/api/auth/login/github/callback"
   );
 

@@ -1,3 +1,5 @@
+import postgres from "postgres";
+import { createError } from "vinxi/http";
 import { APIEvent } from "@solidjs/start/server";
 import { email, pipe, strictObject, string } from "valibot";
 
@@ -17,7 +19,21 @@ export async function POST({ request }: APIEvent) {
     formData
   );
 
-  await db.insert(waitlistTable).values({
-    email: data.email,
-  });
+  try {
+    await db.insert(waitlistTable).values({
+      email: data.email,
+    });
+
+    return {
+      success: true,
+    };
+  } catch (e) {
+    throw createError({
+      statusCode: e instanceof postgres.PostgresError ? 409 : 500,
+      statusMessage:
+        e instanceof postgres.PostgresError
+          ? "Access has already been requested for this email"
+          : undefined,
+    });
+  }
 }

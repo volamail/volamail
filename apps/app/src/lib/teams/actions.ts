@@ -142,7 +142,7 @@ export const inviteTeamMember = action(async (formData: FormData) => {
       team_name: meta.team.name,
       link: import.meta.env.DEV
         ? `http://localhost:3000/join-team/${meta.team.id}`
-        : `https://${env.SITE_URL}/join-team/${meta.team.id}`,
+        : `https://${env.SITE_DOMAIN}/join-team/${meta.team.id}`,
     },
   });
 }, "invites");

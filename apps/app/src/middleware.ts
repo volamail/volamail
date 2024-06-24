@@ -1,21 +1,27 @@
 import { createMiddleware } from "@solidjs/start/middleware";
 import { appendHeader, createError, getCookie } from "vinxi/http";
 import { type Session, type User, verifyRequestOrigin } from "lucia";
+
 import { lucia } from "./lib/auth/lucia";
 
 export default createMiddleware({
   onRequest: async (solidEvent) => {
-    const { nativeEvent: event, request, response, locals } = solidEvent;
+    const { nativeEvent: event, request, locals } = solidEvent;
 
-    if (request.method !== "GET") {
+    if (request.method !== "GET" && import.meta.env.PROD) {
       const hostHeader = request.headers.get("Host") ?? null;
       const originHeader = request.headers.get("Origin") ?? null;
 
+      const origin = new URL(originHeader || "https://volamail.com");
+
+      origin.hostname = clearSubdomain(origin.hostname);
+
       if (
-        !originHeader ||
         !hostHeader ||
-        !verifyRequestOrigin(originHeader, [hostHeader])
+        !verifyRequestOrigin(origin.toString(), [clearSubdomain(hostHeader)])
       ) {
+        console.warn("CSRF protection triggered");
+
         throw createError({
           status: 403,
         });
@@ -59,4 +65,14 @@ declare module "@solidjs/start/server" {
     user: User | null;
     session: Session | null;
   }
+}
+
+function clearSubdomain(url: string) {
+  const parts = url.split(".");
+
+  if (parts.length < 3) {
+    return url;
+  }
+
+  return parts.slice(1).join(".");
 }

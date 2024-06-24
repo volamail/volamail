@@ -42,7 +42,7 @@ export function Editor(props: Props) {
 
       props.onChange(result.code);
     },
-    onError() {
+    onError(e) {
       showToast({
         title: "Unable to generate template",
         variant: "error",

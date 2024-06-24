@@ -19,11 +19,12 @@ if (Astro.request.method === "POST") {
       {
         method: "POST",
         body: data,
+        mode: "cors",
       }
     );
 
     if (!response.ok) {
-      throw new Error("Bad response" + response.statusText + response.status);
+      throw new Error("Bad response from app server");
     }
 
     success = true;
@@ -81,7 +82,7 @@ if (Astro.request.method === "POST") {
               API call. E-mail shouldn't be so difficult.
             </p>
 
-            <div class="flex items-center gap-6 mt-8 max-w-sm w-full">
+            <div class="flex items-center gap-6 mt-8 max-w-sm w-full z-10">
               <WaitlistForm client:load error={error} success={success} />
             </div>
           </div>

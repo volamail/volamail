@@ -21,18 +21,29 @@ export function WaitlistForm(props: Props) {
     setPhase("pending");
 
     try {
-      const response = await fetch("/", {
-        method: "POST",
-        body: formData,
-      });
+      const response = await fetch(
+        `${import.meta.env.DEV ? "http" : "https"}://${
+          import.meta.env.PUBLIC_APP_DOMAIN
+        }/api/waitlist/request-approval`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
 
       if (!response.ok) {
-        throw new Error("Bad response");
+        const body = await response.json();
+
+        throw new Error(body.statusMessage);
       }
 
       setPhase("success");
-    } catch {
-      setError("An error occurred");
+    } catch (e) {
+      setError(
+        e instanceof Error
+          ? e.message
+          : "An error occurred while requesting access."
+      );
 
       setPhase("idle");
     }
@@ -40,7 +51,7 @@ export function WaitlistForm(props: Props) {
 
   return (
     <form
-      class="flex flex-col items-start gap-1 w-full"
+      class="flex flex-col items-start gap-1 w-full relative"
       method="post"
       onSubmit={handleSubmit}
     >
@@ -54,8 +65,8 @@ export function WaitlistForm(props: Props) {
       <div
         class="has-[input:focus]:outline w-full outline-blue-600 px-1.5 rounded-xl bg-white border border-gray-300 overflow-hidden inline-flex gap-2 p-1 items-center"
         classList={{
-          "border-red-500": props.error !== undefined,
-          "border-gray-300": props.error === undefined,
+          "border-red-500": error() !== undefined,
+          "border-gray-300": error() === undefined,
         }}
       >
         <input
@@ -89,7 +100,7 @@ export function WaitlistForm(props: Props) {
       </div>
 
       <Show when={error() !== undefined}>
-        <p class="text-xs text-red-500">{error()}</p>
+        <p class="text-xs text-red-500 pl-2 absolute -bottom-5">{error()}</p>
       </Show>
     </form>
   );
