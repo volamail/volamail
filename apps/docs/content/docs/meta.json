@@ -1,0 +1,8 @@
+{
+  "root": true,
+  "pages": [
+    "index",
+    "---Guides---",
+    "guides/your-first-email"
+  ]
+}

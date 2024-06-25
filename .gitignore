@@ -36,3 +36,6 @@ dist/
 
 # astro
 .astro
+
+# fumadocs
+.map.ts
