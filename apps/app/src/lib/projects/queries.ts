@@ -4,7 +4,7 @@ import { getRequestEvent } from "solid-js/web";
 import { cache, redirect } from "@solidjs/router";
 
 import { db } from "../db";
-import { projectsTable } from "../db/schema";
+import { projectsTable, teamsTable } from "../db/schema";
 import { getUserProjects as queryGetUserProjects } from "./utils";
 
 export const getUserProjects = cache(async () => {
@@ -38,3 +38,34 @@ export const getTeamDefaultProject = cache(async (teamId: string) => {
     where: and(eq(projectsTable.teamId, teamId)),
   });
 }, "projects:default");
+
+export const getCurrentUserDefaultProject = cache(async () => {
+  "use server";
+
+  const event = getRequestEvent()!;
+
+  const user = event.locals.user;
+
+  if (!user) {
+    return null;
+  }
+
+  const personalTeam = await db.query.teamsTable.findFirst({
+    where: eq(teamsTable.id, user.personalTeamId),
+    with: {
+      projects: true,
+    },
+  });
+
+  const project = personalTeam?.projects[0];
+
+  if (!project) {
+    // TODO: Maybe create a default project here
+    throw createError({
+      statusCode: 500,
+      statusMessage: "No user project found",
+    });
+  }
+
+  return project;
+}, "default-project");
