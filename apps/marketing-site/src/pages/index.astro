@@ -15,7 +15,9 @@ if (Astro.request.method === "POST") {
     const data = await Astro.request.formData();
 
     const response = await fetch(
-      "https://app.volamail.com/api/waitlist/request-approval",
+      `${import.meta.env.DEV ? "http" : "https"}://${
+        import.meta.env.PUBLIC_APP_DOMAIN
+      }/api/waitlist/request-approval`,
       {
         method: "POST",
         body: data,

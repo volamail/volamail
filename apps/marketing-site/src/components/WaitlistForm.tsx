@@ -99,6 +99,14 @@ export function WaitlistForm(props: Props) {
         </Show>
       </div>
 
+      <input
+        type="text"
+        name="username"
+        class="sr-only"
+        aria-hidden
+        tabindex={-1}
+      />
+
       <Show when={error() !== undefined}>
         <p class="text-xs text-red-500 pl-2 absolute -bottom-5">{error()}</p>
       </Show>
