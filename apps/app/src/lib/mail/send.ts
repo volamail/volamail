@@ -7,7 +7,7 @@ type Params = {
   subject: string;
   from: string;
   to: string | string[];
-  data: Record<string, string>;
+  data?: Record<string, string>;
 };
 
 export const sesClient = new SESv2({
@@ -21,14 +21,16 @@ export const sesClient = new SESv2({
 export async function sendMail(params: Params) {
   const { subject, body } = params;
 
+  const data = params.data ?? {};
+
   const html = body.replace(
     /(\{\{.+?\}\})/g,
-    (match) => params.data[match.slice(2, -2)]
+    (match) => data[match.slice(2, -2)]
   );
 
   const subjectText = subject.replace(
     /(\{\{.+?\}\})/g,
-    (match) => params.data[match.slice(2, -2)]
+    (match) => data[match.slice(2, -2)]
   );
 
   await sesClient.send(

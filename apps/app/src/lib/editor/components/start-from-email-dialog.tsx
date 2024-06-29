@@ -82,7 +82,7 @@ export function StartFromEmailDialog(props: Props) {
         </div>
 
         <div
-          class="border border-gray-300 rounded-lg h-64 overflow-y-auto bg-gray-100 flex flex-col relative p-1"
+          class="border border-gray-300 rounded-lg h-64 overflow-y-auto bg-gray-100 flex flex-col relative p-1 gap-1"
           role="listbox"
         >
           <Suspense fallback={<LoaderIcon class="size-4 mx-auto my-2 animate-spin" />}>

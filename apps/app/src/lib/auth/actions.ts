@@ -1,18 +1,20 @@
-import { and, eq } from "drizzle-orm";
+import { action, redirect } from "@solidjs/router";
 import { generateState } from "arctic";
+import { and, eq } from "drizzle-orm";
 import { customAlphabet } from "nanoid";
 import { getRequestEvent } from "solid-js/web";
-import { action, redirect } from "@solidjs/router";
-import { appendHeader, createError, setCookie } from "vinxi/http";
 import { email, object, optional, parseAsync, pipe, string } from "valibot";
+import { appendHeader, createError, setCookie } from "vinxi/http";
 
 import { db } from "../db";
-import { lucia } from "./lucia";
-import { createGithubAuth } from "./github";
-import { parseFormData } from "../server-utils";
-import { getUserProjects } from "../projects/utils";
-import { bootstrapUser } from "../users/server-utils";
 import { mailCodesTable, usersTable, waitlistTable } from "../db/schema";
+import { sendMail } from "../mail/send";
+import { getUserProjects } from "../projects/utils";
+import { parseFormData } from "../server-utils";
+import otpTemplate from "../static-templates/mail-otp.html?raw";
+import { bootstrapUser } from "../users/server-utils";
+import { createGithubAuth } from "./github";
+import { lucia } from "./lucia";
 
 export const loginWithGithub = action(async (formData: FormData) => {
   "use server";
@@ -26,6 +28,7 @@ export const loginWithGithub = action(async (formData: FormData) => {
 
   const state = generateState();
 
+  // biome-ignore lint/style/noNonNullAssertion: Request event is safe in server action
   const { nativeEvent } = getRequestEvent()!;
 
   const github = createGithubAuth({
@@ -50,6 +53,7 @@ export const loginWithGithub = action(async (formData: FormData) => {
 export const logout = action(async () => {
   "use server";
 
+  // biome-ignore lint/style/noNonNullAssertion: Request event is safe in server action
   const { locals, nativeEvent } = getRequestEvent()!;
 
   if (!locals.session) {
@@ -109,14 +113,20 @@ export const sendEmailOtp = action(async (formData: FormData) => {
     expiresAt: new Date(Date.now() + 1000 * 60 * 15),
   });
 
-  console.log("GENERATED CODE:", code);
+  if (import.meta.env.DEV) {
+    console.log("GENERATED EMAIL OTP:", code);
+  } else {
+    await sendMail({
+      from: "noreply@volamail.com",
+      to: body.email,
+      subject: "Here's your login code",
+      body: otpTemplate,
+      data: {
+        otp: code,
+      },
+    })
+  }
 
-  // await sendMail({
-  //   from: "noreply@volamail.com",
-  //   to: body.email,
-  //   subject: "Here's your login code",
-  //   body:
-  // })
 
   const searchParams = new URLSearchParams();
 
@@ -162,6 +172,7 @@ export const verifyEmailOtp = action(async (formData: FormData) => {
     db.delete(mailCodesTable).where(eq(mailCodesTable.email, body.email)),
   ]);
 
+  // biome-ignore lint/style/noNonNullAssertion: Request event is safe in server action
   const { nativeEvent } = getRequestEvent()!;
 
   if (existingUser) {
@@ -183,7 +194,14 @@ export const verifyEmailOtp = action(async (formData: FormData) => {
     }
 
     const project = projects.teams.find((t) => t.projects.length > 0)
-      ?.projects[0]!;
+      ?.projects[0];
+
+    if (!project) {
+      throw createError({
+        statusCode: 409,
+        statusMessage: "No project found",
+      });
+    }
 
     throw redirect(`/t/${project.teamId}/p/${project.id}/emails`);
   }
