@@ -1,14 +1,14 @@
-import { LoaderIcon } from "lucide-solid";
-import { type JSX, splitProps, Show, ValidComponent } from "solid-js";
-import { type VariantProps, tv } from "tailwind-variants";
 import {
   Button as KobalteButton,
-  ButtonRootProps as KobalteButtonRootProps,
+  type ButtonRootProps as KobalteButtonRootProps,
 } from "@kobalte/core/button";
 import type { PolymorphicProps } from "@kobalte/core/polymorphic";
+import { LoaderIcon } from "lucide-solid";
+import { type JSX, Show, type ValidComponent, splitProps } from "solid-js";
+import { type VariantProps, tv } from "tailwind-variants";
 
 export const buttonVariants = tv({
-  base: "shrink-0 flex transition-colors cursor-default justify-center items-center gap-1.5 font-medium text-sm disabled:opacity-80 disabled:pointer-events-none",
+  base: "shrink-0 flex transition-colors cursor-default justify-center items-center gap-1.5 font-medium text-sm disabled:opacity-50 disabled:pointer-events-none",
   variants: {
     variant: {
       solid: "",
@@ -92,15 +92,15 @@ export const buttonVariants = tv({
 
 export type ButtonProps<T extends ValidComponent = "button"> =
   KobalteButtonRootProps<T> &
-    VariantProps<typeof buttonVariants> & {
-      class?: string | undefined;
-      loading?: boolean;
-      icon?: () => JSX.Element;
-      children?: JSX.Element;
-    };
+  VariantProps<typeof buttonVariants> & {
+    class?: string | undefined;
+    loading?: boolean;
+    icon?: () => JSX.Element;
+    children?: JSX.Element;
+  };
 
 export function Button<T extends ValidComponent = "button">(
-  props: PolymorphicProps<T, ButtonProps<T>>
+  props: PolymorphicProps<T, ButtonProps<T>>,
 ) {
   const [local, rest] = splitProps(props as ButtonProps, [
     "variant",
@@ -110,12 +110,13 @@ export function Button<T extends ValidComponent = "button">(
     "loading",
     "icon",
     "color",
+    "disabled"
   ]);
 
   return (
     <KobalteButton
       class={buttonVariants(local)}
-      disabled={local.loading || props.disabled}
+      disabled={local.loading || local.disabled}
       {...rest}
     >
       {props.children}

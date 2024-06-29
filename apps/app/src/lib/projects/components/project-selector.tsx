@@ -2,16 +2,16 @@ import { For, Show, createMemo } from "solid-js";
 import { CheckIcon, ChevronsUpDownIcon, PlusIcon } from "lucide-solid";
 import { A, createAsync, useLocation, useParams } from "@solidjs/router";
 
-import { buttonVariants } from "../../ui/components/button";
-import type { DbProject } from "../../db/schema";
-import { getUserProjects } from "~/lib/projects/queries";
 import {
-  PopoverContent,
   PopoverRoot,
   PopoverTrigger,
+  PopoverContent,
 } from "../../ui/components/popover";
-import { CreateProjectDialog } from "./CreateProjectDialog";
 import { cn } from "~/lib/ui/utils/cn";
+import type { DbProject } from "../../db/schema";
+import { getUserProjects } from "~/lib/projects/queries";
+import { buttonVariants } from "../../ui/components/button";
+import { CreateProjectDialog } from "./CreateProjectDialog";
 
 export function ProjectSelector() {
   const params = useParams();

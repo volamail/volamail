@@ -50,7 +50,7 @@ export function CreateProjectDialog(props: Props) {
         round
         even
         variant="ghost"
-        aria-label="Create project"
+        aria-label={`Create project under ${props.team.name}`}
       />
       <DialogContent class="flex flex-col gap-6">
         <div class="flex flex-col gap-2">

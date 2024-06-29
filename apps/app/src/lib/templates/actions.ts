@@ -1,11 +1,11 @@
 import { generateText } from "ai";
 import { eq, and } from "drizzle-orm";
 import { createError } from "vinxi/http";
-import { anthropic } from "@ai-sdk/anthropic";
 import { action, redirect } from "@solidjs/router";
 import { object, string, optional } from "valibot";
 
 import { db } from "~/lib/db";
+import { model } from "./server-utils";
 import * as schema from "~/lib/db/schema";
 import { requireUser } from "~/lib/auth/utils";
 import { parseFormData } from "../server-utils";
@@ -124,7 +124,7 @@ export const generateTemplate = action(async (formData: FormData) => {
     : payload.prompt;
 
   const result = await generateText({
-    model: anthropic("claude-3-haiku-20240307"),
+    model,
     system: payload.currentHtml ? EDIT_PROMPT : INITIAL_GENERATION_PROMPT,
     messages: [
       {
@@ -155,7 +155,7 @@ export const editTemplateElement = action(async (formData: FormData) => {
   );
 
   const result = await generateText({
-    model: anthropic("claude-3-haiku-20240307"),
+    model,
     system:
       "You are an HTML email editor. You will be give a piece of HTML code taken from an email and the user's prompt. Your task is to apply the changes required by the user to that HTML and return the result. Make sure to only return HTML, no backticks, no markdown, just the modified HTML. Remember that HTML must be old e-mail compatible, so use tables for layouts. Remember the <style> tag doesn't work in email clients, so use inline styles on the elements instead.",
     messages: [
@@ -199,4 +199,33 @@ export const deleteTemplate = action(async (formData: FormData) => {
     );
 
   throw redirect("..");
+}, "templates");
+
+export const getTemplateInForm = action(async (formData: FormData) => {
+  "use server";
+
+  requireUser();
+
+  const body = await parseFormData(
+    object({
+      id: string(),
+    }),
+    formData
+  );
+
+  const row = await db.query.templatesTable.findFirst({
+    where: eq(schema.templatesTable.id, body.id),
+  });
+
+  if (!row) {
+    throw createError({
+      statusCode: 404,
+      statusMessage: "Template not found",
+    });
+  }
+
+  return {
+    subject: row.subject,
+    body: row.body,
+  };
 }, "templates");

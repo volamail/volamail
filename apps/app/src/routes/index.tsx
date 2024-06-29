@@ -17,5 +17,7 @@ export default function Dashboard() {
     return <Navigate href="/404" />;
   }
 
-  return <Navigate href={`/t/${project()?.teamId}/p/${project()?.id}`} />;
+  return (
+    <Navigate href={`/t/${project()?.teamId}/p/${project()?.id}/emails`} />
+  );
 }

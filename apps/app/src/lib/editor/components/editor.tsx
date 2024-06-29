@@ -6,7 +6,8 @@ import {
   createSignal,
 } from "solid-js";
 import { Tabs } from "@kobalte/core/tabs";
-import { EyeIcon, CodeIcon, SendIcon, Table2Icon } from "lucide-solid";
+import quotedPrintable from "quoted-printable";
+import { EyeIcon, CodeIcon, SendIcon } from "lucide-solid";
 
 import { ImagePicker } from "./image-picker";
 import { FloatingMenu } from "./floating-menu";
@@ -16,6 +17,7 @@ import { showToast } from "~/lib/ui/components/toasts";
 import { Textarea } from "~/lib/ui/components/textarea";
 import { useMutation } from "~/lib/ui/hooks/useMutation";
 import { generateTemplate } from "~/lib/templates/actions";
+import { StartFromEmailDialog } from "./start-from-email-dialog";
 import { GridBgContainer } from "~/lib/ui/components/grid-bg-container";
 
 type Props = {
@@ -187,7 +189,7 @@ export function Editor(props: Props) {
       <form
         method="post"
         action={generateTemplate}
-        class="w-full max-w-2xl"
+        class="w-full max-w-2xl z-10"
         ref={mainForm}
       >
         <input type="hidden" name="projectId" value={props.projectId} />
@@ -208,13 +210,11 @@ export function Editor(props: Props) {
               </div>
 
               <div class="flex gap-4">
-                <button
-                  type="button"
-                  class="font-medium disabled:opacity-50 cursor-default flex-1 rounded-lg bg-gray-200 shadow p-4 text-sm inline-flex gap-2 items-center not:disabled:hover:bg-gray-300 transition-colors"
-                >
-                  <Table2Icon class="size-8 bg-black text-white rounded-lg p-2" />
-                  Start from another email
-                </button>
+                <StartFromEmailDialog
+                  projectId={props.projectId}
+                  onComplete={(email) => props.onChange(email.body)}
+                />
+
                 <PasteHtmlButton onPaste={props.onChange} />
               </div>
             </div>
@@ -277,16 +277,20 @@ export function Editor(props: Props) {
  */
 
 function serializeCode(code: string) {
+  const decoded = quotedPrintable.decode(code);
+
   return replaceLast(
-    code.replaceAll(`data-selected="true"`, "").replace("<body", "<div"),
+    decoded.replaceAll(`data-selected="true"`, "").replace("<body", "<div"),
     "</body>",
     "</div>"
   );
 }
 
 function deserializeCode(code: string) {
+  const decoded = quotedPrintable.decode(code);
+
   return replaceLast(
-    code.replaceAll(`data-selected="true"`, "").replace("<div", "<body"),
+    decoded.replaceAll(`data-selected="true"`, "").replace("<div", "<body"),
     "</div>",
     "</body>"
   );

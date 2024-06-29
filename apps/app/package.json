@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^0.0.19",
+    "@ai-sdk/openai": "^0.0.34",
     "@aws-sdk/client-s3": "^3.600.0",
     "@aws-sdk/client-sesv2": "^3.600.0",
     "@corvu/otp-field": "^0.1.1",
@@ -18,7 +19,7 @@
     "@solidjs/meta": "^0.29.4",
     "@solidjs/router": "^0.13.6",
     "@solidjs/start": "^1.0.2",
-    "ai": "^3.2.1",
+    "ai": "^3.2.15",
     "arctic": "^1.9.1",
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.30.10",
@@ -27,6 +28,7 @@
     "lucide-solid": "^0.378.0",
     "nanoid": "^5.0.7",
     "postgres": "^3.4.4",
+    "quoted-printable": "^1.0.1",
     "solid-js": "^1.8.17",
     "tailwind-merge": "^2.3.0",
     "tailwind-variants": "^0.2.1",
@@ -40,6 +42,7 @@
   "devDependencies": {
     "@biomejs/biome": "1.7.3",
     "@repo/tailwind-config": "workspace:*",
+    "@types/quoted-printable": "^1.0.2",
     "autoprefixer": "^10.4.19",
     "drizzle-kit": "^0.21.4",
     "postcss": "^8.4.38",
