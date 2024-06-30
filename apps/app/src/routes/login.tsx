@@ -42,7 +42,7 @@ export default function Login() {
         method="post"
         class="shadow-xl border rounded-xl bg-white max-w-sm w-full p-8 flex flex-col gap-1"
       >
-        <h1 class="text-2xl font-semibold">Login</h1>
+        <h1 class="text-xl font-semibold">Login</h1>
         <p class="text-gray-600 text-sm">
           Sign in to your account to start working on your team's emails.
         </p>

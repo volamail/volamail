@@ -12,19 +12,20 @@ import {
   PopoverTrigger,
 } from "../../ui/components/popover";
 import { CreateProjectDialog } from "./create-project-dialog";
+import { getCurrentUser } from "~/lib/auth/queries";
 
 export function ProjectSelector() {
   const params = useParams();
 
+  const user = createAsync(() => getCurrentUser());
   const projects = createAsync(() => getUserProjects());
 
   const currentProject = createMemo(() => {
-    for (const team of projects()?.teams ?? []) {
-      const project = team.projects.find(
-        (project) => project.id === params.projectId
-      );
-
-      if (project) {
+    for (const project of [
+      ...(projects()?.personal || []),
+      ...(projects()?.teams || []).flatMap((team) => team.projects),
+    ]) {
+      if (project.id === params.projectId) {
         return project;
       }
     }
@@ -42,16 +43,18 @@ export function ProjectSelector() {
         <ChevronsUpDownIcon class="size-4" />
       </PopoverTrigger>
       <PopoverContent class="flex flex-col w-64 overflow-y-auto max-h-64 p-0">
+        <ProjectsNavigation
+          teamId={user()!.personalTeamId}
+          title="Personal projects"
+          projects={projects()!.personal}
+        />
+        <hr class="w-full border-gray-200" />
         <For each={projects()!.teams}>
           {(team) => (
             <>
               <ProjectsNavigation
                 teamId={team.id}
-                title={
-                  team.personal
-                    ? "Personal projects"
-                    : `${team.name}'s projects`
-                }
+                title={`${team.name}'s projects`}
                 projects={team.projects}
               />
               <hr class="w-full border-gray-200" />

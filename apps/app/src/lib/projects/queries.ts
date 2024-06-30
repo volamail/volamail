@@ -5,10 +5,16 @@ import { createError } from "vinxi/http";
 import { requireUser } from "../auth/utils";
 import { db } from "../db";
 import { projectsTable, teamsTable } from "../db/schema";
-import { getUserProjects as queryGetUserProjects, requireUserToBeMemberOfProject, requireUserToBeMemberOfTeam } from "./utils";
+import {
+  getUserProjects as queryGetUserProjects,
+  requireUserToBeMemberOfProject,
+  requireUserToBeMemberOfTeam,
+} from "./utils";
 
 export const getUserProjects = cache(async () => {
   "use server";
+
+  await new Promise((resolve) => setTimeout(resolve, 2000));
 
   const user = requireUser();
 
@@ -50,17 +56,23 @@ export const getCurrentUserDefaultProject = cache(async () => {
   return project;
 }, "default-project");
 
-export const getProject = cache(async ({ teamId, projectId }: { teamId: string, projectId: string }) => {
-  "use server";
+export const getProject = cache(
+  async ({ teamId, projectId }: { teamId: string; projectId: string }) => {
+    "use server";
 
-  const user = requireUser();
+    const user = requireUser();
 
-  await requireUserToBeMemberOfTeam({
-    userId: user.id,
-    teamId: teamId
-  });
+    await requireUserToBeMemberOfTeam({
+      userId: user.id,
+      teamId: teamId,
+    });
 
-  return await db.query.projectsTable.findFirst({
-    where: and(eq(projectsTable.teamId, teamId), eq(projectsTable.id, projectId))
-  });
-}, "project");
+    return await db.query.projectsTable.findFirst({
+      where: and(
+        eq(projectsTable.teamId, teamId),
+        eq(projectsTable.id, projectId)
+      ),
+    });
+  },
+  "project"
+);

@@ -11,10 +11,9 @@ import type { APIEvent } from "@solidjs/start/server";
 
 import { db } from "~/lib/db";
 import { lucia } from "~/lib/auth/lucia";
-import { usersTable, waitlistTable } from "~/lib/db/schema";
 import { createGithubAuth } from "~/lib/auth/github";
-import { getUserProjects } from "~/lib/projects/utils";
 import { bootstrapUser } from "~/lib/users/server-utils";
+import { usersTable, waitlistTable } from "~/lib/db/schema";
 
 export async function GET({ nativeEvent }: APIEvent) {
   const query = getQuery(nativeEvent);
@@ -69,10 +68,7 @@ export async function GET({ nativeEvent }: APIEvent) {
           .where(eq(usersTable.id, existingUser.id));
       }
 
-      const [session, projects] = await Promise.all([
-        lucia.createSession(existingUser.id, {}),
-        getUserProjects(existingUser.id),
-      ]);
+      const session = await lucia.createSession(existingUser.id, {});
 
       appendHeader(
         nativeEvent,
@@ -84,13 +80,7 @@ export async function GET({ nativeEvent }: APIEvent) {
         return sendRedirect(nativeEvent, query.to.toString());
       }
 
-      const project = projects.teams.find((t) => t.projects.length > 0)
-        ?.projects[0]!;
-
-      return sendRedirect(
-        nativeEvent,
-        `/t/${project.teamId}/p/${project.id}/emails`
-      );
+      return sendRedirect(nativeEvent, `/teams`);
     }
 
     const approval = await db.query.waitlistTable.findFirst({

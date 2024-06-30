@@ -16,7 +16,10 @@ import { env } from "../env";
 import { sendMail } from "../mail/send";
 import { requireUser } from "../auth/utils";
 import { parseFormData } from "../server-utils";
-import { requireUserToBeMemberOfTeam } from "../projects/utils";
+import {
+  deleteProjectWithCleanup,
+  requireUserToBeMemberOfTeam,
+} from "../projects/utils";
 import { SUBSCRIPTION_QUOTAS } from "../subscriptions/constants";
 import teamInviteTemplate from "~/lib/static-templates/team-invite.html?raw";
 
@@ -273,3 +276,35 @@ export const deleteMember = action(async (formData: FormData) => {
     success: true,
   };
 }, "members");
+
+export const deleteTeam = action(async (formData: FormData) => {
+  "use server";
+
+  const user = requireUser();
+
+  const payload = await parseFormData(
+    object({
+      id: string(),
+    }),
+    formData
+  );
+
+  await requireUserToBeMemberOfTeam({
+    userId: user.id,
+    teamId: payload.id,
+  });
+
+  const projects = await db.query.projectsTable.findMany({
+    where: eq(projectsTable.teamId, payload.id),
+  });
+
+  await db.transaction(async (db) => {
+    await Promise.all(
+      projects.map((project) => deleteProjectWithCleanup(project.id))
+    );
+
+    await db.delete(teamsTable).where(eq(teamsTable.id, payload.id));
+  });
+
+  throw redirect("/teams");
+}, "teams");

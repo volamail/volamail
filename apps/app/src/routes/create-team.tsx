@@ -32,12 +32,12 @@ export default function CreateTeam() {
       <form
         method="post"
         action={createTeam}
-        class="p-8 rounded-xl bg-white shadow flex flex-col gap-8 max-w-sm w-full border"
+        class="p-8 rounded-2xl bg-white shadow-xl flex flex-col gap-8 max-w-sm w-full border"
       >
         <div class="flex flex-col gap-1">
-          <h1 class="text-xl font-medium">Create team</h1>
+          <h1 class="text-xl font-semibold">Create team</h1>
           <p class="text-gray-500 text-sm">
-            You'll be able to invite people to your team and manage emails
+            You'll be able to invite people to your team and manage projects
             together.
           </p>
         </div>
@@ -55,12 +55,7 @@ export default function CreateTeam() {
           />
         </div>
 
-        <Button
-          type="submit"
-          class="self-end"
-          loading={submission.pending}
-          icon={() => <PlusIcon class="size-4" />}
-        >
+        <Button type="submit" class="self-end" loading={submission.pending}>
           Create team
         </Button>
       </form>

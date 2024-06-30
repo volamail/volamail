@@ -6,23 +6,33 @@ import {
   Trash2Icon,
   XIcon,
 } from "lucide-solid";
-import { For, Show, createSignal } from "solid-js";
+import { For, Match, Show, Switch, createSignal } from "solid-js";
 
 import { editTeam } from "~/lib/teams/actions";
 import { DeleteInviteDialog } from "~/lib/teams/components/delete-invite-dialog";
 import { DeleteMemberDialog } from "~/lib/teams/components/delete-member-dialog";
+import { DeleteTeamDialog } from "~/lib/teams/components/delete-team-dialog";
 import { InviteMemberDialog } from "~/lib/teams/components/invite-member-dialog";
 import { getTeam } from "~/lib/teams/queries";
 import { Button } from "~/lib/ui/components/button";
 import { Input } from "~/lib/ui/components/input";
 import { showToast } from "~/lib/ui/components/toasts";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "~/lib/ui/components/tooltip";
 import { useMutation } from "~/lib/ui/hooks/useMutation";
 
 export default function TeamPage(props: RouteSectionProps) {
   const team = createAsync(() => getTeam(props.params.teamId));
 
   if (team()?.personal) {
-    return <Navigate href={`/t/${props.params.teamId}/p/${props.params.projectId}/emails`} />
+    return (
+      <Navigate
+        href={`/t/${props.params.teamId}/p/${props.params.projectId}/emails`}
+      />
+    );
   }
 
   const [memberToDelete, setMemberToDelete] = createSignal<string>();
@@ -43,7 +53,6 @@ export default function TeamPage(props: RouteSectionProps) {
       });
     },
   });
-
 
   return (
     <main class="p-8 flex flex-col grow gap-8 max-w-2xl">
@@ -78,16 +87,41 @@ export default function TeamPage(props: RouteSectionProps) {
 
                   {/* @ts-expect-error idk align attribute is deprecated or something*/}
                   <td align="right">
-                    <Button
-                      color="destructive"
-                      variant="ghost"
-                      class="self-end p-1"
-                      icon={() => <XIcon class="size-4" />}
-                      aria-label="Remove member"
-                      type="button"
-                      even
-                      onClick={() => setMemberToDelete(member.userId)}
-                    />
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <Button
+                          color="destructive"
+                          variant="ghost"
+                          class="self-end p-1"
+                          icon={() => <XIcon class="size-4" />}
+                          aria-label="Remove member"
+                          type="button"
+                          even
+                          disabled={
+                            member.userId === team()?.personalTeamOwner?.id ||
+                            team()?.members.length === 1
+                          }
+                          onClick={() => setMemberToDelete(member.userId)}
+                        />
+                      </TooltipTrigger>
+                      <TooltipContent class="text-gray-600">
+                        <Switch fallback={<p>Remove member</p>}>
+                          <Match
+                            when={
+                              member.userId === team()?.personalTeamOwner?.id
+                            }
+                          >
+                            <p>Can't remove the personal team owner</p>
+                          </Match>
+                          <Match when={team()?.members.length === 1}>
+                            <p>
+                              Can't remove the last member. Scroll down to the
+                              "Danger zone" to remove the whole team.
+                            </p>
+                          </Match>
+                        </Switch>
+                      </TooltipContent>
+                    </Tooltip>
                   </td>
                 </tr>
               )}
@@ -178,9 +212,13 @@ export default function TeamPage(props: RouteSectionProps) {
                 id="name"
                 value={team()?.name}
                 required
+                disabled={team()?.personal}
               />
               <p class="text-xs text-gray-500">
-                This name is only used for display purposes.
+                This name is only used for display purposes.{" "}
+                <Show when={team()?.personal}>
+                  <span>It's disabled for personal teams.</span>
+                </Show>
               </p>
             </div>
           </div>
@@ -190,6 +228,7 @@ export default function TeamPage(props: RouteSectionProps) {
             class="self-end"
             icon={() => <CircleCheckBigIcon class="size-4" />}
             loading={editTeamAction.pending}
+            disabled={team()?.personal}
           >
             Save
           </Button>
@@ -201,15 +240,7 @@ export default function TeamPage(props: RouteSectionProps) {
       <section class="flex flex-col gap-4">
         <h2 class="text-xl font-semibold">Danger zone</h2>
 
-        <Button
-          class="self-start"
-          color="destructive"
-          variant="outline"
-          icon={() => <Trash2Icon class="size-4" />}
-          disabled
-        >
-          Delete team
-        </Button>
+        <DeleteTeamDialog teamId={props.params.teamId} />
       </section>
     </main>
   );

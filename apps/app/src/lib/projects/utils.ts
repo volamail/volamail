@@ -3,6 +3,9 @@ import { createError } from "vinxi/http";
 import { projectsTable, teamMembersTable, teamsTable } from "../db/schema";
 
 import { db } from "../db";
+import { sesClient } from "../mail/send";
+import { env } from "../env";
+import { s3 } from "../media/server-utils";
 
 export async function getUserProjects(userId: string) {
   const teams = await db.query.teamsTable.findMany({
@@ -19,11 +22,14 @@ export async function getUserProjects(userId: string) {
     },
   });
 
+  const own =
+    teams.find((team) => team.personalTeamOwner?.id === userId)?.projects || [];
+
+  const other = teams.filter((team) => team.personalTeamOwner?.id !== userId);
+
   return {
-    teams: teams.map((team) => ({
-      ...team,
-      personal: team.personalTeamOwner !== null,
-    })),
+    personal: own,
+    teams: other,
   };
 }
 
@@ -112,4 +118,40 @@ export async function requireUserToBeMemberOfProject(params: {
       project,
     },
   };
+}
+
+export async function deleteProjectWithCleanup(projectId: string) {
+  const project = await db.query.projectsTable.findFirst({
+    where: eq(projectsTable.id, projectId),
+    with: {
+      images: true,
+      domains: true,
+    },
+  });
+
+  if (!project) {
+    throw new Error("Project not found");
+  }
+
+  await db.transaction(async (db) => {
+    await Promise.all([
+      db.delete(projectsTable).where(eq(projectsTable.id, projectId)),
+      project.images.length > 0 &&
+        s3.deleteObjects({
+          Bucket: env.AWS_BUCKET,
+          Delete: {
+            Objects: project.images.map((image) => ({
+              Key: `media/${image.id}`,
+            })),
+          },
+        }),
+      Promise.all(
+        project.domains.map((domain) =>
+          sesClient.deleteEmailIdentity({
+            EmailIdentity: domain.domain,
+          })
+        )
+      ),
+    ]);
+  });
 }

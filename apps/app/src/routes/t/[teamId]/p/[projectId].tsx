@@ -42,7 +42,6 @@ export default function DashboardLayout(props: Props) {
   const params = useParams();
 
   const user = createAsync(() => getCurrentUser());
-  const team = createAsync(() => getTeam(params.teamId));
 
   const logoutAction = useSubmission(logout);
 
@@ -115,16 +114,14 @@ export default function DashboardLayout(props: Props) {
                   Usage & Billing
                 </NavLink>
               </li>
-              <Show when={team()?.personal === false}>
-                <li>
-                  <NavLink
-                    href={`/t/${params.teamId}/p/${params.projectId}/team`}
-                  >
-                    <UsersIcon class="size-4" />
-                    Team settings
-                  </NavLink>
-                </li>
-              </Show>
+              <li>
+                <NavLink
+                  href={`/t/${params.teamId}/p/${params.projectId}/team`}
+                >
+                  <UsersIcon class="size-4" />
+                  Team settings
+                </NavLink>
+              </li>
             </ul>
           </section>
         </div>
@@ -134,7 +131,10 @@ export default function DashboardLayout(props: Props) {
           method="post"
           class="flex justify-start items-center gap-2 border-t border-gray-300 p-3"
         >
-          <Avatar src={user()?.imageUrl} fallback={user()?.name.charAt(0) || ""} />
+          <Avatar
+            src={user()?.imageUrl}
+            fallback={user()?.name.charAt(0) || ""}
+          />
           <p class="text-sm truncate grow">{user()?.name}</p>
           <Button
             even

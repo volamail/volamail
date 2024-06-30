@@ -11,6 +11,7 @@ import { sesClient } from "../mail/send";
 import { s3 } from "../media/server-utils";
 import { parseFormData } from "../server-utils";
 import {
+  deleteProjectWithCleanup,
   getUserProjects,
   requireUserToBeMemberOfProject,
   requireUserToBeMemberOfTeam,
@@ -63,45 +64,9 @@ export const deleteProject = action(async (formData: FormData) => {
     userId: user.id,
   });
 
-  const [project, userProjects] = await Promise.all([
-    db.query.projectsTable.findFirst({
-      where: eq(projectsTable.id, payload.id),
-      with: {
-        images: true,
-        domains: true,
-      },
-    }),
-    getUserProjects(user.id),
-  ]);
+  const userProjects = await getUserProjects(user.id);
 
-  if (!project) {
-    throw createError({
-      statusCode: 404,
-      statusMessage: "Project not found",
-    });
-  }
-
-  await db.transaction(async (db) => {
-    await Promise.all([
-      db.delete(projectsTable).where(eq(projectsTable.id, payload.id)),
-      project.images.length > 0 &&
-        s3.deleteObjects({
-          Bucket: env.AWS_BUCKET,
-          Delete: {
-            Objects: project.images.map((image) => ({
-              Key: `media/${image.id}`,
-            })),
-          },
-        }),
-      Promise.all(
-        project.domains.map((domain) =>
-          sesClient.deleteEmailIdentity({
-            EmailIdentity: domain.domain,
-          })
-        )
-      ),
-    ]);
-  });
+  await deleteProjectWithCleanup(payload.id);
 
   const [projectToRedirectTo] = userProjects.teams
     .flatMap((team) => team.projects)
