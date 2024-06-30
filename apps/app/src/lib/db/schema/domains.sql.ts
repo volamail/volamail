@@ -1,6 +1,6 @@
-import { nanoid } from "nanoid";
 import { relations } from "drizzle-orm";
 import { boolean, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { nanoid } from "nanoid";
 
 import { projectsTable } from "./projects.sql";
 
@@ -14,7 +14,9 @@ export const domainsTable = pgTable("domains", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
   projectId: text("project_id")
     .notNull()
-    .references(() => projectsTable.id),
+    .references(() => projectsTable.id, {
+      onDelete: "cascade",
+    }),
 });
 
 export const domainsRelations = relations(domainsTable, ({ one }) => ({

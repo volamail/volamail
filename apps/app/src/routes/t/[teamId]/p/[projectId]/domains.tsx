@@ -9,7 +9,12 @@ import {
 } from "solid-js";
 import { Title } from "@solidjs/meta";
 import { LoaderIcon, PlusIcon, XIcon } from "lucide-solid";
-import { type RouteDefinition, type RouteSectionProps } from "@solidjs/router";
+import {
+  createAsync,
+  revalidate,
+  type RouteDefinition,
+  type RouteSectionProps,
+} from "@solidjs/router";
 
 import {
   Dialog,
@@ -33,10 +38,9 @@ export const route: RouteDefinition = {
 };
 
 export default function DomainsPage(props: RouteSectionProps) {
-  const [domains, { refetch }] = createResource(
-    () => props.params.projectId,
-    getProjectDomains
-  );
+  const domains = createAsync(() => getProjectDomains(props.params.projectId));
+
+  const [refetching, setRefetching] = createSignal(false);
 
   const [createDomainDialogOpen, setCreateDomainDialogOpen] =
     createSignal(false);
@@ -62,15 +66,19 @@ export default function DomainsPage(props: RouteSectionProps) {
   });
 
   onMount(() => {
-    const interval = setInterval(() => {
-      refetch();
+    const interval = setInterval(async () => {
+      setRefetching(true);
+
+      await revalidate(getProjectDomains.keyFor(props.params.projectId));
+
+      setRefetching(false);
     }, 10000);
 
     onCleanup(() => clearInterval(interval));
   });
 
   return (
-    <main class="p-8 flex flex-col grow gap-4 max-w-6xl">
+    <main class="p-8 flex flex-col grow gap-4 max-w-4xl">
       <Title>Domains - Volamail</Title>
 
       <div class="flex flex-col gap-2 mb-6">
@@ -95,7 +103,7 @@ export default function DomainsPage(props: RouteSectionProps) {
         }
       >
         <Show
-          when={domains.latest?.length}
+          when={domains()?.length}
           fallback={
             <div class="p-4 text-sm max-w-2xl text-gray-600 bg-gray-100 border border-gray-300 rounded-lg text-center">
               No domains set up for this team.
@@ -103,19 +111,19 @@ export default function DomainsPage(props: RouteSectionProps) {
           }
         >
           <ul class="flex flex-col gap-2 grow">
-            <For each={domains.latest}>
+            <For each={domains()}>
               {(domain) => (
                 <li
                   class="border flex flex-col gap-6 border-gray-300 bg-gray-50 rounded-lg px-3 py-2 text-sm"
                   classList={{
-                    "opacity-50": domains.loading && !domain.verified,
+                    "opacity-50": refetching() && !domain.verified,
                   }}
                 >
                   <div class="flex justify-between">
                     <div class="flex flex-col gap-0.5">
                       <div class="text-xl font-semibold inline-flex gap-2 items-center">
                         <p>{domain.domain} </p>
-                        <Show when={domains.loading && !domain.verified}>
+                        <Show when={!domain.verified || refetching()}>
                           <LoaderIcon class="size-4 animate-spin" />
                         </Show>
                       </div>
@@ -153,7 +161,7 @@ export default function DomainsPage(props: RouteSectionProps) {
                         Add the following DNS records to your domain's DNS
                         settings to verify the domain.
                       </p>
-                      <table class="text-sm mt-2">
+                      <table class="text-xs mt-2">
                         <thead>
                           <tr class="border-b">
                             <th class="font-medium py-2">Type</th>

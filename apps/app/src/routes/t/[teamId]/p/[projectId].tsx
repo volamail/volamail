@@ -1,47 +1,48 @@
 import {
   A,
+  type RouteDefinition,
   createAsync,
   useParams,
   useSubmission,
-  type RouteDefinition,
 } from "@solidjs/router";
-import { twMerge } from "tailwind-merge";
-import { Show, splitProps, type ComponentProps, type JSX } from "solid-js";
 import {
   AtSignIcon,
   CreditCardIcon,
-  GlobeIcon,
   ImageIcon,
   KeyIcon,
   LogOutIcon,
+  SettingsIcon,
   Table2Icon,
   UsersIcon,
 } from "lucide-solid";
+import { type ComponentProps, type JSX, Show, splitProps } from "solid-js";
+import { twMerge } from "tailwind-merge";
 
-import { Button } from "~/lib/ui/components/button";
 import { logout } from "~/lib/auth/actions";
 import { getCurrentUser } from "~/lib/auth/queries";
-import { getUserProjects } from "~/lib/projects/queries";
 import { ProjectSelector } from "~/lib/projects/components/project-selector";
+import { getUserProjects } from "~/lib/projects/queries";
+import { getTeam } from "~/lib/teams/queries";
 import { Avatar } from "~/lib/ui/components/avatar";
+import { Button } from "~/lib/ui/components/button";
 
 type Props = {
   children: JSX.Element;
 };
 
 export const route: RouteDefinition = {
-  load() {
+  load({ params }) {
     void getUserProjects();
     void getCurrentUser();
+    void getTeam(params.teamId);
   },
 };
 
 export default function DashboardLayout(props: Props) {
   const params = useParams();
 
-  const user = createAsync(() => getCurrentUser(), {
-    deferStream: true,
-  });
+  const user = createAsync(() => getCurrentUser());
+  const team = createAsync(() => getTeam(params.teamId));
 
   const logoutAction = useSubmission(logout);
 
@@ -91,6 +92,14 @@ export default function DashboardLayout(props: Props) {
                   Media
                 </NavLink>
               </li>
+              <li>
+                <NavLink
+                  href={`/t/${params.teamId}/p/${params.projectId}/settings`}
+                >
+                  <SettingsIcon class="size-4" />
+                  Settings
+                </NavLink>
+              </li>
             </ul>
           </section>
 
@@ -106,14 +115,16 @@ export default function DashboardLayout(props: Props) {
                   Usage & Billing
                 </NavLink>
               </li>
-              <li>
-                <NavLink
-                  href={`/t/${params.teamId}/p/${params.projectId}/team`}
-                >
-                  <UsersIcon class="size-4" />
-                  Team settings
-                </NavLink>
-              </li>
+              <Show when={team()?.personal === false}>
+                <li>
+                  <NavLink
+                    href={`/t/${params.teamId}/p/${params.projectId}/team`}
+                  >
+                    <UsersIcon class="size-4" />
+                    Team settings
+                  </NavLink>
+                </li>
+              </Show>
             </ul>
           </section>
         </div>
@@ -123,7 +134,7 @@ export default function DashboardLayout(props: Props) {
           method="post"
           class="flex justify-start items-center gap-2 border-t border-gray-300 p-3"
         >
-          <Avatar src={user()?.imageUrl} fallback={user()?.name.charAt(0)!} />
+          <Avatar src={user()?.imageUrl} fallback={user()?.name.charAt(0) || ""} />
           <p class="text-sm truncate grow">{user()?.name}</p>
           <Button
             even

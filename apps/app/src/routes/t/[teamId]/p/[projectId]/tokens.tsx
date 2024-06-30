@@ -47,7 +47,7 @@ export default function Tokens() {
 
     if (submission.result) {
       return showToast({
-        title: "Token created!",
+        title: "Token created",
         variant: "success",
       });
     }

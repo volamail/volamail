@@ -33,7 +33,6 @@ export function CreateProjectDialog(props: Props) {
       });
     },
     onError(e) {
-      console.log(e);
       showToast({
         title: "Unable to create project",
         variant: "error",

@@ -1,11 +1,11 @@
+import type { PolymorphicProps } from "@kobalte/core/polymorphic";
+import * as ToastPrimitive from "@kobalte/core/toast";
+import { CheckIcon, XCircleIcon, XIcon } from "lucide-solid";
 import { splitProps } from "solid-js";
+import type { Component, JSX, ValidComponent } from "solid-js";
 import { Portal } from "solid-js/web";
 import { twMerge } from "tailwind-merge";
-import * as ToastPrimitive from "@kobalte/core/toast";
 import { type VariantProps, tv } from "tailwind-variants";
-import { CheckIcon, XCircleIcon, XIcon } from "lucide-solid";
-import type { Component, JSX, ValidComponent } from "solid-js";
-import type { PolymorphicProps } from "@kobalte/core/polymorphic";
 
 type ToasterProps<T extends ValidComponent = "ol"> = PolymorphicProps<
   T,
@@ -17,7 +17,7 @@ const Toaster: Component<ToasterProps> = (props) => {
 
   return (
     <Portal>
-      <ToastPrimitive.Region>
+      <ToastPrimitive.Region duration={1500}>
         <ToastPrimitive.List
           class={twMerge(
             "fixed z-[100] h-dvh flex max-h-screen w-full gap-2 p-4 bottom-0 left-1/2 -translate-x-1/2 flex-col-reverse pointer-events-none items-center",
@@ -25,7 +25,7 @@ const Toaster: Component<ToasterProps> = (props) => {
           )}
           {...rest}
         />
-      </ToastPrimitive.Region>
+      </ToastPrimitive.Region >
     </Portal>
   );
 };

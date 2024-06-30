@@ -1,25 +1,29 @@
-import {
-  XIcon,
-  Trash2Icon,
-  LoaderIcon,
-  CircleCheckBigIcon,
-} from "lucide-solid";
 import { Title } from "@solidjs/meta";
+import { Navigate, type RouteSectionProps, createAsync } from "@solidjs/router";
+import {
+  CircleCheckBigIcon,
+  LoaderIcon,
+  Trash2Icon,
+  XIcon,
+} from "lucide-solid";
 import { For, Show, createSignal } from "solid-js";
-import { RouteSectionProps, createAsync } from "@solidjs/router";
 
-import { getTeam } from "~/lib/teams/queries";
 import { editTeam } from "~/lib/teams/actions";
-import { Input } from "~/lib/ui/components/input";
-import { Button } from "~/lib/ui/components/button";
-import { showToast } from "~/lib/ui/components/toasts";
-import { useMutation } from "~/lib/ui/hooks/useMutation";
-import { InviteMemberDialog } from "~/lib/teams/components/invite-member-dialog";
 import { DeleteInviteDialog } from "~/lib/teams/components/delete-invite-dialog";
 import { DeleteMemberDialog } from "~/lib/teams/components/delete-member-dialog";
+import { InviteMemberDialog } from "~/lib/teams/components/invite-member-dialog";
+import { getTeam } from "~/lib/teams/queries";
+import { Button } from "~/lib/ui/components/button";
+import { Input } from "~/lib/ui/components/input";
+import { showToast } from "~/lib/ui/components/toasts";
+import { useMutation } from "~/lib/ui/hooks/useMutation";
 
 export default function TeamPage(props: RouteSectionProps) {
   const team = createAsync(() => getTeam(props.params.teamId));
+
+  if (team()?.personal) {
+    return <Navigate href={`/t/${props.params.teamId}/p/${props.params.projectId}/emails`} />
+  }
 
   const [memberToDelete, setMemberToDelete] = createSignal<string>();
   const [inviteToDelete, setInviteToDelete] = createSignal<string>();
@@ -39,6 +43,7 @@ export default function TeamPage(props: RouteSectionProps) {
       });
     },
   });
+
 
   return (
     <main class="p-8 flex flex-col grow gap-8 max-w-2xl">

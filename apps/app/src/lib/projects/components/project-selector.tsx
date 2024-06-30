@@ -1,17 +1,17 @@
-import { For, Show, createMemo } from "solid-js";
-import { CheckIcon, ChevronsUpDownIcon, PlusIcon } from "lucide-solid";
 import { A, createAsync, useLocation, useParams } from "@solidjs/router";
+import { CheckIcon, ChevronsUpDownIcon, PlusIcon } from "lucide-solid";
+import { For, Show, createMemo } from "solid-js";
 
-import {
-  PopoverRoot,
-  PopoverTrigger,
-  PopoverContent,
-} from "../../ui/components/popover";
+import { getUserProjects } from "~/lib/projects/queries";
 import { cn } from "~/lib/ui/utils/cn";
 import type { DbProject } from "../../db/schema";
-import { getUserProjects } from "~/lib/projects/queries";
 import { buttonVariants } from "../../ui/components/button";
-import { CreateProjectDialog } from "./CreateProjectDialog";
+import {
+  PopoverContent,
+  PopoverRoot,
+  PopoverTrigger,
+} from "../../ui/components/popover";
+import { CreateProjectDialog } from "./create-project-dialog";
 
 export function ProjectSelector() {
   const params = useParams();
@@ -46,6 +46,7 @@ export function ProjectSelector() {
           {(team) => (
             <>
               <ProjectsNavigation
+                teamId={team.id}
                 title={
                   team.personal
                     ? "Personal projects"
@@ -72,6 +73,7 @@ export function ProjectSelector() {
 }
 
 type TeamsProjectsProps = {
+  teamId: string;
   title: string;
   projects: DbProject[];
 };
@@ -88,7 +90,7 @@ function ProjectsNavigation(props: TeamsProjectsProps) {
         <p>{props.title}</p>
         <CreateProjectDialog
           team={{
-            id: params.teamId,
+            id: props.teamId,
             name: props.title,
           }}
         />

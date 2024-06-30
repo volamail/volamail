@@ -1,11 +1,12 @@
-import { nanoid } from "nanoid";
 import { relations } from "drizzle-orm";
 import { index, pgTable, text } from "drizzle-orm/pg-core";
+import { nanoid } from "nanoid";
 
-import { usersTable } from "./users.sql";
-import { teamsTable } from "./teams.sql";
+import { domainsTable } from "./domains.sql";
 import { imagesTable } from "./images.sql";
+import { teamsTable } from "./teams.sql";
 import { templatesTable } from "./templates.sql";
+import { usersTable } from "./users.sql";
 
 export const projectsTable = pgTable(
   "projects",
@@ -39,6 +40,7 @@ export const projectsRelations = relations(projectsTable, ({ one, many }) => ({
   }),
   templates: many(templatesTable),
   images: many(imagesTable),
+  domains: many(domainsTable)
 }));
 
 export type DbProject = typeof projectsTable.$inferSelect;

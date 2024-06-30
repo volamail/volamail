@@ -11,7 +11,9 @@ export const imagesTable = pgTable("images", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
   projectId: text("project_id")
     .notNull()
-    .references(() => projectsTable.id),
+    .references(() => projectsTable.id, {
+      onDelete: "cascade",
+    }),
 });
 
 export const imagesRelations = relations(imagesTable, ({ one }) => ({

@@ -1,10 +1,10 @@
 import { cache, redirect } from "@solidjs/router";
-import { db } from "../db";
 import { and, eq } from "drizzle-orm";
-import { teamInvitesTable, teamsTable } from "../db/schema";
+import type { User } from "lucia";
 import { createError } from "vinxi/http";
 import { requireUser } from "../auth/utils";
-import { User } from "lucia";
+import { db } from "../db";
+import { teamInvitesTable, teamsTable } from "../db/schema";
 
 export const getTeam = cache(async (id: string) => {
   "use server";
@@ -20,6 +20,7 @@ export const getTeam = cache(async (id: string) => {
         },
       },
       invites: true,
+      personalTeamOwner: true,
     },
   });
 
@@ -30,7 +31,10 @@ export const getTeam = cache(async (id: string) => {
     });
   }
 
-  return team;
+  return {
+    ...team,
+    personal: team.personalTeamOwner !== null,
+  }
 }, "teams");
 
 export const getTeamInvite = cache(async (id: string) => {
@@ -62,4 +66,4 @@ export const getTeamInvite = cache(async (id: string) => {
   }
 
   return invite;
-}, "team-invite");
+}, "team-invites");
