@@ -1,28 +1,24 @@
 // @refresh reload
-import { CopyIcon, EyeIcon, PlusIcon } from "lucide-solid";
+import { CopyIcon, EyeIcon, PlusIcon, XIcon } from "lucide-solid";
 import {
   type ComponentProps,
   For,
   Show,
   Suspense,
-  createEffect,
   createSignal,
   createMemo,
   splitProps,
 } from "solid-js";
 import { Title } from "@solidjs/meta";
 import { twMerge } from "tailwind-merge";
-import {
-  RouteDefinition,
-  createAsync,
-  useParams,
-  useSubmission,
-} from "@solidjs/router";
+import { RouteDefinition, createAsync, useParams } from "@solidjs/router";
 
 import { Button } from "~/lib/ui/components/button";
 import { showToast } from "~/lib/ui/components/toasts";
 import { createApiToken } from "~/lib/api-tokens/actions";
 import { getProjectTokens } from "~/lib/api-tokens/queries";
+import { useMutation } from "~/lib/ui/hooks/useMutation";
+import { RevokeTokenDialog } from "~/lib/api-tokens/components/revoke-token-dialog";
 
 export const route: RouteDefinition = {
   load({ params }) {
@@ -35,22 +31,22 @@ export default function Tokens() {
 
   const tokens = createAsync(() => getProjectTokens(params.projectId));
 
-  const submission = useSubmission(createApiToken);
+  const [tokenIdToRevoke, setTokenIdToRevoke] = createSignal<string>();
 
-  createEffect(() => {
-    if (submission.error) {
-      return showToast({
-        title: "Unable to create token",
-        variant: "error",
-      });
-    }
-
-    if (submission.result) {
-      return showToast({
+  const createApiTokenAction = useMutation({
+    action: createApiToken,
+    onSuccess() {
+      showToast({
         title: "Token created",
         variant: "success",
       });
-    }
+    },
+    onError(e) {
+      showToast({
+        title: "Unable to create token",
+        variant: "error",
+      });
+    },
   });
 
   return (
@@ -92,18 +88,49 @@ export default function Tokens() {
             <ul class="flex flex-col gap-2 grow">
               <For each={tokens()}>
                 {(token) => (
-                  <li class="border border-gray-300 bg-gray-50 rounded-lg px-3 py-2 text-sm">
+                  <li class="border border-gray-300 bg-gray-50 rounded-lg px-3 py-2 text-sm flex justify-between items-start">
                     <div class="flex flex-col gap-1">
-                      <Token class="text-sm font-semibold font-mono">
+                      <Token
+                        class="text-sm font-semibold font-mono"
+                        revoked={token.revokedAt !== null}
+                      >
                         {token.token}
                       </Token>
 
                       <p class="text-xs text-gray-500 inline-flex gap-1 items-center">
-                        Created by{" "}
-                        <span class="font-medium">{token.creator.email}</span>-{" "}
-                        {token.createdAt.toLocaleString("en-US")}
+                        <Show
+                          when={token.revokedAt === null}
+                          fallback={
+                            <span>
+                              Revoked at{" "}
+                              <span class="font-medium">
+                                {token.revokedAt!.toLocaleString("en-US")}
+                              </span>
+                            </span>
+                          }
+                        >
+                          Created by{" "}
+                          <span class="font-medium">{token.creator.name}</span>
+                          at{" "}
+                          <span class="font-medium">
+                            {token.createdAt.toLocaleString("en-US")}
+                          </span>
+                        </Show>
                       </p>
                     </div>
+                    <Show when={token.revokedAt === null}>
+                      <Button
+                        color="destructive"
+                        variant="ghost"
+                        even
+                        class="p-1"
+                        onClick={() => setTokenIdToRevoke(token.id)}
+                        aria-label="Revoke token"
+                        type="button"
+                      >
+                        <XIcon class="size-4" />
+                      </Button>
+                    </Show>
                   </li>
                 )}
               </For>
@@ -121,28 +148,35 @@ export default function Tokens() {
               type="submit"
               class="self-start"
               icon={() => <PlusIcon class="size-4" />}
-              loading={submission.pending}
+              loading={createApiTokenAction.pending}
             >
               Create token
             </Button>
           </form>
+
+          <RevokeTokenDialog
+            tokenId={tokenIdToRevoke()}
+            projectId={params.projectId}
+            onClose={() => setTokenIdToRevoke()}
+          />
         </Suspense>
       </div>
     </main>
   );
 }
 
-type TokenProps = Omit<ComponentProps<"span">, "children"> & {
+type TokenProps = Omit<ComponentProps<"div">, "children"> & {
   children: string;
+  revoked?: boolean;
 };
 
 function Token(props: TokenProps) {
-  const [local, others] = splitProps(props, ["children", "class"]);
+  const [local, others] = splitProps(props, ["children", "class", "revoked"]);
 
   const [hidden, setHidden] = createSignal(true);
 
   const children = createMemo(() => {
-    if (hidden()) {
+    if (hidden() && !props.revoked) {
       return props.children
         .split("")
         .map((c, i) => (i > 6 ? "*" : c))
@@ -162,27 +196,31 @@ function Token(props: TokenProps) {
   }
 
   return (
-    <span
+    <div
       {...others}
       class={twMerge("inline-flex gap-2 items-center", local.class)}
     >
-      {children()}
-      <button
-        type="button"
-        onClick={() => setHidden(!hidden())}
-        class="text-gray-500 hover:text-gray-700 cursor-default"
-        aria-label="Toggle token visibility"
-      >
-        <EyeIcon class="size-4" />
-      </button>
-      <button
-        aria-label="Copy to clipboard"
-        type="button"
-        onClick={copyToClipboard}
-        class="text-gray-500 hover:text-gray-700 cursor-default"
-      >
-        <CopyIcon class="size-4" />
-      </button>
-    </span>
+      <span classList={{ "line-through text-gray-400": local.revoked }}>
+        {children()}
+      </span>
+      <Show when={!local.revoked}>
+        <button
+          type="button"
+          onClick={() => setHidden(!hidden())}
+          class="text-gray-500 hover:text-gray-700 cursor-default"
+          aria-label="Toggle token visibility"
+        >
+          <EyeIcon class="size-4" />
+        </button>
+        <button
+          aria-label="Copy to clipboard"
+          type="button"
+          onClick={copyToClipboard}
+          class="text-gray-500 hover:text-gray-700 cursor-default"
+        >
+          <CopyIcon class="size-4" />
+        </button>
+      </Show>
+    </div>
   );
 }

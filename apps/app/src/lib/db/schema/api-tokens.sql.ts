@@ -17,6 +17,7 @@ export const apiTokensTable = pgTable("api_tokens", {
   creatorId: text("creator_id")
     .notNull()
     .references(() => usersTable.id),
+  revokedAt: timestamp("revoked_at"),
 });
 
 export const apiTokensRelations = relations(apiTokensTable, ({ one }) => ({

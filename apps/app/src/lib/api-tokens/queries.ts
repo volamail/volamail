@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { cache } from "@solidjs/router";
 
 import { db } from "../db";
@@ -21,5 +21,6 @@ export const getProjectTokens = cache(async (projectId: string) => {
     with: {
       creator: true,
     },
+    orderBy: desc(apiTokensTable.revokedAt),
   });
 }, "tokens");
