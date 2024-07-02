@@ -2,6 +2,7 @@
 import { Image } from "astro:assets";
 import Logo from "../components/Logo.astro";
 import mockupImage from "../assets/mockup.png";
+import screenshotImage from "../assets/screenshot.png";
 import FeatureCard from "../components/FeatureCard.astro";
 import { WaitlistForm } from "../components/WaitlistForm.tsx";
 
@@ -36,6 +37,10 @@ if (Astro.request.method === "POST") {
     error = "An error occurred";
   }
 }
+
+const loginLink = `${import.meta.env.DEV ? "http" : "https"}://${
+  import.meta.env.PUBLIC_APP_DOMAIN
+}/login`;
 ---
 
 <html lang="en">
@@ -60,6 +65,15 @@ if (Astro.request.method === "POST") {
     />
 
     <title>Simple email for everyone - Volamail</title>
+
+    <meta
+      name="description"
+      content="Write emails with the help of AI and send them with an API call. E-mail shouldn't be so difficult."
+    />
+    <meta
+      name="keywords"
+      content="email, ai, api, email api, open-source, self-hostable, free, pro, enterprise, startup, small team, large team, large company, email tooling, email automation, email marketing, marketing automation, marketing software, automation software, automation tool, automation platform, automation software, automation tool, automation platform, self-hosted, hosted, cloud, serverless, web, frontend, backend, platform, software"
+    />
   </head>
   <body>
     <main class="flex flex-col min-h-dvh justify-center items-center">
@@ -95,7 +109,18 @@ if (Astro.request.method === "POST") {
           />
         </section>
       </div>
-      <section class="flex flex-col gap-4 max-w-5xl w-full px-8 -mt-32 z-10">
+      <div class="relative mb-16 -mt-32 px-8">
+        <Image
+          src={screenshotImage}
+          class="w-full max-w-4xl rounded-xl"
+          alt=""
+        />
+        <div
+          class="absolute inset-0 bg-gradient-to-b from-transparent to-white z-50"
+        >
+        </div>
+      </div>
+      <section class="flex flex-col gap-4 max-w-5xl w-full px-8 z-10">
         <h2 class="text-3xl font-bold">Features</h2>
         <div class="flex flex-col sm:grid grid-cols-2 grid-rows-2 gap-4">
           <FeatureCard title="AI-assisted editing">
@@ -119,49 +144,176 @@ if (Astro.request.method === "POST") {
         </div>
       </section>
 
-      <section class="flex flex-col gap-4 max-w-5xl w-full px-8 py-32">
-        <h2 class="text-3xl font-bold">Why</h2>
+      <seection class="flex flex-col gap-4 max-w-5xl w-full px-8 py-32">
+        <h2 class="text-3xl font-bold">Pricing</h2>
         <p class="text-gray-600">
-          Working in modern web development <a
-            href="https://vlkstudio.com"
+          Simple, predictable pricing that scales with your needs.
+        </p>
+
+        <div class="flex flex-col gap-4">
+          <div
+            class="border border-gray-300 bg-gray-50 rounded-lg p-4 flex flex-col gap-1"
+          >
+            <h3 class="font-semibold text-xl">Self-hosted</h3>
+            <p class="text-gray-600 text-sm">
+              Pay nothing and get access to all features, forever. Hosting
+              Volamail on your own cloud is meant to be easy.
+            </p>
+          </div>
+          <div class="flex items-center gap-2">
+            <hr class="grow" />
+            <span class="text-gray-400 text-xs">Or try our hosted plans</span>
+            <hr class="grow" />
+          </div>
+          <div class="flex flex-col md:flex-row gap-2">
+            <div
+              class="border flex-1 border-gray-300 bg-gray-50 rounded-lg p-4 flex flex-col gap-4"
+            >
+              <div class="flex flex-col gap-4 grow">
+                <div class="flex flex-col gap-1">
+                  <h3 class="font-semibold text-xl">Free</h3>
+                  <p class="font-bold text-2xl">
+                    $0<span class="text-sm">/month</span>
+                  </p>
+                </div>
+                <p class="text-gray-600 text-sm">
+                  Our most basic hosted plan, suited for small projects and
+                  people that just want to try the platform.
+                </p>
+
+                <p class="text-gray-600 text-sm">
+                  You'll be able to try most features in Volamail and you'll
+                  have a 500 emails per month quota that should be enough for
+                  your next side-project.
+                </p>
+
+                <ul
+                  class="text-sm list-disc pl-3 gap-1 text-gray-600 flex flex-col"
+                >
+                  <li>500 emails/month</li>
+                  <li>Unlimited AI generations and edits</li>
+                  <li>2 projects</li>
+                  <li>20MB image storage per project</li>
+                </ul>
+              </div>
+
+              <a
+                href={loginLink}
+                class="bg-black text-center hover:bg-gray-700 transition-colors text-white px-4 py-2 rounded-lg text-sm font-medium"
+              >
+                Get started
+              </a>
+            </div>
+
+            <div
+              class="border flex-1 border-gray-300 bg-gray-50 rounded-lg p-4 flex flex-col gap-4"
+            >
+              <div class="flex flex-col gap-4 grow">
+                <div class="flex flex-col gap-1">
+                  <h3 class="font-semibold text-xl">Pro</h3>
+                  <p class="font-bold text-2xl">
+                    $19<span class="text-sm">/month</span>
+                  </p>
+                </div>
+                <p class="text-gray-600 text-sm">
+                  Our main plan, suited for startups, small teams or large solo
+                  projects.
+                </p>
+
+                <p class="text-gray-600 text-sm">
+                  You'll get access to every feature in Volamail, a better AI
+                  model and a higher monthly email quota.
+                </p>
+
+                <ul
+                  class="text-sm list-disc pl-3 gap-1 text-gray-600 flex flex-col"
+                >
+                  <li>Better AI model</li>
+                  <li>10000 emails/month</li>
+                  <li>Unlimited AI generations and edits</li>
+                  <li>5 projects</li>
+                  <li>50MB image storage per project</li>
+                </ul>
+              </div>
+
+              <a
+                href={loginLink}
+                class="bg-black text-center hover:bg-gray-700 transition-colors text-white px-4 py-2 rounded-lg text-sm font-medium"
+              >
+                Get started
+              </a>
+            </div>
+            <div
+              class="border flex-1 border-gray-300 bg-gray-50 rounded-lg p-4 flex flex-col gap-2"
+            >
+              <div class="flex flex-col gap-2 grow">
+                <h3 class="font-semibold text-xl">Custom plans</h3>
+
+                <p class="text-gray-600 text-sm">
+                  We offer custom plans for larger teams or companies that need
+                  higher quotas or different feature-sets.
+                </p>
+                <p class="text-gray-600 text-sm">
+                  Don't hesitate to reach out even if you're a smaller company,
+                  our plans are affordable and we'll work with you to find the
+                  best fit.
+                </p>
+              </div>
+
+              <a
+                href="mailto:info@volamail.com"
+                class="border-black border text-center px-4 py-2 rounded-lg text-sm font-medium"
+              >
+                Contact us
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <section class="flex flex-col gap-4 max-w-5xl w-full py-32">
+          <h2 class="text-3xl font-bold">Why</h2>
+          <p class="text-gray-600">
+            Working in modern web development <a
+              href="https://vlkstudio.com"
+              target="_blank"
+              class="font-medium underline">we</a
+            > found existing email tooling to be a bit of a pain. There's a huge
+            gap between the startup-level email setup and what large enterprise companies
+            are using.
+          </p>
+          <p class="text-gray-600">
+            Volamail wants to unify this flow by providing an extremely fast
+            onboarding process for lean startups that have to go fast, but still
+            give large editing teams the ability to work on emails without
+            conflict, with features such as access control and localization.
+          </p>
+          <p class="text-gray-600">
+            All this is bundled in a modern, open-source package for
+            transparency, collaboration and self-hosting.
+          </p>
+        </section>
+      </seection>
+      <footer
+        class="w-full border-t max-w-5xl mx-auto justify-between border-gray-100 p-8 flex items-center"
+      >
+        <Logo class="w-6" />
+        <div class="flex gap-6 items-center text-sm">
+          <a
+            href="https://github.com/volamail/volamail"
             target="_blank"
-            class="font-medium underline">we</a
-          > found existing email tooling to be a bit of a pain. There's a huge gap
-          between the startup-level email setup and what large enterprise companies
-          are using.
-        </p>
-        <p class="text-gray-600">
-          Volamail wants to unify this flow by providing an extremely fast
-          onboarding process for lean startups that have to go fast, but still
-          give large editing teams the ability to work on emails without
-          conflict, with features such as access control and localization.
-        </p>
-        <p class="text-gray-600">
-          All this is bundled in a modern, open-source package for transparency,
-          collaboration and self-hosting.
-        </p>
-      </section>
+            class="text-gray-500 hover:text-black transition-colors"
+          >
+            GitHub
+          </a>
+          <a
+            href="https://x.com/volamail"
+            target="_blank"
+            class="text-gray-500 hover:text-black transition-colors"
+          >
+            X
+          </a>
+        </div>
+      </footer>
     </main>
-    <footer
-      class="w-full border-t max-w-5xl mx-auto justify-between border-gray-100 p-8 flex items-center"
-    >
-      <Logo class="w-6" />
-      <div class="flex gap-6 items-center text-sm">
-        <a
-          href="https://github.com/volamail/volamail"
-          target="_blank"
-          class="text-gray-500 hover:text-black transition-colors"
-        >
-          GitHub
-        </a>
-        <a
-          href="https://x.com/volamail"
-          target="_blank"
-          class="text-gray-500 hover:text-black transition-colors"
-        >
-          X
-        </a>
-      </div>
-    </footer>
   </body>
 </html>
