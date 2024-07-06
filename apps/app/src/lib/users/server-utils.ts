@@ -8,7 +8,10 @@ import {
   subscriptionsTable,
 } from "../db/schema";
 import { db } from "../db";
-import { SUBSCRIPTION_QUOTAS } from "../subscriptions/constants";
+import {
+  SUBSCRIPTION_QUOTAS,
+  SUBSCRIPTION_TYPE_FREE,
+} from "../subscriptions/constants";
 
 export async function bootstrapUser(email: string) {
   const id = ulid();
@@ -20,14 +23,15 @@ export async function bootstrapUser(email: string) {
       const [{ insertedId: subscriptionId }] = await db
         .insert(subscriptionsTable)
         .values({
-          tier: "FREE",
+          tier: SUBSCRIPTION_TYPE_FREE,
           status: "ACTIVE",
-          monthlyQuota: SUBSCRIPTION_QUOTAS["FREE"],
-          remainingQuota: SUBSCRIPTION_QUOTAS["FREE"],
+          monthlyQuota: SUBSCRIPTION_QUOTAS["FREE"]["emails"],
+          remainingQuota: SUBSCRIPTION_QUOTAS["FREE"]["emails"],
           renewsAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
           lastRefilledAt: new Date(),
           periodType: "MONTHLY",
           price: "0.00",
+          storageQuota: SUBSCRIPTION_QUOTAS["FREE"]["storage"],
         })
         .returning({ insertedId: subscriptionsTable.id });
 

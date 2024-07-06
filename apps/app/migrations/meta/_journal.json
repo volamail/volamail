@@ -253,6 +253,27 @@
       "when": 1719865772225,
       "tag": "0035_nasty_strong_guy",
       "breakpoints": true
+    },
+    {
+      "idx": 36,
+      "version": "6",
+      "when": 1720267444225,
+      "tag": "0036_dazzling_hiroim",
+      "breakpoints": true
+    },
+    {
+      "idx": 37,
+      "version": "6",
+      "when": 1720267454915,
+      "tag": "0037_omniscient_black_widow",
+      "breakpoints": true
+    },
+    {
+      "idx": 38,
+      "version": "6",
+      "when": 1720271972564,
+      "tag": "0038_fresh_sphinx",
+      "breakpoints": true
     }
   ]
 }
