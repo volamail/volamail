@@ -123,7 +123,7 @@ export default function DomainsPage(props: RouteSectionProps) {
                     <div class="flex flex-col gap-0.5">
                       <div class="text-xl font-semibold inline-flex gap-2 items-center">
                         <p>{domain.domain} </p>
-                        <Show when={!domain.verified || refetching()}>
+                        <Show when={!domain.verified && refetching()}>
                           <LoaderIcon class="size-4 animate-spin" />
                         </Show>
                       </div>
@@ -146,7 +146,7 @@ export default function DomainsPage(props: RouteSectionProps) {
                       color="destructive"
                       variant="ghost"
                       even
-                      class="self-start"
+                      class="self-start p-1"
                       icon={() => <XIcon class="size-4" />}
                       aria-label="Delete address"
                       type="button"

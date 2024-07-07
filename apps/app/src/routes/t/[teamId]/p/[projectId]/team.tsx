@@ -88,22 +88,21 @@ export default function TeamPage(props: RouteSectionProps) {
                   {/* @ts-expect-error idk align attribute is deprecated or something*/}
                   <td align="right">
                     <Tooltip>
-                      <TooltipTrigger>
-                        <Button
-                          color="destructive"
-                          variant="ghost"
-                          class="self-end p-1"
-                          icon={() => <XIcon class="size-4" />}
-                          aria-label="Remove member"
-                          type="button"
-                          even
-                          disabled={
-                            member.userId === team()?.personalTeamOwner?.id ||
-                            team()?.members.length === 1
-                          }
-                          onClick={() => setMemberToDelete(member.userId)}
-                        />
-                      </TooltipTrigger>
+                      <TooltipTrigger
+                        as={Button}
+                        color="destructive"
+                        variant="ghost"
+                        class="self-end p-1"
+                        icon={() => <XIcon class="size-4" />}
+                        aria-label="Remove member"
+                        type="button"
+                        even
+                        disabled={
+                          member.userId === team()?.personalTeamOwner?.id ||
+                          team()?.members.length === 1
+                        }
+                        onClick={() => setMemberToDelete(member.userId)}
+                      />
                       <TooltipContent class="text-gray-600">
                         <Switch fallback={<p>Remove member</p>}>
                           <Match

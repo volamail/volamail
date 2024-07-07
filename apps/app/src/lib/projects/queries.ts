@@ -2,24 +2,10 @@ import { cache } from "@solidjs/router";
 import { and, eq } from "drizzle-orm";
 import { createError } from "vinxi/http";
 
-import { requireUser } from "../auth/utils";
 import { db } from "../db";
+import { requireUser } from "../auth/utils";
+import { requireUserToBeMemberOfTeam } from "./utils";
 import { projectsTable, teamsTable } from "../db/schema";
-import {
-  getUserProjects as queryGetUserProjects,
-  requireUserToBeMemberOfProject,
-  requireUserToBeMemberOfTeam,
-} from "./utils";
-
-export const getUserProjects = cache(async () => {
-  "use server";
-
-  await new Promise((resolve) => setTimeout(resolve, 2000));
-
-  const user = requireUser();
-
-  return await queryGetUserProjects(user.id);
-}, "projects");
 
 export const getTeamDefaultProject = cache(async (teamId: string) => {
   "use server";

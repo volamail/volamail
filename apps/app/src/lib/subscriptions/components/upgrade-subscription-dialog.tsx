@@ -55,12 +55,12 @@ export function UpgradeSubscriptionDialog(props: Props) {
           <AlertDialogTitle>Upgrade to Pro</AlertDialogTitle>
           <AlertDialogDescription as="div" class="flex flex-col gap-4">
             <p>
-              You're upgrading the <strong>{props.team.name}</strong> team to
-              the <strong>Pro</strong> plan.
+              You're upgrading <strong>{props.team.name}</strong> to the{" "}
+              <strong>Pro</strong> plan.
             </p>
 
-            <div>
-              This plan will give your team access to:
+            <div class="flex flex-col gap-1">
+              <p>This plan will give your team access to:</p>
               <ul class="list-disc pl-6 text-sm">
                 <li>
                   {SUBSCRIPTION_QUOTAS[SUBSCRIPTION_TYPE_PRO].projects} projects

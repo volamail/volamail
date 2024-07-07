@@ -1,37 +1,11 @@
-import { eq, inArray } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { createError } from "vinxi/http";
-import { projectsTable, teamMembersTable, teamsTable } from "../db/schema";
+import { projectsTable, teamsTable } from "../db/schema";
 
 import { db } from "../db";
-import { sesClient } from "../mail/send";
 import { env } from "../env";
-import { s3 } from "../media/server-utils";
-
-export async function getUserProjects(userId: string) {
-  const teams = await db.query.teamsTable.findMany({
-    where: inArray(
-      teamsTable.id,
-      db
-        .select({ id: teamMembersTable.teamId })
-        .from(teamMembersTable)
-        .where(eq(teamMembersTable.userId, userId))
-    ),
-    with: {
-      projects: true,
-      personalTeamOwner: true,
-    },
-  });
-
-  const own =
-    teams.find((team) => team.personalTeamOwner?.id === userId)?.projects || [];
-
-  const other = teams.filter((team) => team.personalTeamOwner?.id !== userId);
-
-  return {
-    personal: own,
-    teams: other,
-  };
-}
+import { s3 } from "../media/s3";
+import { sesClient } from "../mail/send";
 
 export async function requireUserToBeMemberOfTeam(params: {
   userId: string;

@@ -1,21 +1,35 @@
 import { nanoid } from "nanoid";
 import { relations } from "drizzle-orm";
-import { pgTable, primaryKey, text, timestamp } from "drizzle-orm/pg-core";
+import {
+  index,
+  pgTable,
+  primaryKey,
+  text,
+  timestamp,
+} from "drizzle-orm/pg-core";
 
 import { usersTable } from "./users.sql";
 import { projectsTable } from "./projects.sql";
 import { domainsTable } from "./domains.sql";
 import { subscriptionsTable } from "./subscriptions.sql";
 
-export const teamsTable = pgTable("teams", {
-  id: text("id")
-    .primaryKey()
-    .$defaultFn(() => nanoid(8)),
-  name: text("name").notNull(),
-  subscriptionId: text("subscription_id")
-    .notNull()
-    .references(() => subscriptionsTable.id),
-});
+export const teamsTable = pgTable(
+  "teams",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => nanoid(8)),
+    name: text("name").notNull(),
+    subscriptionId: text("subscription_id")
+      .notNull()
+      .references(() => subscriptionsTable.id),
+  },
+  (table) => ({
+    subscriptionIdx: index("teams_subscription_id_idx").on(
+      table.subscriptionId
+    ),
+  })
+);
 
 export const teamMembersTable = pgTable(
   "team_members",

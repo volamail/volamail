@@ -19,12 +19,12 @@ import { type ComponentProps, type JSX, Show, splitProps } from "solid-js";
 import { twMerge } from "tailwind-merge";
 
 import { logout } from "~/lib/auth/actions";
-import { getCurrentUser } from "~/lib/auth/queries";
-import { ProjectSelector } from "~/lib/projects/components/project-selector";
-import { getUserProjects } from "~/lib/projects/queries";
 import { getTeam } from "~/lib/teams/queries";
+import { getUserTeams } from "~/lib/teams/queries";
+import { getCurrentUser } from "~/lib/auth/queries";
 import { Avatar } from "~/lib/ui/components/avatar";
 import { Button } from "~/lib/ui/components/button";
+import { ProjectSelector } from "~/lib/projects/components/project-selector";
 
 type Props = {
   children: JSX.Element;
@@ -32,7 +32,7 @@ type Props = {
 
 export const route: RouteDefinition = {
   load({ params }) {
-    void getUserProjects();
+    void getUserTeams();
     void getCurrentUser();
     void getTeam(params.teamId);
   },

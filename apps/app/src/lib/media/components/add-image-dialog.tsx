@@ -30,11 +30,9 @@ export function AddImageDialog(props: Props) {
 
       setOpen(false);
     },
-    onError() {
-      setOpen(false);
-
+    onError(e) {
       showToast({
-        title: "Unable to add image",
+        title: e.statusMessage || "Unable to add image",
         variant: "error",
       });
     },

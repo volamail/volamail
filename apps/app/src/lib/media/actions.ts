@@ -1,16 +1,18 @@
 import { nanoid } from "nanoid";
 import sizeOf from "image-size";
 import { and, eq } from "drizzle-orm";
+import { createError } from "vinxi/http";
 import { action } from "@solidjs/router";
 import { object, instance, string, optional } from "valibot";
+import { ISizeCalculationResult } from "image-size/dist/types/interface";
 
 import { db } from "../db";
 import { env } from "../env";
 import { imagesTable } from "../db/schema";
 import { requireUser } from "../auth/utils";
 import { parseFormData } from "../server-utils";
-import { getMediaUrl, s3 } from "./server-utils";
 import { requireUserToBeMemberOfProject } from "../projects/utils";
+import { getMediaUrl, requireProjectStorageLeft, s3 } from "./guards";
 
 export const addImage = action(async (formData: FormData) => {
   "use server";
@@ -26,22 +28,38 @@ export const addImage = action(async (formData: FormData) => {
     formData
   );
 
-  await requireUserToBeMemberOfProject({
+  if (!body.file || body.file.size === 0) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "No file uploaded",
+    });
+  }
+
+  const buffer = (await body.file.arrayBuffer()) as Buffer;
+
+  let dimensions: ISizeCalculationResult;
+
+  try {
+    dimensions = sizeOf(new Uint8Array(buffer));
+  } catch (e) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Invalid image",
+    });
+  }
+
+  const { meta } = await requireUserToBeMemberOfProject({
     userId: user.id,
     projectId: body.projectId,
   });
 
-  // TODO: Check if file is an image
-
-  // TODO: Check if file is too big
-
-  // TODO: Check if user has enough storage left
+  await requireProjectStorageLeft({
+    projectId: meta.project.id,
+    kilobytes: body.file.size / 1000,
+    teamId: meta.project.team.id,
+  });
 
   const id = nanoid(32);
-
-  const buffer = (await body.file.arrayBuffer()) as Buffer;
-
-  const dimensions = sizeOf(new Uint8Array(buffer));
 
   await Promise.all([
     s3.putObject({
@@ -54,7 +72,7 @@ export const addImage = action(async (formData: FormData) => {
       id,
       projectId: body.projectId,
       name: body.name || body.file.name,
-      size: Math.floor(body.file.size / 8),
+      size: Math.floor(body.file.size / 1000),
       dimensions: `${dimensions.width}x${dimensions.height}`,
     }),
   ]);
@@ -83,43 +101,57 @@ export const editMedia = action(async (formData: FormData) => {
     formData
   );
 
-  await requireUserToBeMemberOfProject({
+  if (!body.file || body.file.size === 0) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "No file uploaded",
+    });
+  }
+
+  const buffer = (await body.file.arrayBuffer()) as Buffer;
+
+  let dimensions: ISizeCalculationResult;
+
+  try {
+    dimensions = sizeOf(new Uint8Array(buffer));
+  } catch (e) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Invalid image",
+    });
+  }
+
+  const { meta } = await requireUserToBeMemberOfProject({
     userId: user.id,
     projectId: body.projectId,
   });
 
-  // TODO: Check if user has enough storage left
+  await requireProjectStorageLeft({
+    projectId: meta.project.id,
+    kilobytes: body.file.size / 1000,
+    teamId: meta.project.team.id,
+  });
 
-  if (body.file && body.file.size > 0) {
-    const buffer = (await body.file.arrayBuffer()) as Buffer;
-
-    const dimensions = sizeOf(new Uint8Array(buffer));
-
-    await Promise.all([
-      s3.putObject({
-        Bucket: env.AWS_BUCKET,
-        Key: `media/${body.id}`,
-        Body: buffer,
-        ContentType: body.file.type,
-      }),
-      db
-        .update(imagesTable)
-        .set({
-          name: body.name,
-          dimensions: `${dimensions.width}x${dimensions.height}`,
-        })
-        .where(
-          and(
-            eq(imagesTable.id, body.id),
-            eq(imagesTable.projectId, body.projectId)
-          )
-        ),
-    ]);
-
-    return {
-      success: true,
-    };
-  }
+  await Promise.all([
+    s3.putObject({
+      Bucket: env.AWS_BUCKET,
+      Key: `media/${body.id}`,
+      Body: buffer,
+      ContentType: body.file.type,
+    }),
+    db
+      .update(imagesTable)
+      .set({
+        name: body.name,
+        dimensions: `${dimensions.width}x${dimensions.height}`,
+      })
+      .where(
+        and(
+          eq(imagesTable.id, body.id),
+          eq(imagesTable.projectId, body.projectId)
+        )
+      ),
+  ]);
 
   await db
     .update(imagesTable)

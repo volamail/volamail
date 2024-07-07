@@ -20,8 +20,12 @@ import {
   deleteProjectWithCleanup,
   requireUserToBeMemberOfTeam,
 } from "../projects/utils";
-import { SUBSCRIPTION_QUOTAS } from "../subscriptions/constants";
+import {
+  SUBSCRIPTION_QUOTAS,
+  SUBSCRIPTION_TYPE_FREE,
+} from "../subscriptions/constants";
 import teamInviteTemplate from "~/lib/static-templates/team-invite.html?raw";
+import { DateTime } from "luxon";
 
 export const createTeam = action(async (formData: FormData) => {
   "use server";
@@ -47,13 +51,14 @@ export const createTeam = action(async (formData: FormData) => {
     const [{ insertedId: subscriptionId }] = await db
       .insert(subscriptionsTable)
       .values({
-        tier: "FREE",
-        monthlyQuota: SUBSCRIPTION_QUOTAS["FREE"],
+        tier: SUBSCRIPTION_TYPE_FREE,
+        remainingQuota: SUBSCRIPTION_QUOTAS[SUBSCRIPTION_TYPE_FREE].emails,
+        monthlyQuota: SUBSCRIPTION_QUOTAS[SUBSCRIPTION_TYPE_FREE].emails,
         periodType: "MONTHLY",
-        lastRefilledAt: new Date(),
+        lastRefilledAt: DateTime.now().toJSDate(),
+        storageQuota: SUBSCRIPTION_QUOTAS[SUBSCRIPTION_TYPE_FREE].storage,
         price: "0.00",
-        remainingQuota: SUBSCRIPTION_QUOTAS["FREE"],
-        renewsAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
+        renewsAt: DateTime.now().plus({ days: 30 }).toJSDate(),
         status: "ACTIVE",
       })
       .returning({ insertedId: subscriptionsTable.id });

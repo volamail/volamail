@@ -3,14 +3,14 @@ import { A, createAsync } from "@solidjs/router";
 import { BookOpenIcon, LogOutIcon } from "lucide-solid";
 
 import { logout } from "~/lib/auth/actions";
+import { getUserTeams } from "~/lib/teams/queries";
 import { Button } from "~/lib/ui/components/button";
 import { showToast } from "~/lib/ui/components/toasts";
-import { getUserProjects } from "~/lib/projects/queries";
 import { useMutation } from "~/lib/ui/hooks/useMutation";
 import { GridBgContainer } from "~/lib/ui/components/grid-bg-container";
 
 export default function Teams() {
-  const projects = createAsync(() => getUserProjects());
+  const teams = createAsync(() => getUserTeams());
 
   const logoutAction = useMutation({
     action: logout,
@@ -55,9 +55,9 @@ export default function Teams() {
           >
             <section class="flex flex-col gap-2">
               <h2 class="text-xl font-semibold">Personal projects</h2>
-              <Show when={projects()?.personal.length}>
+              <Show when={teams()?.personal?.projects.length}>
                 <ul class="flex gap-2">
-                  <For each={projects()?.personal}>
+                  <For each={teams()?.personal?.projects}>
                     {(project) => (
                       <li>
                         <A
@@ -73,7 +73,7 @@ export default function Teams() {
               </Show>
             </section>
 
-            <For each={projects()?.teams}>
+            <For each={teams()?.other}>
               {(team) => (
                 <section class="flex flex-col gap-2">
                   <h2 class="text-xl font-semibold">{team.name}</h2>

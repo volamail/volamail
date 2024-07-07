@@ -1,21 +1,18 @@
-import { action, redirect } from "@solidjs/router";
-import { object, parseAsync, string } from "valibot";
-import { createError } from "vinxi/http";
-
 import { eq } from "drizzle-orm";
-import { requireUser } from "../auth/utils";
-import { db } from "../db";
-import { projectsTable } from "../db/schema";
-import { env } from "../env";
-import { sesClient } from "../mail/send";
-import { s3 } from "../media/server-utils";
-import { parseFormData } from "../server-utils";
+import { object, string } from "valibot";
+import { createError } from "vinxi/http";
+import { action, redirect } from "@solidjs/router";
+
 import {
   deleteProjectWithCleanup,
-  getUserProjects,
-  requireUserToBeMemberOfProject,
   requireUserToBeMemberOfTeam,
+  requireUserToBeMemberOfProject,
 } from "./utils";
+import { db } from "../db";
+import { requireUser } from "../auth/utils";
+import { projectsTable } from "../db/schema";
+import { parseFormData } from "../server-utils";
+import { getUserTeams } from "../teams/server-utils";
 
 export const createProject = action(async (formData: FormData) => {
   "use server";
@@ -64,11 +61,14 @@ export const deleteProject = action(async (formData: FormData) => {
     userId: user.id,
   });
 
-  const userProjects = await getUserProjects(user.id);
+  const userProjects = await getUserTeams(user.id);
 
   await deleteProjectWithCleanup(payload.id);
 
-  const [projectToRedirectTo] = userProjects.teams
+  const [projectToRedirectTo] = [
+    ...(userProjects.personal ? [userProjects.personal] : []),
+    ...userProjects.other,
+  ]
     .flatMap((team) => team.projects)
     .filter((p) => p.id !== payload.id);
 

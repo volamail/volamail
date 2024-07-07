@@ -5,6 +5,7 @@ import { createError } from "vinxi/http";
 import { requireUser } from "../auth/utils";
 import { db } from "../db";
 import { teamInvitesTable, teamsTable } from "../db/schema";
+import { getUserTeams as queryGetUserTeams } from "./server-utils";
 
 export const getTeam = cache(async (id: string) => {
   "use server";
@@ -34,7 +35,7 @@ export const getTeam = cache(async (id: string) => {
   return {
     ...team,
     personal: team.personalTeamOwner !== null,
-  }
+  };
 }, "teams");
 
 export const getTeamInvite = cache(async (id: string) => {
@@ -67,3 +68,11 @@ export const getTeamInvite = cache(async (id: string) => {
 
   return invite;
 }, "team-invites");
+
+export const getUserTeams = cache(async () => {
+  "use server";
+
+  const user = requireUser();
+
+  return await queryGetUserTeams(user.id);
+}, "teams");

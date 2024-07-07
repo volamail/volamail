@@ -25,6 +25,7 @@ export const projectsTable = pgTable(
       }),
   },
   (table) => ({
+    teamIdx: index("projects_team_id_idx").on(table.teamId),
     creatorIdx: index("projects_creator_idx").on(table.creatorId),
   })
 );
@@ -40,7 +41,7 @@ export const projectsRelations = relations(projectsTable, ({ one, many }) => ({
   }),
   templates: many(templatesTable),
   images: many(imagesTable),
-  domains: many(domainsTable)
+  domains: many(domainsTable),
 }));
 
 export type DbProject = typeof projectsTable.$inferSelect;

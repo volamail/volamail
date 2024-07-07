@@ -4,8 +4,8 @@ import { cache } from "@solidjs/router";
 import { db } from "../db";
 import { imagesTable } from "../db/schema";
 import { requireUser } from "../auth/utils";
-import { getMediaUrl } from "./server-utils";
 import { requireUserToBeMemberOfProject } from "../projects/utils";
+import { getMediaUrl } from "./utils";
 
 export const getProjectImages = cache(async (projectId: string) => {
   "use server";

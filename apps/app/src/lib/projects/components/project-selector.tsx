@@ -2,33 +2,47 @@ import { A, createAsync, useLocation, useParams } from "@solidjs/router";
 import { CheckIcon, ChevronsUpDownIcon, PlusIcon } from "lucide-solid";
 import { For, Show, createMemo } from "solid-js";
 
-import { getUserProjects } from "~/lib/projects/queries";
+import { getUserTeams } from "~/lib/teams/queries";
 import { cn } from "~/lib/ui/utils/cn";
 import type { DbProject } from "../../db/schema";
-import { buttonVariants } from "../../ui/components/button";
+import { Button, buttonVariants } from "../../ui/components/button";
 import {
   PopoverContent,
   PopoverRoot,
   PopoverTrigger,
 } from "../../ui/components/popover";
 import { CreateProjectDialog } from "./create-project-dialog";
-import { getCurrentUser } from "~/lib/auth/queries";
+import { MAX_TEAMS_PER_USER } from "~/lib/subscriptions/constants";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "~/lib/ui/components/tooltip";
 
 export function ProjectSelector() {
   const params = useParams();
 
-  const user = createAsync(() => getCurrentUser());
-  const projects = createAsync(() => getUserProjects());
+  const teams = createAsync(() => getUserTeams());
 
   const currentProject = createMemo(() => {
     for (const project of [
-      ...(projects()?.personal || []),
-      ...(projects()?.teams || []).flatMap((team) => team.projects),
+      ...(teams()?.personal?.projects || []),
+      ...(teams()?.other || []).flatMap((team) => team.projects),
     ]) {
       if (project.id === params.projectId) {
         return project;
       }
     }
+  });
+
+  const reachedMaxTeams = createMemo(() => {
+    const nonPersonalTeams = teams()?.other;
+
+    if (!nonPersonalTeams) {
+      return false;
+    }
+
+    return nonPersonalTeams.length >= MAX_TEAMS_PER_USER;
   });
 
   return (
@@ -42,43 +56,66 @@ export function ProjectSelector() {
         {currentProject()?.name}
         <ChevronsUpDownIcon class="size-4" />
       </PopoverTrigger>
-      <PopoverContent class="flex flex-col w-64 overflow-y-auto max-h-64 p-0">
-        <ProjectsNavigation
-          teamId={user()!.personalTeamId}
-          title="Personal projects"
-          projects={projects()!.personal}
-        />
-        <hr class="w-full border-gray-200" />
-        <For each={projects()!.teams}>
-          {(team) => (
-            <>
-              <ProjectsNavigation
-                teamId={team.id}
-                title={`${team.name}'s projects`}
-                projects={team.projects}
-              />
-              <hr class="w-full border-gray-200" />
-            </>
-          )}
-        </For>
+      <PopoverContent
+        class="flex flex-col w-64 p-0"
+        onOpenAutoFocus={(e) => {
+          e.preventDefault();
 
-        <A
-          href="/create-team"
-          class={buttonVariants({
-            class: "m-2 justify-center rounded-md",
-          })}
-        >
-          Create team <PlusIcon class="size-4" />
-        </A>
+          const target = e.target as HTMLDivElement;
+
+          const firstLink = target.querySelector("a");
+
+          firstLink?.focus();
+        }}
+      >
+        <div class="max-h-96 verflow-y-auto">
+          <ProjectsNavigation
+            title="Personal projects"
+            team={teams()!.personal!}
+          />
+          <For each={teams()!.other}>
+            {(team) => (
+              <ProjectsNavigation
+                title={`${team.name}'s projects`}
+                team={team}
+              />
+            )}
+          </For>
+        </div>
+
+        <div class="p-2 border-t border-gray-300">
+          <Tooltip disabled={!reachedMaxTeams()}>
+            <TooltipTrigger
+              as={reachedMaxTeams() ? Button : A}
+              href="/create-team"
+              class={buttonVariants({
+                class: "justify-center rounded-md w-full",
+              })}
+              // @ts-expect-error too polymorphic
+              disabled={reachedMaxTeams() ? true : undefined}
+            >
+              Create team <PlusIcon class="size-4" />
+            </TooltipTrigger>
+            <TooltipContent>
+              You've reached the maximum number of teams you can be part of.
+              Please contact us at{" "}
+              <a href="mailto:info@volamail.com">info@volamail.com</a> if you
+              need more.
+            </TooltipContent>
+          </Tooltip>
+        </div>
       </PopoverContent>
     </PopoverRoot>
   );
 }
 
 type TeamsProjectsProps = {
-  teamId: string;
   title: string;
-  projects: DbProject[];
+  team: {
+    id: string;
+    projects: DbProject[];
+    reachedProjectLimit: boolean;
+  };
 };
 
 function ProjectsNavigation(props: TeamsProjectsProps) {
@@ -88,18 +125,23 @@ function ProjectsNavigation(props: TeamsProjectsProps) {
   const currentDashboardSection = location.pathname.split("/").slice(5)[0];
 
   return (
-    <div class="px-2 pt-4 pb-2 flex flex-col gap-1">
+    <div class="px-2 pt-4 pb-2 flex flex-col gap-1 border-b border-gray-300 last:border-b-0">
       <div class="text-sm text-gray-500 pr-2 pl-2.5 inline-flex justify-start gap-1.5">
         <p>{props.title}</p>
         <CreateProjectDialog
           team={{
-            id: props.teamId,
+            id: props.team.id,
             name: props.title,
           }}
+          disabledReason={
+            props.team.reachedProjectLimit
+              ? "Project limit reached for this team. Upgrade your plan to create more projects."
+              : undefined
+          }
         />
       </div>
       <ul class="flex flex-col gap-0.5 w-full">
-        <For each={props.projects}>
+        <For each={props.team.projects}>
           {(project) => (
             <li class="text-sm w-full">
               <A
