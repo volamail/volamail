@@ -41,54 +41,55 @@ export const buttonVariants = tv({
       color: "primary",
       variant: "solid",
       class:
-        "bg-black text-white [:not(:aria-disabled)]:hover:bg-gray-700 [:not(:aria-disabled)]:hover:text-white",
+        'bg-black text-white [&:not([aria-disabled="true"])]:hover:bg-gray-700 [&:not([aria-disabled="true"])]:hover:text-white',
     },
     {
       color: "destructive",
       variant: "solid",
-      class: "bg-red-500 text-white [:not(:aria-disabled)]:hover:bg-red-600",
+      class:
+        'bg-red-500 text-white [&:not([aria-disabled="true"])]:hover:bg-red-600',
     },
     {
       color: "success",
       variant: "solid",
       class:
-        "bg-green-500 text-white [:not(:aria-disabled)]:hover:bg-green-600",
+        'bg-green-500 text-white [&:not([aria-disabled="true"])]:hover:bg-green-600',
     },
     {
       color: "primary",
       variant: "outline",
       class:
-        "bg-transparent border border-gray-200 text-black [:not(:aria-disabled)]:hover:bg-gray-100",
+        'bg-transparent border border-gray-200 text-black [&:not([aria-disabled="true"])]:hover:bg-gray-100',
     },
     {
       color: "destructive",
       variant: "outline",
       class:
-        "bg-transparent border border-red-500 text-red-500 [:not(:aria-disabled)]:hover:bg-red-200",
+        'bg-transparent border border-red-500 text-red-500 [&:not([aria-disabled="true"])]:hover:bg-red-200',
     },
     {
       color: "success",
       variant: "outline",
       class:
-        "bg-transparent border border-green-500 text-green-500 [:not(:aria-disabled)]:hover:bg-green-200",
+        'bg-transparent border border-green-500 text-green-500 [&:not([aria-disabled="true"])]:hover:bg-green-200',
     },
     {
       color: "primary",
       variant: "ghost",
       class:
-        "bg-transparent [not(:aria-disabled)]:hover:bg-gray-200 text-black aria-disabled:bg-gray-100 aria-disabled:text-gray-500",
+        'bg-transparent [&:not([aria-disabled="true"])]:hover:bg-gray-200 text-black aria-disabled:bg-gray-100 aria-disabled:text-gray-500',
     },
     {
       color: "destructive",
       variant: "ghost",
       class:
-        "bg-transparent [not(:aria-disabled)]:hover:bg-red-200 text-red-500 aria-disabled:bg-red-100 aria-disabled:text-red-500",
+        'bg-transparent [&:not([aria-disabled="true"])]:hover:bg-red-200 text-red-500 aria-disabled:bg-red-100 aria-disabled:text-red-500',
     },
     {
       color: "success",
       variant: "ghost",
       class:
-        "bg-transparent [not(:aria-disabled)]:hover:bg-green-200 text-green-500 aria-disabled:bg-green-100 aria-disabled:text-green-500",
+        'bg-transparent [&:not([aria-disabled="true"])]:hover:bg-green-200 text-green-500 aria-disabled:bg-green-100 aria-disabled:text-green-500',
     },
   ],
   defaultVariants: {
