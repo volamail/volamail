@@ -8,8 +8,10 @@ import {
 import {
   AtSignIcon,
   CreditCardIcon,
+  GlobeIcon,
   ImageIcon,
   KeyIcon,
+  LanguagesIcon,
   LogOutIcon,
   SettingsIcon,
   Table2Icon,
@@ -25,6 +27,8 @@ import { getCurrentUser } from "~/lib/auth/queries";
 import { Avatar } from "~/lib/ui/components/avatar";
 import { Button } from "~/lib/ui/components/button";
 import { ProjectSelector } from "~/lib/projects/components/project-selector";
+import { tv, VariantProps } from "tailwind-variants";
+import { Dynamic } from "solid-js/web";
 
 type Props = {
   children: JSX.Element;
@@ -92,6 +96,28 @@ export default function DashboardLayout(props: Props) {
                 </NavLink>
               </li>
               <li>
+                <NavLink disabled>
+                  <div class="grow flex gap-1.5 items-center">
+                    <GlobeIcon class="size-4" />
+                    Audiences
+                  </div>
+                  <div class="rounded-full bg-yellow-100 border border-yellow-500 px-1.5 text-xs text-yellow-600">
+                    Soon
+                  </div>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink disabled>
+                  <div class="grow flex gap-1.5 items-center">
+                    <LanguagesIcon class="size-4" />
+                    Languages
+                  </div>
+                  <div class="rounded-full bg-yellow-100 border border-yellow-500 px-1.5 text-xs text-yellow-600">
+                    Soon
+                  </div>
+                </NavLink>
+              </li>
+              <li>
                 <NavLink
                   href={`/t/${params.teamId}/p/${params.projectId}/settings`}
                 >
@@ -154,18 +180,50 @@ export default function DashboardLayout(props: Props) {
   );
 }
 
-type NavLinkProps = ComponentProps<typeof A>;
+const navLinkVariants = tv({
+  base: "w-full text-sm inline-flex gap-2 items-center rounded-md py-1.5 px-2.5 font-medium text-black hover:bg-gray-300 transition-colors cursor-default",
+  variants: {
+    disabled: {
+      true: "opacity-50 cursor-not-allowed pointer-events-none",
+      false: "",
+    },
+  },
+});
+
+type NavLinkProps = Omit<ComponentProps<typeof A>, "href"> &
+  VariantProps<typeof navLinkVariants> &
+  (
+    | { disabled: true; href?: undefined }
+    | {
+        href: string;
+        disabled?: false;
+      }
+  );
 
 function NavLink(props: NavLinkProps) {
-  const [local, others] = splitProps(props, ["class", "activeClass"]);
+  const [local, others] = splitProps(props, [
+    "class",
+    "activeClass",
+    "disabled",
+  ]);
+
+  if (local.disabled) {
+    return (
+      <button
+        class={navLinkVariants({ disabled: local.disabled })}
+        aria-disabled={local.disabled}
+        type="button"
+      >
+        {others.children}
+      </button>
+    );
+  }
 
   return (
     <A
       {...others}
-      class={twMerge(
-        "w-full text-sm inline-flex gap-2 items-center rounded-md py-1.5 px-2.5 font-medium text-black hover:bg-gray-300 transition-colors cursor-default",
-        local.class
-      )}
+      href={others.href!}
+      class={navLinkVariants()}
       activeClass={twMerge("bg-gray-200", local.activeClass)}
     />
   );
