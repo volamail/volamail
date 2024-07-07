@@ -27,7 +27,7 @@ if (Astro.request.method === "POST") {
     );
 
     if (!response.ok) {
-      throw new Error("Bad response from app server");
+      throw new Error("Bad response from Volamail server");
     }
 
     success = true;
