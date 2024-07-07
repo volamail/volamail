@@ -39,3 +39,9 @@ dist/
 
 # fumadocs
 .map.ts
+
+# vercel
+.vercel
+
+# vinxi
+.vinxi
