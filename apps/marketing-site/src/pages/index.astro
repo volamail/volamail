@@ -104,6 +104,7 @@ const loginLink = `${import.meta.env.DEV ? "http" : "https"}://${
           </div>
           <Image
             src={mockupImage}
+            sizes="400px"
             class="md:opacity-100 opacity-20 w-96 absolute top-1/2 -translate-y-1/2 right-0 pointer-events-none"
             alt=""
           />
@@ -112,8 +113,9 @@ const loginLink = `${import.meta.env.DEV ? "http" : "https"}://${
       <div class="relative mb-16 -mt-32 px-8">
         <Image
           src={screenshotImage}
-          class="w-full max-w-4xl rounded-xl"
+          class="w-full max-w-4xl rounded-xl aspect-[14/9]"
           alt=""
+          sizes="(max-width: 768px) 768px, 1280px"
         />
         <div
           class="absolute inset-0 bg-gradient-to-b from-transparent to-white z-50"

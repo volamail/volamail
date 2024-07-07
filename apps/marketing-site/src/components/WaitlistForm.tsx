@@ -87,6 +87,7 @@ export function WaitlistForm(props: Props) {
           <button
             type="submit"
             disabled={phase() === "pending"}
+            aria-label="Request access"
             class="font-medium disabled:opacity-50 p-2 rounded-full bg-black text-white inline-flex gap-2 items-center text-sm cursor-default hover:bg-gray-600 transition-colors"
           >
             <Show
@@ -102,7 +103,7 @@ export function WaitlistForm(props: Props) {
       <input
         type="text"
         name="username"
-        class="sr-only"
+        class="hidden"
         aria-hidden
         tabindex={-1}
       />

@@ -9,12 +9,12 @@ import { appendHeader, createError, setCookie } from "vinxi/http";
 import { db } from "../db";
 import { mailCodesTable, usersTable, waitlistTable } from "../db/schema";
 import { sendMail } from "../mail/send";
-import { getUserProjects } from "../projects/utils";
 import { parseFormData } from "../server-utils";
 import otpTemplate from "../static-templates/mail-otp.html?raw";
 import { bootstrapUser } from "../users/server-utils";
 import { createGithubAuth } from "./github";
 import { lucia } from "./lucia";
+import { getUserTeams } from "../teams/server-utils";
 
 export const loginWithGithub = action(async (formData: FormData) => {
   "use server";
@@ -124,9 +124,8 @@ export const sendEmailOtp = action(async (formData: FormData) => {
       data: {
         otp: code,
       },
-    })
+    });
   }
-
 
   const searchParams = new URLSearchParams();
 
@@ -178,9 +177,9 @@ export const verifyEmailOtp = action(async (formData: FormData) => {
   if (existingUser) {
     await lucia.invalidateUserSessions(existingUser.id);
 
-    const [session, projects] = await Promise.all([
+    const [session, teams] = await Promise.all([
       lucia.createSession(existingUser.id, {}),
-      getUserProjects(existingUser.id),
+      getUserTeams(existingUser.id),
     ]);
 
     appendHeader(
@@ -193,8 +192,10 @@ export const verifyEmailOtp = action(async (formData: FormData) => {
       throw redirect(body.to);
     }
 
-    const project = projects.teams.find((t) => t.projects.length > 0)
-      ?.projects[0];
+    const project = [
+      ...(teams.personal ? [teams.personal] : []),
+      ...teams.other,
+    ].find((t) => t.projects.length > 0)?.projects[0];
 
     if (!project) {
       throw createError({
