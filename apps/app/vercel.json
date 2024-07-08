@@ -1,4 +1,5 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
   "rewrites": [
     {
       "source": "/:path*",
@@ -8,7 +9,7 @@
           "value": "api.volamail.com"
         }
       ],
-      "destination": "/api/:path*"
+      "destination": "https://app.volamail.com/api/:path*"
     }
   ]
 }
