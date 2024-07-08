@@ -28,7 +28,6 @@ import { Avatar } from "~/lib/ui/components/avatar";
 import { Button } from "~/lib/ui/components/button";
 import { ProjectSelector } from "~/lib/projects/components/project-selector";
 import { tv, VariantProps } from "tailwind-variants";
-import { Dynamic } from "solid-js/web";
 
 type Props = {
   children: JSX.Element;
@@ -97,7 +96,7 @@ export default function DashboardLayout(props: Props) {
               </li>
               <li>
                 <NavLink disabled>
-                  <div class="grow flex gap-1.5 items-center">
+                  <div class="grow flex gap-2 items-center">
                     <GlobeIcon class="size-4" />
                     Audiences
                   </div>
@@ -108,7 +107,7 @@ export default function DashboardLayout(props: Props) {
               </li>
               <li>
                 <NavLink disabled>
-                  <div class="grow flex gap-1.5 items-center">
+                  <div class="grow flex gap-2 items-center">
                     <LanguagesIcon class="size-4" />
                     Languages
                   </div>

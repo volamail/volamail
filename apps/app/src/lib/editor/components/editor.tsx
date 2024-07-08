@@ -4,10 +4,11 @@ import {
   createMemo,
   createEffect,
   createSignal,
+  onMount,
 } from "solid-js";
 import { Tabs } from "@kobalte/core/tabs";
 import quotedPrintable from "quoted-printable";
-import { EyeIcon, CodeIcon, SendIcon } from "lucide-solid";
+import { EyeIcon, CodeIcon, SendIcon, UndoIcon } from "lucide-solid";
 
 import { ImagePicker } from "./image-picker";
 import { FloatingMenu } from "./floating-menu";
@@ -34,6 +35,7 @@ export function Editor(props: Props) {
 
   const [selectedElement, setSelectedElement] = createSignal<HTMLElement>();
   const [selectedImageUrl, setSelectedImageUrl] = createSignal<string>();
+  const [prevValue, setPrevValue] = createSignal<string | null>(null);
 
   const generateTemplateAction = useMutation({
     action: generateTemplate,
@@ -41,6 +43,8 @@ export function Editor(props: Props) {
       mainForm.reset();
 
       setSelectedImageUrl();
+
+      setPrevValue(props.value || null);
 
       props.onChange(result.code);
     },
@@ -123,6 +127,16 @@ export function Editor(props: Props) {
     promptInput.focus();
   }
 
+  function handleUndo() {
+    if (!prevValue()) {
+      return;
+    }
+
+    props.onChange(prevValue() || undefined);
+
+    setPrevValue(null);
+  }
+
   const displayedCode = createMemo(() => {
     const rawCode = props.value;
 
@@ -133,26 +147,54 @@ export function Editor(props: Props) {
     return serializeCode(rawCode);
   });
 
+  function handleKeyDown(event: KeyboardEvent) {
+    if (event.key === "z" && (event.metaKey || event.ctrlKey)) {
+      event.preventDefault();
+
+      handleUndo();
+    }
+  }
+
+  onMount(() => {
+    document.addEventListener("keydown", handleKeyDown);
+
+    onCleanup(() => {
+      document.removeEventListener("keydown", handleKeyDown);
+    });
+  });
+
   return (
     <GridBgContainer class="grow min-h-0 flex flex-col gap-2 justify-center items-center p-8">
       <Show when={props.value}>
         <Tabs class="grow min-h-0 flex flex-col gap-2 w-full relative">
-          <Tabs.List class="border border-gray-300 inline-flex self-start text-sm items-center bg-gray-200 rounded-lg p-1">
-            <Tabs.Trigger
-              value="preview"
-              class="rounded-lg inline-flex transition-colors gap-1.5 items-center data-[selected]:bg-gray-100 px-3 py-1 data-[selected]:font-medium data-[selected]:text-black text-gray-600"
-            >
-              Preview
-              <EyeIcon class="size-4" />
-            </Tabs.Trigger>
-            <Tabs.Trigger
-              value="html"
-              class="rounded-lg inline-flex transition-colors gap-1.5 items-center data-[selected]:bg-gray-100 px-3 py-1 data-[selected]:font-medium data-[selected]:text-black text-gray-600"
-            >
-              HTML
-              <CodeIcon class="size-4" />
-            </Tabs.Trigger>
-          </Tabs.List>
+          <div class="flex justify-between items-center">
+            <Tabs.List class="border border-gray-300 inline-flex self-start text-sm items-center bg-gray-200 rounded-lg p-1">
+              <Tabs.Trigger
+                value="preview"
+                class="rounded-lg inline-flex transition-colors gap-1.5 items-center data-[selected]:bg-gray-100 px-3 py-1 data-[selected]:font-medium data-[selected]:text-black text-gray-600"
+              >
+                Preview
+                <EyeIcon class="size-4" />
+              </Tabs.Trigger>
+              <Tabs.Trigger
+                value="html"
+                class="rounded-lg inline-flex transition-colors gap-1.5 items-center data-[selected]:bg-gray-100 px-3 py-1 data-[selected]:font-medium data-[selected]:text-black text-gray-600"
+              >
+                HTML
+                <CodeIcon class="size-4" />
+              </Tabs.Trigger>
+            </Tabs.List>
+            <Show when={prevValue()}>
+              <Button
+                type="button"
+                variant="ghost"
+                icon={() => <UndoIcon class="size-4" />}
+                aria-label="Undo changes"
+                class="p-2"
+                onClick={handleUndo}
+              />
+            </Show>
+          </div>
           <Tabs.Content
             value="preview"
             class="relative overflow-y-auto grow bg-white border border-gray-200 w-full rounded-xl shadow"

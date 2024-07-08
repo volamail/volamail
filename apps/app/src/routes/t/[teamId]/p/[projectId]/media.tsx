@@ -26,7 +26,7 @@ export default function Media(props: RouteSectionProps) {
   const images = createAsync(() => getProjectImages(props.params.projectId));
 
   return (
-    <main class="p-8 flex flex-col grow gap-8 max-w-xl">
+    <main class="p-8 flex flex-col grow gap-8 max-w-2xl">
       <Title>Media - Volamail</Title>
 
       <div class="flex flex-col gap-2">
@@ -44,11 +44,14 @@ export default function Media(props: RouteSectionProps) {
       <section class="flex flex-col gap-2">
         <h2 class="text-xl font-medium">Images</h2>
 
-        <Show when={images()?.length} fallback={
-          <div class="p-4 rounded-lg bg-gray-100 text-center text-sm text-gray-500 border border-gray-300">
-            No images added yet.
-          </div>
-        }>
+        <Show
+          when={images()?.length}
+          fallback={
+            <div class="p-4 rounded-lg bg-gray-100 text-center text-sm text-gray-500 border border-gray-300">
+              No images added yet.
+            </div>
+          }
+        >
           <ul class="flex flex-col gap-2">
             <For each={images()}>
               {(image) => (
