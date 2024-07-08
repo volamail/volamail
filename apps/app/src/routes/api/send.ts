@@ -1,7 +1,15 @@
 import { createError } from "vinxi/http";
 import { and, eq, sql } from "drizzle-orm";
 import type { APIEvent } from "@solidjs/start/server";
-import { email, object, parseAsync, pipe, record, string } from "valibot";
+import {
+  email,
+  object,
+  optional,
+  parseAsync,
+  pipe,
+  record,
+  string,
+} from "valibot";
 
 import { db } from "~/lib/db";
 import { lucia } from "~/lib/auth/lucia";
@@ -10,18 +18,6 @@ import { sendMail } from "~/lib/mail/send";
 
 export async function POST({ request }: APIEvent) {
   // TODO: Rate-limit
-
-  const body = await request.json();
-
-  const payload = await parseAsync(
-    object({
-      template: string(),
-      data: record(string(), string()),
-      from: pipe(string(), email()),
-      to: pipe(string(), email()),
-    }),
-    body
-  );
 
   const authHeader = request.headers.get("Authorization");
 
@@ -33,6 +29,32 @@ export async function POST({ request }: APIEvent) {
       statusMessage: "Unauthorized",
     });
   }
+
+  const body = await request.json();
+
+  const payload = await parseAsync(
+    object({
+      template: string(
+        'invalid "template" value. it should be a string with the id of the email template'
+      ),
+      data: optional(
+        record(
+          string(),
+          string(),
+          '"data" must be a record of string:string pairs'
+        )
+      ),
+      from: pipe(
+        string('"from" email address is required'),
+        email('"from" is not a valid email address')
+      ),
+      to: pipe(
+        string('"to" email address is required'),
+        email('"to" is not a valid email address')
+      ),
+    }),
+    body
+  );
 
   const tokenRow = await db.query.apiTokensTable.findFirst({
     where: eq(schema.apiTokensTable.token, token),
