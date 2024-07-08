@@ -4,6 +4,7 @@ import type { APIEvent } from "@solidjs/start/server";
 import { email, object, parseAsync, pipe, record, string } from "valibot";
 
 import { db } from "~/lib/db";
+import { lucia } from "~/lib/auth/lucia";
 import * as schema from "~/lib/db/schema";
 import { sendMail } from "~/lib/mail/send";
 
@@ -14,7 +15,6 @@ export async function POST({ request }: APIEvent) {
 
   const payload = await parseAsync(
     object({
-      token: string(),
       template: string(),
       data: record(string(), string()),
       from: pipe(string(), email()),
@@ -23,8 +23,19 @@ export async function POST({ request }: APIEvent) {
     body
   );
 
-  const token = await db.query.apiTokensTable.findFirst({
-    where: eq(schema.apiTokensTable.token, payload.token),
+  const authHeader = request.headers.get("Authorization");
+
+  const token = lucia.readBearerToken(authHeader || "");
+
+  if (!token) {
+    throw createError({
+      status: 401,
+      statusMessage: "Unauthorized",
+    });
+  }
+
+  const tokenRow = await db.query.apiTokensTable.findFirst({
+    where: eq(schema.apiTokensTable.token, token),
     with: {
       project: {
         with: {
@@ -38,14 +49,15 @@ export async function POST({ request }: APIEvent) {
     },
   });
 
-  if (!token) {
+  if (!tokenRow) {
     throw createError({
       status: 401,
       statusMessage: "Unauthorized",
     });
   }
 
-  const { team } = token.project;
+  const team = tokenRow.project.team;
+  const project = tokenRow.project;
 
   if (team.subscription.remainingQuota <= 0) {
     throw createError({
@@ -57,7 +69,7 @@ export async function POST({ request }: APIEvent) {
   const template = await db.query.templatesTable.findFirst({
     where: and(
       eq(schema.templatesTable.id, payload.template),
-      eq(schema.templatesTable.projectId, token.projectId)
+      eq(schema.templatesTable.projectId, project.id)
     ),
   });
 
@@ -72,7 +84,7 @@ export async function POST({ request }: APIEvent) {
 
   const domain = await db.query.domainsTable.findFirst({
     where: and(
-      eq(schema.domainsTable.projectId, token.projectId),
+      eq(schema.domainsTable.projectId, project.id),
       eq(schema.domainsTable.domain, fromDomain)
     ),
     columns: {

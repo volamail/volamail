@@ -5,7 +5,7 @@ import { action, redirect } from "@solidjs/router";
 import { object, string, optional } from "valibot";
 
 import { db } from "~/lib/db";
-import { model } from "./server-utils";
+import { getModelForTeam } from "./model";
 import * as schema from "~/lib/db/schema";
 import { requireUser } from "~/lib/auth/utils";
 import { parseFormData } from "../server-utils";
@@ -78,7 +78,7 @@ export const editTemplate = action(async (formData: FormData) => {
     });
   }
 
-  const { meta } = await requireUserToBeMemberOfProject({
+  await requireUserToBeMemberOfProject({
     userId: user.id,
     projectId: template.projectId,
   });
@@ -110,7 +110,7 @@ export const generateTemplate = action(async (formData: FormData) => {
     formData
   );
 
-  await requireUserToBeMemberOfProject({
+  const { meta } = await requireUserToBeMemberOfProject({
     userId: user.id,
     projectId: payload.projectId,
   });
@@ -124,7 +124,7 @@ export const generateTemplate = action(async (formData: FormData) => {
     : payload.prompt;
 
   const result = await generateText({
-    model,
+    model: await getModelForTeam(meta.project.team.id),
     system: payload.currentHtml ? EDIT_PROMPT : INITIAL_GENERATION_PROMPT,
     messages: [
       {
@@ -144,18 +144,24 @@ export const generateTemplate = action(async (formData: FormData) => {
 export const editTemplateElement = action(async (formData: FormData) => {
   "use server";
 
-  requireUser();
+  const user = requireUser();
 
   const payload = await parseFormData(
     object({
       element: string(),
       prompt: string(),
+      projectId: string(),
     }),
     formData
   );
 
+  const { meta } = await requireUserToBeMemberOfProject({
+    userId: user.id,
+    projectId: payload.projectId,
+  });
+
   const result = await generateText({
-    model,
+    model: await getModelForTeam(meta.project.team.id),
     system:
       "You are an HTML email editor. You will be give a piece of HTML code taken from an email and the user's prompt. Your task is to apply the changes required by the user to that HTML and return the result. Make sure to only return HTML, no backticks, no markdown, just the modified HTML. Remember that HTML must be old e-mail compatible, so use tables for layouts. Remember the <style> tag doesn't work in email clients, so use inline styles on the elements instead.",
     messages: [

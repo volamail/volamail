@@ -184,16 +184,6 @@ export function Editor(props: Props) {
                 <CodeIcon class="size-4" />
               </Tabs.Trigger>
             </Tabs.List>
-            <Show when={prevValue()}>
-              <Button
-                type="button"
-                variant="ghost"
-                icon={() => <UndoIcon class="size-4" />}
-                aria-label="Undo changes"
-                class="p-2"
-                onClick={handleUndo}
-              />
-            </Show>
           </div>
           <Tabs.Content
             value="preview"
@@ -231,7 +221,7 @@ export function Editor(props: Props) {
       <form
         method="post"
         action={generateTemplate}
-        class="w-full max-w-2xl z-10"
+        class="w-full z-10"
         ref={mainForm}
       >
         <input type="hidden" name="projectId" value={props.projectId} />
@@ -240,9 +230,9 @@ export function Editor(props: Props) {
           <input type="hidden" name="currentHtml" value={props.value} />
         </Show>
 
-        <div class="flex flex-col gap-64">
+        <div class="flex flex-col gap-64 items-center">
           <Show when={!props.value}>
-            <div class="flex flex-col gap-12">
+            <div class="flex flex-col gap-12 w-full items-center">
               <div class="flex flex-col gap-2">
                 <h1 class="text-4xl font-bold text-center">Create email</h1>
                 <p class="text-center text-gray-600 text-sm">
@@ -251,7 +241,7 @@ export function Editor(props: Props) {
                 </p>
               </div>
 
-              <div class="flex gap-4">
+              <div class="flex gap-4 max-w-3xl w-full">
                 <StartFromEmailDialog
                   projectId={props.projectId}
                   onComplete={(email) => props.onChange(email.body)}
@@ -262,47 +252,62 @@ export function Editor(props: Props) {
             </div>
           </Show>
 
-          <Textarea
-            name="prompt"
-            required
-            loading={generateTemplateAction.pending}
-            resizeable
-            submitOnEnter
-            autofocus
-            leading={() => (
-              <div class="flex gap-1 shrink-0 items-center py-1">
-                <ImagePicker
-                  projectId={props.projectId}
-                  onSelect={handleSelectImage}
-                />
-                <Show when={selectedImageUrl()}>
-                  <span class="text-gray-500 text-sm">Using this image,</span>
-                  <input
-                    type="hidden"
-                    name="image"
-                    value={selectedImageUrl()}
+          <div
+            class="w-full flex gap-2"
+            classList={{ "max-w-3xl": !props.value }}
+          >
+            <Textarea
+              name="prompt"
+              required
+              loading={generateTemplateAction.pending}
+              resizeable
+              submitOnEnter
+              autofocus
+              leading={() => (
+                <div class="flex gap-1 shrink-0 items-center py-1">
+                  <ImagePicker
+                    projectId={props.projectId}
+                    onSelect={handleSelectImage}
                   />
-                </Show>
-              </div>
-            )}
-            ref={promptInput}
-            trailing={() => (
+                  <Show when={selectedImageUrl()}>
+                    <span class="text-gray-500 text-sm">Using this image,</span>
+                    <input
+                      type="hidden"
+                      name="image"
+                      value={selectedImageUrl()}
+                    />
+                  </Show>
+                </div>
+              )}
+              ref={promptInput}
+              trailing={() => (
+                <Button
+                  type="submit"
+                  aria-label="Request changes"
+                  class="p-2 mt-0.5"
+                  round
+                  even
+                  icon={() => <SendIcon class="size-3" />}
+                />
+              )}
+              class="py-1 gap-1"
+              placeholder={
+                selectedImageUrl()
+                  ? "create an invite email and put the image on top."
+                  : "A welcome e-mail with a magic link button..."
+              }
+            />
+            <Show when={prevValue()}>
               <Button
-                type="submit"
-                aria-label="Request changes"
-                class="p-2 mt-0.5"
-                round
-                even
-                icon={() => <SendIcon class="size-3" />}
+                type="button"
+                variant="outline"
+                icon={() => <UndoIcon class="size-4" />}
+                aria-label="Undo changes"
+                class="p-2"
+                onClick={handleUndo}
               />
-            )}
-            class="py-1 gap-1"
-            placeholder={
-              selectedImageUrl()
-                ? "create an invite email and put the image on top."
-                : "A welcome e-mail with a magic link button..."
-            }
-          />
+            </Show>
+          </div>
         </div>
       </form>
 

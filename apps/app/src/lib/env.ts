@@ -6,6 +6,7 @@ export const env = getValidatedEnv();
 
 function getValidatedEnv() {
   const schema = object({
+    ANTHROPIC_API_KEY: string(),
     AWS_BUCKET: string(),
     AWS_REGION: string(),
     AWS_ACCESS_KEY_ID: string(),
@@ -13,7 +14,6 @@ function getValidatedEnv() {
     DATABASE_URL: string(),
     GITHUB_CLIENT_ID: string(),
     GITHUB_CLIENT_SECRET: string(),
-    OPENAI_API_KEY: optional(string()),
     SITE_DOMAIN: string(),
     STRIPE_SECRET_KEY: string(),
     STRIPE_WEBHOOK_SECRET: string(),

@@ -1,0 +1,14 @@
+{
+  "rewrites": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "api.volamail.com"
+        }
+      ],
+      "destination": "/api/:path*"
+    }
+  ]
+}
