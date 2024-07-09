@@ -8,23 +8,40 @@ import {
 } from "solid-js";
 import { Tabs } from "@kobalte/core/tabs";
 import quotedPrintable from "quoted-printable";
-import { EyeIcon, CodeIcon, SendIcon, UndoIcon } from "lucide-solid";
+import {
+  EyeIcon,
+  CodeIcon,
+  SendIcon,
+  UndoIcon,
+  Trash2Icon,
+  Table2Icon,
+  CloudDownloadIcon,
+} from "lucide-solid";
 
 import { ImagePicker } from "./image-picker";
 import { FloatingMenu } from "./floating-menu";
-import { Button } from "~/lib/ui/components/button";
+import { Button, buttonVariants } from "~/lib/ui/components/button";
 import { PasteHtmlButton } from "./paste-html-button";
 import { showToast } from "~/lib/ui/components/toasts";
 import { Textarea } from "~/lib/ui/components/textarea";
 import { useMutation } from "~/lib/ui/hooks/useMutation";
 import { generateTemplate } from "~/lib/templates/actions";
-import { StartFromEmailDialog } from "./start-from-email-dialog";
+import { StartFromEmailDialogContents } from "./start-from-email-dialog";
 import { GridBgContainer } from "~/lib/ui/components/grid-bg-container";
+import { DeleteTemplateDialog } from "~/lib/templates/components/DeleteTemplateDialog";
+import { Dialog, DialogTrigger } from "~/lib/ui/components/dialog";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "~/lib/ui/components/tooltip";
+import { Kbd } from "~/lib/ui/components/kbd";
 
 type Props = {
   name?: string;
   value?: string;
   projectId: string;
+  templateId?: string;
   onChange: (value: string | undefined) => void;
 };
 
@@ -33,9 +50,12 @@ export function Editor(props: Props) {
   let templatePreview!: HTMLDivElement;
   let promptInput!: HTMLTextAreaElement;
 
+  const [deleteDialogOpen, setDeleteDialogOpen] = createSignal(false);
   const [selectedElement, setSelectedElement] = createSignal<HTMLElement>();
   const [selectedImageUrl, setSelectedImageUrl] = createSignal<string>();
-  const [prevValue, setPrevValue] = createSignal<string | null>(null);
+  const [history, setHistory] = createSignal<string[]>([]);
+  const [importExistingDialogOpen, setImportExistingDialogOpen] =
+    createSignal(false);
 
   const generateTemplateAction = useMutation({
     action: generateTemplate,
@@ -44,11 +64,11 @@ export function Editor(props: Props) {
 
       setSelectedImageUrl();
 
-      setPrevValue(props.value || null);
+      persistCurrentToHistory();
 
       props.onChange(result.code);
     },
-    onError(e) {
+    onError() {
       showToast({
         title: "Unable to generate template",
         variant: "error",
@@ -102,6 +122,8 @@ export function Editor(props: Props) {
 
     element.outerHTML = changes;
 
+    persistCurrentToHistory();
+
     props.onChange(deserializeCode(templatePreview.innerHTML));
 
     setSelectedElement();
@@ -116,6 +138,8 @@ export function Editor(props: Props) {
 
     element.remove();
 
+    persistCurrentToHistory();
+
     props.onChange(deserializeCode(templatePreview.innerHTML));
 
     setSelectedElement();
@@ -128,13 +152,15 @@ export function Editor(props: Props) {
   }
 
   function handleUndo() {
-    if (!prevValue()) {
+    const prevValue = history()[history().length - 1];
+
+    if (!prevValue) {
       return;
     }
 
-    props.onChange(prevValue() || undefined);
+    props.onChange(prevValue);
 
-    setPrevValue(null);
+    setHistory(history().slice(0, -1));
   }
 
   const displayedCode = createMemo(() => {
@@ -155,6 +181,25 @@ export function Editor(props: Props) {
     }
   }
 
+  function handleImportFromExistingComplete(value: string) {
+    setImportExistingDialogOpen(false);
+
+    persistCurrentToHistory();
+
+    props.onChange(value);
+  }
+
+  function persistCurrentToHistory() {
+    if (!props.value) {
+      return;
+    }
+
+    setHistory([
+      ...(history().length === 6 ? history().slice(1) : history()),
+      props.value,
+    ]);
+  }
+
   onMount(() => {
     document.addEventListener("keydown", handleKeyDown);
 
@@ -167,7 +212,7 @@ export function Editor(props: Props) {
     <GridBgContainer class="grow min-h-0 flex flex-col gap-2 justify-center items-center p-8">
       <Show when={props.value}>
         <Tabs class="grow min-h-0 flex flex-col gap-2 w-full relative">
-          <div class="flex justify-between items-center">
+          <div class="flex justify-between items-end">
             <Tabs.List class="border border-gray-300 inline-flex self-start text-sm items-center bg-gray-200 rounded-lg p-1">
               <Tabs.Trigger
                 value="preview"
@@ -184,6 +229,73 @@ export function Editor(props: Props) {
                 <CodeIcon class="size-4" />
               </Tabs.Trigger>
             </Tabs.List>
+
+            <div class="flex gap-2 items-center">
+              <Show when={history().length}>
+                <div class="flex gap-2 items-center">
+                  <Tooltip>
+                    <TooltipTrigger
+                      as={Button}
+                      type="button"
+                      variant="outline"
+                      icon={() => <UndoIcon class="size-4" />}
+                      aria-label="Undo changes"
+                      onClick={handleUndo}
+                      even
+                    />
+                    <TooltipContent class="inline-flex gap-1.5 items-center">
+                      Undo changes
+                      <Kbd>Ctrl/Cmd + Z</Kbd>
+                    </TooltipContent>
+                  </Tooltip>
+
+                  <div class="h-6 border-r border-gray-300" />
+                </div>
+              </Show>
+              <Dialog
+                open={importExistingDialogOpen()}
+                onOpenChange={setImportExistingDialogOpen}
+              >
+                <Tooltip>
+                  <TooltipTrigger
+                    as={DialogTrigger}
+                    aria-label="Import existing email template"
+                    class={buttonVariants({
+                      variant: "outline",
+                      even: true,
+                    })}
+                  >
+                    <CloudDownloadIcon class="size-4" />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    Import existing email template
+                  </TooltipContent>
+                </Tooltip>
+
+                <StartFromEmailDialogContents
+                  filter={(email) => email.id !== props.templateId}
+                  projectId={props.projectId}
+                  onComplete={(email) =>
+                    handleImportFromExistingComplete(email.body)
+                  }
+                />
+              </Dialog>
+              <Tooltip>
+                <TooltipTrigger
+                  as={Button}
+                  variant="outline"
+                  color="destructive"
+                  class="self-end"
+                  aria-label="Delete email"
+                  onClick={() => setDeleteDialogOpen(true)}
+                  even
+                  icon={() => <Trash2Icon class="size-4" />}
+                />
+                <TooltipContent class="inline-flex gap-1.5 items-center">
+                  Delete email
+                </TooltipContent>
+              </Tooltip>
+            </div>
           </div>
           <Tabs.Content
             value="preview"
@@ -199,9 +311,10 @@ export function Editor(props: Props) {
               {(element) => (
                 <FloatingMenu
                   element={element()}
-                  onClose={() => setSelectedElement()}
+                  projectId={props.projectId}
                   onComplete={modifyElement}
                   onDelete={deleteElement}
+                  onClose={() => setSelectedElement()}
                   onChangeSelection={setSelectedElement}
                 />
               )}
@@ -242,10 +355,17 @@ export function Editor(props: Props) {
               </div>
 
               <div class="flex gap-4 max-w-3xl w-full">
-                <StartFromEmailDialog
-                  projectId={props.projectId}
-                  onComplete={(email) => props.onChange(email.body)}
-                />
+                <Dialog>
+                  <DialogTrigger class="font-medium cursor-default flex-1 rounded-lg bg-gray-200 shadow p-4 text-sm inline-flex gap-2 items-center hover:bg-gray-300 transition-colors">
+                    <Table2Icon class="size-8 bg-black text-white rounded-lg p-2" />
+                    Start from another email
+                  </DialogTrigger>
+
+                  <StartFromEmailDialogContents
+                    projectId={props.projectId}
+                    onComplete={(email) => props.onChange(email.body)}
+                  />
+                </Dialog>
 
                 <PasteHtmlButton onPaste={props.onChange} />
               </div>
@@ -297,21 +417,22 @@ export function Editor(props: Props) {
                   : "A welcome e-mail with a magic link button..."
               }
             />
-            <Show when={prevValue()}>
-              <Button
-                type="button"
-                variant="outline"
-                icon={() => <UndoIcon class="size-4" />}
-                aria-label="Undo changes"
-                class="p-2"
-                onClick={handleUndo}
-              />
-            </Show>
           </div>
         </div>
       </form>
 
       <input type="hidden" name={props.name} value={props.value} />
+
+      <Show when={props.templateId}>
+        {(templateId) => (
+          <DeleteTemplateDialog
+            projectId={props.projectId}
+            templateId={templateId()}
+            open={deleteDialogOpen()}
+            onClose={() => setDeleteDialogOpen(false)}
+          />
+        )}
+      </Show>
     </GridBgContainer>
   );
 }

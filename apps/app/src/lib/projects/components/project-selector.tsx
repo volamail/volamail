@@ -98,9 +98,7 @@ export function ProjectSelector() {
             </TooltipTrigger>
             <TooltipContent>
               You've reached the maximum number of teams you can be part of.
-              Please contact us at{" "}
-              <a href="mailto:info@volamail.com">info@volamail.com</a> if you
-              need more.
+              Please contact us if you need more.
             </TooltipContent>
           </Tooltip>
         </div>

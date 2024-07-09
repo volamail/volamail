@@ -190,7 +190,7 @@ export const deleteTemplate = action(async (formData: FormData) => {
     formData
   );
 
-  await requireUserToBeMemberOfProject({
+  const { meta } = await requireUserToBeMemberOfProject({
     userId: user.id,
     projectId: payload.projectId,
   });
@@ -204,7 +204,7 @@ export const deleteTemplate = action(async (formData: FormData) => {
       )
     );
 
-  throw redirect("..");
+  throw redirect(`/t/${meta.project.team.id}/p/${payload.projectId}/emails`);
 }, "templates");
 
 export const getTemplateInForm = action(async (formData: FormData) => {

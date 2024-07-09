@@ -43,7 +43,7 @@ export default createHandler(() => (
 
           {assets}
         </head>
-        <body>
+        <body class="overscroll-y-none">
           <div id="app">{children}</div>
           {scripts}
         </body>

@@ -17,7 +17,6 @@ import { Textarea } from "~/lib/ui/components/textarea";
 import { Editor } from "~/lib/editor/components/editor";
 import { useMutation } from "~/lib/ui/hooks/useMutation";
 import { Breadcrumbs } from "~/lib/ui/components/breadcrumbs";
-import { DeleteTemplateDialog } from "~/lib/templates/components/DeleteTemplateDialog";
 
 export const route: RouteDefinition = {
   load({ params }) {
@@ -26,9 +25,7 @@ export const route: RouteDefinition = {
 };
 
 export default function EditTemplate(props: RouteSectionProps) {
-  const template = createAsync(() => getTemplate(props.params.id), {
-    deferStream: true,
-  });
+  const template = createAsync(() => getTemplate(props.params.id));
 
   const [html, setHtml] = createSignal(template()?.body);
 
@@ -69,8 +66,6 @@ export default function EditTemplate(props: RouteSectionProps) {
       });
     },
   });
-
-  const [deleteDialogOpen, setDeleteDialogOpen] = createSignal(false);
 
   return (
     <main class="h-dvh flex flex-col grow bg-gray-100">
@@ -149,32 +144,15 @@ export default function EditTemplate(props: RouteSectionProps) {
 
             <input type="hidden" name="body" value={html()} />
           </div>
-
-          <Button
-            type="button"
-            color="destructive"
-            variant="ghost"
-            class="self-end"
-            aria-label="Delete email"
-            onClick={() => setDeleteDialogOpen(true)}
-            even
-            icon={() => <Trash2Icon class="size-4" />}
-          />
         </form>
 
         <Editor
           value={html()}
           onChange={setHtml}
           projectId={props.params.projectId}
+          templateId={props.params.id}
         />
       </div>
-
-      <DeleteTemplateDialog
-        projectId={props.params.projectId}
-        templateId={props.params.id}
-        open={deleteDialogOpen()}
-        onClose={() => setDeleteDialogOpen(false)}
-      />
     </main>
   );
 }

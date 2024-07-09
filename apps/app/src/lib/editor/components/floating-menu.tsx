@@ -6,17 +6,18 @@ import {
   SaveAllIcon,
   ArrowUpNarrowWideIcon,
   TextIcon,
-  CheckIcon,
 } from "lucide-solid";
 
 import { Input } from "~/lib/ui/components/input";
 import { Button } from "~/lib/ui/components/button";
+import { showToast } from "~/lib/ui/components/toasts";
 import { Textarea } from "~/lib/ui/components/textarea";
 import { useMutation } from "~/lib/ui/hooks/useMutation";
 import { editTemplateElement } from "~/lib/templates/actions";
 import { PopoverContent, PopoverRoot } from "~/lib/ui/components/popover";
 
 type Props = {
+  projectId: string;
   element: HTMLElement;
   onClose: () => void;
   onComplete: (changes: string) => void;
@@ -29,6 +30,12 @@ export function FloatingMenu(props: Props) {
     action: editTemplateElement,
     onSuccess(result) {
       props.onComplete(result.code);
+    },
+    onError(e) {
+      showToast({
+        title: "Unable to edit element",
+        variant: "error",
+      });
     },
   });
 
@@ -63,13 +70,15 @@ export function FloatingMenu(props: Props) {
         props.element instanceof HTMLTableCellElement) &&
       elementHasOnlyText(props.element)
     ) {
+      const contents = (props.element.textContent || "").trim();
+
       elements.push(
         <Textarea
           name="contents"
           leading={() => <TextIcon class="size-4" />}
           resizeable
         >
-          {props.element.textContent || ""}
+          {contents}
         </Textarea>
       );
     }
@@ -86,11 +95,14 @@ export function FloatingMenu(props: Props) {
       <PopoverContent class="flex flex-col w-96">
         <>
           <form method="post" action={editTemplateElement} autocomplete="off">
+            <input type="hidden" name="projectId" value={props.projectId} />
+
             <input
               type="hidden"
               name="element"
               value={props.element.outerHTML}
             />
+
             <Input
               type="text"
               autofocus

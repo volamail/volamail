@@ -7,12 +7,14 @@ import {
 } from "@solidjs/router";
 import {
   AtSignIcon,
+  BookOpenIcon,
   CreditCardIcon,
   GlobeIcon,
   ImageIcon,
   KeyIcon,
   LanguagesIcon,
   LogOutIcon,
+  MessageCircleQuestionIcon,
   SettingsIcon,
   Table2Icon,
   UsersIcon,
@@ -25,9 +27,14 @@ import { getTeam } from "~/lib/teams/queries";
 import { getUserTeams } from "~/lib/teams/queries";
 import { getCurrentUser } from "~/lib/auth/queries";
 import { Avatar } from "~/lib/ui/components/avatar";
-import { Button } from "~/lib/ui/components/button";
+import { Button, buttonVariants } from "~/lib/ui/components/button";
 import { ProjectSelector } from "~/lib/projects/components/project-selector";
 import { tv, VariantProps } from "tailwind-variants";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "~/lib/ui/components/tooltip";
 
 type Props = {
   children: JSX.Element;
@@ -50,105 +57,109 @@ export default function DashboardLayout(props: Props) {
 
   return (
     <div class="flex">
-      <nav class="bg-gray-100 overflow-y-auto border-r h-dvh flex flex-col gap-4 w-64 shrink-0">
-        <div class="grow p-4 w-full flex flex-col gap-4">
-          <Show when={params.projectId} keyed>
-            <ProjectSelector />
-          </Show>
+      <nav class="bg-gray-100 overflow-y-auto border-r h-dvh flex flex-col w-64 shrink-0">
+        <div class="grow p-4 w-full flex flex-col">
+          <div class="flex flex-col gap-4">
+            <Show when={params.projectId} keyed>
+              <ProjectSelector />
+            </Show>
 
-          <hr class="w-full border-gray-200" />
+            <hr class="w-full border-gray-200" />
 
-          <section class="flex flex-col gap-2">
-            <h3 class="font-semibold text-xs text-gray-500 pl-2.5">PROJECT</h3>
+            <section class="flex flex-col gap-2">
+              <h3 class="font-semibold text-xs text-gray-500 pl-2.5">
+                PROJECT
+              </h3>
 
-            <ul class="flex flex-col gap-1 grow">
-              <li>
-                <NavLink
-                  href={`/t/${params.teamId}/p/${params.projectId}/emails`}
-                >
-                  <Table2Icon class="size-4" />
-                  Emails
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
-                  href={`/t/${params.teamId}/p/${params.projectId}/tokens`}
-                >
-                  <KeyIcon class="size-4" />
-                  API tokens
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
-                  href={`/t/${params.teamId}/p/${params.projectId}/domains`}
-                >
-                  <AtSignIcon class="size-4" />
-                  Domains
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
-                  href={`/t/${params.teamId}/p/${params.projectId}/media`}
-                >
-                  <ImageIcon class="size-4" />
-                  Media
-                </NavLink>
-              </li>
-              <li>
-                <NavLink disabled>
-                  <div class="grow flex gap-2 items-center">
-                    <GlobeIcon class="size-4" />
-                    Audiences
-                  </div>
-                  <div class="rounded-full bg-yellow-100 border border-yellow-500 px-1.5 text-xs text-yellow-600">
-                    Soon
-                  </div>
-                </NavLink>
-              </li>
-              <li>
-                <NavLink disabled>
-                  <div class="grow flex gap-2 items-center">
-                    <LanguagesIcon class="size-4" />
-                    Languages
-                  </div>
-                  <div class="rounded-full bg-yellow-100 border border-yellow-500 px-1.5 text-xs text-yellow-600">
-                    Soon
-                  </div>
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
-                  href={`/t/${params.teamId}/p/${params.projectId}/settings`}
-                >
-                  <SettingsIcon class="size-4" />
-                  Settings
-                </NavLink>
-              </li>
-            </ul>
-          </section>
+              <ul class="flex flex-col gap-1 grow">
+                <li>
+                  <NavLink
+                    href={`/t/${params.teamId}/p/${params.projectId}/emails`}
+                  >
+                    <Table2Icon class="size-4" />
+                    Emails
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    href={`/t/${params.teamId}/p/${params.projectId}/tokens`}
+                  >
+                    <KeyIcon class="size-4" />
+                    API tokens
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    href={`/t/${params.teamId}/p/${params.projectId}/domains`}
+                  >
+                    <AtSignIcon class="size-4" />
+                    Domains
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    href={`/t/${params.teamId}/p/${params.projectId}/media`}
+                  >
+                    <ImageIcon class="size-4" />
+                    Media
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink disabled>
+                    <div class="grow flex gap-2 items-center">
+                      <GlobeIcon class="size-4" />
+                      Audiences
+                    </div>
+                    <div class="rounded-full bg-yellow-100 border border-yellow-500 px-1.5 text-xs text-yellow-600">
+                      Soon
+                    </div>
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink disabled>
+                    <div class="grow flex gap-2 items-center">
+                      <LanguagesIcon class="size-4" />
+                      Languages
+                    </div>
+                    <div class="rounded-full bg-yellow-100 border border-yellow-500 px-1.5 text-xs text-yellow-600">
+                      Soon
+                    </div>
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    href={`/t/${params.teamId}/p/${params.projectId}/settings`}
+                  >
+                    <SettingsIcon class="size-4" />
+                    Settings
+                  </NavLink>
+                </li>
+              </ul>
+            </section>
 
-          <section class="flex flex-col gap-2">
-            <h3 class="font-semibold text-xs text-gray-500 pl-2.5">TEAM</h3>
+            <section class="flex flex-col gap-2">
+              <h3 class="font-semibold text-xs text-gray-500 pl-2.5">TEAM</h3>
 
-            <ul class="flex flex-col gap-1 grow">
-              <li>
-                <NavLink
-                  href={`/t/${params.teamId}/p/${params.projectId}/usage`}
-                >
-                  <CreditCardIcon class="size-4" />
-                  Usage & Billing
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
-                  href={`/t/${params.teamId}/p/${params.projectId}/team`}
-                >
-                  <UsersIcon class="size-4" />
-                  Team settings
-                </NavLink>
-              </li>
-            </ul>
-          </section>
+              <ul class="flex flex-col gap-1 grow">
+                <li>
+                  <NavLink
+                    href={`/t/${params.teamId}/p/${params.projectId}/usage`}
+                  >
+                    <CreditCardIcon class="size-4" />
+                    Usage & Billing
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    href={`/t/${params.teamId}/p/${params.projectId}/team`}
+                  >
+                    <UsersIcon class="size-4" />
+                    Team settings
+                  </NavLink>
+                </li>
+              </ul>
+            </section>
+          </div>
         </div>
 
         <form
@@ -161,16 +172,46 @@ export default function DashboardLayout(props: Props) {
             fallback={user()?.name.charAt(0) || ""}
           />
           <p class="text-sm truncate grow">{user()?.name}</p>
-          <Button
-            even
-            type="submit"
-            variant="ghost"
-            class="self-end"
-            loading={logoutAction.pending}
-            icon={() => <LogOutIcon class="size-4" />}
-          >
-            <span class="sr-only">Logout</span>
-          </Button>
+          <div class="flex gap-1 items-center shrink-0">
+            <Tooltip>
+              <TooltipTrigger
+                as="a"
+                href="mailto:info@volamail.com"
+                aria-label="Support"
+                class={buttonVariants({ variant: "ghost", even: true })}
+              >
+                <MessageCircleQuestionIcon class="size-4" />
+              </TooltipTrigger>
+              <TooltipContent>Support</TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger
+                as="a"
+                href="https://docs.volamail.com"
+                target="_blank"
+                aria-label="Docs"
+                class={buttonVariants({ variant: "ghost", even: true })}
+              >
+                <BookOpenIcon class="size-4" />
+              </TooltipTrigger>
+              <TooltipContent>Docs</TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger
+                as={Button}
+                type="submit"
+                variant="ghost"
+                even
+                class="self-end"
+                loading={logoutAction.pending}
+                icon={() => <LogOutIcon class="size-4" />}
+                aria-label="Logout"
+              />
+              <TooltipContent>Logout</TooltipContent>
+            </Tooltip>
+          </div>
         </form>
       </nav>
 
