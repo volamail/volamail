@@ -1,5 +1,6 @@
-import { Trash2Icon, XIcon } from "lucide-solid";
+import { Trash2Icon } from "lucide-solid";
 import { createMemo, createSignal } from "solid-js";
+
 import {
   AlertDialog,
   AlertDialogContent,
@@ -7,11 +8,11 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "~/lib/ui/components/alert-dialog";
-import { Button } from "~/lib/ui/components/button";
+import { deleteTeam } from "../actions";
 import { Input } from "~/lib/ui/components/input";
+import { Button } from "~/lib/ui/components/button";
 import { showToast } from "~/lib/ui/components/toasts";
 import { useMutation } from "~/lib/ui/hooks/useMutation";
-import { deleteTeam } from "../actions";
 
 type Props = {
   teamId: string;
@@ -121,7 +122,7 @@ export function DeleteTeamDialog(props: Props) {
               type="submit"
               color="destructive"
               class="self-end"
-              icon={() => <XIcon class="size-4" />}
+              icon={() => <Trash2Icon class="size-4" />}
               loading={deleteTeamMutation.pending}
               disabled={disabled()}
             >

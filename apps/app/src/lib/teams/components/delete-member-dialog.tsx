@@ -1,4 +1,4 @@
-import { XIcon } from "lucide-solid";
+import { Trash2Icon } from "lucide-solid";
 
 import {
   AlertDialog,
@@ -68,7 +68,7 @@ export function DeleteMemberDialog(props: Props) {
             type="submit"
             color="destructive"
             class="self-end"
-            icon={() => <XIcon class="size-4" />}
+            icon={() => <Trash2Icon class="size-4" />}
             loading={deleteMemberMutation.pending}
           >
             Delete

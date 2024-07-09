@@ -1,4 +1,4 @@
-import { XIcon } from "lucide-solid";
+import { Trash2Icon } from "lucide-solid";
 
 import {
   AlertDialog,
@@ -46,7 +46,7 @@ export function DeleteImageDialog(props: Props) {
         variant="ghost"
         class="p-1"
         even
-        icon={() => <XIcon class="size-4" />}
+        icon={() => <Trash2Icon class="size-4" />}
         aria-label="Delete media"
         color="destructive"
       />
@@ -68,7 +68,7 @@ export function DeleteImageDialog(props: Props) {
             color="destructive"
             class="self-end"
             loading={deleteImageMutation.pending}
-            icon={() => <XIcon class="size-4" />}
+            icon={() => <Trash2Icon class="size-4" />}
           >
             Delete file
           </Button>

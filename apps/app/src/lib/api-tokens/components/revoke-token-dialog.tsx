@@ -1,4 +1,4 @@
-import { Trash2Icon, XIcon } from "lucide-solid";
+import { Trash2Icon } from "lucide-solid";
 import {
   AlertDialog,
   AlertDialogContent,
@@ -7,8 +7,8 @@ import {
 } from "~/lib/ui/components/alert-dialog";
 import { revokeApiToken } from "../actions";
 import { Button } from "~/lib/ui/components/button";
-import { useMutation } from "~/lib/ui/hooks/useMutation";
 import { showToast } from "~/lib/ui/components/toasts";
+import { useMutation } from "~/lib/ui/hooks/useMutation";
 
 type Props = {
   projectId: string;
@@ -72,7 +72,7 @@ export function RevokeTokenDialog(props: Props) {
             type="submit"
             color="destructive"
             class="self-end"
-            icon={() => <XIcon class="size-4" />}
+            icon={() => <Trash2Icon class="size-4" />}
             loading={revokeTokenMutation.pending}
           >
             Delete

@@ -1,13 +1,14 @@
 import { Title } from "@solidjs/meta";
+import { CircleCheckBigIcon } from "lucide-solid";
 import { type RouteSectionProps, createAsync } from "@solidjs/router";
-import { SaveAllIcon, Trash2Icon } from "lucide-solid";
-import { editProject } from "~/lib/projects/actions";
-import { DeleteProjectDialog } from "~/lib/projects/components/delete-project-dialog";
+
+import { Input } from "~/lib/ui/components/input";
 import { getProject } from "~/lib/projects/queries";
 import { Button } from "~/lib/ui/components/button";
-import { Input } from "~/lib/ui/components/input";
+import { editProject } from "~/lib/projects/actions";
 import { showToast } from "~/lib/ui/components/toasts";
 import { useMutation } from "~/lib/ui/hooks/useMutation";
+import { DeleteProjectDialog } from "~/lib/projects/components/delete-project-dialog";
 
 export default function ProjectSettings(props: RouteSectionProps) {
   const project = createAsync(() =>
@@ -75,7 +76,7 @@ export default function ProjectSettings(props: RouteSectionProps) {
         <Button
           type="submit"
           class="self-end"
-          icon={() => <SaveAllIcon class="size-4" />}
+          icon={() => <CircleCheckBigIcon class="size-4" />}
           loading={editProjectAction.pending}
         >
           Save

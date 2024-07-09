@@ -2,13 +2,12 @@ import {
   For,
   Show,
   Suspense,
-  createResource,
   createSignal,
   onCleanup,
   onMount,
 } from "solid-js";
 import { Title } from "@solidjs/meta";
-import { LoaderIcon, PlusIcon, XIcon } from "lucide-solid";
+import { LoaderIcon, PlusIcon, Trash2Icon } from "lucide-solid";
 import {
   createAsync,
   revalidate,
@@ -147,7 +146,7 @@ export default function DomainsPage(props: RouteSectionProps) {
                       variant="ghost"
                       even
                       class="self-start p-1"
-                      icon={() => <XIcon class="size-4" />}
+                      icon={() => <Trash2Icon class="size-4" />}
                       aria-label="Delete address"
                       type="button"
                       onClick={() => setDomainIdToDelete(domain.id)}
@@ -213,6 +212,7 @@ export default function DomainsPage(props: RouteSectionProps) {
               class="flex flex-col gap-4"
               action={createDomain}
               method="post"
+              autocomplete="off"
             >
               <input
                 type="hidden"

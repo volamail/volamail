@@ -93,7 +93,7 @@ export default function TeamPage(props: RouteSectionProps) {
                         color="destructive"
                         variant="ghost"
                         class="self-end p-1"
-                        icon={() => <XIcon class="size-4" />}
+                        icon={() => <Trash2Icon class="size-4" />}
                         aria-label="Remove member"
                         type="button"
                         even
@@ -162,7 +162,7 @@ export default function TeamPage(props: RouteSectionProps) {
                           color="destructive"
                           variant="ghost"
                           class="self-end p-1"
-                          icon={() => <XIcon class="size-4" />}
+                          icon={() => <Trash2Icon class="size-4" />}
                           aria-label="Revoke invitation"
                           type="button"
                           even

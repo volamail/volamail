@@ -1,5 +1,5 @@
 // @refresh reload
-import { CopyIcon, EyeIcon, PlusIcon, XIcon } from "lucide-solid";
+
 import {
   type ComponentProps,
   For,
@@ -11,13 +11,14 @@ import {
 } from "solid-js";
 import { Title } from "@solidjs/meta";
 import { twMerge } from "tailwind-merge";
+import { CopyIcon, EyeIcon, PlusIcon, Trash2Icon } from "lucide-solid";
 import { RouteDefinition, createAsync, useParams } from "@solidjs/router";
 
 import { Button } from "~/lib/ui/components/button";
 import { showToast } from "~/lib/ui/components/toasts";
+import { useMutation } from "~/lib/ui/hooks/useMutation";
 import { createApiToken } from "~/lib/api-tokens/actions";
 import { getProjectTokens } from "~/lib/api-tokens/queries";
-import { useMutation } from "~/lib/ui/hooks/useMutation";
 import { RevokeTokenDialog } from "~/lib/api-tokens/components/revoke-token-dialog";
 
 export const route: RouteDefinition = {
@@ -128,7 +129,7 @@ export default function Tokens() {
                         aria-label="Revoke token"
                         type="button"
                       >
-                        <XIcon class="size-4" />
+                        <Trash2Icon class="size-4" />
                       </Button>
                     </Show>
                   </li>

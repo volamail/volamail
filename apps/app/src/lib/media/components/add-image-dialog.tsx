@@ -50,7 +50,12 @@ export function AddImageDialog(props: Props) {
       <DialogContent class="flex flex-col gap-6">
         <DialogTitle>Add image</DialogTitle>
 
-        <form class="flex flex-col gap-4" method="post" action={addImage}>
+        <form
+          class="flex flex-col gap-4"
+          method="post"
+          action={addImage}
+          autocomplete="off"
+        >
           <input type="hidden" name="projectId" value={props.projectId} />
 
           <div class="flex flex-col gap-1">

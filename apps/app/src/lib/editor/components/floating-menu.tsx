@@ -6,6 +6,7 @@ import {
   SaveAllIcon,
   ArrowUpNarrowWideIcon,
   TextIcon,
+  CircleCheckBigIcon,
 } from "lucide-solid";
 
 import { Input } from "~/lib/ui/components/input";
@@ -42,6 +43,26 @@ export function FloatingMenu(props: Props) {
   const elementSettingsElements = createMemo(() => {
     const elements: Array<JSX.Element> = [];
 
+    if (
+      (props.element instanceof HTMLParagraphElement ||
+        props.element instanceof HTMLHeadingElement ||
+        props.element instanceof HTMLTableCellElement ||
+        props.element instanceof HTMLAnchorElement) &&
+      elementHasOnlyText(props.element)
+    ) {
+      const contents = (props.element.textContent || "").trim();
+
+      elements.push(
+        <Textarea
+          name="contents"
+          leading={() => <TextIcon class="size-4" />}
+          resizeable
+        >
+          {contents}
+        </Textarea>
+      );
+    }
+
     if (props.element instanceof HTMLAnchorElement) {
       elements.push(
         <Input
@@ -61,25 +82,6 @@ export function FloatingMenu(props: Props) {
           leading={() => <LinkIcon class="size-4" />}
           value={props.element.src}
         />
-      );
-    }
-
-    if (
-      (props.element instanceof HTMLParagraphElement ||
-        props.element instanceof HTMLHeadingElement ||
-        props.element instanceof HTMLTableCellElement) &&
-      elementHasOnlyText(props.element)
-    ) {
-      const contents = (props.element.textContent || "").trim();
-
-      elements.push(
-        <Textarea
-          name="contents"
-          leading={() => <TextIcon class="size-4" />}
-          resizeable
-        >
-          {contents}
-        </Textarea>
       );
     }
 
@@ -122,15 +124,7 @@ export function FloatingMenu(props: Props) {
               )}
             />
           </form>
-          <div class="flex gap-1 w-full justify-start mt-1.5">
-            <Button
-              icon={() => <Trash2Icon class="size-4" />}
-              color="destructive"
-              onClick={props.onDelete}
-              aria-label="Delete element"
-              even
-              variant="ghost"
-            />
+          <div class="flex gap-1 w-full justify-end mt-1.5">
             <Button
               icon={() => <ArrowUpNarrowWideIcon class="size-4" />}
               variant="ghost"
@@ -139,6 +133,14 @@ export function FloatingMenu(props: Props) {
               }
               aria-label="Select parent element"
               even
+            />
+            <Button
+              icon={() => <Trash2Icon class="size-4" />}
+              color="destructive"
+              onClick={props.onDelete}
+              aria-label="Delete element"
+              even
+              variant="ghost"
             />
           </div>
           <Show when={elementSettingsElements().length}>
@@ -184,7 +186,7 @@ export function FloatingMenu(props: Props) {
                 {elementSettingsElements()}
                 <Button
                   type="submit"
-                  icon={() => <SaveAllIcon class="size-4" />}
+                  icon={() => <CircleCheckBigIcon class="size-4" />}
                   class="self-end"
                 >
                   Save
