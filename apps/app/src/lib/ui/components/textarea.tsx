@@ -1,4 +1,4 @@
-import { Loader2Icon } from "lucide-solid";
+import { LoaderIcon } from "lucide-solid";
 import { type VariantProps, tv } from "tailwind-variants";
 import { Show, splitProps, type ComponentProps, type JSX } from "solid-js";
 
@@ -62,7 +62,7 @@ export function Textarea(props: Props) {
         when={local.loading}
         fallback={local.trailing ? local.trailing() : null}
       >
-        <Loader2Icon
+        <LoaderIcon
           class={textareaVariants().loader({ class: local.classes?.loader })}
         />
       </Show>

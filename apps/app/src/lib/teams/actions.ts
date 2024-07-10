@@ -142,7 +142,7 @@ export const inviteTeamMember = action(async (formData: FormData) => {
   });
 
   await sendMail({
-    from: "noreply@volamail.com",
+    from: env.NOREPLY_EMAIL,
     to: payload.email,
     subject: `You've been invited to join ${meta.team.name}`,
     body: teamInviteTemplate,

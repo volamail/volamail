@@ -57,6 +57,7 @@ export default function Login() {
               type="email"
               name="email"
               placeholder="john.doe@example.com"
+              value={searchParams.email || ""}
             />
 
             <Button

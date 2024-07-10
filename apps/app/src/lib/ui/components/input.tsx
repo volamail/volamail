@@ -1,12 +1,12 @@
-import { Loader2Icon } from "lucide-solid";
+import { LoaderIcon } from "lucide-solid";
 import { type VariantProps, tv } from "tailwind-variants";
 import { Show, splitProps, type ComponentProps, type JSX } from "solid-js";
 
 const inputVariants = tv({
-  base: "w-full relative has-[input:disabled]:bg-gray-100 has-[input:focus]:outline outline-blue-600 flex gap-2 px-2.5 items-center bg-white border rounded-lg border-gray-300",
+  base: 'w-full relative has-[input[aria-disabled="true"]]:bg-gray-100 has-[input:focus]:outline outline-blue-600 flex gap-2 px-2.5 items-center bg-white border rounded-lg border-gray-300',
   slots: {
     input:
-      "text-input py-1.5 outline-none text-sm w-full bg-white autofill:bg-white disabled:bg-gray-100 disabled:text-gray-500",
+      "text-input py-1.5 outline-none text-sm w-full bg-white autofill:bg-white aria-disabled:bg-gray-100 aria-disabled:text-gray-500",
     loader: "animate-spin size-4",
   },
 });
@@ -40,7 +40,8 @@ export function Input(props: Props) {
 
       <input
         {...rest}
-        disabled={local.disabled || local.loading}
+        disabled={local.disabled}
+        aria-disabled={local.loading}
         class={inputVariants().input({ class: local.classes?.input })}
         style={{
           // @ts-expect-error css types aren't up to date
@@ -52,7 +53,7 @@ export function Input(props: Props) {
         when={local.loading}
         fallback={local.trailing ? local.trailing() : null}
       >
-        <Loader2Icon
+        <LoaderIcon
           class={inputVariants().loader({ class: local.classes?.loader })}
         />
       </Show>

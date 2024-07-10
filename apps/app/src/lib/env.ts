@@ -1,4 +1,12 @@
-import { object, parse, string, ValiError, optional } from "valibot";
+import {
+  email,
+  object,
+  optional,
+  parse,
+  pipe,
+  string,
+  ValiError,
+} from "valibot";
 
 import { formatValiError } from "./validation/utils";
 
@@ -6,6 +14,7 @@ export const env = getValidatedEnv();
 
 function getValidatedEnv() {
   const schema = object({
+    ADMIN_ID: optional(string()),
     ANTHROPIC_API_KEY: string(),
     AWS_BUCKET: string(),
     AWS_REGION: string(),
@@ -14,6 +23,7 @@ function getValidatedEnv() {
     DATABASE_URL: string(),
     GITHUB_CLIENT_ID: string(),
     GITHUB_CLIENT_SECRET: string(),
+    NOREPLY_EMAIL: pipe(string(), email()),
     SITE_DOMAIN: string(),
     STRIPE_SECRET_KEY: string(),
     STRIPE_WEBHOOK_SECRET: string(),

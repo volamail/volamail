@@ -16,6 +16,7 @@ import {
   Trash2Icon,
   Table2Icon,
   CloudDownloadIcon,
+  SparklesIcon,
 } from "lucide-solid";
 
 import { ImagePicker } from "./image-picker";
@@ -404,10 +405,10 @@ export function Editor(props: Props) {
                 <Button
                   type="submit"
                   aria-label="Request changes"
-                  class="p-2 mt-0.5"
+                  class="p-1.5 mt-0.5"
                   round
                   even
-                  icon={() => <SendIcon class="size-3" />}
+                  icon={() => <SparklesIcon class="size-4" />}
                 />
               )}
               class="py-1 gap-1"

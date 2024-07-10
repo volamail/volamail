@@ -1,5 +1,7 @@
-import { cache, redirect } from "@solidjs/router";
 import { getRequestEvent } from "solid-js/web";
+import { cache, redirect } from "@solidjs/router";
+
+import { env } from "../env";
 
 export const getCurrentUser = cache(async () => {
   "use server";
@@ -17,5 +19,6 @@ export const getCurrentUser = cache(async () => {
     imageUrl: user.githubId
       ? `https://avatars.githubusercontent.com/u/${user.githubId}`
       : null,
+    superadmin: env.ADMIN_ID === user.id,
   };
 }, "user");

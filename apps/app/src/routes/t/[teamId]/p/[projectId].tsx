@@ -35,6 +35,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "~/lib/ui/components/tooltip";
+import { ApproveToWaitlistDialog } from "~/lib/waitlist/components/approve-to-waitlist-dialog";
 
 type Props = {
   children: JSX.Element;
@@ -173,6 +174,9 @@ export default function DashboardLayout(props: Props) {
           />
           <p class="text-sm truncate grow">{user()?.name}</p>
           <div class="flex gap-1 items-center shrink-0">
+            <Show when={user()?.superadmin}>
+              <ApproveToWaitlistDialog />
+            </Show>
             <Tooltip>
               <TooltipTrigger
                 as="a"

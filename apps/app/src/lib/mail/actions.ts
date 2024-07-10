@@ -4,11 +4,12 @@ import { createError } from "vinxi/http";
 import { object, optional, record, string } from "valibot";
 
 import { db } from "../db";
+import { env } from "../env";
 import { sendMail } from "./send";
 import { requireUser } from "../auth/utils";
+import { parseFormData } from "../server-utils";
 import { subscriptionsTable } from "../db/schema";
 import { requireUserToBeMemberOfProject } from "../projects/utils";
-import { parseFormData } from "../server-utils";
 
 export const sendTestMail = action(async (formData: FormData) => {
   "use server";
@@ -57,7 +58,7 @@ export const sendTestMail = action(async (formData: FormData) => {
 
   try {
     await sendMail({
-      from: "noreply@volamail.com",
+      from: env.NOREPLY_EMAIL,
       to: user.email,
       body: payload.body,
       subject: payload.subject,

@@ -1,20 +1,21 @@
-import { action, redirect } from "@solidjs/router";
 import { generateState } from "arctic";
 import { and, eq } from "drizzle-orm";
 import { customAlphabet } from "nanoid";
 import { getRequestEvent } from "solid-js/web";
-import { email, object, optional, parseAsync, pipe, string } from "valibot";
+import { action, redirect } from "@solidjs/router";
+import { email, object, optional, pipe, string } from "valibot";
 import { appendHeader, createError, setCookie } from "vinxi/http";
 
 import { db } from "../db";
-import { mailCodesTable, usersTable, waitlistTable } from "../db/schema";
-import { sendMail } from "../mail/send";
-import { parseFormData } from "../server-utils";
-import otpTemplate from "../static-templates/mail-otp.html?raw";
-import { bootstrapUser } from "../users/server-utils";
-import { createGithubAuth } from "./github";
+import { env } from "../env";
 import { lucia } from "./lucia";
+import { sendMail } from "../mail/send";
+import { createGithubAuth } from "./github";
+import { parseFormData } from "../server-utils";
 import { getUserTeams } from "../teams/server-utils";
+import { bootstrapUser } from "../users/server-utils";
+import otpTemplate from "../static-templates/mail-otp.html?raw";
+import { mailCodesTable, usersTable, waitlistTable } from "../db/schema";
 
 export const loginWithGithub = action(async (formData: FormData) => {
   "use server";
@@ -117,7 +118,7 @@ export const sendEmailOtp = action(async (formData: FormData) => {
     console.log("GENERATED EMAIL OTP:", code);
   } else {
     await sendMail({
-      from: "noreply@volamail.com",
+      from: env.NOREPLY_EMAIL,
       to: body.email,
       subject: "Here's your login code",
       body: otpTemplate,

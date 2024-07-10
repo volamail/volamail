@@ -16,6 +16,7 @@
     "@corvu/otp-field": "^0.1.1",
     "@kobalte/core": "^0.13.3",
     "@lucia-auth/adapter-drizzle": "^1.0.7",
+    "@solid-primitives/scheduled": "^1.4.3",
     "@solidjs/meta": "^0.29.4",
     "@solidjs/router": "^0.13.6",
     "@solidjs/start": "^1.0.2",

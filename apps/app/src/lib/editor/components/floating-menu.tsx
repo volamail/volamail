@@ -7,6 +7,7 @@ import {
   ArrowUpNarrowWideIcon,
   TextIcon,
   CircleCheckBigIcon,
+  SparklesIcon,
 } from "lucide-solid";
 
 import { Input } from "~/lib/ui/components/input";
@@ -109,16 +110,17 @@ export function FloatingMenu(props: Props) {
               type="text"
               autofocus
               name="prompt"
-              class="pr-1 gap-1"
+              class="pr-2 gap-1"
               placeholder="Make this bold..."
               loading={action.pending}
               trailing={() => (
                 <Button
                   type="submit"
                   variant="ghost"
-                  icon={() => <SendIcon class="size-4" />}
+                  icon={() => <SparklesIcon class="size-4" />}
                   round
                   even
+                  class="p-1"
                   aria-label="Request changes"
                 />
               )}
