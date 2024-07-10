@@ -54,7 +54,7 @@ export function CreateProjectDialog(props: Props) {
           class="self-start p-0.5"
           even
           round
-          variant="ghost"
+          variant="outline"
           icon={() => <PlusIcon class="size-4 text-gray-500" />}
           aria-label={`Create project under ${props.team.name}`}
           disabled={!!props.disabledReason}

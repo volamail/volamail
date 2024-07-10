@@ -83,22 +83,6 @@ export default function DashboardLayout(props: Props) {
                 </li>
                 <li>
                   <NavLink
-                    href={`/t/${params.teamId}/p/${params.projectId}/tokens`}
-                  >
-                    <KeyIcon class="size-4" />
-                    API tokens
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    href={`/t/${params.teamId}/p/${params.projectId}/domains`}
-                  >
-                    <AtSignIcon class="size-4" />
-                    Domains
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
                     href={`/t/${params.teamId}/p/${params.projectId}/media`}
                   >
                     <ImageIcon class="size-4" />
@@ -125,6 +109,22 @@ export default function DashboardLayout(props: Props) {
                     <div class="rounded-full bg-yellow-100 border border-yellow-500 px-1.5 text-xs text-yellow-600">
                       Soon
                     </div>
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    href={`/t/${params.teamId}/p/${params.projectId}/tokens`}
+                  >
+                    <KeyIcon class="size-4" />
+                    API tokens
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    href={`/t/${params.teamId}/p/${params.projectId}/domains`}
+                  >
+                    <AtSignIcon class="size-4" />
+                    Domains
                   </NavLink>
                 </li>
                 <li>

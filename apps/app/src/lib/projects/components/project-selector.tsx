@@ -124,8 +124,8 @@ function ProjectsNavigation(props: TeamsProjectsProps) {
 
   return (
     <div class="px-2 pt-4 pb-2 flex flex-col gap-1 border-b border-gray-300 last:border-b-0">
-      <div class="text-sm text-gray-500 pr-2 pl-2.5 inline-flex justify-start gap-1.5">
-        <p>{props.title}</p>
+      <div class="text-sm text-gray-500 pr-1.5 pl-2.5 inline-flex items-center justify-start gap-1.5">
+        <p class="grow">{props.title}</p>
         <CreateProjectDialog
           team={{
             id: props.team.id,

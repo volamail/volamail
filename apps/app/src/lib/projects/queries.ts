@@ -1,4 +1,4 @@
-import { cache } from "@solidjs/router";
+import { cache, redirect } from "@solidjs/router";
 import { and, eq } from "drizzle-orm";
 import { createError } from "vinxi/http";
 
@@ -6,6 +6,7 @@ import { db } from "../db";
 import { requireUser } from "../auth/utils";
 import { requireUserToBeMemberOfTeam } from "./utils";
 import { projectsTable, teamsTable } from "../db/schema";
+import { User } from "lucia";
 
 export const getTeamDefaultProject = cache(async (teamId: string) => {
   "use server";
@@ -20,7 +21,12 @@ export const getTeamDefaultProject = cache(async (teamId: string) => {
 export const getCurrentUserDefaultProject = cache(async () => {
   "use server";
 
-  const user = requireUser();
+  let user: User;
+  try {
+    user = requireUser();
+  } catch {
+    throw redirect("/login");
+  }
 
   const personalTeam = await db.query.teamsTable.findFirst({
     where: eq(teamsTable.id, user.personalTeamId),

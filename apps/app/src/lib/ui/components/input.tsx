@@ -3,10 +3,10 @@ import { type VariantProps, tv } from "tailwind-variants";
 import { Show, splitProps, type ComponentProps, type JSX } from "solid-js";
 
 const inputVariants = tv({
-  base: 'w-full relative has-[input[aria-disabled="true"]]:bg-gray-100 has-[input:focus]:outline outline-blue-600 flex gap-2 px-2.5 items-center bg-white border rounded-lg border-gray-300',
+  base: "w-full relative has-[:aria-disabled]:bg-gray-100 has-[:disabled]:bg-gray-100 has-[input:focus]:outline outline-blue-600 flex gap-2 px-2.5 items-center bg-white border rounded-lg border-gray-300",
   slots: {
     input:
-      "text-input py-1.5 outline-none text-sm w-full bg-white autofill:bg-white aria-disabled:bg-gray-100 aria-disabled:text-gray-500",
+      "text-input py-1.5 outline-none text-sm w-full bg-white autofill:bg-white aria-disabled:bg-gray-100 disabled:bg-gray-100 aria-disabled:text-gray-500 disabled:text-gray-500",
     loader: "animate-spin size-4",
   },
 });
