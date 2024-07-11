@@ -2,7 +2,11 @@
   "root": true,
   "pages": [
     "index",
-    "---Guides---",
-    "guides/your-first-email"
+    "---Editor---",
+    "editor/getting-started",
+    "---Rest API---",
+    "rest-api/send",
+    "---Self-hosting---",
+    "self-hosting/guide"
   ]
 }
