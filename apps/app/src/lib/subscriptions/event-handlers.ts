@@ -55,7 +55,7 @@ export async function handleInvoicePaidEvent({
       ? subscriptionMeta.storage
       : SUBSCRIPTION_QUOTAS[subscriptionMeta.type].storage;
 
-  if (team.subscription) {
+  if (team.subscription && team.subscription.tier !== "FREE") {
     await db
       .update(subscriptionsTable)
       .set({
@@ -80,6 +80,10 @@ export async function handleInvoicePaidEvent({
   const price = subscription.items.data[0].price.unit_amount! / 100;
 
   await db.transaction(async (db) => {
+    await db
+      .delete(subscriptionsTable)
+      .where(eq(subscriptionsTable.id, team.subscription.id));
+
     const [createdSubscription] = await db
       .insert(subscriptionsTable)
       .values({
