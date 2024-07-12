@@ -12,7 +12,7 @@ import {
   subscriptionsTable,
 } from "../db/schema";
 import { db } from "../db";
-import { env } from "../env";
+import { env } from "../environment/env";
 import { sendMail } from "../mail/send";
 import { requireUser } from "../auth/utils";
 import { parseFormData } from "../server-utils";

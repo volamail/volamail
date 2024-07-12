@@ -70,22 +70,24 @@ export default function Login() {
             </Button>
           </div>
 
-          <div class="flex gap-3 items-center">
-            <hr class="w-full border-gray-200" />
-            <span class="text-sm text-gray-500">or</span>
-            <hr class="w-full border-gray-200" />
-          </div>
+          <Show when={import.meta.env.VITE_GITHUB_CLIENT_ID}>
+            <div class="flex gap-3 items-center">
+              <hr class="w-full border-gray-200" />
+              <span class="text-sm text-gray-500">or</span>
+              <hr class="w-full border-gray-200" />
+            </div>
 
-          <Button
-            type="submit"
-            class="justify-center py-2"
-            variant="outline"
-            formAction={loginWithGithub}
-            loading={loginWithGithubAction.pending}
-            icon={() => <GithubIcon class="size-4" />}
-          >
-            Sign in with GitHub
-          </Button>
+            <Button
+              type="submit"
+              class="justify-center py-2"
+              variant="outline"
+              formAction={loginWithGithub}
+              loading={loginWithGithubAction.pending}
+              icon={() => <GithubIcon class="size-4" />}
+            >
+              Sign in with GitHub
+            </Button>
+          </Show>
         </div>
 
         <Show when={searchParams.error}>

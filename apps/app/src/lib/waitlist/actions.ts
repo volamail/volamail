@@ -4,15 +4,23 @@ import { object, string } from "valibot";
 import { createError } from "vinxi/http";
 
 import { db } from "../db";
-import { env } from "../env";
+import { env } from "../environment/env";
 import * as schema from "../db/schema";
 import { sendMail } from "../mail/send";
 import { requireUser } from "../auth/utils";
 import { parseFormData } from "../server-utils";
 import earlyAccessInviteTemplate from "../static-templates/early-access-invite.html?raw";
+import { isSelfHosted } from "../environment/utils";
 
 export const addToWaitlist = action(async (formData: FormData) => {
   "use server";
+
+  if (isSelfHosted()) {
+    throw createError({
+      status: 404,
+      statusMessage: "Not found",
+    });
+  }
 
   const payload = await parseFormData(
     object({
@@ -30,6 +38,13 @@ export const addToWaitlist = action(async (formData: FormData) => {
 
 export const approveToWaitlist = action(async (formData: FormData) => {
   "use server";
+
+  if (env.VITE_SELF_HOSTED === "true") {
+    throw createError({
+      status: 404,
+      statusMessage: "Not found",
+    });
+  }
 
   const user = requireUser();
 

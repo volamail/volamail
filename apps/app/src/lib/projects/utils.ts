@@ -3,7 +3,7 @@ import { createError } from "vinxi/http";
 import { projectsTable, teamsTable } from "../db/schema";
 
 import { db } from "../db";
-import { env } from "../env";
+import { env } from "../environment/env";
 import { s3 } from "../media/s3";
 import { sesClient } from "../mail/send";
 

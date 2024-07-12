@@ -1,15 +1,22 @@
 import { APIEvent } from "@solidjs/start/server";
 import { createError, readRawBody } from "vinxi/http";
 
-import { env } from "~/lib/env";
+import { env } from "~/lib/environment/env";
 import {
   handleInvoicePaidEvent,
   handleSubscriptionDeletedEvent,
   handleSubscriptionUpdatedEvent,
 } from "~/lib/subscriptions/event-handlers";
-import { stripe } from "~/lib/subscriptions/stripe";
+import { getStripeInstance } from "~/lib/subscriptions/stripe";
 
 export async function POST({ request, nativeEvent }: APIEvent) {
+  if (env.VITE_SELF_HOSTED === "true") {
+    throw createError({
+      status: 404,
+      statusMessage: "Not found",
+    });
+  }
+
   const stripeSignature = request.headers.get("stripe-signature");
 
   const body = await readRawBody(nativeEvent);
@@ -20,6 +27,8 @@ export async function POST({ request, nativeEvent }: APIEvent) {
       statusMessage: "Bad request from Stripe",
     });
   }
+
+  const stripe = getStripeInstance();
 
   const event = stripe.webhooks.constructEvent(
     body,

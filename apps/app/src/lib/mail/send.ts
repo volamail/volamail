@@ -1,6 +1,6 @@
 import { SESv2, SendEmailCommand } from "@aws-sdk/client-sesv2";
 
-import { env } from "../env";
+import { env } from "../environment/env";
 
 type Params = {
   body: string;

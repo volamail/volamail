@@ -3,8 +3,8 @@ import { object, string } from "valibot";
 import { action, redirect } from "@solidjs/router";
 import { createError } from "vinxi/http";
 
-import { env } from "../env";
-import { stripe } from "./stripe";
+import { env } from "../environment/env";
+import { getStripeInstance } from "./stripe";
 import { requireUser } from "../auth/utils";
 import { parseFormData } from "../server-utils";
 import { requireUserToBeMemberOfTeam } from "../projects/utils";
@@ -15,6 +15,13 @@ import { subscriptionsTable } from "../db/schema";
 export const redirectToProSubscriptionCheckout = action(
   async (formData: FormData) => {
     "use server";
+
+    if (env.VITE_SELF_HOSTED === "true") {
+      throw createError({
+        status: 404,
+        statusMessage: "Not found",
+      });
+    }
 
     const user = requireUser();
 
@@ -30,6 +37,8 @@ export const redirectToProSubscriptionCheckout = action(
       userId: user.id,
       teamId: body.teamId,
     });
+
+    const stripe = getStripeInstance();
 
     const price = await stripe.prices.retrieve(env.STRIPE_PRO_PLAN_ID, {
       expand: ["product"],
@@ -62,6 +71,13 @@ export const redirectToProSubscriptionCheckout = action(
 
 export const redirectToCustomerPortal = action(async (formData: FormData) => {
   "use server";
+
+  if (env.VITE_SELF_HOSTED === "true") {
+    throw createError({
+      status: 404,
+      statusMessage: "Not found",
+    });
+  }
 
   const user = requireUser();
 
@@ -97,6 +113,8 @@ export const redirectToCustomerPortal = action(async (formData: FormData) => {
   }
 
   let portalUrl: string;
+
+  const stripe = getStripeInstance();
 
   try {
     const subscription = await stripe.subscriptions.retrieve(

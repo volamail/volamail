@@ -7,7 +7,7 @@ import { email, object, optional, pipe, string } from "valibot";
 import { appendHeader, createError, setCookie } from "vinxi/http";
 
 import { db } from "../db";
-import { env } from "../env";
+import { env } from "../environment/env";
 import { lucia } from "./lucia";
 import { sendMail } from "../mail/send";
 import { createGithubAuth } from "./github";
@@ -16,6 +16,7 @@ import { getUserTeams } from "../teams/server-utils";
 import { bootstrapUser } from "../users/server-utils";
 import otpTemplate from "../static-templates/mail-otp.html?raw";
 import { mailCodesTable, usersTable, waitlistTable } from "../db/schema";
+import { isSelfHosted } from "../environment/utils";
 
 export const loginWithGithub = action(async (formData: FormData) => {
   "use server";
@@ -95,7 +96,7 @@ export const sendEmailOtp = action(async (formData: FormData) => {
     },
   });
 
-  if (!waitlistApproval) {
+  if (!waitlistApproval && !isSelfHosted()) {
     throw createError({
       statusCode: 403,
       statusMessage: "Email not approved yet",

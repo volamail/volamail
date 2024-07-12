@@ -36,6 +36,7 @@ import {
   TooltipTrigger,
 } from "~/lib/ui/components/tooltip";
 import { ApproveToWaitlistDialog } from "~/lib/waitlist/components/approve-to-waitlist-dialog";
+import { isSelfHosted } from "~/lib/environment/utils";
 
 type Props = {
   children: JSX.Element;
@@ -142,14 +143,16 @@ export default function DashboardLayout(props: Props) {
               <h3 class="font-semibold text-xs text-gray-500 pl-2.5">TEAM</h3>
 
               <ul class="flex flex-col gap-1 grow">
-                <li>
-                  <NavLink
-                    href={`/t/${params.teamId}/p/${params.projectId}/usage`}
-                  >
-                    <CreditCardIcon class="size-4" />
-                    Usage & Billing
-                  </NavLink>
-                </li>
+                <Show when={!isSelfHosted()}>
+                  <li>
+                    <NavLink
+                      href={`/t/${params.teamId}/p/${params.projectId}/usage`}
+                    >
+                      <CreditCardIcon class="size-4" />
+                      Usage & Billing
+                    </NavLink>
+                  </li>
+                </Show>
                 <li>
                   <NavLink
                     href={`/t/${params.teamId}/p/${params.projectId}/team`}

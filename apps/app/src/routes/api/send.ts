@@ -15,6 +15,7 @@ import { db } from "~/lib/db";
 import { lucia } from "~/lib/auth/lucia";
 import * as schema from "~/lib/db/schema";
 import { sendMail } from "~/lib/mail/send";
+import { isSelfHosted } from "~/lib/server-utils";
 
 export async function POST({ request }: APIEvent) {
   // TODO: Rate-limit
@@ -81,7 +82,7 @@ export async function POST({ request }: APIEvent) {
   const team = tokenRow.project.team;
   const project = tokenRow.project;
 
-  if (team.subscription.remainingQuota <= 0) {
+  if (team.subscription.remainingQuota <= 0 && !isSelfHosted()) {
     throw createError({
       status: 429,
       statusMessage: "Quota reached",
@@ -130,12 +131,14 @@ export async function POST({ request }: APIEvent) {
   });
 
   // TODO: wrap this (and above) in a transaction
-  await db
-    .update(schema.subscriptionsTable)
-    .set({
-      remainingQuota: sql`${schema.subscriptionsTable.remainingQuota} - 1`,
-    })
-    .where(eq(schema.subscriptionsTable.id, team.subscription.id));
+  if (!isSelfHosted()) {
+    await db
+      .update(schema.subscriptionsTable)
+      .set({
+        remainingQuota: sql`${schema.subscriptionsTable.remainingQuota} - 1`,
+      })
+      .where(eq(schema.subscriptionsTable.id, team.subscription.id));
+  }
 
   return {
     success: true,

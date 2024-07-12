@@ -4,12 +4,13 @@ import { createError } from "vinxi/http";
 import { object, optional, record, string } from "valibot";
 
 import { db } from "../db";
-import { env } from "../env";
 import { sendMail } from "./send";
 import { requireUser } from "../auth/utils";
 import { parseFormData } from "../server-utils";
 import { subscriptionsTable } from "../db/schema";
 import { requireUserToBeMemberOfProject } from "../projects/utils";
+import { isSelfHosted } from "../environment/utils";
+import { env } from "../environment/env";
 
 export const sendTestMail = action(async (formData: FormData) => {
   "use server";
@@ -49,7 +50,7 @@ export const sendTestMail = action(async (formData: FormData) => {
     });
   }
 
-  if (subcription.remainingQuota <= 0) {
+  if (subcription.remainingQuota <= 0 && !isSelfHosted()) {
     throw createError({
       statusCode: 429,
       statusMessage: "Quota reached",
@@ -72,12 +73,14 @@ export const sendTestMail = action(async (formData: FormData) => {
   }
 
   // TODO: wrap this (and above) in a transaction
-  await db
-    .update(subscriptionsTable)
-    .set({
-      remainingQuota: sql`${subscriptionsTable.remainingQuota} - 1`,
-    })
-    .where(eq(subscriptionsTable.id, subcription.id));
+  if (!isSelfHosted()) {
+    await db
+      .update(subscriptionsTable)
+      .set({
+        remainingQuota: sql`${subscriptionsTable.remainingQuota} - 1`,
+      })
+      .where(eq(subscriptionsTable.id, subcription.id));
+  }
 
   return {
     success: true,

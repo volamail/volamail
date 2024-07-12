@@ -8,13 +8,14 @@ import { ISizeCalculationResult } from "image-size/dist/types/interface";
 
 import { s3 } from "./s3";
 import { db } from "../db";
-import { env } from "../env";
 import { getMediaUrl } from "./utils";
 import { imagesTable } from "../db/schema";
 import { requireUser } from "../auth/utils";
 import { parseFormData } from "../server-utils";
 import { requireProjectStorageLeft } from "./guards";
 import { requireUserToBeMemberOfProject } from "../projects/utils";
+import { isSelfHosted } from "../environment/utils";
+import { env } from "../environment/env";
 
 export const addImage = action(async (formData: FormData) => {
   "use server";
@@ -55,11 +56,13 @@ export const addImage = action(async (formData: FormData) => {
     projectId: body.projectId,
   });
 
-  await requireProjectStorageLeft({
-    projectId: meta.project.id,
-    kilobytes: body.file.size / 1000,
-    teamId: meta.project.team.id,
-  });
+  if (!isSelfHosted()) {
+    await requireProjectStorageLeft({
+      projectId: meta.project.id,
+      kilobytes: body.file.size / 1000,
+      teamId: meta.project.team.id,
+    });
+  }
 
   const id = nanoid(32);
 
@@ -128,11 +131,13 @@ export const editMedia = action(async (formData: FormData) => {
     projectId: body.projectId,
   });
 
-  await requireProjectStorageLeft({
-    projectId: meta.project.id,
-    kilobytes: body.file.size / 1000,
-    teamId: meta.project.team.id,
-  });
+  if (!isSelfHosted()) {
+    await requireProjectStorageLeft({
+      projectId: meta.project.id,
+      kilobytes: body.file.size / 1000,
+      teamId: meta.project.team.id,
+    });
+  }
 
   await Promise.all([
     s3.putObject({
