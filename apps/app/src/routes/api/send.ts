@@ -15,7 +15,7 @@ import { db } from "~/lib/db";
 import { lucia } from "~/lib/auth/lucia";
 import * as schema from "~/lib/db/schema";
 import { sendMail } from "~/lib/mail/send";
-import { isSelfHosted } from "~/lib/server-utils";
+import { isSelfHosted } from "~/lib/environment/utils";
 
 export async function POST({ request }: APIEvent) {
   // TODO: Rate-limit

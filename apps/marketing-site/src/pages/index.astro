@@ -146,7 +146,7 @@ const loginLink = `${import.meta.env.DEV ? "http" : "https"}://${
         </div>
       </section>
 
-      <seection class="flex flex-col gap-4 max-w-5xl w-full px-8 py-32">
+      <section class="flex flex-col gap-4 max-w-5xl w-full px-8 py-32">
         <h2 class="text-3xl font-bold">Pricing</h2>
         <p class="text-gray-600">
           Simple, predictable pricing that scales with your needs.
@@ -179,19 +179,19 @@ const loginLink = `${import.meta.env.DEV ? "http" : "https"}://${
                   </p>
                 </div>
                 <p class="text-gray-600 text-sm">
-                  Our most basic hosted plan, suited for small projects and
-                  people that just want to try the platform.
+                  Our free hosted plan, suited for small projects and people
+                  that just want to try the platform.
                 </p>
 
                 <p class="text-gray-600 text-sm">
-                  You'll be able to try most features in Volamail and you'll
-                  have a 500 emails per month quota that should be enough for
-                  your next side-project.
+                  You'll be able to try most features in Volamail with a 500
+                  emails per month quota.
                 </p>
 
                 <ul
-                  class="text-sm list-disc pl-3 gap-1 text-gray-600 flex flex-col"
+                  class="grow justify-end text-sm list-disc pl-3 gap-1 text-gray-600 flex flex-col"
                 >
+                  <li>Base AI model</li>
                   <li>500 emails/month</li>
                   <li>Unlimited AI generations and edits</li>
                   <li>2 projects</li>
@@ -201,14 +201,14 @@ const loginLink = `${import.meta.env.DEV ? "http" : "https"}://${
 
               <a
                 href={loginLink}
-                class="bg-black text-center hover:bg-gray-700 transition-colors text-white px-4 py-2 rounded-lg text-sm font-medium"
+                class="bg-transparent text-center hover:bg-gray-200 transition-colors text-black border-black border px-4 py-2 rounded-lg text-sm font-medium"
               >
                 Get started
               </a>
             </div>
 
             <div
-              class="border flex-1 border-gray-300 bg-gray-50 rounded-lg p-4 flex flex-col gap-4"
+              class="border flex-1 border-black bg-gray-50 rounded-lg p-4 flex flex-col gap-4"
             >
               <div class="flex flex-col gap-4 grow">
                 <div class="flex flex-col gap-1">
@@ -228,7 +228,7 @@ const loginLink = `${import.meta.env.DEV ? "http" : "https"}://${
                 </p>
 
                 <ul
-                  class="text-sm list-disc pl-3 gap-1 text-gray-600 flex flex-col"
+                  class="grow justify-end text-sm list-disc pl-3 gap-1 text-gray-600 flex flex-col"
                 >
                   <li>Better AI model</li>
                   <li>10000 emails/month</li>
@@ -264,42 +264,27 @@ const loginLink = `${import.meta.env.DEV ? "http" : "https"}://${
 
               <a
                 href="mailto:info@volamail.com"
-                class="border-black border text-center px-4 py-2 rounded-lg text-sm font-medium"
+                class="border-black border hover:bg-gray-200 transition-colors bg-transparent text-center px-4 py-2 rounded-lg text-sm font-medium"
               >
                 Contact us
               </a>
             </div>
           </div>
         </div>
+      </section>
 
-        <section class="flex flex-col gap-4 max-w-5xl w-full py-32">
-          <h2 class="text-3xl font-bold">Why</h2>
-          <p class="text-gray-600">
-            Working in modern web development <a
-              href="https://vlkstudio.com"
-              target="_blank"
-              class="font-medium underline">we</a
-            > found existing email tooling to be a bit of a pain. There's a huge
-            gap between the startup-level email setup and what large enterprise companies
-            are using.
-          </p>
-          <p class="text-gray-600">
-            Volamail wants to unify this flow by providing an extremely fast
-            onboarding process for lean startups that have to go fast, but still
-            give large editing teams the ability to work on emails without
-            conflict, with features such as access control and localization.
-          </p>
-          <p class="text-gray-600">
-            All this is bundled in a modern, open-source package for
-            transparency, collaboration and self-hosting.
-          </p>
-        </section>
-      </seection>
       <footer
         class="w-full border-t max-w-5xl mx-auto justify-between border-gray-100 p-8 flex items-center"
       >
         <Logo class="w-6" />
         <div class="flex gap-6 items-center text-sm">
+          <a
+            href="https://docs.volamail.com"
+            target="_blank"
+            class="text-gray-500 hover:text-black transition-colors"
+          >
+            Docs
+          </a>
           <a
             href="https://github.com/volamail/volamail"
             target="_blank"
