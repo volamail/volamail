@@ -6,6 +6,7 @@ import FeatureCard from "../components/FeatureCard.astro";
 import { WaitlistForm } from "../components/WaitlistForm.tsx";
 
 import "../global.css";
+import BaseHead from "../components/BaseHead.astro";
 
 let success = false;
 let error: string | undefined;
@@ -46,24 +47,7 @@ const currentYear = new Date().getFullYear().toString();
 
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
-
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-    <link rel="manifest" href="/site.webmanifest" />
-    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#000000" />
-    <meta name="msapplication-TileColor" content="#000000" />
-    <meta name="theme-color" content="#ffffff" />
-
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400..900&display=swap"
-      rel="stylesheet"
-    />
+    <BaseHead />
 
     <title>Simple email for everyone - Volamail</title>
 
@@ -127,10 +111,9 @@ const currentYear = new Date().getFullYear().toString();
             Volamail is 100% open source and self-hostable. There are very few
             moving parts so you can easily deploy it to your own infrastructure.
           </FeatureCard>
-          <FeatureCard title="Marketing and transactional">
-            Editing teams will be able to lay out marketing emails and send them
-            to an audience straight from the dashboard. Transactional emails can
-            be sent by developers via a simple fetch call.
+          <FeatureCard title="Send via a simple HTTP call">
+            There's no need for dependencies or bulky SDKs. Transactional emails
+            can be sent by developers with a plain HTTP call.
           </FeatureCard>
         </div>
       </section>
@@ -149,6 +132,12 @@ const currentYear = new Date().getFullYear().toString();
             <p class="text-gray-600 text-sm">
               Pay nothing and get access to all features, forever. Hosting
               Volamail on your own cloud is meant to be easy.
+              <a
+                class="underline"
+                href="https://docs.volamail.com/self-hosting/guide"
+              >
+                See self-hosting docs.
+              </a>
             </p>
           </div>
           <div class="flex items-center gap-2">
