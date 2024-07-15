@@ -1,7 +1,6 @@
 ---
 import { Image } from "astro:assets";
 import Logo from "../components/Logo.astro";
-import mockupImage from "../assets/mockup.png";
 import screenshotImage from "../assets/screenshot.png";
 import FeatureCard from "../components/FeatureCard.astro";
 import { WaitlistForm } from "../components/WaitlistForm.tsx";
@@ -41,6 +40,8 @@ if (Astro.request.method === "POST") {
 const loginLink = `${import.meta.env.DEV ? "http" : "https"}://${
   import.meta.env.PUBLIC_APP_DOMAIN
 }/login`;
+
+const currentYear = new Date().getFullYear().toString();
 ---
 
 <html lang="en">
@@ -78,49 +79,37 @@ const loginLink = `${import.meta.env.DEV ? "http" : "https"}://${
   <body>
     <main class="flex flex-col min-h-dvh justify-center items-center">
       <div
-        class="h-dvh bg-grid-black/5 w-full relative flex flex-col justify-start"
+        class="mb-20 p-8 bg-grid-black/5 w-full relative flex flex-col justify-start"
       >
         <div
-          class="absolute pointer-events-none top-0 left-0 w-full h-dvh flex items-center justify-center bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,white)]"
+          class="absolute pointer-events-none inset-0 w-full flex items-center justify-center bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,white)]"
         >
         </div>
 
         <section
-          class="max-w-5xl mx-auto w-full flex justify-between items-center p-8 relative h-[90dvh]"
+          class="max-w-5xl gap-8 py-32 mx-auto w-full flex flex-col justify-center text-center items-center p-8 relative"
         >
-          <div class="flex flex-col gap-4 max-w-md">
-            <h1 class="text-5xl font-black text-left">
-              Simple email
-              <br /> for everyone
-            </h1>
-            <p class="text-left text-gray-700">
-              Write email templates with the help of AI and send them with an
-              API call. E-mail shouldn't be so difficult.
-            </p>
-
-            <div class="flex items-center gap-6 mt-8 max-w-sm w-full z-10">
-              <WaitlistForm client:load error={error} success={success} />
+          <div class="flex flex-col gap-12 max-w-md">
+            <div class="flex flex-col gap-4">
+              <h1 class="text-5xl font-black">
+                Simple email
+                <br /> for everyone
+              </h1>
+              <p class='text-gray-700"'>
+                Write email templates with the help of AI and send them with an
+                API call. E-mail shouldn't be so difficult.
+              </p>
             </div>
+
+            <WaitlistForm client:load error={error} success={success} />
           </div>
-          <Image
-            src={mockupImage}
-            sizes="400px"
-            class="md:opacity-100 opacity-20 w-96 absolute top-1/2 -translate-y-1/2 right-0 pointer-events-none"
-            alt=""
-          />
         </section>
-      </div>
-      <div class="relative mb-16 -mt-32 px-8">
         <Image
           src={screenshotImage}
-          class="w-full max-w-4xl rounded-xl aspect-[14/9]"
-          alt=""
-          sizes="(max-width: 768px) 768px, 1280px"
+          class="w-full hidden shadow-2xl md:block mx-auto max-w-6xl border z-20 rounded-xl aspect-[16/9]"
+          alt="Screenshot of the Volamail dashboard with an example email template for a sportswear company campaign"
+          sizes="1280px"
         />
-        <div
-          class="absolute inset-0 bg-gradient-to-b from-transparent to-white z-50"
-        >
-        </div>
       </div>
       <section class="flex flex-col gap-4 max-w-5xl w-full px-8 z-10">
         <h2 class="text-3xl font-bold">Features</h2>
@@ -276,7 +265,12 @@ const loginLink = `${import.meta.env.DEV ? "http" : "https"}://${
       <footer
         class="w-full border-t max-w-5xl mx-auto justify-between border-gray-100 p-8 flex items-center"
       >
-        <Logo class="w-6" />
+        <div class="flex gap-3 items-center">
+          <Logo class="w-6" />
+          <span class="text-sm text-gray-500">
+            Volamail © 2023 - {currentYear}
+          </span>
+        </div>
         <div class="flex gap-6 items-center text-sm">
           <a
             href="https://docs.volamail.com"
