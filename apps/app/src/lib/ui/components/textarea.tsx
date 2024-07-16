@@ -41,6 +41,7 @@ export function Textarea(props: Props) {
 
       <textarea
         {...rest}
+        rows={rest.rows || 1}
         disabled={local.disabled}
         class={textareaVariants().input({ class: local.classes?.input })}
         style={{
