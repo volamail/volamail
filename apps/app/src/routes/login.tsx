@@ -70,7 +70,7 @@ export default function Login() {
             </Button>
           </div>
 
-          <Show when={import.meta.env.VITE_GITHUB_CLIENT_ID}>
+          <Show when={process.env.VITE_GITHUB_CLIENT_ID}>
             <div class="flex gap-3 items-center">
               <hr class="w-full border-gray-200" />
               <span class="text-sm text-gray-500">or</span>

@@ -29,7 +29,7 @@ import { useMutation } from "~/lib/ui/hooks/useMutation";
 import { generateTemplate } from "~/lib/templates/actions";
 import { StartFromEmailDialogContents } from "./start-from-email-dialog";
 import { GridBgContainer } from "~/lib/ui/components/grid-bg-container";
-import { DeleteTemplateDialog } from "~/lib/templates/components/DeleteTemplateDialog";
+import { DeleteTemplateDialog } from "~/lib/templates/components/delete-template-dialog";
 import { Dialog, DialogTrigger } from "~/lib/ui/components/dialog";
 import {
   Tooltip,
