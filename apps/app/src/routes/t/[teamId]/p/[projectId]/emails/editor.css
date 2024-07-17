@@ -1,0 +1,24 @@
+.revert-tailwind {
+  all: initial;
+  font-size: initial;
+  position: relative;
+}
+
+.revert-tailwind > div {
+  min-height: 100%;
+}
+
+.revert-tailwind * {
+  font-size: revert;
+  margin: revert;
+  font-weight: revert;
+  cursor: pointer;
+}
+
+.revert-tailwind *[data-selected] {
+  @apply outline-2 outline-blue-600 outline-dashed bg-blue-600/25;
+}
+
+.revert-tailwind *[align=center] {
+  margin: 0 auto;
+}

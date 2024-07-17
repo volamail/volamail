@@ -1,11 +1,13 @@
+import "./editor.css";
+
 import {
   createAsync,
   type RouteDefinition,
   type RouteSectionProps,
 } from "@solidjs/router";
 import { Title } from "@solidjs/meta";
-import { createEffect, createSignal } from "solid-js";
-import { CircleCheckBigIcon, SendIcon, Trash2Icon } from "lucide-solid";
+import { createEffect, createSignal, Suspense } from "solid-js";
+import { CircleCheckBigIcon, SendIcon } from "lucide-solid";
 
 import { Input } from "~/lib/ui/components/input";
 import { sendTestMail } from "~/lib/mail/actions";
@@ -17,6 +19,7 @@ import { Textarea } from "~/lib/ui/components/textarea";
 import { Editor } from "~/lib/editor/components/editor";
 import { useMutation } from "~/lib/ui/hooks/useMutation";
 import { Breadcrumbs } from "~/lib/ui/components/breadcrumbs";
+import { EditorSkeleton } from "~/lib/editor/components/editor-skeleton";
 
 export const route: RouteDefinition = {
   load({ params }) {
@@ -99,60 +102,62 @@ export default function EditTemplate(props: RouteSectionProps) {
         </div>
       </div>
 
-      <div class="flex h-full min-h-0">
-        <form
-          method="post"
-          id="edit-email-form"
-          action={editTemplate}
-          class="bg-white h-full border-r p-4 w-72 gap-4 flex flex-col shrink-0"
-        >
-          <div class="flex flex-col grow gap-4">
-            <input
-              type="hidden"
-              name="projectId"
-              value={props.params.projectId}
-            />
-            <input type="hidden" name="id" value={props.params.id} />
-
-            <div class="flex flex-col gap-1">
-              <label for="slug" class="font-medium text-sm">
-                Slug
-              </label>
-              <Input
-                type="text"
-                placeholder="welcome-email"
-                name="slug"
-                id="slug"
-                required
-                value={template()?.slug}
+      <Suspense fallback={<EditorSkeleton />}>
+        <div class="flex h-full min-h-0">
+          <form
+            method="post"
+            id="edit-email-form"
+            action={editTemplate}
+            class="bg-white h-full border-r p-4 w-72 gap-4 flex flex-col shrink-0"
+          >
+            <div class="flex flex-col grow gap-4">
+              <input
+                type="hidden"
+                name="projectId"
+                value={props.params.projectId}
               />
+              <input type="hidden" name="id" value={props.params.id} />
+
+              <div class="flex flex-col gap-1">
+                <label for="slug" class="font-medium text-sm">
+                  Slug
+                </label>
+                <Input
+                  type="text"
+                  placeholder="welcome-email"
+                  name="slug"
+                  id="slug"
+                  required
+                  value={template()?.slug}
+                />
+              </div>
+
+              <div class="flex flex-col gap-1">
+                <label for="subject" class="font-medium text-sm">
+                  Subject
+                </label>
+                <Textarea
+                  placeholder="Welcome to our service..."
+                  name="subject"
+                  id="subject"
+                  resizeable
+                  required
+                  value={template()?.subject}
+                />
+              </div>
+
+              <input type="hidden" name="body" value={html()} />
             </div>
+          </form>
 
-            <div class="flex flex-col gap-1">
-              <label for="subject" class="font-medium text-sm">
-                Subject
-              </label>
-              <Textarea
-                placeholder="Welcome to our service..."
-                name="subject"
-                id="subject"
-                resizeable
-                required
-                value={template()?.subject}
-              />
-            </div>
-
-            <input type="hidden" name="body" value={html()} />
-          </div>
-        </form>
-
-        <Editor
-          value={html()}
-          onChange={setHtml}
-          projectId={props.params.projectId}
-          templateId={props.params.id}
-        />
-      </div>
+          <Editor
+            value={html()}
+            onChange={setHtml}
+            projectId={props.params.projectId}
+            templateId={props.params.id}
+          />
+        </div>
+      </Suspense>
     </main>
   );
 }

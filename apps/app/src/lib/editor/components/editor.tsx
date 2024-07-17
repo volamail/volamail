@@ -11,23 +11,17 @@ import quotedPrintable from "quoted-printable";
 import {
   EyeIcon,
   CodeIcon,
-  SendIcon,
   UndoIcon,
   Trash2Icon,
-  Table2Icon,
   CloudDownloadIcon,
-  SparklesIcon,
 } from "lucide-solid";
 
-import { ImagePicker } from "./image-picker";
 import { FloatingMenu } from "./floating-menu";
 import { Button, buttonVariants } from "~/lib/ui/components/button";
-import { PasteHtmlButton } from "./paste-html-button";
 import { showToast } from "~/lib/ui/components/toasts";
-import { Textarea } from "~/lib/ui/components/textarea";
 import { useMutation } from "~/lib/ui/hooks/useMutation";
 import { generateTemplate } from "~/lib/templates/actions";
-import { StartFromEmailDialogContents } from "./start-from-email-dialog";
+import { ImportExistingEmailDialogContents } from "./import-existing-email-dialog";
 import { GridBgContainer } from "~/lib/ui/components/grid-bg-container";
 import { DeleteTemplateDialog } from "~/lib/templates/components/delete-template-dialog";
 import { Dialog, DialogTrigger } from "~/lib/ui/components/dialog";
@@ -37,6 +31,7 @@ import {
   TooltipTrigger,
 } from "~/lib/ui/components/tooltip";
 import { Kbd } from "~/lib/ui/components/kbd";
+import { PromptInput } from "./prompt-input";
 
 type Props = {
   name?: string;
@@ -275,7 +270,7 @@ export function Editor(props: Props) {
                   </TooltipContent>
                 </Tooltip>
 
-                <StartFromEmailDialogContents
+                <ImportExistingEmailDialogContents
                   filter={(email) => email.id !== props.templateId}
                   projectId={props.projectId}
                   onComplete={(email) =>
@@ -346,82 +341,13 @@ export function Editor(props: Props) {
           <input type="hidden" name="currentHtml" value={props.value} />
         </Show>
 
-        <div class="flex flex-col gap-64 items-center">
-          <Show when={!props.value}>
-            <div class="flex flex-col gap-12 w-full items-center">
-              <div class="flex flex-col gap-2">
-                <h1 class="text-4xl font-bold text-center">Create email</h1>
-                <p class="text-center text-gray-600 text-sm">
-                  Use an existing email as a starting point or start from
-                  scratch.
-                </p>
-              </div>
-
-              <div class="flex gap-4 max-w-3xl w-full">
-                <Dialog>
-                  <DialogTrigger class="font-medium cursor-default flex-1 rounded-lg bg-gray-200 shadow p-4 text-sm inline-flex gap-2 items-center hover:bg-gray-300 transition-colors">
-                    <Table2Icon class="size-8 bg-black text-white rounded-lg p-2" />
-                    Start from another email
-                  </DialogTrigger>
-
-                  <StartFromEmailDialogContents
-                    projectId={props.projectId}
-                    onComplete={(email) => props.onChange(email.body)}
-                  />
-                </Dialog>
-
-                <PasteHtmlButton onPaste={props.onChange} />
-              </div>
-            </div>
-          </Show>
-
-          <div
-            class="w-full flex gap-2"
-            classList={{ "max-w-3xl": !props.value }}
-          >
-            <Textarea
-              name="prompt"
-              required
-              loading={generateTemplateAction.pending}
-              resizeable
-              submitOnEnter
-              autofocus
-              leading={() => (
-                <div class="flex gap-1 shrink-0 items-center py-1">
-                  <ImagePicker
-                    projectId={props.projectId}
-                    onSelect={handleSelectImage}
-                  />
-                  <Show when={selectedImageUrl()}>
-                    <span class="text-gray-500 text-sm">Using this image,</span>
-                    <input
-                      type="hidden"
-                      name="image"
-                      value={selectedImageUrl()}
-                    />
-                  </Show>
-                </div>
-              )}
-              ref={promptInput}
-              trailing={() => (
-                <Button
-                  type="submit"
-                  aria-label="Request changes"
-                  class="p-1.5 mt-0.5"
-                  round
-                  even
-                  icon={() => <SparklesIcon class="size-4" />}
-                />
-              )}
-              class="py-1 gap-1"
-              placeholder={
-                selectedImageUrl()
-                  ? "create an invite email and put the image on top."
-                  : "A welcome e-mail with a magic link button..."
-              }
-            />
-          </div>
-        </div>
+        <PromptInput
+          ref={promptInput}
+          loading={generateTemplateAction.pending}
+          projectId={props.projectId}
+          selectedImageUrl={selectedImageUrl()}
+          onSelectImage={handleSelectImage}
+        />
       </form>
 
       <input type="hidden" name={props.name} value={props.value} />

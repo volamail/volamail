@@ -54,7 +54,7 @@ export default function Dashboard() {
                   >
                     <p class="font-semibold">{template.slug}</p>
                     <p class="text-xs text-gray-500">
-                      {template.createdAt.toDateString()}
+                      {template.createdAt.toLocaleString("en-US")}
                     </p>
                   </A>
                 </li>

@@ -25,7 +25,7 @@ type Props = {
   filter?: (email: { id: string; slug: string; subject: string }) => boolean;
 };
 
-export function StartFromEmailDialogContents(props: Props) {
+export function ImportExistingEmailDialogContents(props: Props) {
   const getTemplateInFormAction = useMutation({
     action: getTemplateInForm,
     onSuccess(result) {
@@ -75,10 +75,10 @@ export function StartFromEmailDialogContents(props: Props) {
       action={getTemplateInForm}
     >
       <div class="flex flex-col gap-2">
-        <DialogTitle>Start from email</DialogTitle>
+        <DialogTitle>Import existing email</DialogTitle>
 
         <DialogDescription>
-          Choose a template to start with, from your project's emails.
+          Choose a template to import from your project's existing emails.
         </DialogDescription>
       </div>
 

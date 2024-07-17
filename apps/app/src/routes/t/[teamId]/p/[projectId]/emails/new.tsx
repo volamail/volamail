@@ -1,6 +1,8 @@
 // @refresh reload
+import "./editor.css";
+
 import { Title } from "@solidjs/meta";
-import { createSignal } from "solid-js";
+import { createSignal, Show } from "solid-js";
 import type { RouteSectionProps } from "@solidjs/router";
 import { CircleCheckBigIcon, SendIcon } from "lucide-solid";
 
@@ -13,6 +15,7 @@ import { Editor } from "~/lib/editor/components/editor";
 import { createTemplate } from "~/lib/templates/actions";
 import { useMutation } from "~/lib/ui/hooks/useMutation";
 import { Breadcrumbs } from "~/lib/ui/components/breadcrumbs";
+import { EditorStartingScreen } from "~/lib/editor/components/starting-screen";
 
 export default function NewTemplate(props: RouteSectionProps) {
   const [html, setHtml] = createSignal("");
@@ -58,76 +61,90 @@ export default function NewTemplate(props: RouteSectionProps) {
           crumbs={[{ label: "Emails", href: ".." }, { label: "New email" }]}
         />
 
-        <div class="flex gap-2">
-          <Button
-            variant="outline"
-            type="submit"
-            icon={() => <SendIcon class="size-4" />}
-            form="create-email-form"
-            formAction={sendTestMail}
-            loading={sendTestMailAction.pending}
-          >
-            Send test mail
-          </Button>
-          <Button
-            icon={() => <CircleCheckBigIcon class="size-4" />}
-            type="submit"
-            form="create-email-form"
-            loading={createEmailAction.pending}
-          >
-            Create email
-          </Button>
-        </div>
+        <Show when={html()}>
+          <div class="flex gap-2">
+            <Button
+              variant="outline"
+              type="submit"
+              icon={() => <SendIcon class="size-4" />}
+              form="create-email-form"
+              formAction={sendTestMail}
+              loading={sendTestMailAction.pending}
+            >
+              Send test mail
+            </Button>
+            <Button
+              icon={() => <CircleCheckBigIcon class="size-4" />}
+              type="submit"
+              form="create-email-form"
+              loading={createEmailAction.pending}
+            >
+              Create email
+            </Button>
+          </div>
+        </Show>
       </div>
 
       <div class="flex grow min-h-0 overflow-hidden">
-        <form
-          method="post"
-          id="create-email-form"
-          autocomplete="off"
-          action={createTemplate}
-          class="bg-white border-r p-4 w-72 gap-4 flex flex-col shrink-0"
+        <Show when={html()}>
+          <form
+            method="post"
+            id="create-email-form"
+            autocomplete="off"
+            action={createTemplate}
+            class="bg-white border-r p-4 w-72 gap-4 flex flex-col shrink-0"
+          >
+            <input
+              type="hidden"
+              name="projectId"
+              value={props.params.projectId}
+            />
+            <input type="hidden" name="id" value={props.params.id} />
+
+            <div class="flex flex-col gap-1">
+              <label for="slug" class="font-medium text-sm">
+                Slug
+              </label>
+              <Input
+                type="text"
+                placeholder="welcome-email"
+                name="slug"
+                id="slug"
+                required
+              />
+            </div>
+            <div class="flex flex-col gap-1">
+              <label for="subject" class="font-medium text-sm">
+                Subject
+              </label>
+              <Textarea
+                placeholder="Welcome to our service..."
+                name="subject"
+                id="subject"
+                resizeable
+                required
+              />
+            </div>
+
+            <input type="hidden" name="body" value={html()} />
+          </form>
+        </Show>
+
+        <Show
+          when={html()}
+          fallback={
+            <EditorStartingScreen
+              projectId={props.params.projectId}
+              onDone={setHtml}
+            />
+          }
         >
-          <input
-            type="hidden"
-            name="projectId"
-            value={props.params.projectId}
+          <Editor
+            value={html()}
+            onChange={setHtml}
+            projectId={props.params.projectId}
           />
-          <input type="hidden" name="id" value={props.params.id} />
-
-          <div class="flex flex-col gap-1">
-            <label for="slug" class="font-medium text-sm">
-              Slug
-            </label>
-            <Input
-              type="text"
-              placeholder="welcome-email"
-              name="slug"
-              id="slug"
-              required
-            />
-          </div>
-          <div class="flex flex-col gap-1">
-            <label for="subject" class="font-medium text-sm">
-              Subject
-            </label>
-            <Textarea
-              placeholder="Welcome to our service..."
-              name="subject"
-              id="subject"
-              resizeable
-              required
-            />
-          </div>
-
-          <input type="hidden" name="body" value={html()} />
-        </form>
-
-        <Editor
-          value={html()}
-          onChange={setHtml}
-          projectId={props.params.projectId}
-        />
+        </Show>
       </div>
     </main>
   );
