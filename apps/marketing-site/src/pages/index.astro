@@ -63,7 +63,7 @@ const currentYear = new Date().getFullYear().toString();
   <body>
     <main class="flex flex-col min-h-dvh justify-center items-center">
       <div
-        class="mb-20 p-8 bg-grid-black/5 w-full relative flex flex-col justify-start"
+        class="p-8 bg-grid-black/5 w-full relative flex flex-col justify-start"
       >
         <div
           class="absolute pointer-events-none inset-0 w-full flex items-center justify-center bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,white)]"
@@ -71,7 +71,7 @@ const currentYear = new Date().getFullYear().toString();
         </div>
 
         <section
-          class="max-w-5xl gap-8 py-32 mx-auto w-full flex flex-col justify-center text-center items-center p-8 relative"
+          class="max-w-5xl gap-8 py-32 mx-auto w-full flex flex-col justify-center text-center items-center relative"
         >
           <div class="flex flex-col gap-12 max-w-md">
             <div class="flex flex-col gap-4">
@@ -90,7 +90,7 @@ const currentYear = new Date().getFullYear().toString();
         </section>
         <Image
           src={screenshotImage}
-          class="w-full hidden shadow-2xl md:block mx-auto max-w-6xl border z-20 rounded-xl"
+          class="w-full mb-20 hidden shadow-2xl md:block mx-auto max-w-6xl border z-20 rounded-xl"
           alt="Screenshot of the Volamail dashboard with an example email template for a sportswear company campaign"
           sizes="1280px"
         />
