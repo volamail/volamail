@@ -5,7 +5,7 @@ import { Show, splitProps, type ComponentProps, type JSX } from "solid-js";
 const textareaVariants = tv({
   base: "w-full relative has-[:disabled]:bg-gray-100 has-[textarea:focus]:outline outline-blue-600 flex gap-2 px-2.5 py-2 items-center bg-white border rounded-lg border-gray-300",
   slots: {
-    input: "text-input resize-none outline-none text-sm w-full",
+    input: "resize-none outline-none text-sm w-full bg-transparent",
     loader: "animate-spin size-4",
   },
 });
