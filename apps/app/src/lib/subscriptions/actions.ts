@@ -130,6 +130,8 @@ export const redirectToCustomerPortal = action(async (formData: FormData) => {
 
     portalUrl = portalSession.url;
   } catch (e) {
+    console.log(e);
+
     throw createError({
       statusCode: 500,
       statusMessage: "Internal server error",
