@@ -13,7 +13,7 @@ import { db } from "~/lib/db";
 import { lucia } from "~/lib/auth/lucia";
 import { createGithubAuth } from "~/lib/auth/github";
 import { bootstrapUser } from "~/lib/users/server-utils";
-import { usersTable, waitlistTable } from "~/lib/db/schema";
+import { usersTable } from "~/lib/db/schema";
 
 export async function GET({ nativeEvent }: APIEvent) {
   const query = getQuery(nativeEvent);
@@ -81,20 +81,6 @@ export async function GET({ nativeEvent }: APIEvent) {
       }
 
       return sendRedirect(nativeEvent, `/teams`);
-    }
-
-    const approval = await db.query.waitlistTable.findFirst({
-      where: and(
-        eq(waitlistTable.email, userEmail),
-        eq(waitlistTable.approved, true)
-      ),
-    });
-
-    if (!approval) {
-      return sendRedirect(
-        nativeEvent,
-        `/login?error=${encodeURI("Email not approved yet")}`
-      );
     }
 
     const {

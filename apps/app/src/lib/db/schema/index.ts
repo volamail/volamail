@@ -8,4 +8,3 @@ export * from "./subscriptions.sql";
 export * from "./teams.sql";
 export * from "./templates.sql";
 export * from "./users.sql";
-export * from "./waitlist.sql";

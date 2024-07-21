@@ -281,6 +281,13 @@
       "when": 1720355027273,
       "tag": "0039_smiling_lifeguard",
       "breakpoints": true
+    },
+    {
+      "idx": 40,
+      "version": "6",
+      "when": 1721565121521,
+      "tag": "0040_third_adam_warlock",
+      "breakpoints": true
     }
   ]
 }

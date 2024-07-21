@@ -15,8 +15,7 @@ import { parseFormData } from "../server-utils";
 import { getUserTeams } from "../teams/server-utils";
 import { bootstrapUser } from "../users/server-utils";
 import otpTemplate from "../static-templates/mail-otp.html?raw";
-import { mailCodesTable, usersTable, waitlistTable } from "../db/schema";
-import { isSelfHosted } from "../environment/utils";
+import { mailCodesTable, usersTable } from "../db/schema";
 
 export const loginWithGithub = action(async (formData: FormData) => {
   "use server";
@@ -85,23 +84,6 @@ export const sendEmailOtp = action(async (formData: FormData) => {
     }),
     formData
   );
-
-  const waitlistApproval = await db.query.waitlistTable.findFirst({
-    where: and(
-      eq(waitlistTable.email, body.email),
-      eq(waitlistTable.approved, true)
-    ),
-    columns: {
-      email: true,
-    },
-  });
-
-  if (!waitlistApproval && !isSelfHosted()) {
-    throw createError({
-      statusCode: 403,
-      statusMessage: "Email not approved yet",
-    });
-  }
 
   await db.delete(mailCodesTable).where(eq(mailCodesTable.email, body.email));
 
