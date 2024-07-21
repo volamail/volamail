@@ -4,11 +4,9 @@ import { CircleCheckIcon } from "lucide-solid";
 interface Props {
   done?: boolean;
 }
-
-const className = Astro.props.done ? "line-through" : "";
 ---
 
-<li class={`inline-flex items-center gap-2 w-full ${className}`}>
+<li class="inline-flex items-center gap-2 w-full">
   <CircleCheckIcon
     class={`size-4 shrink-0 ${Astro.props.done ? "text-blue-500 bg-blue-100 rounded-full" : "text-gray-500"}`}
   />
