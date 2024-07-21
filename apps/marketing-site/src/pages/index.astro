@@ -7,7 +7,11 @@ import RoadmapItem from "../components/RoadmapItem.astro";
 
 import "../global.css";
 import BaseHead from "../components/BaseHead.astro";
-import { ArrowRightIcon } from "lucide-solid";
+import {
+  ArrowRightIcon,
+  ChevronRightIcon,
+  MessageCircleQuestionIcon,
+} from "lucide-solid";
 
 const loginLink = `${import.meta.env.DEV ? "http" : "https"}://${
   import.meta.env.PUBLIC_APP_DOMAIN
@@ -56,13 +60,23 @@ const currentYear = new Date().getFullYear().toString();
               </p>
             </div>
 
-            <a
-              href={loginLink}
-              class="bg-black inline-flex gap-2 items-center self-center text-center hover:bg-gray-700 transition-colors text-white px-4 py-2 rounded-full text-sm font-medium"
-            >
-              Get started
-              <ArrowRightIcon class="size-4" />
-            </a>
+            <div class="flex gap-8 justify-center items-center">
+              <a
+                href={loginLink}
+                class="bg-black inline-flex gap-1.5 items-center self-center text-center hover:bg-gray-700 transition-colors text-white px-4 py-2 rounded-full text-sm font-medium"
+              >
+                Get started
+                <ChevronRightIcon class="size-4" />
+              </a>
+
+              <a
+                href="mailto:info@volamail.com"
+                class="text-black text-sm transition-colors hover:text-gray-500 inline-flex gap-1.5 items-center"
+              >
+                Contact us
+                <ChevronRightIcon class="size-4" />
+              </a>
+            </div>
           </div>
         </section>
         <Image
