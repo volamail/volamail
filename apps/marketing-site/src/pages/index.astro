@@ -3,40 +3,11 @@ import { Image } from "astro:assets";
 import Logo from "../components/Logo.astro";
 import screenshotImage from "../assets/screenshot.png";
 import FeatureCard from "../components/FeatureCard.astro";
-import { WaitlistForm } from "../components/WaitlistForm.tsx";
+import RoadmapItem from "../components/RoadmapItem.astro";
 
 import "../global.css";
 import BaseHead from "../components/BaseHead.astro";
-
-let success = false;
-let error: string | undefined;
-
-if (Astro.request.method === "POST") {
-  try {
-    const data = await Astro.request.formData();
-
-    const response = await fetch(
-      `${import.meta.env.DEV ? "http" : "https"}://${
-        import.meta.env.PUBLIC_APP_DOMAIN
-      }/api/waitlist/request-approval`,
-      {
-        method: "POST",
-        body: data,
-        mode: "cors",
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error("Bad response from Volamail server");
-    }
-
-    success = true;
-  } catch (e) {
-    console.log(e);
-
-    error = "An error occurred";
-  }
-}
+import { ArrowRightIcon } from "lucide-solid";
 
 const loginLink = `${import.meta.env.DEV ? "http" : "https"}://${
   import.meta.env.PUBLIC_APP_DOMAIN
@@ -85,7 +56,13 @@ const currentYear = new Date().getFullYear().toString();
               </p>
             </div>
 
-            <WaitlistForm client:load error={error} success={success} />
+            <a
+              href={loginLink}
+              class="bg-black inline-flex gap-2 items-center self-center text-center hover:bg-gray-700 transition-colors text-white px-4 py-2 rounded-full text-sm font-medium"
+            >
+              Get started
+              <ArrowRightIcon class="size-4" />
+            </a>
           </div>
         </section>
         <Image
@@ -95,7 +72,9 @@ const currentYear = new Date().getFullYear().toString();
           sizes="1280px"
         />
       </div>
-      <section class="flex flex-col gap-4 max-w-5xl w-full px-8 z-10">
+      <section
+        class="flex flex-col gap-4 max-w-5xl w-full px-8 z-10 mb-12 mt-8"
+      >
         <h2 class="text-3xl font-bold">Features</h2>
         <div class="flex flex-col sm:grid grid-cols-2 grid-rows-2 gap-4">
           <FeatureCard title="AI-assisted editing">
@@ -118,7 +97,32 @@ const currentYear = new Date().getFullYear().toString();
         </div>
       </section>
 
-      <section class="flex flex-col gap-4 max-w-5xl w-full px-8 py-32">
+      <section class="flex flex-col max-w-5xl w-full gap-4 px-8 z-10 my-12">
+        <div class="flex flex-col gap-2">
+          <h2 class="text-3xl font-bold">Roadmap</h2>
+          <p class="text-gray-600">
+            We're constantly working on new features and improving the
+            experience.
+          </p>
+          <p class="text-gray-600">Here's a list of things we're working on:</p>
+        </div>
+
+        <ul class="flex flex-col md:grid grid-cols-2 list-disc gap-2">
+          <RoadmapItem done> AI template generation </RoadmapItem>
+          <RoadmapItem done> Inline AI editing </RoadmapItem>
+          <RoadmapItem done> Custom domains </RoadmapItem>
+          <RoadmapItem done> Media uploads </RoadmapItem>
+          <RoadmapItem done> Image prompting</RoadmapItem>
+          <RoadmapItem done> Import HTML emails</RoadmapItem>
+          <RoadmapItem done> HTML export</RoadmapItem>
+          <RoadmapItem> Email Localization</RoadmapItem>
+          <RoadmapItem> Marketing emails </RoadmapItem>
+          <RoadmapItem> Scheduled sending </RoadmapItem>
+          <RoadmapItem> Dedicated IPs </RoadmapItem>
+        </ul>
+      </section>
+
+      <section class="flex flex-col gap-4 max-w-5xl w-full px-8 my-12">
         <h2 class="text-3xl font-bold">Pricing</h2>
         <p class="text-gray-600">
           Simple, predictable pricing that scales with your needs.
