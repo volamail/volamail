@@ -1,3 +1,19 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/**
+ * Patch to make browser autofill color white
+ * https://github.com/tailwindlabs/tailwindcss/discussions/8679
+ */
+@layer components {
+  .autofill-text:-webkit-autofill {
+    -webkit-text-fill-color: black;
+  }
+
+  .text-input {
+    @apply autofill-text; /* set text colour (white) */
+    @apply text-sm;
+    @apply autofill:shadow-[inset_0_0_0px_1000px_#fff]; /* set 'background' colour (black)*/
+  }
+}

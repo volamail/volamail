@@ -288,6 +288,20 @@
       "when": 1721565121521,
       "tag": "0040_third_adam_warlock",
       "breakpoints": true
+    },
+    {
+      "idx": 41,
+      "version": "6",
+      "when": 1721641221911,
+      "tag": "0041_optimal_energizer",
+      "breakpoints": true
+    },
+    {
+      "idx": 42,
+      "version": "6",
+      "when": 1721641681791,
+      "tag": "0042_organic_katie_power",
+      "breakpoints": true
     }
   ]
 }

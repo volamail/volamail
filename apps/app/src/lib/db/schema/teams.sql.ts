@@ -38,11 +38,13 @@ export const teamMembersTable = pgTable(
       .notNull()
       .references(() => teamsTable.id, {
         onDelete: "cascade",
+        onUpdate: "cascade",
       }),
     userId: text("user_id")
       .notNull()
       .references(() => usersTable.id, {
         onDelete: "cascade",
+        onUpdate: "cascade",
       }),
     joinedAt: timestamp("joined_at").notNull().defaultNow(),
   },

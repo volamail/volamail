@@ -17,6 +17,7 @@ export async function getUserTeams(userId: string) {
         projects: true,
         personalTeamOwner: true,
         subscription: true,
+        members: true,
       },
     })
   ).map((team) => {

@@ -13,7 +13,7 @@ import {
   OTPFieldSlot,
 } from "~/lib/ui/components/otp-field";
 import { Button } from "~/lib/ui/components/button";
-import { CheckIcon } from "lucide-solid";
+import { CheckIcon, ChevronRightIcon } from "lucide-solid";
 
 export default function VerifyMailOtp(props: RouteSectionProps) {
   const verifyOtpAction = useMutation({
@@ -73,8 +73,8 @@ export default function VerifyMailOtp(props: RouteSectionProps) {
 
         <Button
           type="submit"
-          class="self-stretch mt-2 py-2"
-          icon={() => <CheckIcon class="size-4" />}
+          class="self-stretch mt-4 py-2"
+          icon={() => <ChevronRightIcon class="size-4" />}
           loading={verifyOtpAction.pending}
         >
           Verify

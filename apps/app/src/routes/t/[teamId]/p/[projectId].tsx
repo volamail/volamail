@@ -170,11 +170,18 @@ export default function DashboardLayout(props: Props) {
           method="post"
           class="flex justify-start items-center gap-2 border-t border-gray-300 p-3"
         >
-          <Avatar
-            src={user()?.imageUrl}
-            fallback={user()?.name.charAt(0) || ""}
-          />
-          <p class="text-sm truncate grow">{user()?.name}</p>
+          <Button
+            as={A}
+            href="profile"
+            variant="ghost"
+            class="grow px-1.5 gap-2 -ml-1.5"
+          >
+            <Avatar
+              src={user()?.imageUrl}
+              fallback={user()?.name.charAt(0) || ""}
+            />
+            <p class="text-sm truncate grow">{user()?.name}</p>
+          </Button>
           <div class="flex gap-1 items-center shrink-0">
             <Tooltip>
               <TooltipTrigger

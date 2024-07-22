@@ -6,7 +6,6 @@ import { domainsTable } from "./domains.sql";
 import { imagesTable } from "./images.sql";
 import { teamsTable } from "./teams.sql";
 import { templatesTable } from "./templates.sql";
-import { usersTable } from "./users.sql";
 
 export const projectsTable = pgTable(
   "projects",
@@ -15,9 +14,6 @@ export const projectsTable = pgTable(
       .primaryKey()
       .$defaultFn(() => nanoid(8)),
     name: text("name").notNull(),
-    creatorId: text("creator_id")
-      .notNull()
-      .references(() => usersTable.id),
     teamId: text("team_id")
       .notNull()
       .references(() => teamsTable.id, {
@@ -26,15 +22,10 @@ export const projectsTable = pgTable(
   },
   (table) => ({
     teamIdx: index("projects_team_id_idx").on(table.teamId),
-    creatorIdx: index("projects_creator_idx").on(table.creatorId),
   })
 );
 
 export const projectsRelations = relations(projectsTable, ({ one, many }) => ({
-  creator: one(usersTable, {
-    fields: [projectsTable.creatorId],
-    references: [usersTable.id],
-  }),
   team: one(teamsTable, {
     fields: [projectsTable.teamId],
     references: [teamsTable.id],
