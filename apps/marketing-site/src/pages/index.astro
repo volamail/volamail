@@ -1,17 +1,13 @@
 ---
 import { Image } from "astro:assets";
 import Logo from "../components/Logo.astro";
+import { ChevronRightIcon } from "lucide-solid";
 import screenshotImage from "../assets/screenshot.png";
 import FeatureCard from "../components/FeatureCard.astro";
 import RoadmapItem from "../components/RoadmapItem.astro";
 
 import "../global.css";
 import BaseHead from "../components/BaseHead.astro";
-import {
-  ArrowRightIcon,
-  ChevronRightIcon,
-  MessageCircleQuestionIcon,
-} from "lucide-solid";
 
 const loginLink = `${import.meta.env.DEV ? "http" : "https"}://${
   import.meta.env.PUBLIC_APP_DOMAIN
