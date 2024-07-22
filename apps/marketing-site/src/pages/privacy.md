@@ -19,11 +19,7 @@ This privacy notice for VLK Studio SRLs (doing business as Volamail) ("**we**," 
 
   
 
-**SUMMARY OF KEY POINTS**
-
-  
-
-**_This summary provides key points from our privacy notice, but you can find out more details about any of these topics by clicking the link following each key point or by using our_** [**_table of contents_**](#toc) **_below to find the section you are looking for._**
+## SUMMARY OF KEY POINTS
 
   
 
@@ -60,47 +56,6 @@ This privacy notice for VLK Studio SRLs (doing business as Volamail) ("**we**," 
   
 
 Want to learn more about what we do with any information we collect? [Review the privacy notice in full](#toc).
-
-  
-
-  
-
-**TABLE OF CONTENTS**
-
-  
-
-[1\. WHAT INFORMATION DO WE COLLECT?](#infocollect)
-
-[2\. HOW DO WE PROCESS YOUR INFORMATION?](#infouse)
-
-[3\. WHAT LEGAL BASES DO WE RELY ON TO PROCESS YOUR PERSONAL INFORMATION?](#legalbases)
-
-[4\. WHEN AND WITH WHOM DO WE SHARE YOUR PERSONAL INFORMATION?](#whoshare)
-
-[5\. HOW DO WE HANDLE YOUR SOCIAL LOGINS?](#sociallogins)  
-
-[6\. HOW LONG DO WE KEEP YOUR INFORMATION?](#inforetain)
-
-[7\. HOW DO WE KEEP YOUR INFORMATION SAFE?](#infosafe)
-
-[8\. DO WE COLLECT INFORMATION FROM MINORS?](#infominors)
-
-[9\. WHAT ARE YOUR PRIVACY RIGHTS?](#privacyrights)
-
-[10\. CONTROLS FOR DO-NOT-TRACK FEATURES](#DNT)
-
-[11\. DO UNITED STATES RESIDENTS HAVE SPECIFIC PRIVACY RIGHTS?](#uslaws)
-
-[12\. DO OTHER REGIONS HAVE SPECIFIC PRIVACY RIGHTS?](#otherlaws)
-
-[13\. DO WE MAKE UPDATES TO THIS NOTICE?](#policyupdates)
-
-[14\. HOW CAN YOU CONTACT US ABOUT THIS NOTICE?](#contact)
-
-[15\. HOW CAN YOU REVIEW, UPDATE, OR DELETE THE DATA WE COLLECT FROM YOU?](#request)
-
-  
-
   
 
 **1\. WHAT INFORMATION DO WE COLLECT?**
