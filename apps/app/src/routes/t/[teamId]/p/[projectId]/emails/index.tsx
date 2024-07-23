@@ -4,7 +4,7 @@ import { PlusIcon } from "lucide-solid";
 import { For, Show, Suspense } from "solid-js";
 import { A, createAsync, useParams } from "@solidjs/router";
 
-import { buttonVariants } from "~/lib/ui/components/button";
+import { Button, buttonVariants } from "~/lib/ui/components/button";
 import { getProjectTemplates } from "~/lib/templates/queries";
 
 export default function Dashboard() {
@@ -62,10 +62,14 @@ export default function Dashboard() {
             </For>
           </ul>
         </Show>
-
-        <A href="new" class={buttonVariants({ class: "self-start mt-2" })}>
-          Create email <PlusIcon class="size-4" />
-        </A>
+        <Button
+          as={A}
+          href="new"
+          class="self-start mt-2"
+          icon={() => <PlusIcon class="size-4" />}
+        >
+          Create email
+        </Button>
       </Suspense>
     </main>
   );

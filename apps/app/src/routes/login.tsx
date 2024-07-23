@@ -1,4 +1,10 @@
-import { Show } from "solid-js";
+import {
+  createEffect,
+  createMemo,
+  createSignal,
+  onCleanup,
+  Show,
+} from "solid-js";
 import { Title } from "@solidjs/meta";
 import { useSearchParams } from "@solidjs/router";
 import { AlertCircleIcon, GithubIcon, SendIcon } from "lucide-solid";
@@ -31,6 +37,20 @@ export default function Login() {
         variant: "error",
       });
     },
+  });
+
+  const [navigating, setNavigating] = createSignal(false);
+
+  createEffect(() => {
+    function handleUnload() {
+      setNavigating(true);
+    }
+
+    window.addEventListener("beforeunload", handleUnload);
+
+    onCleanup(() => {
+      window.removeEventListener("beforeunload", handleUnload);
+    });
   });
 
   return (
@@ -87,7 +107,7 @@ export default function Login() {
               class="justify-center py-2"
               variant="outline"
               formAction={loginWithGithub}
-              loading={loginWithGithubAction.pending}
+              loading={loginWithGithubAction.pending || navigating()}
               icon={() => <GithubIcon class="size-4" />}
             >
               Sign in with GitHub
