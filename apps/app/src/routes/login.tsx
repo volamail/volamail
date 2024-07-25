@@ -1,8 +1,9 @@
-import { createSignal, onCleanup, onMount, Show } from "solid-js";
 import { Title } from "@solidjs/meta";
-import { useSearchParams } from "@solidjs/router";
+import { createSignal, onCleanup, onMount, Show } from "solid-js";
 import { AlertCircleIcon, GithubIcon, SendIcon } from "lucide-solid";
+import { createAsync, Navigate, useSearchParams } from "@solidjs/router";
 
+import { getAuthState } from "~/lib/auth/queries";
 import { Input } from "~/lib/ui/components/input";
 import { Button } from "~/lib/ui/components/button";
 import { showToast } from "~/lib/ui/components/toasts";
@@ -12,6 +13,8 @@ import { GridBgContainer } from "~/lib/ui/components/grid-bg-container";
 
 export default function Login() {
   const [searchParams] = useSearchParams();
+
+  const authState = createAsync(() => getAuthState());
 
   const loginWithGithubAction = useMutation({
     action: loginWithGithub,
@@ -46,6 +49,10 @@ export default function Login() {
       window.removeEventListener("beforeunload", handleUnload);
     });
   });
+
+  if (authState()?.authenticated) {
+    return <Navigate href="/teams" />;
+  }
 
   return (
     <GridBgContainer class="h-dvh">

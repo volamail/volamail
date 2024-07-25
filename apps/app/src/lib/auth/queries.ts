@@ -22,3 +22,15 @@ export const getCurrentUser = cache(async () => {
     superadmin: "ADMIN_ID" in env && env.ADMIN_ID === user.id,
   };
 }, "user");
+
+export const getAuthState = cache(async () => {
+  "use server";
+
+  const event = getRequestEvent()!;
+
+  const user = event.locals.user;
+
+  return {
+    authenticated: !!user,
+  };
+}, "auth");
