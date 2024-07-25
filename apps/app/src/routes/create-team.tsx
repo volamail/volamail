@@ -1,29 +1,25 @@
-// @refresh reload
-import { createEffect } from "solid-js";
-import { PlusIcon } from "lucide-solid";
-import { useSubmission } from "@solidjs/router";
-
 import { Button } from "~/lib/ui/components/button";
 import { showToast } from "~/lib/ui/components/toasts";
 import { createTeam } from "~/lib/teams/actions";
 import { GridBgContainer } from "~/lib/ui/components/grid-bg-container";
 import { Title } from "@solidjs/meta";
+import { useMutation } from "~/lib/ui/hooks/useMutation";
 
 export default function CreateTeam() {
-  const submission = useSubmission(createTeam);
-
-  createEffect(() => {
-    if (submission.error) {
-      showToast({
-        title: "Unable to create team",
-        variant: "error",
-      });
-    } else if (submission.result) {
+  const submission = useMutation({
+    action: createTeam,
+    onSuccess() {
       showToast({
         title: "Team created! You're being redirected...",
         variant: "success",
       });
-    }
+    },
+    onError() {
+      showToast({
+        title: "Unable to create team",
+        variant: "error",
+      });
+    },
   });
 
   return (

@@ -1,21 +1,23 @@
-import { generateState } from "arctic";
+import { DateTime } from "luxon";
 import { and, eq } from "drizzle-orm";
+import { generateState } from "arctic";
 import { customAlphabet } from "nanoid";
 import { getRequestEvent } from "solid-js/web";
 import { action, redirect } from "@solidjs/router";
-import { email, object, optional, pipe, string } from "valibot";
 import { appendHeader, createError, setCookie } from "vinxi/http";
+import { email, object, optional, pipe, string, toLowerCase } from "valibot";
 
 import { db } from "../db";
-import { env } from "../environment/env";
 import { lucia } from "./lucia";
+import { requireUser } from "./utils";
 import { sendMail } from "../mail/send";
+import { env } from "../environment/env";
 import { createGithubAuth } from "./github";
 import { parseFormData } from "../server-utils";
 import { getUserTeams } from "../teams/server-utils";
 import { bootstrapUser } from "../users/server-utils";
-import otpTemplate from "../static-templates/mail-otp.html?raw";
 import { mailCodesTable, usersTable } from "../db/schema";
+import otpTemplate from "../static-templates/mail-otp.html?raw";
 
 export const loginWithGithub = action(async (formData: FormData) => {
   "use server";
@@ -79,7 +81,7 @@ export const sendEmailOtp = action(async (formData: FormData) => {
 
   const body = await parseFormData(
     object({
-      email: pipe(string(), email()),
+      email: pipe(string(), email(), toLowerCase()),
       to: optional(string()),
     }),
     formData
@@ -94,7 +96,7 @@ export const sendEmailOtp = action(async (formData: FormData) => {
   await db.insert(mailCodesTable).values({
     email: body.email,
     code,
-    expiresAt: new Date(Date.now() + 1000 * 60 * 15),
+    expiresAt: DateTime.now().plus({ minutes: 15 }).toJSDate(),
   });
 
   if (import.meta.env.DEV) {
@@ -125,7 +127,7 @@ export const verifyEmailOtp = action(async (formData: FormData) => {
 
   const body = await parseFormData(
     object({
-      email: pipe(string(), email()),
+      email: pipe(string(), email(), toLowerCase()),
       code: string(),
       to: optional(string()),
     }),
@@ -210,4 +212,124 @@ export const verifyEmailOtp = action(async (formData: FormData) => {
   }
 
   throw redirect(`/t/${defaultTeamId}/p/${defaultProjectId}/emails`);
+});
+
+export const changeEmail = action(async (formData: FormData) => {
+  "use server";
+
+  const user = requireUser();
+
+  const body = await parseFormData(
+    object({
+      email: pipe(string(), toLowerCase()),
+    }),
+    formData
+  );
+
+  if (user.email === body.email) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "New email is the same as the current one",
+    });
+  }
+
+  const existingUser = await db.query.usersTable.findFirst({
+    where: eq(usersTable.email, body.email),
+  });
+
+  if (existingUser) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Email already in use",
+    });
+  }
+
+  const nanoid = customAlphabet("0123456789", 6);
+
+  const code = nanoid();
+
+  await db.delete(mailCodesTable).where(eq(mailCodesTable.email, body.email));
+
+  await db.insert(mailCodesTable).values({
+    code,
+    email: body.email,
+    expiresAt: DateTime.now().plus({ minutes: 10 }).toJSDate(),
+    userId: user.id,
+  });
+
+  if (import.meta.env.PROD) {
+    await sendMail({
+      from: env.NOREPLY_EMAIL,
+      to: body.email,
+      subject: `Your email change verification code`,
+      body: otpTemplate,
+      data: {
+        otp: code,
+      },
+    });
+  } else {
+    console.log("GENERATED EMAIL OTP:", code);
+  }
+
+  return {
+    success: true,
+    data: {
+      email: body.email,
+    },
+  };
+});
+
+export const verifyEmailChangeOtp = action(async (formData: FormData) => {
+  "use server";
+
+  const body = await parseFormData(
+    object({
+      email: pipe(string(), email(), toLowerCase()),
+      code: string(),
+    }),
+    formData
+  );
+
+  const user = requireUser();
+
+  const code = await db.query.mailCodesTable.findFirst({
+    where: and(
+      eq(mailCodesTable.email, body.email),
+      eq(mailCodesTable.code, body.code),
+      eq(mailCodesTable.userId, user.id)
+    ),
+  });
+
+  if (!code) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Bad code",
+    });
+  }
+
+  if (DateTime.fromJSDate(code.expiresAt).diffNow().seconds < 0) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Code expired",
+    });
+  }
+
+  await Promise.all([
+    db
+      .update(usersTable)
+      .set({ email: body.email })
+      .where(eq(usersTable.id, user.id)),
+    db
+      .delete(mailCodesTable)
+      .where(
+        and(
+          eq(mailCodesTable.code, body.code),
+          eq(mailCodesTable.userId, user.id)
+        )
+      ),
+  ]);
+
+  return {
+    success: true,
+  };
 });

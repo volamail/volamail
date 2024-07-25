@@ -302,6 +302,20 @@
       "when": 1721641681791,
       "tag": "0042_organic_katie_power",
       "breakpoints": true
+    },
+    {
+      "idx": 43,
+      "version": "6",
+      "when": 1721893808672,
+      "tag": "0043_early_rogue",
+      "breakpoints": true
+    },
+    {
+      "idx": 44,
+      "version": "6",
+      "when": 1721893843317,
+      "tag": "0044_cold_lockjaw",
+      "breakpoints": true
     }
   ]
 }

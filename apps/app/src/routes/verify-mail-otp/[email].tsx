@@ -58,7 +58,7 @@ export default function VerifyMailOtp(props: RouteSectionProps) {
         <OTPField
           maxLength={6}
           class="mt-5"
-          onComplete={() => formRef.submit()}
+          onComplete={() => formRef.requestSubmit()}
         >
           <OTPFieldInput name="code" />
           <OTPFieldGroup>

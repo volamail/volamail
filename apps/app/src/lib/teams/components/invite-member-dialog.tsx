@@ -1,5 +1,5 @@
 import { PlusIcon, SendIcon } from "lucide-solid";
-import { createEffect, createSignal } from "solid-js";
+import { createSignal } from "solid-js";
 
 import {
   Dialog,

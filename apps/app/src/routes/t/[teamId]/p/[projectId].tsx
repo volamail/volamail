@@ -174,7 +174,7 @@ export default function DashboardLayout(props: Props) {
             as={A}
             href="profile"
             variant="ghost"
-            class="grow px-1.5 gap-2 -ml-1.5"
+            class="grow px-1.5 gap-2 hover:bg-white"
           >
             <Avatar
               src={user()?.imageUrl}

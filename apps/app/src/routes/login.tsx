@@ -1,10 +1,4 @@
-import {
-  createEffect,
-  createMemo,
-  createSignal,
-  onCleanup,
-  Show,
-} from "solid-js";
+import { createSignal, onCleanup, onMount, Show } from "solid-js";
 import { Title } from "@solidjs/meta";
 import { useSearchParams } from "@solidjs/router";
 import { AlertCircleIcon, GithubIcon, SendIcon } from "lucide-solid";
@@ -41,7 +35,7 @@ export default function Login() {
 
   const [navigating, setNavigating] = createSignal(false);
 
-  createEffect(() => {
+  onMount(() => {
     function handleUnload() {
       setNavigating(true);
     }

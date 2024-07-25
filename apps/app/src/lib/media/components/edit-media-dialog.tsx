@@ -1,11 +1,5 @@
-import {
-  CircleCheckBigIcon,
-  Edit2Icon,
-  EditIcon,
-  PlusIcon,
-  SendIcon,
-} from "lucide-solid";
-import { createEffect, createSignal } from "solid-js";
+import { CircleCheckBigIcon, EditIcon } from "lucide-solid";
+import { createSignal } from "solid-js";
 
 import {
   Dialog,
