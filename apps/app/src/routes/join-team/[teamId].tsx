@@ -8,7 +8,7 @@ import { CheckIcon } from "lucide-solid";
 
 import { acceptInvite } from "~/lib/teams/actions";
 import { Button } from "~/lib/ui/components/button";
-import { getTeamInvite } from "~/lib/teams/queries";
+import { getTeamInvite } from "~/lib/teams/loaders";
 import { GridBgContainer } from "~/lib/ui/components/grid-bg-container";
 import { useMutation } from "~/lib/ui/hooks/useMutation";
 import { showToast } from "~/lib/ui/components/toasts";

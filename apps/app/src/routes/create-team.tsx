@@ -14,9 +14,10 @@ export default function CreateTeam() {
         variant: "success",
       });
     },
-    onError() {
+    onError(e) {
+      console.log(e);
       showToast({
-        title: "Unable to create team",
+        title: e.statusMessage || "Unable to create team",
         variant: "error",
       });
     },

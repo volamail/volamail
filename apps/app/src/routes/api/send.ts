@@ -1,15 +1,7 @@
+import * as v from "valibot";
 import { createError } from "vinxi/http";
 import { and, eq, sql } from "drizzle-orm";
 import type { APIEvent } from "@solidjs/start/server";
-import {
-  email,
-  object,
-  optional,
-  parseAsync,
-  pipe,
-  record,
-  string,
-} from "valibot";
 
 import { db } from "~/lib/db";
 import { lucia } from "~/lib/auth/lucia";
@@ -33,25 +25,25 @@ export async function POST({ request }: APIEvent) {
 
   const body = await request.json();
 
-  const payload = await parseAsync(
-    object({
-      template: string(
+  const payload = await v.parseAsync(
+    v.object({
+      template: v.string(
         'invalid "template" value. it should be a string with the id of the email template'
       ),
-      data: optional(
-        record(
-          string(),
-          string(),
+      data: v.optional(
+        v.record(
+          v.string(),
+          v.string(),
           '"data" must be a record of string:string pairs'
         )
       ),
-      from: pipe(
-        string('"from" email address is required'),
-        email('"from" is not a valid email address')
+      from: v.pipe(
+        v.string('"from" email address is required'),
+        v.email('"from" is not a valid email address')
       ),
-      to: pipe(
-        string('"to" email address is required'),
-        email('"to" is not a valid email address')
+      to: v.pipe(
+        v.string('"to" email address is required'),
+        v.email('"to" is not a valid email address')
       ),
     }),
     body
@@ -123,7 +115,7 @@ export async function POST({ request }: APIEvent) {
   }
 
   await sendMail({
-    from: payload.from,
+    from: `${project.name} <${payload.from}>`,
     to: payload.to,
     subject: template.subject,
     body: template.body,

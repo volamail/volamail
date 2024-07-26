@@ -9,23 +9,18 @@ import {
   projectsTable,
   teamMembersTable,
   teamInvitesTable,
-  subscriptionsTable,
 } from "../db/schema";
-import { db } from "../db";
-import { env } from "../environment/env";
-import { sendMail } from "../mail/send";
-import { requireUser } from "../auth/utils";
-import { parseFormData } from "../server-utils";
 import {
   deleteProjectWithCleanup,
   requireUserToBeMemberOfTeam,
 } from "../projects/utils";
-import {
-  SUBSCRIPTION_QUOTAS,
-  SUBSCRIPTION_TYPE_FREE,
-} from "../subscriptions/constants";
+import { db } from "../db";
+import { sendMail } from "../mail/send";
+import * as mutations from "./mutations";
+import { env } from "../environment/env";
+import { requireUser } from "../auth/utils";
+import { parseFormData } from "../server-utils";
 import teamInviteTemplate from "~/lib/static-templates/team-invite.html?raw";
-import { DateTime } from "luxon";
 
 export const createTeam = action(async (formData: FormData) => {
   "use server";
@@ -48,43 +43,12 @@ export const createTeam = action(async (formData: FormData) => {
   );
 
   const { teamId, projectId } = await db.transaction(async (db) => {
-    const [{ insertedId: subscriptionId }] = await db
-      .insert(subscriptionsTable)
-      .values({
-        tier: SUBSCRIPTION_TYPE_FREE,
-        remainingQuota: SUBSCRIPTION_QUOTAS[SUBSCRIPTION_TYPE_FREE].emails,
-        monthlyQuota: SUBSCRIPTION_QUOTAS[SUBSCRIPTION_TYPE_FREE].emails,
-        periodType: "MONTHLY",
-        lastRefilledAt: DateTime.now().toJSDate(),
-        storageQuota: SUBSCRIPTION_QUOTAS[SUBSCRIPTION_TYPE_FREE].storage,
-        price: "0.00",
-        renewsAt: DateTime.now().plus({ days: 30 }).toJSDate(),
-        status: "ACTIVE",
-      })
-      .returning({ insertedId: subscriptionsTable.id });
+    const { teamId, projectId } = await mutations.createTeam(payload.name, db);
 
-    const [{ insertedId: teamId }] = await db
-      .insert(teamsTable)
-      .values({
-        ...payload,
-        subscriptionId,
-      })
-      .returning({ insertedId: teamsTable.id });
-
-    const [, [{ insertedId: projectId }]] = await Promise.all([
-      db.insert(teamMembersTable).values({
-        teamId,
-        userId: user.id,
-      }),
-      db
-        .insert(projectsTable)
-        .values({
-          creatorId: user.id,
-          teamId,
-          name: "Untitled project",
-        })
-        .returning({ insertedId: projectsTable.id }),
-    ]);
+    await db.insert(teamMembersTable).values({
+      teamId,
+      userId: user.id,
+    });
 
     return { teamId, projectId };
   });

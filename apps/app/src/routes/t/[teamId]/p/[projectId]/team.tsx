@@ -13,7 +13,7 @@ import { DeleteInviteDialog } from "~/lib/teams/components/delete-invite-dialog"
 import { DeleteMemberDialog } from "~/lib/teams/components/delete-member-dialog";
 import { DeleteTeamDialog } from "~/lib/teams/components/delete-team-dialog";
 import { InviteMemberDialog } from "~/lib/teams/components/invite-member-dialog";
-import { getTeam } from "~/lib/teams/queries";
+import { getTeam } from "~/lib/teams/loaders";
 import { Button } from "~/lib/ui/components/button";
 import { Input } from "~/lib/ui/components/input";
 import { showToast } from "~/lib/ui/components/toasts";

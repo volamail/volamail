@@ -1,5 +1,5 @@
+import * as v from "valibot";
 import { eq } from "drizzle-orm";
-import { object, string } from "valibot";
 import { createError } from "vinxi/http";
 import { action, redirect } from "@solidjs/router";
 
@@ -12,7 +12,7 @@ import { db } from "../db";
 import { requireUser } from "../auth/utils";
 import { projectsTable } from "../db/schema";
 import { parseFormData } from "../server-utils";
-import { getUserTeams } from "../teams/server-utils";
+import { getUserTeams } from "../teams/queries";
 
 export const createProject = action(async (formData: FormData) => {
   "use server";
@@ -20,9 +20,9 @@ export const createProject = action(async (formData: FormData) => {
   const user = requireUser();
 
   const payload = await parseFormData(
-    object({
-      teamId: string(),
-      name: string(),
+    v.object({
+      teamId: v.string(),
+      name: v.string(),
     }),
     formData
   );
@@ -37,7 +37,6 @@ export const createProject = action(async (formData: FormData) => {
     .values({
       teamId: payload.teamId,
       name: payload.name,
-      creatorId: user.id,
     })
     .returning({ insertedId: projectsTable.id });
 
@@ -50,8 +49,8 @@ export const deleteProject = action(async (formData: FormData) => {
   const user = requireUser();
 
   const payload = await parseFormData(
-    object({
-      id: string(),
+    v.object({
+      id: v.string(),
     }),
     formData
   );
@@ -90,9 +89,13 @@ export const editProject = action(async (formData: FormData) => {
   const user = requireUser();
 
   const payload = await parseFormData(
-    object({
-      id: string(),
-      name: string(),
+    v.object({
+      id: v.string(),
+      name: v.pipe(
+        v.string(),
+        v.minLength(2, "Name is too short"),
+        v.maxLength(64, "Name is too long")
+      ),
     }),
     formData
   );

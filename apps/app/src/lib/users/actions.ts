@@ -1,18 +1,19 @@
-import { action, redirect } from "@solidjs/router";
-import { requireUser } from "../auth/utils";
-import { getUserTeams } from "../teams/server-utils";
-import { deleteProjectWithCleanup } from "../projects/utils";
-import { db } from "../db";
-import {
-  sessionsTable,
-  teamMembersTable,
-  teamsTable,
-  usersTable,
-} from "../db/schema";
 import { and, eq } from "drizzle-orm";
-import { lucia } from "../auth/lucia";
 import { appendHeader } from "vinxi/http";
 import { getRequestEvent } from "solid-js/web";
+import { action, redirect } from "@solidjs/router";
+
+import {
+  usersTable,
+  teamsTable,
+  sessionsTable,
+  teamMembersTable,
+} from "../db/schema";
+import { db } from "../db";
+import { lucia } from "../auth/lucia";
+import { requireUser } from "../auth/utils";
+import { getUserTeams } from "../teams/queries";
+import { deleteProjectWithCleanup } from "../projects/utils";
 
 export const deleteAccount = action(async () => {
   "use server";
@@ -43,6 +44,15 @@ export const deleteAccount = action(async () => {
             )
           );
         await db.delete(teamsTable).where(eq(teamsTable.id, team.id));
+      } else {
+        await db
+          .delete(teamMembersTable)
+          .where(
+            and(
+              eq(teamMembersTable.teamId, team.id),
+              eq(teamMembersTable.userId, user.id)
+            )
+          );
       }
     }
 

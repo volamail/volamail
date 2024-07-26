@@ -12,7 +12,7 @@ import type { APIEvent } from "@solidjs/start/server";
 import { db } from "~/lib/db";
 import { lucia } from "~/lib/auth/lucia";
 import { createGithubAuth } from "~/lib/auth/github";
-import { bootstrapUser } from "~/lib/users/server-utils";
+import { createUser } from "~/lib/users/mutations";
 import { usersTable } from "~/lib/db/schema";
 
 export async function GET({ nativeEvent }: APIEvent) {
@@ -87,7 +87,7 @@ export async function GET({ nativeEvent }: APIEvent) {
       id: userId,
       defaultProjectId,
       defaultTeamId,
-    } = await bootstrapUser(userEmail);
+    } = await createUser(userEmail);
 
     const session = await lucia.createSession(userId, {});
 

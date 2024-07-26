@@ -27,9 +27,8 @@ export default function ProjectSettings(props: RouteSectionProps) {
       });
     },
     onError(e) {
-      console.log(e);
       showToast({
-        title: "Unable to save changes",
+        title: e.statusMessage || "Unable to save changes",
         variant: "error",
       });
     },
@@ -68,7 +67,7 @@ export default function ProjectSettings(props: RouteSectionProps) {
               required
             />
             <p class="text-xs text-gray-500">
-              This name is only used for display purposes.
+              This is used as the sender's name in emails.
             </p>
           </div>
         </div>

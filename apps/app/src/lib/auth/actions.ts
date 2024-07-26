@@ -14,8 +14,8 @@ import { sendMail } from "../mail/send";
 import { env } from "../environment/env";
 import { createGithubAuth } from "./github";
 import { parseFormData } from "../server-utils";
-import { getUserTeams } from "../teams/server-utils";
-import { bootstrapUser } from "../users/server-utils";
+import { getUserTeams } from "../teams/queries";
+import { createUser } from "../users/mutations";
 import { mailCodesTable, usersTable } from "../db/schema";
 import otpTemplate from "../static-templates/mail-otp.html?raw";
 
@@ -197,7 +197,7 @@ export const verifyEmailOtp = action(async (formData: FormData) => {
     id: userId,
     defaultProjectId,
     defaultTeamId,
-  } = await bootstrapUser(body.email);
+  } = await createUser(body.email);
 
   const session = await lucia.createSession(userId, {});
 

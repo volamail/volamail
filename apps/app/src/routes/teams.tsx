@@ -3,7 +3,7 @@ import { A, createAsync } from "@solidjs/router";
 import { BookOpenIcon, LogOutIcon } from "lucide-solid";
 
 import { logout } from "~/lib/auth/actions";
-import { getUserTeams } from "~/lib/teams/queries";
+import { getUserTeams } from "~/lib/teams/loaders";
 import { Button } from "~/lib/ui/components/button";
 import { showToast } from "~/lib/ui/components/toasts";
 import { useMutation } from "~/lib/ui/hooks/useMutation";

@@ -1,78 +1,50 @@
-import { cache, redirect } from "@solidjs/router";
-import { and, eq } from "drizzle-orm";
-import type { User } from "lucia";
-import { createError } from "vinxi/http";
-import { requireUser } from "../auth/utils";
+import { inArray, eq } from "drizzle-orm";
 import { db } from "../db";
-import { teamInvitesTable, teamsTable } from "../db/schema";
-import { getUserTeams as queryGetUserTeams } from "./server-utils";
+import { teamsTable, teamMembersTable } from "../db/schema";
+import { SUBSCRIPTION_QUOTAS } from "../subscriptions/constants";
 
-export const getTeam = cache(async (id: string) => {
-  "use server";
-
-  requireUser();
-
-  const team = await db.query.teamsTable.findFirst({
-    where: eq(teamsTable.id, id),
-    with: {
-      members: {
-        with: {
-          user: true,
-        },
+export async function getUserTeams(userId: string) {
+  const teams = (
+    await db.query.teamsTable.findMany({
+      where: inArray(
+        teamsTable.id,
+        db
+          .select({ id: teamMembersTable.teamId })
+          .from(teamMembersTable)
+          .where(eq(teamMembersTable.userId, userId))
+      ),
+      with: {
+        projects: true,
+        personalTeamOwner: true,
+        subscription: true,
+        members: true,
       },
-      invites: true,
-      personalTeamOwner: true,
-    },
+    })
+  ).map((team) => {
+    const quotas =
+      team.subscription.tier === "CUSTOM"
+        ? {
+            emails: team.subscription.monthlyQuota,
+            storage: team.subscription.storageQuota,
+            projects: SUBSCRIPTION_QUOTAS.PRO.projects,
+          }
+        : SUBSCRIPTION_QUOTAS[team.subscription.tier];
+
+    return {
+      ...team,
+      quotas,
+      reachedProjectLimit: team.projects.length >= quotas.projects,
+    };
   });
 
-  if (!team) {
-    throw createError({
-      statusCode: 404,
-      statusMessage: "Team not found",
-    });
-  }
+  const personalTeam = teams.find(
+    (team) => team.personalTeamOwner?.id === userId
+  );
+
+  const other = teams.filter((team) => team.personalTeamOwner?.id !== userId);
 
   return {
-    ...team,
-    personal: team.personalTeamOwner !== null,
+    personal: personalTeam,
+    other,
   };
-}, "teams");
-
-export const getTeamInvite = cache(async (id: string) => {
-  "use server";
-
-  let user: User;
-
-  try {
-    user = requireUser();
-  } catch {
-    throw redirect(`/login?to=${`/join-team/${id}`}`);
-  }
-
-  const invite = await db.query.teamInvitesTable.findFirst({
-    where: and(
-      eq(teamInvitesTable.email, user.email),
-      eq(teamInvitesTable.teamId, id)
-    ),
-    with: {
-      team: true,
-    },
-  });
-
-  if (!invite) {
-    throw createError({
-      statusCode: 404,
-      statusMessage: "Invite not found",
-    });
-  }
-
-  return invite;
-}, "team-invites");
-
-export const getUserTeams = cache(async () => {
-  "use server";
-
-  const user = requireUser();
-
-  return await queryGetUserTeams(user.id);
-}, "teams");
+}

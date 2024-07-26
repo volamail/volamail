@@ -2,7 +2,7 @@ import { A, createAsync, useLocation, useParams } from "@solidjs/router";
 import { CheckIcon, ChevronsUpDownIcon, PlusIcon } from "lucide-solid";
 import { For, Show, createMemo } from "solid-js";
 
-import { getUserTeams } from "~/lib/teams/queries";
+import { getUserTeams } from "~/lib/teams/loaders";
 import { cn } from "~/lib/ui/utils/cn";
 import type { DbProject } from "../../db/schema";
 import { Button, buttonVariants } from "../../ui/components/button";

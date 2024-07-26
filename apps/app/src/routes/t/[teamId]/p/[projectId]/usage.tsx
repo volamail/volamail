@@ -7,7 +7,7 @@ import {
 import { Title } from "@solidjs/meta";
 import { Match, Show, Suspense, Switch } from "solid-js";
 
-import { getTeam } from "~/lib/teams/queries";
+import { getTeam } from "~/lib/teams/loaders";
 import { Button } from "~/lib/ui/components/button";
 import { ExternalLinkIcon } from "lucide-solid";
 import { showToast } from "~/lib/ui/components/toasts";

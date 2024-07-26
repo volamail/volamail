@@ -59,7 +59,7 @@ export const sendTestMail = action(async (formData: FormData) => {
 
   try {
     await sendMail({
-      from: env.NOREPLY_EMAIL,
+      from: `Volamail <${env.NOREPLY_EMAIL}>`,
       to: user.email,
       body: payload.body,
       subject: payload.subject,

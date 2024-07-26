@@ -23,8 +23,8 @@ import { type ComponentProps, type JSX, Show, splitProps } from "solid-js";
 import { twMerge } from "tailwind-merge";
 
 import { logout } from "~/lib/auth/actions";
-import { getTeam } from "~/lib/teams/queries";
-import { getUserTeams } from "~/lib/teams/queries";
+import { getTeam } from "~/lib/teams/loaders";
+import { getUserTeams } from "~/lib/teams/loaders";
 import { getCurrentUser } from "~/lib/auth/queries";
 import { Avatar } from "~/lib/ui/components/avatar";
 import { Button, buttonVariants } from "~/lib/ui/components/button";
