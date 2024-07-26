@@ -1,6 +1,21 @@
+---
+const siteLink = `${import.meta.env.DEV ? "http" : "https"}://${
+  import.meta.env.PUBLIC_APP_DOMAIN
+}`;
+---
+
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width" />
 <meta name="generator" content={Astro.generator} />
+
+<meta property="og:title" content="Volamail · Open-source, AI-powered email" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content={siteLink} />
+<meta property="og:image" content={`${siteLink}/og_image.png`} />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@volamail" />
+<meta name="twitter:creator" content="@volamail" />
 
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />

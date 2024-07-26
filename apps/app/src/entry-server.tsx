@@ -1,5 +1,10 @@
 // @refresh reload
 import { createHandler, StartServer } from "@solidjs/start/server";
+import { env } from "./lib/environment/env";
+
+const SITE_URL = `${import.meta.env.DEV ? "http" : "https"}://${
+  env.SITE_DOMAIN
+}`;
 
 export default createHandler(() => (
   <StartServer
@@ -8,6 +13,19 @@ export default createHandler(() => (
         <head>
           <meta charset="utf-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+          <meta
+            property="og:title"
+            content="Volamail · Open-source, AI-powered email"
+          />
+          <meta property="og:type" content="website" />
+          <meta property="og:url" content={SITE_URL} />
+          <meta property="og:image" content={`${SITE_URL}/og_image.png`} />
+
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:site" content="@volamail" />
+          <meta name="twitter:creator" content="@volamail" />
+
           <link
             rel="apple-touch-icon"
             sizes="180x180"
