@@ -107,10 +107,21 @@ export const editMedia = action(async (formData: FormData) => {
   );
 
   if (!body.file || body.file.size === 0) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: "No file uploaded",
-    });
+    await db
+      .update(imagesTable)
+      .set({
+        name: body.name,
+      })
+      .where(
+        and(
+          eq(imagesTable.id, body.id),
+          eq(imagesTable.projectId, body.projectId)
+        )
+      );
+
+    return {
+      success: true,
+    };
   }
 
   const buffer = (await body.file.arrayBuffer()) as Buffer;

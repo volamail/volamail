@@ -36,11 +36,11 @@ export function EditMediaDialog(props: Props) {
 
       setOpen(false);
     },
-    onError() {
+    onError(e) {
       setOpen(false);
 
       showToast({
-        title: "Unable to apply changes",
+        title: e.statusMessage || "Unable to apply changes",
         variant: "error",
       });
     },
