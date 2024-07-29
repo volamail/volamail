@@ -32,6 +32,7 @@ import {
 } from "~/lib/ui/components/tooltip";
 import { Kbd } from "~/lib/ui/components/kbd";
 import { PromptInput } from "./prompt-input";
+import { HtmlTab } from "./html-tab";
 
 type Props = {
   name?: string;
@@ -318,14 +319,16 @@ export function Editor(props: Props) {
               )}
             </Show>
           </Tabs.Content>
-          <Tabs.Content
-            value="html"
-            class="relative overflow-y-auto grow min-h-0 flex flex-col bg-white border border-gray-200 w-full rounded-xl shadow"
-          >
-            <pre class="p-4 min-h-0 text-sm whitespace-pre-wrap">
-              {props.value}
-            </pre>
-          </Tabs.Content>
+          <Show when={props.value}>
+            {(code) => (
+              <Tabs.Content
+                value="html"
+                class="relative overflow-y-auto grow min-h-0 flex flex-col bg-white border border-gray-200 w-full rounded-xl shadow"
+              >
+                <HtmlTab code={code()} />
+              </Tabs.Content>
+            )}
+          </Show>
         </Tabs>
       </Show>
 
