@@ -19,7 +19,13 @@ import {
   Table2Icon,
   UsersIcon,
 } from "lucide-solid";
-import { type ComponentProps, type JSX, Show, splitProps } from "solid-js";
+import {
+  type ComponentProps,
+  createMemo,
+  type JSX,
+  Show,
+  splitProps,
+} from "solid-js";
 import { twMerge } from "tailwind-merge";
 
 import { logout } from "~/lib/auth/actions";
@@ -48,6 +54,12 @@ export const route: RouteDefinition = {
     void getTeam(params.teamId);
   },
 };
+
+const ENVIRONMENT_STRING = `Version: v${
+  import.meta.env.VITE_PUBLIC_APP_VERSION
+} - Stage: ${import.meta.env.PROD ? "prod" : "dev"} - SH: ${
+  import.meta.env.VITE_SELF_HOSTED ? "Y" : "N"
+}`;
 
 export default function DashboardLayout(props: Props) {
   const params = useParams();
@@ -165,10 +177,14 @@ export default function DashboardLayout(props: Props) {
           </div>
         </div>
 
+        <p class="text-gray-300 self-stretch text-center text-xs px-4 py-2">
+          {ENVIRONMENT_STRING}
+        </p>
+
         <form
           action={logout}
           method="post"
-          class="flex justify-start items-center gap-2 border-t border-gray-300 p-3"
+          class="flex justify-start items-center gap-2 border-t border-gray-200 p-3"
         >
           <Button
             as={A}
