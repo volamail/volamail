@@ -18,6 +18,11 @@ import { useMutation } from "~/lib/ui/hooks/useMutation";
 import { editTemplateElement } from "~/lib/templates/actions";
 import { PopoverContent, PopoverRoot } from "~/lib/ui/components/popover";
 import ColorPicker from "./color-picker";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "~/lib/ui/components/tooltip";
 
 type Props = {
   projectId: string;
@@ -147,11 +152,10 @@ export function FloatingMenu(props: Props) {
               trailing={() => (
                 <Button
                   type="submit"
-                  variant="ghost"
-                  icon={() => <SparklesIcon class="size-4" />}
+                  icon={() => <SparklesIcon class="size-3" />}
                   round
                   even
-                  class="p-1"
+                  class="p-1.5"
                   aria-label="Request changes"
                 />
               )}
@@ -225,23 +229,31 @@ export function FloatingMenu(props: Props) {
               </div>
 
               <div class="flex gap-1 items-center">
-                <Button
-                  icon={() => <ArrowUpNarrowWideIcon class="size-4" />}
-                  variant="outline"
-                  onClick={() =>
-                    props.onChangeSelection(props.element.parentElement!)
-                  }
-                  aria-label="Select parent element"
-                  even
-                />
-                <Button
-                  icon={() => <Trash2Icon class="size-4" />}
-                  color="destructive"
-                  onClick={props.onDelete}
-                  aria-label="Delete element"
-                  even
-                  variant="outline"
-                />
+                <Tooltip>
+                  <TooltipTrigger
+                    as={Button}
+                    icon={() => <ArrowUpNarrowWideIcon class="size-4" />}
+                    variant="outline"
+                    onClick={() =>
+                      props.onChangeSelection(props.element.parentElement!)
+                    }
+                    aria-label="Select parent element"
+                    even
+                  />
+                  <TooltipContent>Select parent element</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger
+                    as={Button}
+                    icon={() => <Trash2Icon class="size-4" />}
+                    color="destructive"
+                    onClick={props.onDelete}
+                    aria-label="Delete element"
+                    even
+                    variant="outline"
+                  />
+                  <TooltipContent>Delete element</TooltipContent>
+                </Tooltip>
               </div>
             </div>
             <Show when={elementSettingsElements().length}>

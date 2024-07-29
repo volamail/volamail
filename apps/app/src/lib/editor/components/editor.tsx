@@ -54,6 +54,8 @@ export function Editor(props: Props) {
   const [importExistingDialogOpen, setImportExistingDialogOpen] =
     createSignal(false);
 
+  const isNewEmail = createMemo(() => props.templateId === undefined);
+
   const generateTemplateAction = useMutation({
     action: generateTemplate,
     onSuccess(result) {
@@ -284,21 +286,23 @@ export function Editor(props: Props) {
                   }
                 />
               </Dialog>
-              <Tooltip>
-                <TooltipTrigger
-                  as={Button}
-                  variant="outline"
-                  color="destructive"
-                  class="self-end"
-                  aria-label="Delete email"
-                  onClick={() => setDeleteDialogOpen(true)}
-                  even
-                  icon={() => <Trash2Icon class="size-4" />}
-                />
-                <TooltipContent class="inline-flex gap-1.5 items-center">
-                  Delete email
-                </TooltipContent>
-              </Tooltip>
+              <Show when={!isNewEmail()}>
+                <Tooltip>
+                  <TooltipTrigger
+                    as={Button}
+                    variant="outline"
+                    color="destructive"
+                    class="self-end"
+                    aria-label="Delete email"
+                    onClick={() => setDeleteDialogOpen(true)}
+                    even
+                    icon={() => <Trash2Icon class="size-4" />}
+                  />
+                  <TooltipContent class="inline-flex gap-1.5 items-center">
+                    Delete email
+                  </TooltipContent>
+                </Tooltip>
+              </Show>
             </div>
           </div>
           <Tabs.Content
