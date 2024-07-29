@@ -7,7 +7,7 @@ dotenv.config();
 
 export default defineConfig({
   server: {
-    preset: "vercel",
+    preset: process.env.VITE_SELF_HOSTED === "true" ? "node" : "vercel",
     routeRules: {
       "/assets/**": {
         proxy: `https://${process.env.AWS_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/**`,

@@ -12,7 +12,7 @@ import { loginWithGithub, sendEmailOtp } from "~/lib/auth/actions";
 import { GridBgContainer } from "~/lib/ui/components/grid-bg-container";
 
 const showGithubLogin = !!(
-  process.env.VITE_GITHUB_CLIENT_ID || import.meta.env.VITE_GITHUB_CLIENT_ID
+  process.env.VITE_GITHUB_CLIENT_ID || import.meta.env.PUBLIC_ZIO_PERA
 );
 
 export default function Login() {
