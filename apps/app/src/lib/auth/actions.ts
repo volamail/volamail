@@ -197,7 +197,9 @@ export const verifyEmailOtp = action(async (formData: FormData) => {
     id: userId,
     defaultProjectId,
     defaultTeamId,
-  } = await createUser(body.email);
+  } = await createUser({
+    email: body.email,
+  });
 
   const session = await lucia.createSession(userId, {});
 

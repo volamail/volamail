@@ -87,7 +87,7 @@ export async function GET({ nativeEvent }: APIEvent) {
       id: userId,
       defaultProjectId,
       defaultTeamId,
-    } = await createUser(userEmail);
+    } = await createUser({ email: userEmail, githubId: githubUser.id });
 
     const session = await lucia.createSession(userId, {});
 
