@@ -1,5 +1,5 @@
 import { Title } from "@solidjs/meta";
-import { createSignal, onCleanup, onMount, Show } from "solid-js";
+import { createMemo, createSignal, onCleanup, onMount, Show } from "solid-js";
 import { AlertCircleIcon, GithubIcon, SendIcon } from "lucide-solid";
 import { createAsync, Navigate, useSearchParams } from "@solidjs/router";
 
@@ -10,6 +10,10 @@ import { showToast } from "~/lib/ui/components/toasts";
 import { useMutation } from "~/lib/ui/hooks/useMutation";
 import { loginWithGithub, sendEmailOtp } from "~/lib/auth/actions";
 import { GridBgContainer } from "~/lib/ui/components/grid-bg-container";
+
+const showGithubLogin = !!(
+  process.env.VITE_GITHUB_CLIENT_ID || import.meta.env.VITE_GITHUB_CLIENT_ID
+);
 
 export default function Login() {
   const [searchParams] = useSearchParams();
@@ -37,6 +41,9 @@ export default function Login() {
   });
 
   const [navigating, setNavigating] = createSignal(false);
+
+  console.log({ env: import.meta.env });
+  console.log({ showGithubLogin });
 
   onMount(() => {
     function handleUnload() {
@@ -91,12 +98,7 @@ export default function Login() {
             </Button>
           </div>
 
-          <Show
-            when={
-              process.env.VITE_GITHUB_CLIENT_ID ||
-              import.meta.env.VITE_GITHUB_CLIENT_ID
-            }
-          >
+          <Show when={showGithubLogin}>
             <div class="flex gap-3 items-center">
               <hr class="w-full border-gray-200" />
               <span class="text-sm text-gray-500">or</span>
