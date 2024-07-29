@@ -57,7 +57,7 @@ export default function NewTemplate(props: RouteSectionProps) {
   });
 
   useBeforeLeave((e: BeforeLeaveEventArgs) => {
-    if (html()) {
+    if (html() && !createEmailAction.pending && !sendTestMailAction.pending) {
       e.preventDefault();
 
       if (
@@ -135,11 +135,11 @@ export default function NewTemplate(props: RouteSectionProps) {
               <label for="subject" class="font-medium text-sm">
                 Subject
               </label>
-              <Textarea
+              <Input
+                type="text"
                 placeholder="Welcome to our service..."
                 name="subject"
                 id="subject"
-                resizeable
                 required
               />
             </div>
