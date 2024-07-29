@@ -1,13 +1,23 @@
 import { LoaderIcon } from "lucide-solid";
 import { type VariantProps, tv } from "tailwind-variants";
-import { Show, splitProps, type ComponentProps, type JSX } from "solid-js";
+import {
+  createUniqueId,
+  Show,
+  splitProps,
+  type ComponentProps,
+  type JSX,
+} from "solid-js";
 
 const inputVariants = tv({
-  base: "w-full relative has-[:disabled]:bg-gray-100 has-[input:focus]:outline outline-blue-600 flex gap-2 px-2.5 items-center bg-white border rounded-lg border-gray-300",
+  base: "flex flex-col gap-1 grow",
   slots: {
+    wrapper:
+      'w-full relative has-[:disabled]:bg-gray-100 has-[input:focus]:outline outline-blue-600 flex gap-2 px-2.5 items-center bg-white border rounded-lg border-gray-300 has-[input[aria-invalid="true"]]:border-red-500',
     input:
       "py-1.5 text-input outline-none text-sm w-full bg-transparent disabled:bg-gray-100 disabled:text-gray-500",
     loader: "animate-spin size-4",
+    hint: "text-xs text-gray-500",
+    error: "text-xs text-red-500",
   },
 });
 
@@ -18,9 +28,16 @@ type Props = ComponentProps<"input"> & {
   resizeable?: boolean;
 } & VariantProps<typeof inputVariants> & {
     classes?: {
+      container?: string;
+      wrapper?: string;
       input?: string;
       loader?: string;
+      hint?: string;
+      error?: string;
     };
+    label?: string;
+    hint?: string;
+    error?: string;
   };
 
 export function Input(props: Props) {
@@ -32,29 +49,64 @@ export function Input(props: Props) {
     "class",
     "classes",
     "resizeable",
+    "label",
+    "hint",
+    "error",
+    "id",
   ]);
 
-  return (
-    <div class={inputVariants().base(local)}>
-      <Show when={local.leading}>{local.leading!()}</Show>
+  const id = local.id || createUniqueId();
 
-      <input
-        {...rest}
-        disabled={local.disabled || local.loading}
-        class={inputVariants().input({ class: local.classes?.input })}
-        style={{
-          // @ts-expect-error css types aren't up to date
-          "field-sizing": local.resizeable ? "content" : undefined,
-        }}
-      />
+  return (
+    <div class={inputVariants().base(local.classes?.container)}>
+      <Show when={local.label}>
+        <label class="text-sm font-medium" for={id}>
+          {local.label}
+        </label>
+      </Show>
+
+      <div class={inputVariants().wrapper(local.classes?.wrapper)}>
+        <Show when={local.leading}>{local.leading!()}</Show>
+
+        <input
+          {...rest}
+          id={id}
+          disabled={local.disabled || local.loading}
+          aria-invalid={!!local.error}
+          aria-describedby={local.error ? `${id}-error` : undefined}
+          class={inputVariants().input({ class: local.classes?.input })}
+          style={{
+            // @ts-expect-error css types aren't up to date
+            "field-sizing": local.resizeable ? "content" : undefined,
+          }}
+        />
+
+        <Show
+          when={local.loading}
+          fallback={local.trailing ? local.trailing() : null}
+        >
+          <LoaderIcon
+            class={inputVariants().loader({ class: local.classes?.loader })}
+          />
+        </Show>
+      </div>
 
       <Show
-        when={local.loading}
-        fallback={local.trailing ? local.trailing() : null}
+        when={local.error}
+        fallback={
+          <Show when={local.hint}>
+            <p class={inputVariants().hint(local.classes?.hint)}>
+              {local.hint}
+            </p>
+          </Show>
+        }
       >
-        <LoaderIcon
-          class={inputVariants().loader({ class: local.classes?.loader })}
-        />
+        <p
+          id={`${id}-error`}
+          class={inputVariants().error(local.classes?.error)}
+        >
+          {local.error}
+        </p>
       </Show>
     </div>
   );
