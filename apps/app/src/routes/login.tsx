@@ -12,7 +12,7 @@ import { loginWithGithub, sendEmailOtp } from "~/lib/auth/actions";
 import { GridBgContainer } from "~/lib/ui/components/grid-bg-container";
 
 const showGithubLogin = !!(
-  process.env.VITE_GITHUB_CLIENT_ID || import.meta.env.PUBLIC_ZIO_PERA
+  process.env.VITE_GITHUB_CLIENT_ID || import.meta.env.VITE_GITHUB_CLIENT_ID
 );
 
 export default function Login() {
@@ -41,9 +41,6 @@ export default function Login() {
   });
 
   const [navigating, setNavigating] = createSignal(false);
-
-  console.log({ env: import.meta.env });
-  console.log({ showGithubLogin });
 
   onMount(() => {
     function handleUnload() {

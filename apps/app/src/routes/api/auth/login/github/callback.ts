@@ -106,6 +106,8 @@ export async function GET({ nativeEvent }: APIEvent) {
       `/t/${defaultTeamId}/p/${defaultProjectId}/emails`
     );
   } catch (e) {
+    console.log(e);
+
     if (e instanceof OAuth2RequestError) {
       throw createError({
         status: 400,
