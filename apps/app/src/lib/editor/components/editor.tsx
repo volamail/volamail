@@ -112,7 +112,10 @@ export function Editor(props: Props) {
     });
   }
 
-  function modifyElement(changes: string) {
+  function modifyElement(
+    changes: string,
+    options: { inline?: boolean } = { inline: false }
+  ) {
     const element = selectedElement();
 
     if (!element) {
@@ -125,7 +128,9 @@ export function Editor(props: Props) {
 
     props.onChange(deserializeCode(templatePreview.innerHTML));
 
-    setSelectedElement();
+    if (!options.inline) {
+      setSelectedElement();
+    }
   }
 
   function deleteElement() {
@@ -313,8 +318,9 @@ export function Editor(props: Props) {
                   projectId={props.projectId}
                   onComplete={modifyElement}
                   onDelete={deleteElement}
-                  onClose={() => setSelectedElement()}
+                  onClose={setSelectedElement}
                   onChangeSelection={setSelectedElement}
+                  onEdit={(changes) => modifyElement(changes, { inline: true })}
                 />
               )}
             </Show>

@@ -1,4 +1,4 @@
-import { JSX, Show, createMemo } from "solid-js";
+import { JSX, Show, createMemo, createSignal } from "solid-js";
 import {
   LinkIcon,
   Trash2Icon,
@@ -26,6 +26,7 @@ type Props = {
   onComplete: (changes: string) => void;
   onChangeSelection: (element: HTMLElement) => void;
   onDelete: () => void;
+  onEdit: (changes: string) => void;
 };
 
 export function FloatingMenu(props: Props) {
@@ -41,6 +42,8 @@ export function FloatingMenu(props: Props) {
       });
     },
   });
+
+  const [inlineChangePending, setInlineChangePending] = createSignal(false);
 
   const elementSettingsElements = createMemo(() => {
     const elements: Array<JSX.Element> = [];
@@ -90,6 +93,18 @@ export function FloatingMenu(props: Props) {
     return elements;
   });
 
+  function handleTextColorChange(value: string) {
+    props.element.style.color = value;
+
+    setInlineChangePending(true);
+  }
+
+  function handleBackgroundColorChange(value: string) {
+    props.element.style.backgroundColor = value;
+
+    setInlineChangePending(true);
+  }
+
   const color =
     props.element.computedStyleMap().get("color")?.toString() || "#000000";
 
@@ -97,10 +112,18 @@ export function FloatingMenu(props: Props) {
     props.element.computedStyleMap().get("background-color")?.toString() ||
     "transparent";
 
+  function handleClose() {
+    if (inlineChangePending()) {
+      props.onEdit(props.element.outerHTML);
+    }
+
+    props.onClose();
+  }
+
   return (
     <PopoverRoot
       open
-      onOpenChange={props.onClose}
+      onOpenChange={handleClose}
       anchorRef={() => props.element}
     >
       <PopoverContent class="flex flex-col w-96">
@@ -188,12 +211,14 @@ export function FloatingMenu(props: Props) {
                     icon={() => <TypeIcon class="size-4" />}
                     aria-label="Change text color"
                     value={color}
+                    onChange={handleTextColorChange}
                     name="textColor"
                   />
                   <ColorPicker
                     icon={() => <PaintBucketIcon class="size-4" />}
                     aria-label="Change background color"
                     value={backgroundColor}
+                    onChange={handleBackgroundColorChange}
                     name="backgroundColor"
                   />
                 </Show>
