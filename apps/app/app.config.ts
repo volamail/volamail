@@ -29,5 +29,6 @@ export default defineConfig({
         packageJSON.version
       ),
     },
+    envPrefix: "VITE_",
   },
 });
