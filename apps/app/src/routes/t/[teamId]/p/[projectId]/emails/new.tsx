@@ -3,7 +3,11 @@ import "./editor.css";
 
 import { Title } from "@solidjs/meta";
 import { createSignal, Show } from "solid-js";
-import type { RouteSectionProps } from "@solidjs/router";
+import {
+  BeforeLeaveEventArgs,
+  useBeforeLeave,
+  type RouteSectionProps,
+} from "@solidjs/router";
 import { CircleCheckBigIcon, SendIcon } from "lucide-solid";
 
 import { Input } from "~/lib/ui/components/input";
@@ -50,6 +54,20 @@ export default function NewTemplate(props: RouteSectionProps) {
         variant: "error",
       });
     },
+  });
+
+  useBeforeLeave((e: BeforeLeaveEventArgs) => {
+    if (html()) {
+      e.preventDefault();
+
+      if (
+        window.confirm(
+          "You didn't save your email - are you sure you want to leave?"
+        )
+      ) {
+        e.retry(true);
+      }
+    }
   });
 
   return (
