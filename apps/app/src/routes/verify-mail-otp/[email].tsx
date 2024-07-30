@@ -1,11 +1,8 @@
 import { Show } from "solid-js";
 import { Title } from "@solidjs/meta";
+import { ChevronRightIcon } from "lucide-solid";
 import { RouteSectionProps, useSearchParams } from "@solidjs/router";
 
-import { verifyEmailOtp } from "~/lib/auth/actions";
-import { GridBgContainer } from "~/lib/ui/components/grid-bg-container";
-import { useMutation } from "~/lib/ui/hooks/useMutation";
-import { showToast } from "~/lib/ui/components/toasts";
 import {
   OTPField,
   OTPFieldGroup,
@@ -13,7 +10,10 @@ import {
   OTPFieldSlot,
 } from "~/lib/ui/components/otp-field";
 import { Button } from "~/lib/ui/components/button";
-import { CheckIcon, ChevronRightIcon } from "lucide-solid";
+import { verifyEmailOtp } from "~/lib/auth/actions";
+import { showToast } from "~/lib/ui/components/toasts";
+import { useMutation } from "~/lib/ui/hooks/useMutation";
+import { GridBgContainer } from "~/lib/ui/components/grid-bg-container";
 
 export default function VerifyMailOtp(props: RouteSectionProps) {
   const verifyOtpAction = useMutation({

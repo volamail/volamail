@@ -11,3 +11,53 @@
 .revert-tailwind *[align=center] {
   margin: 0 auto;
 }
+
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0s;
+}
+
+
+#editor-view {
+  view-transition-name: editor-view;
+}
+
+
+::view-transition-old(editor-view),
+::view-transition-new(editor-view) {
+  animation-duration: 0.4s;
+  animation-timing-function: ease-in-out;
+} 
+
+::view-transition-old(editor-view) {
+  animation-name: blur-out;
+}
+
+::view-transition-new(editor-view) {
+  animation-name: blur-in;
+}
+
+@keyframes blur-in {
+  from {
+    filter: blur(10px);
+    opacity: 0;
+  }
+  
+  to {
+    filter: blur(0px);
+    opacity: 1;
+  }
+}
+
+@keyframes blur-out {
+  from {
+    filter: blur(0px);
+    opacity: 1;
+  }
+
+  to {
+    filter: blur(10px);
+    opacity: 0;
+  }
+}

@@ -175,6 +175,7 @@ export const verifyEmailOtp = action(async (formData: FormData) => {
     );
 
     if (body.to) {
+      console.log("FOUND BODY.TO");
       throw redirect(body.to);
     }
 

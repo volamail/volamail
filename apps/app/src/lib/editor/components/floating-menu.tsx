@@ -122,6 +122,7 @@ export function FloatingMenu(props: Props) {
       open
       onOpenChange={handleClose}
       anchorRef={() => props.element}
+      placement="left"
     >
       <PopoverContent class="flex flex-col w-[30rem]">
         <>
@@ -196,6 +197,7 @@ export function FloatingMenu(props: Props) {
 
               props.onComplete(element.outerHTML);
             }}
+            autocomplete="off"
           >
             <div class="flex gap-1 w-full justify-between mt-1.5">
               <div class="flex gap-1 items-center">
@@ -275,5 +277,7 @@ export function FloatingMenu(props: Props) {
 }
 
 function elementHasOnlyText(el: HTMLElement) {
-  return !el.innerHTML.includes("<td>") && !el.innerHTML.includes("<img");
+  const pattern = /<.*>.*<\/.*>/;
+
+  return !pattern.test(el.innerHTML);
 }

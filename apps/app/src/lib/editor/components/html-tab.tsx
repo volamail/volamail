@@ -1,7 +1,6 @@
 import getWasm from "shiki/wasm";
-import { LoaderIcon } from "lucide-solid";
+import { createResource } from "solid-js";
 import { createHighlighterCore } from "shiki/core";
-import { createResource, Suspense } from "solid-js";
 
 async function createCodeHighlight(code: string) {
   const highlighter = await createHighlighterCore({

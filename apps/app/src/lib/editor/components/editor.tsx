@@ -69,7 +69,9 @@ export function Editor(props: Props) {
 
       persistCurrentToHistory();
 
-      props.onChange(result.code);
+      tryViewTransition(() => {
+        props.onChange(result.code);
+      });
     },
     onError(e) {
       console.log(e);
@@ -135,7 +137,9 @@ export function Editor(props: Props) {
 
     persistCurrentToHistory();
 
-    props.onChange(deserializeCode(templatePreview.innerHTML));
+    tryViewTransition(() => {
+      props.onChange(deserializeCode(templatePreview.innerHTML));
+    });
 
     if (!options.inline) {
       setSelectedElement();
@@ -171,7 +175,9 @@ export function Editor(props: Props) {
       return;
     }
 
-    props.onChange(prevValue);
+    tryViewTransition(() => {
+      props.onChange(prevValue);
+    });
 
     setHistory(history().slice(0, -1));
   }
@@ -319,6 +325,7 @@ export function Editor(props: Props) {
             <div
               ref={handleTemplatePreviewMounted}
               class="revert-tailwind"
+              id="editor-view"
               innerHTML={displayedCode()}
             />
 
@@ -430,4 +437,13 @@ function replaceLast(text: string, searchValue: string, replaceValue: string) {
   return `${text.slice(0, lastOccurrenceIndex)}${replaceValue}${text.slice(
     lastOccurrenceIndex + searchValue.length
   )}`;
+}
+
+function tryViewTransition(callback: () => void) {
+  if (!document.startViewTransition) {
+    callback();
+    return;
+  }
+
+  document.startViewTransition(callback);
 }

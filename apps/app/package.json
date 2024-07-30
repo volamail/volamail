@@ -56,6 +56,7 @@
   "devDependencies": {
     "@biomejs/biome": "1.7.3",
     "@repo/tailwind-config": "workspace:*",
+    "@types/dom-view-transitions": "^1.0.5",
     "@types/luxon": "^3.4.2",
     "@types/quoted-printable": "^1.0.2",
     "autoprefixer": "^10.4.19",
