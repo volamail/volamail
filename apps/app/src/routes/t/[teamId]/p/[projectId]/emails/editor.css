@@ -1,16 +1,5 @@
-.revert-tailwind {
-  all: initial;
-  font-size: initial;
-  position: relative;
-}
-
-.revert-tailwind > div {
-  min-height: 100%;
-}
-
 .revert-tailwind * {
   font-size: revert;
-  margin: revert;
   font-weight: revert;
   cursor: pointer;
 }

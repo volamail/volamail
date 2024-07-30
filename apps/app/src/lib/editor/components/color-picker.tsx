@@ -1,4 +1,4 @@
-import { createSignal, splitProps } from "solid-js";
+import { createEffect, createSignal, splitProps } from "solid-js";
 import { PipetteIcon } from "lucide-solid";
 import { ColorPicker as ArkColorPicker } from "@ark-ui/solid";
 
@@ -15,19 +15,15 @@ type Props = {
 export default function ColorPicker(props: Props) {
   const [local, others] = splitProps(props, ["value", "name", "onChange"]);
 
-  const [value, setValue] = createSignal(local.value || "#000000");
-
   function handleChange(details: ArkColorPicker.ValueChangeDetails) {
-    setValue(details.valueAsString);
-
-    local.onChange?.(details.valueAsString);
+    local.onChange?.(details.value.toString("hex"));
   }
 
   return (
     <ArkColorPicker.Root
       unmountOnExit
       lazyMount
-      value={value()}
+      value={local.value || "#000000"}
       onValueChange={handleChange}
     >
       <ArkColorPicker.Control>
@@ -42,7 +38,7 @@ export default function ColorPicker(props: Props) {
             >
               <div
                 class="absolute -right-2.5 -bottom-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full size-3 border border-gray-300"
-                style={{ background: value() }}
+                style={{ background: local.value }}
               />
             </Button>
           )}

@@ -1,28 +1,27 @@
-import { JSX, Show, createMemo, createSignal } from "solid-js";
 import {
   LinkIcon,
-  Trash2Icon,
-  ArrowUpNarrowWideIcon,
-  TextIcon,
-  CircleCheckBigIcon,
-  SparklesIcon,
   TypeIcon,
+  Trash2Icon,
+  SparklesIcon,
   PaintBucketIcon,
+  CircleCheckBigIcon,
+  ArrowUpNarrowWideIcon,
 } from "lucide-solid";
+import { JSX, Show, createMemo, createSignal } from "solid-js";
 
-import { Input } from "~/lib/ui/components/input";
-import { Button } from "~/lib/ui/components/button";
-import { showToast } from "~/lib/ui/components/toasts";
-import { Textarea } from "~/lib/ui/components/textarea";
-import { useMutation } from "~/lib/ui/hooks/useMutation";
-import { editTemplateElement } from "~/lib/templates/actions";
-import { PopoverContent, PopoverRoot } from "~/lib/ui/components/popover";
-import ColorPicker from "./color-picker";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "~/lib/ui/components/tooltip";
+import ColorPicker from "./color-picker";
+import RichTextEditor from "./rich-text-editor";
+import { Input } from "~/lib/ui/components/input";
+import { Button } from "~/lib/ui/components/button";
+import { showToast } from "~/lib/ui/components/toasts";
+import { useMutation } from "~/lib/ui/hooks/useMutation";
+import { editTemplateElement } from "~/lib/templates/actions";
+import { PopoverContent, PopoverRoot } from "~/lib/ui/components/popover";
 
 type Props = {
   projectId: string;
@@ -50,26 +49,38 @@ export function FloatingMenu(props: Props) {
 
   const [inlineChangePending, setInlineChangePending] = createSignal(false);
 
+  function handleBackgroundColorChange(value: string) {
+    props.element.style.backgroundColor = value;
+
+    setInlineChangePending(true);
+  }
+
+  const backgroundColor = createMemo(
+    () =>
+      props.element.computedStyleMap().get("background-color")?.toString() ||
+      "transparent"
+  );
+
   const elementSettingsElements = createMemo(() => {
     const elements: Array<JSX.Element> = [];
 
     if (
       (props.element instanceof HTMLParagraphElement ||
         props.element instanceof HTMLHeadingElement ||
-        props.element instanceof HTMLTableCellElement ||
-        props.element instanceof HTMLAnchorElement) &&
+        props.element instanceof HTMLAnchorElement ||
+        props.element instanceof HTMLTableCellElement) &&
       elementHasOnlyText(props.element)
     ) {
-      const contents = (props.element.textContent || "").trim();
+      const contents =
+        props.element instanceof HTMLTableCellElement
+          ? props.element.innerHTML
+          : props.element.outerHTML;
 
       elements.push(
-        <Textarea
-          name="contents"
-          leading={() => <TextIcon class="size-4" />}
-          resizeable
-        >
-          {contents}
-        </Textarea>
+        <RichTextEditor
+          defaultValue={contents}
+          backgroundColor={backgroundColor()}
+        />
       );
     }
 
@@ -98,25 +109,6 @@ export function FloatingMenu(props: Props) {
     return elements;
   });
 
-  function handleTextColorChange(value: string) {
-    props.element.style.color = value;
-
-    setInlineChangePending(true);
-  }
-
-  function handleBackgroundColorChange(value: string) {
-    props.element.style.backgroundColor = value;
-
-    setInlineChangePending(true);
-  }
-
-  const color =
-    props.element.computedStyleMap().get("color")?.toString() || "#000000";
-
-  const backgroundColor =
-    props.element.computedStyleMap().get("background-color")?.toString() ||
-    "transparent";
-
   function handleClose() {
     if (inlineChangePending()) {
       props.onEdit(props.element.outerHTML);
@@ -131,7 +123,7 @@ export function FloatingMenu(props: Props) {
       onOpenChange={handleClose}
       anchorRef={() => props.element}
     >
-      <PopoverContent class="flex flex-col w-96">
+      <PopoverContent class="flex flex-col w-[30rem]">
         <>
           <form method="post" action={editTemplateElement} autocomplete="off">
             <input type="hidden" name="projectId" value={props.projectId} />
@@ -185,7 +177,11 @@ export function FloatingMenu(props: Props) {
               }
 
               if (formData.get("contents")) {
-                element.textContent = formData.get("contents") as string;
+                if (props.element instanceof HTMLTableCellElement) {
+                  element.innerHTML = formData.get("contents") as string;
+                } else {
+                  element.outerHTML = formData.get("contents") as string;
+                }
               }
 
               if (formData.get("textColor")) {
@@ -212,16 +208,9 @@ export function FloatingMenu(props: Props) {
                   }
                 >
                   <ColorPicker
-                    icon={() => <TypeIcon class="size-4" />}
-                    aria-label="Change text color"
-                    value={color}
-                    onChange={handleTextColorChange}
-                    name="textColor"
-                  />
-                  <ColorPicker
                     icon={() => <PaintBucketIcon class="size-4" />}
                     aria-label="Change background color"
-                    value={backgroundColor}
+                    value={backgroundColor()}
                     onChange={handleBackgroundColorChange}
                     name="backgroundColor"
                   />
@@ -286,7 +275,5 @@ export function FloatingMenu(props: Props) {
 }
 
 function elementHasOnlyText(el: HTMLElement) {
-  const pattern = /<.*>.*<\/.*>/;
-
-  return !pattern.test(el.innerHTML);
+  return !el.innerHTML.includes("<td>") && !el.innerHTML.includes("<img");
 }

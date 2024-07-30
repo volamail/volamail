@@ -5,6 +5,7 @@ import {
   createEffect,
   createSignal,
   onMount,
+  Suspense,
 } from "solid-js";
 import { Tabs } from "@kobalte/core/tabs";
 import quotedPrintable from "quoted-printable";
@@ -14,7 +15,9 @@ import {
   UndoIcon,
   Trash2Icon,
   CloudDownloadIcon,
+  LoaderIcon,
 } from "lucide-solid";
+import { clientOnly } from "@solidjs/start";
 
 import { FloatingMenu } from "./floating-menu";
 import { Button, buttonVariants } from "~/lib/ui/components/button";
@@ -32,7 +35,6 @@ import {
 } from "~/lib/ui/components/tooltip";
 import { Kbd } from "~/lib/ui/components/kbd";
 import { PromptInput } from "./prompt-input";
-import { HtmlTab } from "./html-tab";
 
 type Props = {
   name?: string;
@@ -41,6 +43,8 @@ type Props = {
   templateId?: string;
   onChange: (value: string | undefined) => void;
 };
+
+const HtmlTab = clientOnly(() => import("./html-tab"));
 
 export function Editor(props: Props) {
   let mainForm!: HTMLFormElement;
@@ -87,6 +91,11 @@ export function Editor(props: Props) {
       return;
     }
 
+    if (target instanceof HTMLSpanElement) {
+      setSelectedElement(target.parentElement as HTMLElement);
+      return;
+    }
+
     setSelectedElement(target);
   }
 
@@ -123,8 +132,6 @@ export function Editor(props: Props) {
     if (!element) {
       return;
     }
-
-    element.outerHTML = changes;
 
     persistCurrentToHistory();
 
@@ -335,7 +342,18 @@ export function Editor(props: Props) {
                 value="html"
                 class="relative overflow-y-auto grow min-h-0 flex flex-col bg-white border border-gray-200 w-full rounded-xl shadow"
               >
-                <HtmlTab code={code()} />
+                <Suspense
+                  fallback={
+                    <div class="flex flex-col gap-2 justify-center items-center grow text-gray-500">
+                      <LoaderIcon class="size-6 animate-spin" />
+                      <p class="text-sm text-gray-500">
+                        Loading HTML preview...
+                      </p>
+                    </div>
+                  }
+                >
+                  <HtmlTab code={code()} />
+                </Suspense>
               </Tabs.Content>
             )}
           </Show>
