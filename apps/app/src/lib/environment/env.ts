@@ -40,7 +40,7 @@ function getValidatedEnv() {
   ]);
 
   try {
-    return v.parse(schema, process.env);
+    return v.parse(schema, { ...process.env, ...import.meta.env });
   } catch (e) {
     if (e instanceof v.ValiError) {
       throw new Error(`Invalid environment: ${formatValiError(e)}`);

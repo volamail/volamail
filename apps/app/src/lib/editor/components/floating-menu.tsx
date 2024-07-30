@@ -277,7 +277,19 @@ export function FloatingMenu(props: Props) {
 }
 
 function elementHasOnlyText(el: HTMLElement) {
-  const pattern = /<.*>.*<\/.*>/;
+  if (
+    el instanceof HTMLSpanElement ||
+    el instanceof HTMLParagraphElement ||
+    el instanceof HTMLHeadingElement
+  ) {
+    return true;
+  }
 
-  return !pattern.test(el.innerHTML);
+  for (const child of el.children) {
+    if (!(child instanceof HTMLSpanElement)) {
+      return false;
+    }
+  }
+
+  return true;
 }
