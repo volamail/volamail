@@ -137,9 +137,7 @@ export function Editor(props: Props) {
 
     persistCurrentToHistory();
 
-    tryViewTransition(() => {
-      props.onChange(deserializeCode(templatePreview.innerHTML));
-    });
+    props.onChange(deserializeCode(templatePreview.innerHTML));
 
     if (!options.inline) {
       setSelectedElement();
