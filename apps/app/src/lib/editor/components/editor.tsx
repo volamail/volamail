@@ -23,7 +23,7 @@ import { FloatingMenu } from "./floating-menu";
 import { Button, buttonVariants } from "~/lib/ui/components/button";
 import { showToast } from "~/lib/ui/components/toasts";
 import { useMutation } from "~/lib/ui/hooks/useMutation";
-import { generateTemplate } from "~/lib/templates/actions";
+import { editHtmlTemplate } from "~/lib/templates/actions";
 import { ImportExistingEmailDialogContents } from "./import-existing-email-dialog";
 import { GridBgContainer } from "~/lib/ui/components/grid-bg-container";
 import { DeleteTemplateDialog } from "~/lib/templates/components/delete-template-dialog";
@@ -60,8 +60,8 @@ export function Editor(props: Props) {
 
   const isNewEmail = createMemo(() => props.templateId === undefined);
 
-  const generateTemplateAction = useMutation({
-    action: generateTemplate,
+  const editTemplateAction = useMutation({
+    action: editHtmlTemplate,
     onSuccess(result) {
       mainForm.reset();
 
@@ -70,7 +70,7 @@ export function Editor(props: Props) {
       persistCurrentToHistory();
 
       tryViewTransition(() => {
-        props.onChange(result.code);
+        props.onChange(result);
       });
     },
     onError(e) {
@@ -322,7 +322,7 @@ export function Editor(props: Props) {
           >
             <div
               ref={handleTemplatePreviewMounted}
-              class="revert-tailwind"
+              class="revert-tailwind h-full"
               id="editor-view"
               innerHTML={displayedCode()}
             />
@@ -367,19 +367,17 @@ export function Editor(props: Props) {
 
       <form
         method="post"
-        action={generateTemplate}
+        action={editHtmlTemplate}
         class="w-full z-10"
         ref={mainForm}
       >
         <input type="hidden" name="projectId" value={props.projectId} />
 
-        <Show when={props.value}>
-          <input type="hidden" name="currentHtml" value={props.value} />
-        </Show>
+        <input type="hidden" name="html" value={props.value} />
 
         <PromptInput
           ref={promptInput}
-          loading={generateTemplateAction.pending}
+          loading={editTemplateAction.pending}
           projectId={props.projectId}
           selectedImageUrl={selectedImageUrl()}
           onSelectImage={handleSelectImage}
@@ -431,6 +429,10 @@ function deserializeCode(code: string) {
 
 function replaceLast(text: string, searchValue: string, replaceValue: string) {
   const lastOccurrenceIndex = text.lastIndexOf(searchValue);
+
+  if (lastOccurrenceIndex === -1) {
+    return text;
+  }
 
   return `${text.slice(0, lastOccurrenceIndex)}${replaceValue}${text.slice(
     lastOccurrenceIndex + searchValue.length

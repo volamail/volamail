@@ -21,7 +21,7 @@ import { useMutation } from "~/lib/ui/hooks/useMutation";
 
 type Props = {
   projectId: string;
-  onComplete: (email: { subject: string; body: string }) => void;
+  onComplete: (email: { subject: string; body: string; slug: string }) => void;
   filter?: (email: { id: string; slug: string; subject: string }) => boolean;
 };
 

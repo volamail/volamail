@@ -22,7 +22,11 @@ import { Breadcrumbs } from "~/lib/ui/components/breadcrumbs";
 import { EditorStartingScreen } from "~/lib/editor/components/starting-screen";
 
 export default function NewTemplate(props: RouteSectionProps) {
-  const [html, setHtml] = createSignal("");
+  const [email, setEmail] = createSignal<{
+    html: string;
+    subject: string;
+    slug: string;
+  }>();
 
   const createEmailAction = useMutation({
     action: createTemplate,
@@ -57,7 +61,7 @@ export default function NewTemplate(props: RouteSectionProps) {
   });
 
   useBeforeLeave((e: BeforeLeaveEventArgs) => {
-    if (html() && !createEmailAction.pending && !sendTestMailAction.pending) {
+    if (email() && !createEmailAction.pending && !sendTestMailAction.pending) {
       e.preventDefault();
 
       if (
@@ -70,6 +74,14 @@ export default function NewTemplate(props: RouteSectionProps) {
     }
   });
 
+  function onEditorChange(value?: string) {
+    if (!value) {
+      return;
+    }
+
+    setEmail({ ...email()!, html: value });
+  }
+
   return (
     <main class="h-dvh flex flex-col bg-gray-100 min-h-0">
       <Title>New email - Volamail</Title>
@@ -79,7 +91,7 @@ export default function NewTemplate(props: RouteSectionProps) {
           crumbs={[{ label: "Emails", href: ".." }, { label: "New email" }]}
         />
 
-        <Show when={html()}>
+        <Show when={email()}>
           <div class="flex gap-2">
             <Button
               variant="outline"
@@ -104,7 +116,7 @@ export default function NewTemplate(props: RouteSectionProps) {
       </div>
 
       <div class="flex grow min-h-0 overflow-hidden">
-        <Show when={html()}>
+        <Show when={email()}>
           <form
             method="post"
             id="create-email-form"
@@ -129,6 +141,7 @@ export default function NewTemplate(props: RouteSectionProps) {
                 name="slug"
                 id="slug"
                 required
+                value={email()?.slug}
               />
             </div>
             <div class="flex flex-col gap-1">
@@ -140,26 +153,27 @@ export default function NewTemplate(props: RouteSectionProps) {
                 placeholder="Welcome to our service..."
                 name="subject"
                 id="subject"
+                value={email()?.subject}
                 required
               />
             </div>
 
-            <input type="hidden" name="body" value={html()} />
+            <input type="hidden" name="body" value={email()!.html} />
           </form>
         </Show>
 
         <Show
-          when={html()}
+          when={email()}
           fallback={
             <EditorStartingScreen
               projectId={props.params.projectId}
-              onDone={setHtml}
+              onDone={setEmail}
             />
           }
         >
           <Editor
-            value={html()}
-            onChange={setHtml}
+            value={email()!.html}
+            onChange={onEditorChange}
             projectId={props.params.projectId}
           />
         </Show>

@@ -1,6 +1,7 @@
-import { generateText } from "ai";
+import { z } from "zod";
 import { eq, and } from "drizzle-orm";
 import { createError } from "vinxi/http";
+import { generateObject, generateText } from "ai";
 import { action, redirect } from "@solidjs/router";
 import { object, string, optional } from "valibot";
 
@@ -9,6 +10,8 @@ import { getModelForTeam } from "./model";
 import * as schema from "~/lib/db/schema";
 import { requireUser } from "~/lib/auth/utils";
 import { parseFormData } from "../server-utils";
+import generatePrompt from "./prompts/generate.txt?raw";
+import editPrompt from "./prompts/edit.txt?raw";
 import { requireUserToBeMemberOfProject } from "~/lib/projects/utils";
 
 export const createTemplate = action(async (formData: FormData) => {
@@ -103,7 +106,6 @@ export const generateTemplate = action(async (formData: FormData) => {
   const payload = await parseFormData(
     object({
       prompt: string(),
-      currentHtml: optional(string()),
       image: optional(string()),
       projectId: string(),
     }),
@@ -115,30 +117,49 @@ export const generateTemplate = action(async (formData: FormData) => {
     projectId: payload.projectId,
   });
 
-  const INITIAL_GENERATION_PROMPT = `You are a HTML email template generator. You will be given a prompt and you should generate a HTML email based on the prompt. Respond with just the HTML code, nothing else, no markdown, no backticks. Use Helvetica and put the email's main contents inside a centered container unless told otherwise. Remember that HTML must be old e-mail compatible, so use tables for layouts. Feel free to clean up the HTML if it looks invalid or contains errors. Remember the <style> tag doesn't work in email clients, so use inline styles on the elements instead. Don't output any meta tags or doctype, just the email <body>. If variables are requested, use double curly brackets with snake_case like {{variable_name}}. For images use a placeholder (from via.placeholder.com) unless an image is specified.`;
+  const result = await generateObject({
+    model: await getModelForTeam(meta.project.team.id),
+    prompt: `${generatePrompt}\nPrompt: ${
+      payload.image ? `Using the image with URL ${payload.image}, ` : ""
+    }${payload.prompt}`,
+    schema: z.object({
+      slug: z.string(),
+      subject: z.string(),
+      html: z.string(),
+    }),
+  });
 
-  const EDIT_PROMPT = `You are a HTML email template editor. You will be given an existing HTML email template and a prompt. Your task is to edit the HTML email template based on the prompt. Respond with just the HTML code, nothing else, no markdown, no backticks. Remember that HTML must be old e-mail compatible, so use tables for layouts. Feel free to clean up the HTML if it looks invalid or contains errors. Remember the <style> tag doesn't work in email clients, so use inline styles on the elements instead. Don't output any meta tags or doctype, just the email <body>. Remember margins don't work on td elements, if a global margin is needed add it to the upper table. Don't output any meta tags or doctype, just the email <body>. If the user requests changes that need refactoring the whole HTML structure of the email, you can do so as long as the appearance stays the same.`;
+  return result.object;
+});
 
-  const prompt = payload.image
-    ? `Using the image with URL ${payload.image}, ${payload.prompt}`
-    : payload.prompt;
+export const editHtmlTemplate = action(async (formData: FormData) => {
+  "use server";
+
+  const user = requireUser();
+
+  const payload = await parseFormData(
+    object({
+      prompt: string(),
+      html: string(),
+      projectId: string(),
+      image: optional(string()),
+    }),
+    formData
+  );
+
+  const { meta } = await requireUserToBeMemberOfProject({
+    userId: user.id,
+    projectId: payload.projectId,
+  });
 
   const result = await generateText({
     model: await getModelForTeam(meta.project.team.id),
-    system: payload.currentHtml ? EDIT_PROMPT : INITIAL_GENERATION_PROMPT,
-    messages: [
-      {
-        role: "user",
-        content: payload.currentHtml
-          ? `html:${payload.currentHtml}\nprompt:${prompt}`
-          : `${prompt}`,
-      },
-    ],
+    prompt: `${editPrompt}\nHTML:${payload.html}\nPrompt:${
+      payload.image ? `Using the image with URL ${payload.image}, ` : ""
+    }${payload.prompt}`,
   });
 
-  return {
-    code: result.text,
-  };
+  return result.text;
 });
 
 export const editTemplateElement = action(async (formData: FormData) => {
@@ -233,5 +254,6 @@ export const getTemplateInForm = action(async (formData: FormData) => {
   return {
     subject: row.subject,
     body: row.body,
+    slug: row.slug,
   };
 }, "templates");

@@ -11,7 +11,7 @@ import { GridBgContainer } from "~/lib/ui/components/grid-bg-container";
 
 type Props = {
   projectId: string;
-  onDone: (code: string) => void;
+  onDone: (email: { html: string; subject: string; slug: string }) => void;
 };
 
 export function EditorStartingScreen(props: Props) {
@@ -24,7 +24,7 @@ export function EditorStartingScreen(props: Props) {
       });
     },
     onSuccess(result) {
-      props.onDone(result.code);
+      props.onDone(result);
     },
   });
 
@@ -32,6 +32,18 @@ export function EditorStartingScreen(props: Props) {
 
   function handleSelectImage(imageUrl?: string) {
     setSelectedImageUrl(imageUrl);
+  }
+
+  function handleExistingEmailImported(email: {
+    subject: string;
+    body: string;
+    slug: string;
+  }) {
+    props.onDone({
+      html: email.body,
+      subject: email.subject,
+      slug: email.slug,
+    });
   }
 
   return (
@@ -61,11 +73,19 @@ export function EditorStartingScreen(props: Props) {
 
                 <ImportExistingEmailDialogContents
                   projectId={props.projectId}
-                  onComplete={(email) => props.onDone(email.body)}
+                  onComplete={handleExistingEmailImported}
                 />
               </Dialog>
 
-              <PasteHtmlButton onPaste={props.onDone} />
+              <PasteHtmlButton
+                onPaste={(code) =>
+                  props.onDone({
+                    html: code,
+                    subject: "",
+                    slug: "",
+                  })
+                }
+              />
             </div>
           </div>
 
