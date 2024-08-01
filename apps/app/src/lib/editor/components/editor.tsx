@@ -226,7 +226,7 @@ export function Editor(props: Props) {
   });
 
   return (
-    <GridBgContainer class="grow min-h-0 flex flex-col gap-2 justify-center items-center p-8">
+    <GridBgContainer class="bg-grid-black/15 grow min-h-0 flex flex-col gap-2 justify-center items-center p-8">
       <Show when={props.value}>
         <Tabs class="grow min-h-0 flex flex-col gap-2 w-full relative">
           <div class="flex justify-between items-end">

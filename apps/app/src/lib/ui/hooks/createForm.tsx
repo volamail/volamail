@@ -101,6 +101,7 @@ export function createForm<T extends Record<string, any>>(
         event.preventDefault();
 
         ref.focus();
+        ref.select();
       }
 
       // @ts-expect-error TODO: Fix this
