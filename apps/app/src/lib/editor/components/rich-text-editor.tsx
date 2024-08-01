@@ -1,17 +1,18 @@
 import { Editor } from "@tiptap/core";
-import StarterKit from "@tiptap/starter-kit";
-import { createSignal, onMount, Show } from "solid-js";
-import { debounce } from "@solid-primitives/scheduled";
-import TextStyle from "@tiptap/extension-text-style";
-import Color from "@tiptap/extension-color";
-import HardBreak from "@tiptap/extension-hard-break";
-import Link from "@tiptap/extension-link";
-import { FontSize } from "../extensions/fontSize";
-import { Margin } from "../extensions/margin";
-import ColorPicker from "./color-picker";
 import { TypeIcon } from "lucide-solid";
-import { BackgroundColor } from "../extensions/backgroundColor";
+import Link from "@tiptap/extension-link";
+import Color from "@tiptap/extension-color";
+import StarterKit from "@tiptap/starter-kit";
+import TextStyle from "@tiptap/extension-text-style";
+import FontFamily from "@tiptap/extension-font-family";
+import { debounce } from "@solid-primitives/scheduled";
+import { createSignal, onMount, Show } from "solid-js";
+
+import ColorPicker from "./color-picker";
+import { Margin } from "../extensions/margin";
 import { Padding } from "../extensions/padding";
+import { FontSize } from "../extensions/fontSize";
+import { BackgroundColor } from "../extensions/backgroundColor";
 
 type Props = {
   defaultValue?: string;
@@ -36,21 +37,6 @@ export default function RichTextEditor(props: Props) {
       element: document.getElementById("rich-editor")!,
       extensions: [
         StarterKit,
-        HardBreak.extend({
-          addKeyboardShortcuts() {
-            return {
-              Enter: () => {
-                if (
-                  this.editor.isActive("orderedList") ||
-                  this.editor.isActive("bulletList")
-                ) {
-                  return this.editor.chain().createParagraphNear().run();
-                }
-                return this.editor.commands.setHardBreak();
-              },
-            };
-          },
-        }),
         TextStyle,
         Color.configure({
           types: ["textStyle", "heading", "paragraph", "link"],
@@ -67,12 +53,14 @@ export default function RichTextEditor(props: Props) {
         Padding.configure({
           types: ["textStyle", "heading", "paragraph", "link"],
         }),
-        HardBreak.configure({}),
         Link.configure({
           openOnClick: false,
           validate() {
             return true;
           },
+        }),
+        FontFamily.configure({
+          types: ["textStyle", "heading", "paragraph", "link"],
         }),
       ],
       enableContentCheck: false,

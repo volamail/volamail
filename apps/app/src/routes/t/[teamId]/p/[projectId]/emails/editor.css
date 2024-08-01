@@ -1,11 +1,23 @@
-.revert-tailwind * {
-  font-size: revert;
-  font-weight: revert;
-  cursor: pointer;
+/**
+ * Editor stuff
+ */
+ .revert-tailwind {
+  all: initial;
+  font-size: initial;
+  position: relative;
 }
 
 .revert-tailwind > div {
   min-height: 100%;
+}
+
+.revert-tailwind * {
+  font-size: inherit;
+  margin: revert;
+  font-weight: revert;
+  cursor: pointer;
+  padding: revert;
+  list-style: revert;
 }
 
 .revert-tailwind *[data-selected] {
@@ -16,12 +28,10 @@
   margin: 0 auto;
 }
 
-
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation-duration: 0s;
 }
-
 
 #editor-view {
   view-transition-name: editor-view;

@@ -79,7 +79,9 @@ export function FloatingMenu(props: Props) {
       elements.push(
         <RichTextEditor
           defaultValue={contents}
-          backgroundColor={backgroundColor()}
+          backgroundColor={getComputedElementBackground(
+            props.element.parentElement!
+          )}
         />
       );
     }
@@ -297,4 +299,14 @@ function elementHasOnlyText(el: HTMLElement) {
   }
 
   return true;
+}
+
+function getComputedElementBackground(element: HTMLElement) {
+  const computedBackgrond = window.getComputedStyle(element).backgroundColor;
+
+  if (computedBackgrond !== "rgba(0, 0, 0, 0)") {
+    return computedBackgrond;
+  }
+
+  return getComputedElementBackground(element.parentElement!);
 }
