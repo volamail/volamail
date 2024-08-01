@@ -6,6 +6,7 @@ import {
   createSignal,
   onMount,
   Suspense,
+  lazy,
 } from "solid-js";
 import { Tabs } from "@kobalte/core/tabs";
 import quotedPrintable from "quoted-printable";
@@ -17,7 +18,6 @@ import {
   CloudDownloadIcon,
   LoaderIcon,
 } from "lucide-solid";
-import { clientOnly } from "@solidjs/start";
 
 import { FloatingMenu } from "./floating-menu";
 import { Button, buttonVariants } from "~/lib/ui/components/button";
@@ -44,7 +44,7 @@ type Props = {
   onChange: (value: string | undefined) => void;
 };
 
-const HtmlTab = clientOnly(() => import("./html-tab"));
+const HtmlTab = lazy(() => import("./html-tab"));
 
 export function Editor(props: Props) {
   let mainForm!: HTMLFormElement;

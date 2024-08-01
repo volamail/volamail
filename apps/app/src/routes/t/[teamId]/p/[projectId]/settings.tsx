@@ -84,7 +84,9 @@ function SettingsForm(props: SettingsFormProps) {
     },
   });
 
-  const { form, fields, handleSubmit } = createForm({
+  const form = createForm<{
+    name: string;
+  }>({
     defaultValues: {
       name: props.project.name,
     },
@@ -99,19 +101,20 @@ function SettingsForm(props: SettingsFormProps) {
 
   return (
     <form
-      onSubmit={handleSubmit}
+      onSubmit={form.handleSubmit}
       class="flex flex-col gap-4 w-full"
       method="post"
       action={editProject}
     >
       <input type="hidden" name="id" value={props.project.id} />
 
-      <div class="flex gap-4">
+      <div class="flex gap-4 w-full">
         <Input label="Project ID" disabled value={props.project.id} />
 
         <Input
           required
-          {...fields.name}
+          class="grow"
+          {...form.getFieldProps("name")}
           hint="This is used as the sender's name in emails."
           label="Name"
         />
@@ -122,7 +125,7 @@ function SettingsForm(props: SettingsFormProps) {
         class="self-end"
         icon={() => <CircleCheckBigIcon class="size-4" />}
         loading={editProjectAction.pending}
-        disabled={form.invalid || !form.dirty}
+        disabled={form.state.invalid || !form.state.dirty}
       >
         Save
       </Button>

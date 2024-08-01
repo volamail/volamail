@@ -6,11 +6,11 @@ export function EditorSkeleton() {
       <div class="w-72 border-r border-gray-200 p-4 flex flex-col gap-6 bg-white">
         <div class="flex flex-col gap-2 w-full animate-pulse">
           <div class="h-4 w-16 rounded bg-gray-100" />
-          <div class="h-8 w-full rounded bg-gray-100" />
+          <div class="h-8 w-full rounded-lg bg-gray-100" />
         </div>
         <div class="flex flex-col gap-2 w-full animate-pulse">
           <div class="h-4 w-20 rounded bg-gray-100" />
-          <div class="h-8 w-full rounded bg-gray-100" />
+          <div class="h-8 w-full rounded-lg bg-gray-100" />
         </div>
       </div>
 

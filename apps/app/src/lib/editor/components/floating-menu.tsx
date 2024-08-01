@@ -126,7 +126,12 @@ export function FloatingMenu(props: Props) {
     >
       <PopoverContent class="flex flex-col w-[30rem]">
         <>
-          <form method="post" action={editTemplateElement} autocomplete="off">
+          <form
+            method="post"
+            class="w-full"
+            action={editTemplateElement}
+            autocomplete="off"
+          >
             <input type="hidden" name="projectId" value={props.projectId} />
 
             <input
@@ -139,7 +144,7 @@ export function FloatingMenu(props: Props) {
               type="text"
               autofocus
               name="prompt"
-              class="pr-2 gap-1"
+              class="gap-1 w-full"
               placeholder="Make this bold..."
               loading={action.pending}
               trailing={() => (

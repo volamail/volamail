@@ -1,15 +1,17 @@
+import {
+  Show,
+  type JSX,
+  splitProps,
+  createUniqueId,
+  type ComponentProps,
+} from "solid-js";
 import { LoaderIcon } from "lucide-solid";
 import { type VariantProps, tv } from "tailwind-variants";
-import {
-  createUniqueId,
-  Show,
-  splitProps,
-  type ComponentProps,
-  type JSX,
-} from "solid-js";
+
+import { clsx } from "../utils/cn";
 
 const inputVariants = tv({
-  base: "flex flex-col gap-1 grow",
+  base: "inline-flex flex-col gap-1",
   slots: {
     wrapper:
       'w-full relative has-[:disabled]:bg-gray-100 has-[input:focus]:outline outline-blue-600 flex gap-2 px-2.5 items-center bg-white border rounded-lg border-gray-300 has-[input[aria-invalid="true"]]:border-red-500',
@@ -58,7 +60,11 @@ export function Input(props: Props) {
   const id = local.id || createUniqueId();
 
   return (
-    <div class={inputVariants().base(local.classes?.container)}>
+    <div
+      class={inputVariants().base({
+        class: clsx(local.classes?.container, local.class),
+      })}
+    >
       <Show when={local.label}>
         <label class="text-sm font-medium" for={id}>
           {local.label}

@@ -5,9 +5,10 @@ import {
   type RouteDefinition,
   type RouteSectionProps,
 } from "@solidjs/router";
+import * as v from "valibot";
 import { Title } from "@solidjs/meta";
-import { createEffect, createSignal, Suspense } from "solid-js";
 import { CircleCheckBigIcon, SendIcon } from "lucide-solid";
+import { createEffect, createSignal, Show, Suspense } from "solid-js";
 
 import { Input } from "~/lib/ui/components/input";
 import { sendTestMail } from "~/lib/mail/actions";
@@ -15,7 +16,7 @@ import { Button } from "~/lib/ui/components/button";
 import { getTemplate } from "~/lib/templates/queries";
 import { editTemplate } from "~/lib/templates/actions";
 import { showToast } from "~/lib/ui/components/toasts";
-import { Textarea } from "~/lib/ui/components/textarea";
+import { createForm } from "~/lib/ui/hooks/createForm";
 import { Editor } from "~/lib/editor/components/editor";
 import { useMutation } from "~/lib/ui/hooks/useMutation";
 import { Breadcrumbs } from "~/lib/ui/components/breadcrumbs";
@@ -103,61 +104,91 @@ export default function EditTemplate(props: RouteSectionProps) {
       </div>
 
       <Suspense fallback={<EditorSkeleton />}>
-        <div class="flex h-full min-h-0">
-          <form
-            method="post"
-            id="edit-email-form"
-            action={editTemplate}
-            class="bg-white h-full border-r p-4 w-72 gap-4 flex flex-col shrink-0"
-          >
-            <div class="flex flex-col grow gap-4">
-              <input
-                type="hidden"
-                name="projectId"
-                value={props.params.projectId}
+        <Show when={template()}>
+          {(template) => (
+            <div class="flex h-full min-h-0">
+              <Sidebar
+                projectId={props.params.projectId}
+                template={template()}
+                html={html()!}
               />
-              <input type="hidden" name="id" value={props.params.id} />
-
-              <div class="flex flex-col gap-1">
-                <label for="slug" class="font-medium text-sm">
-                  Slug
-                </label>
-                <Input
-                  type="text"
-                  placeholder="welcome-email"
-                  name="slug"
-                  id="slug"
-                  required
-                  value={template()?.slug}
-                />
-              </div>
-
-              <div class="flex flex-col gap-1">
-                <label for="subject" class="font-medium text-sm">
-                  Subject
-                </label>
-                <Textarea
-                  placeholder="Welcome to our service..."
-                  name="subject"
-                  id="subject"
-                  resizeable
-                  required
-                  value={template()?.subject}
-                />
-              </div>
-
-              <input type="hidden" name="body" value={html()} />
+              <Editor
+                value={html()}
+                onChange={setHtml}
+                projectId={props.params.projectId}
+                templateId={props.params.id}
+              />
             </div>
-          </form>
-
-          <Editor
-            value={html()}
-            onChange={setHtml}
-            projectId={props.params.projectId}
-            templateId={props.params.id}
-          />
-        </div>
+          )}
+        </Show>
       </Suspense>
     </main>
+  );
+}
+
+type SidebarProps = {
+  projectId: string;
+  template: {
+    id: string;
+    slug: string;
+    subject: string;
+  };
+  html: string;
+};
+
+function Sidebar(props: SidebarProps) {
+  const form = createForm<{
+    slug: string;
+    subject: string;
+  }>({
+    defaultValues: {
+      slug: props.template.slug,
+      subject: props.template.subject,
+    },
+    schema: v.object({
+      slug: v.pipe(
+        v.string(),
+        v.minLength(2, "Slug is too short"),
+        v.maxLength(32, "Slug is too long"),
+        v.regex(
+          /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
+          "Slug can only contain lowercase letters, numbers and hyphens"
+        )
+      ),
+      subject: v.string(),
+    }),
+  });
+
+  return (
+    <form
+      onSubmit={form.handleSubmit}
+      method="post"
+      id="edit-email-form"
+      action={editTemplate}
+      class="bg-white h-full border-r p-4 w-72 gap-4 flex flex-col shrink-0"
+    >
+      <div class="flex flex-col grow gap-4">
+        <input type="hidden" name="projectId" value={props.projectId} />
+        <input type="hidden" name="id" value={props.template.id} />
+
+        <Input
+          {...form.getFieldProps("slug")}
+          label="Slug"
+          type="text"
+          placeholder="welcome-email"
+          required
+        />
+
+        <Input
+          {...form.getFieldProps("subject")}
+          label="Subject"
+          placeholder="Welcome to our service..."
+          resizeable
+          required
+        />
+
+        <input type="hidden" name="body" value={props.html} />
+      </div>
+    </form>
   );
 }
