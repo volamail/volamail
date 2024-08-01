@@ -233,14 +233,14 @@ export function Editor(props: Props) {
             <Tabs.List class="border border-gray-300 inline-flex self-start text-sm items-center bg-gray-200 rounded-lg p-1">
               <Tabs.Trigger
                 value="preview"
-                class="rounded-lg inline-flex transition-colors gap-1.5 items-center data-[selected]:bg-gray-100 px-3 py-1 data-[selected]:font-medium data-[selected]:text-black text-gray-600"
+                class="cursor-default rounded-lg hover:text-gray-800 inline-flex transition-colors gap-1.5 items-center data-[selected]:bg-gray-100 px-3 py-1 data-[selected]:font-medium data-[selected]:text-black text-gray-500"
               >
                 Preview
                 <EyeIcon class="size-4" />
               </Tabs.Trigger>
               <Tabs.Trigger
                 value="html"
-                class="rounded-lg inline-flex transition-colors gap-1.5 items-center data-[selected]:bg-gray-100 px-3 py-1 data-[selected]:font-medium data-[selected]:text-black text-gray-600"
+                class="cursor-default hover:text-gray-800 rounded-lg inline-flex transition-colors gap-1.5 items-center data-[selected]:bg-gray-100 px-3 py-1 data-[selected]:font-medium data-[selected]:text-black text-gray-500"
               >
                 HTML
                 <CodeIcon class="size-4" />
@@ -322,7 +322,7 @@ export function Editor(props: Props) {
           >
             <div
               ref={handleTemplatePreviewMounted}
-              class="revert-tailwind h-full"
+              class="revert-tailwind h-full [&>*]:cursor-pointer"
               id="editor-view"
               innerHTML={displayedCode()}
             />
