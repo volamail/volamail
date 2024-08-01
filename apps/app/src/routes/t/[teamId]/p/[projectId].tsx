@@ -1,47 +1,49 @@
 import {
-  A,
-  type RouteDefinition,
-  createAsync,
-  useParams,
-  useSubmission,
-} from "@solidjs/router";
+  Show,
+  type JSX,
+  splitProps,
+  type ComponentProps,
+  createSignal,
+} from "solid-js";
 import {
-  AtSignIcon,
-  BookOpenIcon,
-  CreditCardIcon,
+  KeyIcon,
   GlobeIcon,
   ImageIcon,
-  KeyIcon,
-  LanguagesIcon,
-  LogOutIcon,
-  MessageCircleQuestionIcon,
-  SettingsIcon,
-  Table2Icon,
   UsersIcon,
+  AtSignIcon,
+  LogOutIcon,
+  Table2Icon,
+  BookOpenIcon,
+  SettingsIcon,
+  LanguagesIcon,
+  CreditCardIcon,
+  PanelLeftCloseIcon,
+  PanelRightCloseIcon,
+  MessageCircleQuestionIcon,
 } from "lucide-solid";
 import {
-  type ComponentProps,
-  createMemo,
-  type JSX,
-  Show,
-  splitProps,
-} from "solid-js";
+  A,
+  useParams,
+  createAsync,
+  useSubmission,
+  type RouteDefinition,
+} from "@solidjs/router";
 import { twMerge } from "tailwind-merge";
-
-import { logout } from "~/lib/auth/actions";
-import { getTeam } from "~/lib/teams/loaders";
-import { getUserTeams } from "~/lib/teams/loaders";
-import { getCurrentUser } from "~/lib/auth/queries";
-import { Avatar } from "~/lib/ui/components/avatar";
-import { Button, buttonVariants } from "~/lib/ui/components/button";
-import { ProjectSelector } from "~/lib/projects/components/project-selector";
 import { tv, VariantProps } from "tailwind-variants";
+
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "~/lib/ui/components/tooltip";
+import { logout } from "~/lib/auth/actions";
+import { getTeam } from "~/lib/teams/loaders";
+import { getUserTeams } from "~/lib/teams/loaders";
+import { getCurrentUser } from "~/lib/auth/queries";
+import { Avatar } from "~/lib/ui/components/avatar";
 import { isSelfHosted } from "~/lib/environment/utils";
+import { Button, buttonVariants } from "~/lib/ui/components/button";
+import { ProjectSelector } from "~/lib/projects/components/project-selector";
 
 type Props = {
   children: JSX.Element;
@@ -68,13 +70,42 @@ export default function DashboardLayout(props: Props) {
 
   const logoutAction = useSubmission(logout);
 
+  const [sidebarExpanded, setSidebarExpanded] = createSignal(true);
+
   return (
     <div class="flex">
-      <nav class="bg-gray-100 overflow-y-auto border-r h-dvh flex flex-col w-64 shrink-0">
-        <div class="grow p-4 w-full flex flex-col">
+      <div
+        class="h-dvh bg-gray-100 p-3 border-r"
+        classList={{ hidden: sidebarExpanded() }}
+      >
+        <Button
+          icon={() => <PanelRightCloseIcon class="size-4" />}
+          variant="ghost"
+          aria-label="Open sidebar"
+          even
+          onClick={() => setSidebarExpanded(true)}
+        />
+      </div>
+      <nav
+        class="bg-gray-100 overflow-y-auto border-r h-dvh flex-col w-64 shrink-0"
+        classList={{
+          flex: sidebarExpanded(),
+          hidden: !sidebarExpanded(),
+        }}
+      >
+        <div class="grow p-3 w-full flex flex-col">
           <div class="flex flex-col gap-4">
             <Show when={params.projectId} keyed>
-              <ProjectSelector />
+              <div class="flex gap-2 items-center">
+                <ProjectSelector />
+                <Button
+                  aria-label="Close sidebar"
+                  icon={() => <PanelLeftCloseIcon class="size-4" />}
+                  variant="ghost"
+                  even
+                  onClick={() => setSidebarExpanded(false)}
+                />
+              </div>
             </Show>
 
             <hr class="w-full border-gray-200" />

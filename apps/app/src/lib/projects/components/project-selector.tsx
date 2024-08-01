@@ -50,7 +50,7 @@ export function ProjectSelector() {
       <PopoverTrigger
         class={buttonVariants({
           variant: "outline",
-          class: "rounded-md justify-between hover:bg-white bg-gray-50",
+          class: "grow rounded-md justify-between hover:bg-white bg-gray-50",
         })}
       >
         {currentProject()?.name}
@@ -89,6 +89,7 @@ export function ProjectSelector() {
               as={reachedMaxTeams() ? Button : A}
               href="/create-team"
               class={buttonVariants({
+                variant: "outline",
                 class: "justify-center rounded-md w-full",
               })}
               // @ts-expect-error too polymorphic
