@@ -12,6 +12,7 @@ import { requireUser } from "~/lib/auth/utils";
 import { parseFormData } from "../server-utils";
 import generatePrompt from "./prompts/generate.txt?raw";
 import editPrompt from "./prompts/edit.txt?raw";
+import inlineEditPrompt from "./prompts/inline-edit.txt?raw";
 import { requireUserToBeMemberOfProject } from "~/lib/projects/utils";
 
 export const createTemplate = action(async (formData: FormData) => {
@@ -119,7 +120,8 @@ export const generateTemplate = action(async (formData: FormData) => {
 
   const result = await generateObject({
     model: await getModelForTeam(meta.project.team.id),
-    prompt: `${generatePrompt}\nPrompt: ${
+    system: generatePrompt,
+    prompt: `Prompt: ${
       payload.image ? `Using the image with URL ${payload.image}, ` : ""
     }${payload.prompt}`,
     schema: z.object({
@@ -134,6 +136,8 @@ export const generateTemplate = action(async (formData: FormData) => {
 
 export const editHtmlTemplate = action(async (formData: FormData) => {
   "use server";
+
+  console.log("EDITING HTML TEMPLATE");
 
   const user = requireUser();
 
@@ -154,7 +158,8 @@ export const editHtmlTemplate = action(async (formData: FormData) => {
 
   const result = await generateText({
     model: await getModelForTeam(meta.project.team.id),
-    prompt: `${editPrompt}\nHTML:${payload.html}\nPrompt:${
+    system: editPrompt,
+    prompt: `HTML: ${payload.html}\nPrompt: ${
       payload.image ? `Using the image with URL ${payload.image}, ` : ""
     }${payload.prompt}`,
   });
@@ -183,15 +188,11 @@ export const editTemplateElement = action(async (formData: FormData) => {
 
   const result = await generateText({
     model: await getModelForTeam(meta.project.team.id),
-    system:
-      "You are an HTML email editor. You will be give a piece of HTML code taken from an email and the user's prompt. Your task is to apply the changes required by the user to that HTML and return the result. Make sure to only return HTML, no backticks, no markdown, just the modified HTML. Remember that HTML must be old e-mail compatible, so use tables for layouts. Remember the <style> tag doesn't work in email clients, so use inline styles on the elements instead.",
-    messages: [
-      {
-        role: "user",
-        content: `html:${payload.element}\nprompt:${payload.prompt}`,
-      },
-    ],
+    system: inlineEditPrompt,
+    prompt: `HTML:${payload.element}\nPrompt:${payload.prompt}`,
   });
+
+  console.log(result.text);
 
   return {
     code: result.text,

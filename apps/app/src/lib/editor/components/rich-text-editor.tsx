@@ -63,7 +63,6 @@ export default function RichTextEditor(props: Props) {
           types: ["textStyle", "heading", "paragraph", "link"],
         }),
       ],
-      enableContentCheck: false,
       content: props.defaultValue,
       onUpdate({ editor }) {
         setEditor(editor);

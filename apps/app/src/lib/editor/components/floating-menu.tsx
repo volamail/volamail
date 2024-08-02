@@ -1,6 +1,5 @@
 import {
   LinkIcon,
-  TypeIcon,
   Trash2Icon,
   SparklesIcon,
   PaintBucketIcon,
@@ -37,11 +36,13 @@ export function FloatingMenu(props: Props) {
   const action = useMutation({
     action: editTemplateElement,
     onSuccess(result) {
+      props.element.outerHTML = result.code;
+
       props.onComplete(result.code);
     },
     onError(e) {
       showToast({
-        title: "Unable to edit element",
+        title: e.statusMessage || "Unable to edit element",
         variant: "error",
       });
     },
@@ -65,16 +66,11 @@ export function FloatingMenu(props: Props) {
     const elements: Array<JSX.Element> = [];
 
     if (
-      (props.element instanceof HTMLParagraphElement ||
-        props.element instanceof HTMLHeadingElement ||
-        props.element instanceof HTMLAnchorElement ||
-        props.element instanceof HTMLTableCellElement) &&
-      elementHasOnlyText(props.element)
+      props.element instanceof HTMLParagraphElement ||
+      props.element instanceof HTMLHeadingElement ||
+      props.element instanceof HTMLAnchorElement
     ) {
-      const contents =
-        props.element instanceof HTMLTableCellElement
-          ? props.element.innerHTML
-          : props.element.outerHTML;
+      const contents = props.element.outerHTML;
 
       elements.push(
         <RichTextEditor
@@ -185,11 +181,7 @@ export function FloatingMenu(props: Props) {
               }
 
               if (formData.get("contents")) {
-                if (props.element instanceof HTMLTableCellElement) {
-                  element.innerHTML = formData.get("contents") as string;
-                } else {
-                  element.outerHTML = formData.get("contents") as string;
-                }
+                element.outerHTML = formData.get("contents") as string;
               }
 
               if (formData.get("textColor")) {
@@ -281,24 +273,6 @@ export function FloatingMenu(props: Props) {
       </PopoverContent>
     </PopoverRoot>
   );
-}
-
-function elementHasOnlyText(el: HTMLElement) {
-  if (
-    el instanceof HTMLSpanElement ||
-    el instanceof HTMLParagraphElement ||
-    el instanceof HTMLHeadingElement
-  ) {
-    return true;
-  }
-
-  for (const child of el.children) {
-    if (!(child instanceof HTMLSpanElement)) {
-      return false;
-    }
-  }
-
-  return true;
 }
 
 function getComputedElementBackground(element: HTMLElement) {
