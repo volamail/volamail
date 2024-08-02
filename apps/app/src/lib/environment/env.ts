@@ -24,6 +24,7 @@ function getValidatedEnv() {
       v.object({
         VITE_SELF_HOSTED: v.literal("false"),
         ADMIN_ID: v.optional(v.string()),
+        POSTHOG_API_KEY: v.string(),
         STRIPE_SECRET_KEY: v.string(),
         STRIPE_WEBHOOK_SECRET: v.string(),
         STRIPE_PRO_PLAN_ID: v.string(),

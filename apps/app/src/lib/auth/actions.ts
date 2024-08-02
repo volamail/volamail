@@ -13,6 +13,7 @@ import { requireUser } from "./utils";
 import { sendMail } from "../mail/send";
 import { env } from "../environment/env";
 import { createGithubAuth } from "./github";
+import * as analytics from "~/lib/analytics";
 import { parseFormData } from "../server-utils";
 import { getUserTeams } from "../teams/queries";
 import { createUser } from "../users/mutations";
@@ -199,6 +200,11 @@ export const verifyEmailOtp = action(async (formData: FormData) => {
     defaultProjectId,
     defaultTeamId,
   } = await createUser({
+    email: body.email,
+  });
+
+  analytics.captureUserRegisteredEvent({
+    id: userId,
     email: body.email,
   });
 

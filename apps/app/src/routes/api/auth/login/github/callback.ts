@@ -5,15 +5,16 @@ import {
   appendHeader,
   sendRedirect,
 } from "vinxi/http";
-import { and, eq } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { OAuth2RequestError } from "arctic";
 import type { APIEvent } from "@solidjs/start/server";
 
 import { db } from "~/lib/db";
 import { lucia } from "~/lib/auth/lucia";
-import { createGithubAuth } from "~/lib/auth/github";
-import { createUser } from "~/lib/users/mutations";
+import * as analytics from "~/lib/analytics";
 import { usersTable } from "~/lib/db/schema";
+import { createUser } from "~/lib/users/mutations";
+import { createGithubAuth } from "~/lib/auth/github";
 
 export async function GET({ nativeEvent }: APIEvent) {
   const query = getQuery(nativeEvent);
@@ -88,6 +89,11 @@ export async function GET({ nativeEvent }: APIEvent) {
       defaultProjectId,
       defaultTeamId,
     } = await createUser({ email: userEmail, githubId: githubUser.id });
+
+    analytics.captureUserRegisteredEvent({
+      id: userId,
+      email: userEmail,
+    });
 
     const session = await lucia.createSession(userId, {});
 

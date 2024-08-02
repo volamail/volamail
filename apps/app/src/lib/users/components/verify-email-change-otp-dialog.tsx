@@ -1,6 +1,5 @@
 import { ChevronRightIcon } from "lucide-solid";
-import { verifyEmailChangeOtp } from "~/lib/auth/actions";
-import { Button } from "~/lib/ui/components/button";
+
 import {
   Dialog,
   DialogContent,
@@ -13,8 +12,10 @@ import {
   OTPFieldInput,
   OTPFieldSlot,
 } from "~/lib/ui/components/otp-field";
+import { Button } from "~/lib/ui/components/button";
 import { showToast } from "~/lib/ui/components/toasts";
 import { useMutation } from "~/lib/ui/hooks/useMutation";
+import { verifyEmailChangeOtp } from "~/lib/auth/actions";
 
 type Props = {
   open?: boolean;
@@ -34,7 +35,6 @@ export function VerifyEmailChangeOtpDialog(props: Props) {
       props.onOpenChange?.(false);
     },
     onError(e) {
-      console.log(e);
       showToast({
         title: e.statusMessage || "Unable to verify code",
         variant: "error",
