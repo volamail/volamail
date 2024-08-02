@@ -69,6 +69,11 @@ export async function GET({ nativeEvent }: APIEvent) {
           .where(eq(usersTable.id, existingUser.id));
       }
 
+      analytics.captureUserLoggedInEvent({
+        id: existingUser.id,
+        email: existingUser.email,
+      });
+
       const session = await lucia.createSession(existingUser.id, {});
 
       appendHeader(

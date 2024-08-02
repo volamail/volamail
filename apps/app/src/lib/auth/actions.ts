@@ -169,6 +169,11 @@ export const verifyEmailOtp = action(async (formData: FormData) => {
       getUserTeams(existingUser.id),
     ]);
 
+    analytics.captureUserLoggedInEvent({
+      id: existingUser.id,
+      email: existingUser.email,
+    });
+
     appendHeader(
       nativeEvent,
       "Set-Cookie",
@@ -176,7 +181,6 @@ export const verifyEmailOtp = action(async (formData: FormData) => {
     );
 
     if (body.to) {
-      console.log("FOUND BODY.TO");
       throw redirect(body.to);
     }
 

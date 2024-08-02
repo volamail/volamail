@@ -8,6 +8,16 @@ const client =
       })
     : null;
 
+export function captureUserLoggedInEvent(user: { id: string; email: string }) {
+  client?.capture({
+    distinctId: user.id,
+    event: "user_logged_in",
+    properties: {
+      email: user.email,
+    },
+  });
+}
+
 export function captureUserRegisteredEvent(user: {
   id: string;
   email: string;
