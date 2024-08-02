@@ -4,7 +4,7 @@ import { env } from "~/lib/environment/env";
 const client =
   "POSTHOG_API_KEY" in env
     ? new PostHog(env.POSTHOG_API_KEY, {
-        host: "https://app.posthog.com",
+        host: "https://eu.i.posthog.com",
       })
     : null;
 
