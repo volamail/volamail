@@ -11,8 +11,9 @@ import { createSignal, onMount, Show } from "solid-js";
 import ColorPicker from "./color-picker";
 import { Margin } from "../extensions/margin";
 import { Padding } from "../extensions/padding";
-import { FontSize } from "../extensions/fontSize";
-import { BackgroundColor } from "../extensions/backgroundColor";
+import { FontSize } from "../extensions/font-size";
+import { BackgroundColor } from "../extensions/background-color";
+import { BorderRadius } from "../extensions/border-radius";
 
 type Props = {
   defaultValue?: string;
@@ -51,6 +52,9 @@ export default function RichTextEditor(props: Props) {
           types: ["textStyle", "heading", "paragraph", "link"],
         }),
         Padding.configure({
+          types: ["textStyle", "heading", "paragraph", "link"],
+        }),
+        BorderRadius.configure({
           types: ["textStyle", "heading", "paragraph", "link"],
         }),
         Link.configure({

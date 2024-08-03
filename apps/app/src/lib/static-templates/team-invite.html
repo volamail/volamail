@@ -1,4 +1,4 @@
-<body bgcolor="#ffffff" style="background-color: #ffffff">
+<body style="background-color: #ffffff; color: #000000">
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
     <tbody>
       <tr>
@@ -44,8 +44,9 @@
                   style="
                     font-family: Helvetica, Arial, sans-serif;
                     font-size: 24px;
-                    color: #000000;
+                    color: rgb(0, 0, 0);
                     padding-top: 20px;
+                    background-color: rgba(0, 0, 0, 0);
                   "
                 >
                   You've been invited to join {{team_name}}
@@ -56,38 +57,56 @@
                   style="
                     font-family: Helvetica, Arial, sans-serif;
                     font-size: 16px;
-                    color: #666666;
-                    padding-top: 15px;
+                    color: rgb(128, 128, 128);
+                    padding-top: 10px;
+                    background-color: rgba(0, 0, 0, 0);
                   "
                 >
-                  Click the link below to sign in to Volamail and accept the
-                  invitation.
+                  Click the following link to login to Volamail and start
+                  collaborating.
+                </td>
+              </tr>
+              <tr>
+                <td style="padding-top: 20px; text-align: left">
+                  <div style="margin-bottom: 20px">
+                    <table>
+                      <tbody>
+                        <tr>
+                          <td>
+                            <a
+                              href="{{login_link}}"
+                              style="
+                                font-family: Helvetica, Arial, sans-serif;
+                                font-size: 18px;
+                                color: #ffffff;
+                                margin: 10px 0 20px;
+                                background-color: #000000;
+                                padding: 10px 15px 10px 15px;
+                                display: inline-block;
+                                border-radius: 10px;
+                                text-align: center;
+                              "
+                              >Join {{team_name}}</a
+                            >
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 </td>
               </tr>
               <tr>
                 <td
                   style="
-                    padding-top: 60px;
-                    text-align: left;
-                    margin-bottom: 20px;
+                    border-top: 1px solid #ccc;
+                    padding-top: 20px;
+                    font-family: Helvetica, Arial, sans-serif;
+                    font-size: 14px;
+                    color: #808080;
                   "
                 >
-                  <a
-                    href="{{link}}"
-                    style="
-                      font-family: Helvetica, Arial, sans-serif;
-                      font-size: 16px;
-                      color: #ffffff;
-                      text-decoration: none;
-                      background-color: #000000;
-                      padding: 10px 20px;
-                      border-radius: 5px;
-                      text-align: left;
-                    "
-                    data-selected="true"
-                  >
-                    Join {{team_name}}
-                  </a>
+                  Volamail is a product by VLK - Via Martini 31 Iglesias 09016
+                  Italy - P. IVA 04081440929
                 </td>
               </tr>
             </tbody>
