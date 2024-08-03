@@ -86,7 +86,7 @@ export function ImagePicker(props: Props) {
           <div class="absolute bottom-0.5 right-0.5 size-2 bg-blue-600 rounded-full" />
         </Show>
       </PopoverTrigger>
-      <PopoverContent class="p-2 w-64">
+      <PopoverContent class="p-2 w-72">
         <div class="flex flex-col border rounded-lg border-gray-300 overflow-hidden">
           <form
             action={addImage}
@@ -99,7 +99,7 @@ export function ImagePicker(props: Props) {
               name="file"
               required
               accept="image/png, image/jpeg"
-              class="file:rounded-md file:border-0 file:hover:bg-gray-300 transition-colors rounded-md"
+              class="min-w-0 file:rounded-md file:border-0 file:hover:bg-gray-300 transition-colors rounded-md"
             />
             <Button
               type="submit"

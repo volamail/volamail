@@ -6,6 +6,7 @@ import {
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogTrigger,
+  AlertDialogCloseButton,
 } from "~/lib/ui/components/alert-dialog";
 import { deleteImage } from "../actions";
 import { Button } from "~/lib/ui/components/button";
@@ -63,15 +64,20 @@ export function DeleteImageDialog(props: Props) {
           <input type="hidden" name="projectId" value={props.projectId} />
           <input type="hidden" name="id" value={props.id} />
 
-          <Button
-            type="submit"
-            color="destructive"
-            class="self-end"
-            loading={deleteImageMutation.pending}
-            icon={() => <Trash2Icon class="size-4" />}
-          >
-            Delete file
-          </Button>
+          <div class="flex gap-2 justify-end">
+            <AlertDialogCloseButton as={Button} variant="outline">
+              Cancel
+            </AlertDialogCloseButton>
+            <Button
+              type="submit"
+              color="destructive"
+              class="self-end"
+              loading={deleteImageMutation.pending}
+              icon={() => <Trash2Icon class="size-4" />}
+            >
+              Delete file
+            </Button>
+          </div>
         </form>
       </AlertDialogContent>
     </AlertDialog>

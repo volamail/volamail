@@ -146,6 +146,8 @@ const AlertDialogDescription = <T extends ValidComponent = "p">(
   );
 };
 
+const AlertDialogCloseButton = AlertDialogPrimitive.CloseButton;
+
 export {
   AlertDialog,
   AlertDialogTrigger,
@@ -154,4 +156,5 @@ export {
   AlertDialogFooter,
   AlertDialogTitle,
   AlertDialogDescription,
+  AlertDialogCloseButton,
 };

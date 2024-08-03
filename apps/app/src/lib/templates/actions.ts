@@ -137,8 +137,6 @@ export const generateTemplate = action(async (formData: FormData) => {
 export const editHtmlTemplate = action(async (formData: FormData) => {
   "use server";
 
-  console.log("EDITING HTML TEMPLATE");
-
   const user = requireUser();
 
   const payload = await parseFormData(
@@ -191,8 +189,6 @@ export const editTemplateElement = action(async (formData: FormData) => {
     system: inlineEditPrompt,
     prompt: `HTML:${payload.element}\nPrompt:${payload.prompt}`,
   });
-
-  console.log(result.text);
 
   return {
     code: result.text,
