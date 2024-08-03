@@ -1,13 +1,14 @@
+import { createSignal } from "solid-js";
 import { Table2Icon } from "lucide-solid";
+
+import { PromptInput } from "./prompt-input";
+import { PasteHtmlButton } from "./paste-html-button";
+import { showToast } from "~/lib/ui/components/toasts";
+import { useMutation } from "~/lib/ui/hooks/useMutation";
 import { generateTemplate } from "~/lib/templates/actions";
 import { Dialog, DialogTrigger } from "~/lib/ui/components/dialog";
-import { ImportExistingEmailDialogContents } from "./import-existing-email-dialog";
-import { PasteHtmlButton } from "./paste-html-button";
-import { useMutation } from "~/lib/ui/hooks/useMutation";
-import { showToast } from "~/lib/ui/components/toasts";
-import { createSignal } from "solid-js";
-import { PromptInput } from "./prompt-input";
 import { GridBgContainer } from "~/lib/ui/components/grid-bg-container";
+import { ImportExistingEmailDialogContents } from "~/lib/templates/components/import-existing-email-dialog";
 
 type Props = {
   projectId: string;

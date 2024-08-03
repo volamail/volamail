@@ -8,8 +8,6 @@ import {
   Suspense,
   lazy,
 } from "solid-js";
-import { Tabs } from "@kobalte/core/tabs";
-import quotedPrintable from "quoted-printable";
 import {
   EyeIcon,
   CodeIcon,
@@ -18,23 +16,25 @@ import {
   CloudDownloadIcon,
   LoaderIcon,
 } from "lucide-solid";
+import { Tabs } from "@kobalte/core/tabs";
+import quotedPrintable from "quoted-printable";
 
-import { FloatingMenu } from "./floating-menu";
-import { Button, buttonVariants } from "~/lib/ui/components/button";
-import { showToast } from "~/lib/ui/components/toasts";
-import { useMutation } from "~/lib/ui/hooks/useMutation";
-import { editHtmlTemplate } from "~/lib/templates/actions";
-import { ImportExistingEmailDialogContents } from "./import-existing-email-dialog";
-import { GridBgContainer } from "~/lib/ui/components/grid-bg-container";
-import { DeleteTemplateDialog } from "~/lib/templates/components/delete-template-dialog";
-import { Dialog, DialogTrigger } from "~/lib/ui/components/dialog";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "~/lib/ui/components/tooltip";
-import { Kbd } from "~/lib/ui/components/kbd";
 import { PromptInput } from "./prompt-input";
+import { Kbd } from "~/lib/ui/components/kbd";
+import { FloatingMenu } from "./floating-menu";
+import { showToast } from "~/lib/ui/components/toasts";
+import { useMutation } from "~/lib/ui/hooks/useMutation";
+import { editHtmlTemplate } from "~/lib/templates/actions";
+import { Dialog, DialogTrigger } from "~/lib/ui/components/dialog";
+import { Button, buttonVariants } from "~/lib/ui/components/button";
+import { GridBgContainer } from "~/lib/ui/components/grid-bg-container";
+import { DeleteTemplateDialog } from "~/lib/templates/components/delete-template-dialog";
+import { ImportExistingEmailDialogContents } from "../../templates/components/import-existing-email-dialog";
 
 type Props = {
   name?: string;
@@ -74,8 +74,6 @@ export function Editor(props: Props) {
       });
     },
     onError(e) {
-      console.log(e);
-
       showToast({
         title: "Unable to generate template",
         variant: "error",
