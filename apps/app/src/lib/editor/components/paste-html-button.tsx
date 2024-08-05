@@ -2,48 +2,79 @@ import { Show, createSignal } from "solid-js";
 import { ClipboardPasteIcon, LoaderIcon } from "lucide-solid";
 
 import { cn } from "~/lib/ui/utils/cn";
+import { showToast } from "~/lib/ui/components/toasts";
 
 type Props = {
   onPaste: (contents: string) => void;
 };
 
 export function PasteHtmlButton(props: Props) {
-  const [selected, setSelected] = createSignal(false);
+  const [pending, setPending] = createSignal(false);
+
+  async function handlePaste() {
+    setPending(true);
+
+    try {
+      const contents = await navigator.clipboard.readText();
+
+      if (!contents.startsWith("<body")) {
+        showToast({
+          title: "Unsupported HTML format",
+          variant: "error",
+        });
+
+        return;
+      }
+
+      props.onPaste(contents);
+    } catch (e) {
+      showToast({
+        title: "Couldn't read clipboard",
+        variant: "error",
+      });
+    } finally {
+      setPending(false);
+    }
+  }
 
   return (
     <button
       type="button"
       class={cn(
-        "font-medium cursor-default flex-1 rounded-lg bg-gray-200 shadow p-4 text-sm inline-flex gap-2 items-center transition-colors",
-        selected() && "bg-black text-white",
-        !selected() && "hover:bg-gray-300"
+        "cursor-default flex-1 rounded-lg bg-gray-200 shadow p-4 text-sm inline-flex flex-col gap-2 items-start transition-colors",
+        pending() && "bg-black text-white",
+        !pending() && "hover:bg-gray-300"
       )}
-      onFocusIn={() => {
-        setSelected(true);
-      }}
-      onBlur={() => setSelected(false)}
-      onPointerDown={(e) => {
-        if (selected() && e.target === document.activeElement) {
-          e.preventDefault();
-          (e.target as HTMLButtonElement).blur();
-        }
-      }}
-      onPaste={(e) => {
-        e.preventDefault();
-
-        props.onPaste(e.clipboardData?.getData("text") ?? "");
-      }}
+      onClick={handlePaste}
     >
       <ClipboardPasteIcon
         class={cn(
-          "size-8 bg-black text-white rounded-lg p-2",
-          selected() && "bg-white text-black"
+          "size-8 bg-black text-white rounded-lg p-2 shrink-0",
+          pending() && "bg-white text-black"
         )}
       />
-      <Show when={selected()} fallback="Paste HTML">
-        Waiting for paste...
-        <LoaderIcon class="size-4 animate-spin" />
-      </Show>
+
+      <div class="flex flex-col items-start text-left mt-1 gap-1">
+        <Show
+          when={pending()}
+          fallback={
+            <>
+              <p class="font-medium">Paste HTML</p>
+              <p class="text-xs text-gray-600">
+                Make sure to only include the &lt;body&gt; tag of the HTML
+              </p>
+            </>
+          }
+        >
+          <div class="flex gap-1 items-center">
+            <p class="font-medium">Waiting for permissions...</p>
+            <LoaderIcon class="size-4 animate-spin" />
+          </div>
+          <p class="text-xs text-gray-400">
+            Please allow permissions to access your clipboard
+          </p>
+        </Show>
+      </div>
     </button>
   );
 }

@@ -67,9 +67,14 @@ export function EditorStartingScreen(props: Props) {
 
             <div class="flex gap-4 max-w-3xl w-full">
               <Dialog>
-                <DialogTrigger class="font-medium cursor-default flex-1 rounded-lg bg-gray-200 shadow p-4 text-sm inline-flex gap-2 items-center hover:bg-gray-300 transition-colors">
+                <DialogTrigger class="cursor-default text-left flex-1 rounded-lg bg-gray-200 shadow p-4 text-sm inline-flex flex-col gap-2 items-start hover:bg-gray-300 transition-colors">
                   <Table2Icon class="size-8 bg-black text-white rounded-lg p-2" />
-                  Start from another email
+                  <div class="flex mt-1 flex-col items-start gap-1">
+                    <p class="font-medium">Start from another email</p>
+                    <p class="text-gray-500 text-xs">
+                      Choose a starting template from this project's emails.
+                    </p>
+                  </div>
                 </DialogTrigger>
 
                 <ImportExistingEmailDialogContents
