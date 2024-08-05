@@ -119,7 +119,10 @@ export const generateTemplate = action(async (formData: FormData) => {
   });
 
   const result = await generateObject({
-    model: await getModelForTeam(meta.project.team.id),
+    model: await getModelForTeam({
+      teamId: meta.project.team.id,
+      tier: "large",
+    }),
     system: generatePrompt,
     prompt: `Prompt: ${
       payload.image ? `Using the image with URL ${payload.image}, ` : ""
@@ -155,7 +158,10 @@ export const editHtmlTemplate = action(async (formData: FormData) => {
   });
 
   const result = await generateText({
-    model: await getModelForTeam(meta.project.team.id),
+    model: await getModelForTeam({
+      teamId: meta.project.team.id,
+      tier: "large",
+    }),
     system: editPrompt,
     prompt: `HTML: ${payload.html}\nPrompt: ${
       payload.image ? `Using the image with URL ${payload.image}, ` : ""
@@ -185,7 +191,10 @@ export const editTemplateElement = action(async (formData: FormData) => {
   });
 
   const result = await generateText({
-    model: await getModelForTeam(meta.project.team.id),
+    model: await getModelForTeam({
+      teamId: meta.project.team.id,
+      tier: "small",
+    }),
     system: inlineEditPrompt,
     prompt: `HTML:${payload.element}\nPrompt:${payload.prompt}`,
   });

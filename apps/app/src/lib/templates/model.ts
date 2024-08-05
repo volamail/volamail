@@ -8,14 +8,14 @@ import { env } from "../environment/env";
 export const llms = {
   "claude-3-haiku-20240307": createAnthropicModel("claude-3-haiku-20240307"),
   "claude-3-sonnet-20240229": createAnthropicModel("claude-3-sonnet-20240229"),
+  "claude-3-opus-20240229": createAnthropicModel("claude-3-opus-20240229"),
   "claude-3-5-sonnet-20240620": createAnthropicModel(
     "claude-3-5-sonnet-20240620"
   ),
-  "claude-3-opus-20240229": createAnthropicModel("claude-3-opus-20240229"),
-  "gpt-4o": createOpenAIModel("gpt-4o"),
-  "gpt-4-turbo": createOpenAIModel("gpt-4-turbo"),
   "gpt-3.5-turbo": createOpenAIModel("gpt-3.5-turbo"),
+  "gpt-4o": createOpenAIModel("gpt-4o"),
   "gpt-4": createOpenAIModel("gpt-4"),
+  "gpt-4-turbo": createOpenAIModel("gpt-4-turbo"),
   custom: createOpenAIModel(process.env.LLM as string),
 } as const;
 
@@ -34,13 +34,16 @@ function createAnthropicModel(model: string) {
     })(model);
 }
 
-export async function getModelForTeam(teamId: string) {
+export async function getModelForTeam(params: {
+  teamId: string;
+  tier: "small" | "large";
+}) {
   if (env.VITE_SELF_HOSTED === "true") {
     return llms[env.LLM]();
   }
 
   const team = await db.query.teamsTable.findFirst({
-    where: eq(teamsTable.id, teamId),
+    where: eq(teamsTable.id, params.teamId),
     with: {
       subscription: {
         columns: {
@@ -55,9 +58,10 @@ export async function getModelForTeam(teamId: string) {
     throw new Error("Team not found");
   }
 
-  if (team.subscription.tier === "FREE") {
-    return llms["claude-3-haiku-20240307"]();
-  }
+  const model =
+    params.tier === "small" || team.subscription.tier === "FREE"
+      ? "claude-3-haiku-20240307"
+      : "claude-3-sonnet-20240229";
 
-  return llms["claude-3-sonnet-20240229"]();
+  return llms[model]();
 }
