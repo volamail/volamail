@@ -22,7 +22,7 @@ importers:
         version: 0.0.34(zod@3.23.8)
       '@ark-ui/solid':
         specifier: ^3.5.0
-        version: 3.5.0(solid-js@1.8.17)
+        version: 3.5.0(solid-js@1.8.19)
       '@aws-sdk/client-s3':
         specifier: ^3.600.0
         version: 3.600.0
@@ -31,25 +31,25 @@ importers:
         version: 3.600.0
       '@corvu/otp-field':
         specifier: ^0.1.1
-        version: 0.1.1(solid-js@1.8.17)
+        version: 0.1.1(solid-js@1.8.19)
       '@kobalte/core':
         specifier: ^0.13.3
-        version: 0.13.3(solid-js@1.8.17)
+        version: 0.13.3(solid-js@1.8.19)
       '@lucia-auth/adapter-drizzle':
         specifier: ^1.0.7
         version: 1.0.7(lucia@3.2.0)
       '@solid-primitives/scheduled':
         specifier: ^1.4.3
-        version: 1.4.3(solid-js@1.8.17)
+        version: 1.4.3(solid-js@1.8.19)
       '@solidjs/meta':
         specifier: ^0.29.4
-        version: 0.29.4(solid-js@1.8.17)
+        version: 0.29.4(solid-js@1.8.19)
       '@solidjs/router':
         specifier: ^0.14.1
-        version: 0.14.1(solid-js@1.8.17)
+        version: 0.14.1(solid-js@1.8.19)
       '@solidjs/start':
         specifier: ^1.0.5
-        version: 1.0.5(rollup@4.18.0)(solid-js@1.8.17)(vinxi@0.3.12(@opentelemetry/api@1.9.0)(@types/node@20.14.6)(drizzle-orm@0.30.10(@opentelemetry/api@1.9.0)(@types/react@18.3.3)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1))(vite@5.3.1(@types/node@20.14.6)(terser@5.31.1))
+        version: 1.0.5(rollup@4.18.0)(solid-js@1.8.19)(vinxi@0.4.1(@opentelemetry/api@1.9.0)(@types/node@20.14.6)(drizzle-orm@0.30.10(@opentelemetry/api@1.9.0)(@types/react@18.3.3)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1))(vite@5.3.1(@types/node@20.14.6)(terser@5.31.1))
       '@tiptap/core':
         specifier: ^2.5.7
         version: 2.5.7(@tiptap/pm@2.5.7)
@@ -76,7 +76,7 @@ importers:
         version: 2.5.7(@tiptap/pm@2.5.7)
       ai:
         specifier: ^3.2.15
-        version: 3.2.15(react@18.3.1)(solid-js@1.8.17)(svelte@4.2.18)(vue@3.4.27(typescript@5.5.2))(zod@3.23.8)
+        version: 3.2.15(react@18.3.1)(solid-js@1.8.19)(svelte@4.2.18)(vue@3.4.27(typescript@5.5.2))(zod@3.23.8)
       arctic:
         specifier: ^1.9.1
         version: 1.9.1
@@ -94,7 +94,7 @@ importers:
         version: 3.2.0
       lucide-solid:
         specifier: ^0.378.0
-        version: 0.378.0(solid-js@1.8.17)
+        version: 0.378.0(solid-js@1.8.19)
       luxon:
         specifier: ^3.4.4
         version: 3.4.4
@@ -117,8 +117,8 @@ importers:
         specifier: ^1.6.6
         version: 1.6.6
       solid-js:
-        specifier: ^1.8.17
-        version: 1.8.17
+        specifier: ^1.8.19
+        version: 1.8.19
       stripe:
         specifier: ^16.1.0
         version: 16.1.0
@@ -135,8 +135,8 @@ importers:
         specifier: ^0.31.1
         version: 0.31.1
       vinxi:
-        specifier: ^0.3.12
-        version: 0.3.12(@opentelemetry/api@1.9.0)(@types/node@20.14.6)(drizzle-orm@0.30.10(@opentelemetry/api@1.9.0)(@types/react@18.3.3)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1)
+        specifier: ^0.4.1
+        version: 0.4.1(@opentelemetry/api@1.9.0)(@types/node@20.14.6)(drizzle-orm@0.30.10(@opentelemetry/api@1.9.0)(@types/react@18.3.3)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1)
       zod:
         specifier: ^3.23.8
         version: 3.23.8
@@ -167,7 +167,7 @@ importers:
         version: 8.4.38
       solid-devtools:
         specifier: ^0.30.1
-        version: 0.30.1(solid-js@1.8.17)(vite@5.3.1(@types/node@20.14.6)(terser@5.31.1))
+        version: 0.30.1(solid-js@1.8.19)(vite@5.3.1(@types/node@20.14.6)(terser@5.31.1))
       tailwindcss:
         specifier: ^3.4.4
         version: 3.4.4
@@ -4270,9 +4270,6 @@ packages:
     resolution: {integrity: sha512-Zf5H2Kxt2xjTvbJvP2ZWLEICxA6j+hAmMzIlypy4xcBg1vKVnx89Wy0GbS+kf5cwCVFFzdCFh2XSCFNULS6csw==}
     engines: {node: '>= 0.4'}
 
-  es-module-lexer@1.5.3:
-    resolution: {integrity: sha512-i1gCgmR9dCl6Vil6UKPI/trA69s08g/syhiDK9TG0Nf1RJjjFI+AzoWW7sPufzkgYAn861skuCwJa0pIIHYxvg==}
-
   es-module-lexer@1.5.4:
     resolution: {integrity: sha512-MVNK56NiMrOwitFB7cqDwq0CQutbw+0BvLshJSse0MUNU+y1FC3bUS/AQg7oUng+/wKrrki7JfmwtVHkVfPLlw==}
 
@@ -6127,8 +6124,18 @@ packages:
     peerDependencies:
       seroval: ^1.0
 
+  seroval-plugins@1.1.1:
+    resolution: {integrity: sha512-qNSy1+nUj7hsCOon7AO4wdAIo9P0jrzAMp18XhiOzA6/uO5TKtP7ScozVJ8T293oRIvi5wyCHSM4TrJo/c/GJA==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      seroval: ^1.0
+
   seroval@1.0.7:
     resolution: {integrity: sha512-n6ZMQX5q0Vn19Zq7CIKNIo7E75gPkGCFUEqDpa8jgwpYr/vScjqnQ6H09t1uIiZ0ZSK0ypEGvrYK2bhBGWsGdw==}
+    engines: {node: '>=10'}
+
+  seroval@1.1.1:
+    resolution: {integrity: sha512-rqEO6FZk8mv7Hyv4UCj3FD3b6Waqft605TLfsCe/BiaylRpyyMC0b+uA5TJKawX3KzMrdi3wsLbCaLplrQmBvQ==}
     engines: {node: '>=10'}
 
   serve-placeholder@2.0.2:
@@ -6223,6 +6230,9 @@ packages:
 
   solid-js@1.8.17:
     resolution: {integrity: sha512-E0FkUgv9sG/gEBWkHr/2XkBluHb1fkrHywUgA6o6XolPDCJ4g1HaLmQufcBBhiF36ee40q+HpG/vCZu7fLpI3Q==}
+
+  solid-js@1.8.19:
+    resolution: {integrity: sha512-h8z/TvTQYsf894LM9Iau/ZW2iAKrCzAWDwjPhMcXnonmW1OIIihc28wp82b1wwei1p81fH5+gnfNOe8RzLbDRQ==}
 
   solid-presence@0.1.7:
     resolution: {integrity: sha512-786JcN2PFCSKKOIQ7Zg0GZuy2vmtF8b78WZDbOIzzVOCcZF/ovZTCZOY11lUYiKqPCXxeLxh8kBLoFF1X42i9w==}
@@ -6798,8 +6808,8 @@ packages:
   vfile@6.0.1:
     resolution: {integrity: sha512-1bYqc7pt6NIADBJ98UiG0Bn/CHIVOoZ/IyEkqIruLg0mE1BKzkOXY2D6CSqQIcKqgadppE5lrxgWXJmXd7zZJw==}
 
-  vinxi@0.3.12:
-    resolution: {integrity: sha512-YU/Scild/Rdy6qwgdILYRlO99Wp8ti2CmlMlYioEg7lRtxAST5iCFjviDya+BYQDgc3Pugh4KzOypVwjZknF2A==}
+  vinxi@0.4.1:
+    resolution: {integrity: sha512-WGEYqIuJ2/P3sBoSVKsGvp/UKpW4wVSaAFdA18gthyMCEExN6nVteoA+Rv1wQFLKXTVL9JRpeGJjcLzcRRgGCA==}
     hasBin: true
 
   vite-plugin-inspect@0.7.42:
@@ -7110,11 +7120,11 @@ snapshots:
       react: 18.3.1
       zod: 3.23.8
 
-  '@ai-sdk/solid@0.0.11(solid-js@1.8.17)(zod@3.23.8)':
+  '@ai-sdk/solid@0.0.11(solid-js@1.8.19)(zod@3.23.8)':
     dependencies:
       '@ai-sdk/ui-utils': 0.0.9(zod@3.23.8)
     optionalDependencies:
-      solid-js: 1.8.17
+      solid-js: 1.8.19
     transitivePeerDependencies:
       - zod
 
@@ -7158,7 +7168,7 @@ snapshots:
 
   '@antfu/utils@0.7.8': {}
 
-  '@ark-ui/solid@3.5.0(solid-js@1.8.17)':
+  '@ark-ui/solid@3.5.0(solid-js@1.8.19)':
     dependencies:
       '@zag-js/accordion': 0.59.0
       '@zag-js/anatomy': 0.59.0
@@ -7190,7 +7200,7 @@ snapshots:
       '@zag-js/select': 0.59.0
       '@zag-js/signature-pad': 0.59.0
       '@zag-js/slider': 0.59.0
-      '@zag-js/solid': 0.59.0(solid-js@1.8.17)
+      '@zag-js/solid': 0.59.0(solid-js@1.8.19)
       '@zag-js/splitter': 0.59.0
       '@zag-js/switch': 0.59.0
       '@zag-js/tabs': 0.59.0
@@ -7200,7 +7210,7 @@ snapshots:
       '@zag-js/tooltip': 0.59.0
       '@zag-js/tree-view': 0.59.0
       '@zag-js/types': 0.59.0
-      solid-js: 1.8.17
+      solid-js: 1.8.19
 
   '@astrojs/check@0.7.0(typescript@5.4.5)':
     dependencies:
@@ -8061,15 +8071,15 @@ snapshots:
     dependencies:
       mime: 3.0.0
 
-  '@corvu/otp-field@0.1.1(solid-js@1.8.17)':
+  '@corvu/otp-field@0.1.1(solid-js@1.8.19)':
     dependencies:
-      '@corvu/utils': 0.3.1(solid-js@1.8.17)
-      solid-js: 1.8.17
+      '@corvu/utils': 0.3.1(solid-js@1.8.19)
+      solid-js: 1.8.19
 
-  '@corvu/utils@0.3.1(solid-js@1.8.17)':
+  '@corvu/utils@0.3.1(solid-js@1.8.19)':
     dependencies:
       '@floating-ui/dom': 1.6.5
-      solid-js: 1.8.17
+      solid-js: 1.8.19
 
   '@deno/shim-deno-test@0.5.0': {}
 
@@ -8565,26 +8575,26 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.1
       '@jridgewell/sourcemap-codec': 1.4.15
 
-  '@kobalte/core@0.13.3(solid-js@1.8.17)':
+  '@kobalte/core@0.13.3(solid-js@1.8.19)':
     dependencies:
       '@floating-ui/dom': 1.6.5
       '@internationalized/date': 3.5.4
       '@internationalized/number': 3.5.3
-      '@kobalte/utils': 0.9.0(solid-js@1.8.17)
-      solid-js: 1.8.17
-      solid-presence: 0.1.7(solid-js@1.8.17)
-      solid-prevent-scroll: 0.1.8(solid-js@1.8.17)
+      '@kobalte/utils': 0.9.0(solid-js@1.8.19)
+      solid-js: 1.8.19
+      solid-presence: 0.1.7(solid-js@1.8.19)
+      solid-prevent-scroll: 0.1.8(solid-js@1.8.19)
 
-  '@kobalte/utils@0.9.0(solid-js@1.8.17)':
+  '@kobalte/utils@0.9.0(solid-js@1.8.19)':
     dependencies:
-      '@solid-primitives/event-listener': 2.3.3(solid-js@1.8.17)
-      '@solid-primitives/keyed': 1.2.2(solid-js@1.8.17)
-      '@solid-primitives/map': 0.4.11(solid-js@1.8.17)
-      '@solid-primitives/media': 2.2.9(solid-js@1.8.17)
-      '@solid-primitives/props': 3.1.11(solid-js@1.8.17)
-      '@solid-primitives/refs': 1.0.8(solid-js@1.8.17)
-      '@solid-primitives/utils': 6.2.3(solid-js@1.8.17)
-      solid-js: 1.8.17
+      '@solid-primitives/event-listener': 2.3.3(solid-js@1.8.19)
+      '@solid-primitives/keyed': 1.2.2(solid-js@1.8.19)
+      '@solid-primitives/map': 0.4.11(solid-js@1.8.19)
+      '@solid-primitives/media': 2.2.9(solid-js@1.8.19)
+      '@solid-primitives/props': 3.1.11(solid-js@1.8.19)
+      '@solid-primitives/refs': 1.0.8(solid-js@1.8.19)
+      '@solid-primitives/utils': 6.2.3(solid-js@1.8.19)
+      solid-js: 1.8.19
 
   '@lucia-auth/adapter-drizzle@1.0.7(lucia@3.2.0)':
     dependencies:
@@ -9904,6 +9914,23 @@ snapshots:
       '@solid-primitives/static-store': 0.0.5(solid-js@1.8.17)
       '@solid-primitives/utils': 6.2.3(solid-js@1.8.17)
       solid-js: 1.8.17
+    optional: true
+
+  '@solid-devtools/debugger@0.23.4(solid-js@1.8.19)':
+    dependencies:
+      '@nothing-but/utils': 0.12.1
+      '@solid-devtools/shared': 0.13.2(solid-js@1.8.19)
+      '@solid-primitives/bounds': 0.0.118(solid-js@1.8.19)
+      '@solid-primitives/cursor': 0.0.112(solid-js@1.8.19)
+      '@solid-primitives/event-bus': 1.0.11(solid-js@1.8.19)
+      '@solid-primitives/event-listener': 2.3.3(solid-js@1.8.19)
+      '@solid-primitives/keyboard': 1.2.8(solid-js@1.8.19)
+      '@solid-primitives/platform': 0.1.2(solid-js@1.8.19)
+      '@solid-primitives/rootless': 1.4.5(solid-js@1.8.19)
+      '@solid-primitives/scheduled': 1.4.3(solid-js@1.8.19)
+      '@solid-primitives/static-store': 0.0.5(solid-js@1.8.19)
+      '@solid-primitives/utils': 6.2.3(solid-js@1.8.19)
+      solid-js: 1.8.19
 
   '@solid-devtools/shared@0.13.2(solid-js@1.8.17)':
     dependencies:
@@ -9917,6 +9944,20 @@ snapshots:
       '@solid-primitives/styles': 0.0.111(solid-js@1.8.17)
       '@solid-primitives/utils': 6.2.3(solid-js@1.8.17)
       solid-js: 1.8.17
+    optional: true
+
+  '@solid-devtools/shared@0.13.2(solid-js@1.8.19)':
+    dependencies:
+      '@solid-primitives/event-bus': 1.0.11(solid-js@1.8.19)
+      '@solid-primitives/event-listener': 2.3.3(solid-js@1.8.19)
+      '@solid-primitives/media': 2.2.9(solid-js@1.8.19)
+      '@solid-primitives/refs': 1.0.8(solid-js@1.8.19)
+      '@solid-primitives/rootless': 1.4.5(solid-js@1.8.19)
+      '@solid-primitives/scheduled': 1.4.3(solid-js@1.8.19)
+      '@solid-primitives/static-store': 0.0.5(solid-js@1.8.19)
+      '@solid-primitives/styles': 0.0.111(solid-js@1.8.19)
+      '@solid-primitives/utils': 6.2.3(solid-js@1.8.19)
+      solid-js: 1.8.19
 
   '@solid-primitives/bounds@0.0.118(solid-js@1.8.17)':
     dependencies:
@@ -9925,21 +9966,48 @@ snapshots:
       '@solid-primitives/static-store': 0.0.5(solid-js@1.8.17)
       '@solid-primitives/utils': 6.2.3(solid-js@1.8.17)
       solid-js: 1.8.17
+    optional: true
+
+  '@solid-primitives/bounds@0.0.118(solid-js@1.8.19)':
+    dependencies:
+      '@solid-primitives/event-listener': 2.3.3(solid-js@1.8.19)
+      '@solid-primitives/resize-observer': 2.0.25(solid-js@1.8.19)
+      '@solid-primitives/static-store': 0.0.5(solid-js@1.8.19)
+      '@solid-primitives/utils': 6.2.3(solid-js@1.8.19)
+      solid-js: 1.8.19
 
   '@solid-primitives/cursor@0.0.112(solid-js@1.8.17)':
     dependencies:
       '@solid-primitives/utils': 6.2.3(solid-js@1.8.17)
       solid-js: 1.8.17
+    optional: true
+
+  '@solid-primitives/cursor@0.0.112(solid-js@1.8.19)':
+    dependencies:
+      '@solid-primitives/utils': 6.2.3(solid-js@1.8.19)
+      solid-js: 1.8.19
 
   '@solid-primitives/event-bus@1.0.11(solid-js@1.8.17)':
     dependencies:
       '@solid-primitives/utils': 6.2.3(solid-js@1.8.17)
       solid-js: 1.8.17
+    optional: true
+
+  '@solid-primitives/event-bus@1.0.11(solid-js@1.8.19)':
+    dependencies:
+      '@solid-primitives/utils': 6.2.3(solid-js@1.8.19)
+      solid-js: 1.8.19
 
   '@solid-primitives/event-listener@2.3.3(solid-js@1.8.17)':
     dependencies:
       '@solid-primitives/utils': 6.2.3(solid-js@1.8.17)
       solid-js: 1.8.17
+    optional: true
+
+  '@solid-primitives/event-listener@2.3.3(solid-js@1.8.19)':
+    dependencies:
+      '@solid-primitives/utils': 6.2.3(solid-js@1.8.19)
+      solid-js: 1.8.19
 
   '@solid-primitives/keyboard@1.2.8(solid-js@1.8.17)':
     dependencies:
@@ -9947,15 +10015,23 @@ snapshots:
       '@solid-primitives/rootless': 1.4.5(solid-js@1.8.17)
       '@solid-primitives/utils': 6.2.3(solid-js@1.8.17)
       solid-js: 1.8.17
+    optional: true
 
-  '@solid-primitives/keyed@1.2.2(solid-js@1.8.17)':
+  '@solid-primitives/keyboard@1.2.8(solid-js@1.8.19)':
     dependencies:
-      solid-js: 1.8.17
+      '@solid-primitives/event-listener': 2.3.3(solid-js@1.8.19)
+      '@solid-primitives/rootless': 1.4.5(solid-js@1.8.19)
+      '@solid-primitives/utils': 6.2.3(solid-js@1.8.19)
+      solid-js: 1.8.19
 
-  '@solid-primitives/map@0.4.11(solid-js@1.8.17)':
+  '@solid-primitives/keyed@1.2.2(solid-js@1.8.19)':
     dependencies:
-      '@solid-primitives/trigger': 1.0.11(solid-js@1.8.17)
-      solid-js: 1.8.17
+      solid-js: 1.8.19
+
+  '@solid-primitives/map@0.4.11(solid-js@1.8.19)':
+    dependencies:
+      '@solid-primitives/trigger': 1.0.11(solid-js@1.8.19)
+      solid-js: 1.8.19
 
   '@solid-primitives/media@2.2.9(solid-js@1.8.17)':
     dependencies:
@@ -9964,20 +10040,40 @@ snapshots:
       '@solid-primitives/static-store': 0.0.8(solid-js@1.8.17)
       '@solid-primitives/utils': 6.2.3(solid-js@1.8.17)
       solid-js: 1.8.17
+    optional: true
+
+  '@solid-primitives/media@2.2.9(solid-js@1.8.19)':
+    dependencies:
+      '@solid-primitives/event-listener': 2.3.3(solid-js@1.8.19)
+      '@solid-primitives/rootless': 1.4.5(solid-js@1.8.19)
+      '@solid-primitives/static-store': 0.0.8(solid-js@1.8.19)
+      '@solid-primitives/utils': 6.2.3(solid-js@1.8.19)
+      solid-js: 1.8.19
 
   '@solid-primitives/platform@0.1.2(solid-js@1.8.17)':
     dependencies:
       solid-js: 1.8.17
+    optional: true
 
-  '@solid-primitives/props@3.1.11(solid-js@1.8.17)':
+  '@solid-primitives/platform@0.1.2(solid-js@1.8.19)':
     dependencies:
-      '@solid-primitives/utils': 6.2.3(solid-js@1.8.17)
-      solid-js: 1.8.17
+      solid-js: 1.8.19
+
+  '@solid-primitives/props@3.1.11(solid-js@1.8.19)':
+    dependencies:
+      '@solid-primitives/utils': 6.2.3(solid-js@1.8.19)
+      solid-js: 1.8.19
 
   '@solid-primitives/refs@1.0.8(solid-js@1.8.17)':
     dependencies:
       '@solid-primitives/utils': 6.2.3(solid-js@1.8.17)
       solid-js: 1.8.17
+    optional: true
+
+  '@solid-primitives/refs@1.0.8(solid-js@1.8.19)':
+    dependencies:
+      '@solid-primitives/utils': 6.2.3(solid-js@1.8.19)
+      solid-js: 1.8.19
 
   '@solid-primitives/resize-observer@2.0.25(solid-js@1.8.17)':
     dependencies:
@@ -9986,54 +10082,98 @@ snapshots:
       '@solid-primitives/static-store': 0.0.8(solid-js@1.8.17)
       '@solid-primitives/utils': 6.2.3(solid-js@1.8.17)
       solid-js: 1.8.17
+    optional: true
+
+  '@solid-primitives/resize-observer@2.0.25(solid-js@1.8.19)':
+    dependencies:
+      '@solid-primitives/event-listener': 2.3.3(solid-js@1.8.19)
+      '@solid-primitives/rootless': 1.4.5(solid-js@1.8.19)
+      '@solid-primitives/static-store': 0.0.8(solid-js@1.8.19)
+      '@solid-primitives/utils': 6.2.3(solid-js@1.8.19)
+      solid-js: 1.8.19
 
   '@solid-primitives/rootless@1.4.5(solid-js@1.8.17)':
     dependencies:
       '@solid-primitives/utils': 6.2.3(solid-js@1.8.17)
       solid-js: 1.8.17
+    optional: true
+
+  '@solid-primitives/rootless@1.4.5(solid-js@1.8.19)':
+    dependencies:
+      '@solid-primitives/utils': 6.2.3(solid-js@1.8.19)
+      solid-js: 1.8.19
 
   '@solid-primitives/scheduled@1.4.3(solid-js@1.8.17)':
     dependencies:
       solid-js: 1.8.17
+    optional: true
+
+  '@solid-primitives/scheduled@1.4.3(solid-js@1.8.19)':
+    dependencies:
+      solid-js: 1.8.19
 
   '@solid-primitives/static-store@0.0.5(solid-js@1.8.17)':
     dependencies:
       '@solid-primitives/utils': 6.2.3(solid-js@1.8.17)
       solid-js: 1.8.17
+    optional: true
+
+  '@solid-primitives/static-store@0.0.5(solid-js@1.8.19)':
+    dependencies:
+      '@solid-primitives/utils': 6.2.3(solid-js@1.8.19)
+      solid-js: 1.8.19
 
   '@solid-primitives/static-store@0.0.8(solid-js@1.8.17)':
     dependencies:
       '@solid-primitives/utils': 6.2.3(solid-js@1.8.17)
       solid-js: 1.8.17
+    optional: true
+
+  '@solid-primitives/static-store@0.0.8(solid-js@1.8.19)':
+    dependencies:
+      '@solid-primitives/utils': 6.2.3(solid-js@1.8.19)
+      solid-js: 1.8.19
 
   '@solid-primitives/styles@0.0.111(solid-js@1.8.17)':
     dependencies:
       '@solid-primitives/rootless': 1.4.5(solid-js@1.8.17)
       '@solid-primitives/utils': 6.2.3(solid-js@1.8.17)
       solid-js: 1.8.17
+    optional: true
 
-  '@solid-primitives/trigger@1.0.11(solid-js@1.8.17)':
+  '@solid-primitives/styles@0.0.111(solid-js@1.8.19)':
     dependencies:
-      '@solid-primitives/utils': 6.2.3(solid-js@1.8.17)
-      solid-js: 1.8.17
+      '@solid-primitives/rootless': 1.4.5(solid-js@1.8.19)
+      '@solid-primitives/utils': 6.2.3(solid-js@1.8.19)
+      solid-js: 1.8.19
+
+  '@solid-primitives/trigger@1.0.11(solid-js@1.8.19)':
+    dependencies:
+      '@solid-primitives/utils': 6.2.3(solid-js@1.8.19)
+      solid-js: 1.8.19
 
   '@solid-primitives/utils@6.2.3(solid-js@1.8.17)':
     dependencies:
       solid-js: 1.8.17
+    optional: true
 
-  '@solidjs/meta@0.29.4(solid-js@1.8.17)':
+  '@solid-primitives/utils@6.2.3(solid-js@1.8.19)':
     dependencies:
-      solid-js: 1.8.17
+      solid-js: 1.8.19
 
-  '@solidjs/router@0.14.1(solid-js@1.8.17)':
+  '@solidjs/meta@0.29.4(solid-js@1.8.19)':
     dependencies:
-      solid-js: 1.8.17
+      solid-js: 1.8.19
 
-  '@solidjs/start@1.0.5(rollup@4.18.0)(solid-js@1.8.17)(vinxi@0.3.12(@opentelemetry/api@1.9.0)(@types/node@20.14.6)(drizzle-orm@0.30.10(@opentelemetry/api@1.9.0)(@types/react@18.3.3)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1))(vite@5.3.1(@types/node@20.14.6)(terser@5.31.1))':
+  '@solidjs/router@0.14.1(solid-js@1.8.19)':
     dependencies:
-      '@vinxi/plugin-directives': 0.4.1(vinxi@0.3.12(@opentelemetry/api@1.9.0)(@types/node@20.14.6)(drizzle-orm@0.30.10(@opentelemetry/api@1.9.0)(@types/react@18.3.3)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1))
-      '@vinxi/server-components': 0.4.1(vinxi@0.3.12(@opentelemetry/api@1.9.0)(@types/node@20.14.6)(drizzle-orm@0.30.10(@opentelemetry/api@1.9.0)(@types/react@18.3.3)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1))
-      '@vinxi/server-functions': 0.4.1(vinxi@0.3.12(@opentelemetry/api@1.9.0)(@types/node@20.14.6)(drizzle-orm@0.30.10(@opentelemetry/api@1.9.0)(@types/react@18.3.3)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1))
+      solid-js: 1.8.19
+
+  '@solidjs/start@1.0.5(rollup@4.18.0)(solid-js@1.8.19)(vinxi@0.4.1(@opentelemetry/api@1.9.0)(@types/node@20.14.6)(drizzle-orm@0.30.10(@opentelemetry/api@1.9.0)(@types/react@18.3.3)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1))(vite@5.3.1(@types/node@20.14.6)(terser@5.31.1))':
+    dependencies:
+      '@vinxi/plugin-directives': 0.4.1(vinxi@0.4.1(@opentelemetry/api@1.9.0)(@types/node@20.14.6)(drizzle-orm@0.30.10(@opentelemetry/api@1.9.0)(@types/react@18.3.3)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1))
+      '@vinxi/server-components': 0.4.1(vinxi@0.4.1(@opentelemetry/api@1.9.0)(@types/node@20.14.6)(drizzle-orm@0.30.10(@opentelemetry/api@1.9.0)(@types/react@18.3.3)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1))
+      '@vinxi/server-functions': 0.4.1(vinxi@0.4.1(@opentelemetry/api@1.9.0)(@types/node@20.14.6)(drizzle-orm@0.30.10(@opentelemetry/api@1.9.0)(@types/react@18.3.3)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1))
       defu: 6.1.4
       error-stack-parser: 2.1.4
       glob: 10.4.2
@@ -10043,9 +10183,9 @@ snapshots:
       seroval-plugins: 1.0.7(seroval@1.0.7)
       shikiji: 0.9.19
       source-map-js: 1.2.0
-      terracotta: 1.0.5(solid-js@1.8.17)
+      terracotta: 1.0.5(solid-js@1.8.19)
       vite-plugin-inspect: 0.7.42(rollup@4.18.0)(vite@5.3.1(@types/node@20.14.6)(terser@5.31.1))
-      vite-plugin-solid: 2.10.2(solid-js@1.8.17)(vite@5.3.1(@types/node@20.14.6)(terser@5.31.1))
+      vite-plugin-solid: 2.10.2(solid-js@1.8.19)(vite@5.3.1(@types/node@20.14.6)(terser@5.31.1))
     transitivePeerDependencies:
       - '@nuxt/kit'
       - '@testing-library/jest-dom'
@@ -10367,7 +10507,7 @@ snapshots:
     transitivePeerDependencies:
       - uWebSockets.js
 
-  '@vinxi/plugin-directives@0.4.1(vinxi@0.3.12(@opentelemetry/api@1.9.0)(@types/node@20.14.6)(drizzle-orm@0.30.10(@opentelemetry/api@1.9.0)(@types/react@18.3.3)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1))':
+  '@vinxi/plugin-directives@0.4.1(vinxi@0.4.1(@opentelemetry/api@1.9.0)(@types/node@20.14.6)(drizzle-orm@0.30.10(@opentelemetry/api@1.9.0)(@types/react@18.3.3)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1))':
     dependencies:
       '@babel/parser': 7.24.7
       acorn: 8.12.0
@@ -10378,29 +10518,29 @@ snapshots:
       magicast: 0.2.11
       recast: 0.23.9
       tslib: 2.6.3
-      vinxi: 0.3.12(@opentelemetry/api@1.9.0)(@types/node@20.14.6)(drizzle-orm@0.30.10(@opentelemetry/api@1.9.0)(@types/react@18.3.3)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1)
+      vinxi: 0.4.1(@opentelemetry/api@1.9.0)(@types/node@20.14.6)(drizzle-orm@0.30.10(@opentelemetry/api@1.9.0)(@types/react@18.3.3)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1)
 
-  '@vinxi/server-components@0.4.1(vinxi@0.3.12(@opentelemetry/api@1.9.0)(@types/node@20.14.6)(drizzle-orm@0.30.10(@opentelemetry/api@1.9.0)(@types/react@18.3.3)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1))':
+  '@vinxi/server-components@0.4.1(vinxi@0.4.1(@opentelemetry/api@1.9.0)(@types/node@20.14.6)(drizzle-orm@0.30.10(@opentelemetry/api@1.9.0)(@types/react@18.3.3)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1))':
     dependencies:
-      '@vinxi/plugin-directives': 0.4.1(vinxi@0.3.12(@opentelemetry/api@1.9.0)(@types/node@20.14.6)(drizzle-orm@0.30.10(@opentelemetry/api@1.9.0)(@types/react@18.3.3)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1))
+      '@vinxi/plugin-directives': 0.4.1(vinxi@0.4.1(@opentelemetry/api@1.9.0)(@types/node@20.14.6)(drizzle-orm@0.30.10(@opentelemetry/api@1.9.0)(@types/react@18.3.3)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1))
       acorn: 8.12.0
       acorn-loose: 8.4.0
       acorn-typescript: 1.4.13(acorn@8.12.0)
       astring: 1.8.6
       magicast: 0.2.11
       recast: 0.23.9
-      vinxi: 0.3.12(@opentelemetry/api@1.9.0)(@types/node@20.14.6)(drizzle-orm@0.30.10(@opentelemetry/api@1.9.0)(@types/react@18.3.3)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1)
+      vinxi: 0.4.1(@opentelemetry/api@1.9.0)(@types/node@20.14.6)(drizzle-orm@0.30.10(@opentelemetry/api@1.9.0)(@types/react@18.3.3)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1)
 
-  '@vinxi/server-functions@0.4.1(vinxi@0.3.12(@opentelemetry/api@1.9.0)(@types/node@20.14.6)(drizzle-orm@0.30.10(@opentelemetry/api@1.9.0)(@types/react@18.3.3)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1))':
+  '@vinxi/server-functions@0.4.1(vinxi@0.4.1(@opentelemetry/api@1.9.0)(@types/node@20.14.6)(drizzle-orm@0.30.10(@opentelemetry/api@1.9.0)(@types/react@18.3.3)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1))':
     dependencies:
-      '@vinxi/plugin-directives': 0.4.1(vinxi@0.3.12(@opentelemetry/api@1.9.0)(@types/node@20.14.6)(drizzle-orm@0.30.10(@opentelemetry/api@1.9.0)(@types/react@18.3.3)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1))
+      '@vinxi/plugin-directives': 0.4.1(vinxi@0.4.1(@opentelemetry/api@1.9.0)(@types/node@20.14.6)(drizzle-orm@0.30.10(@opentelemetry/api@1.9.0)(@types/react@18.3.3)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1))
       acorn: 8.12.0
       acorn-loose: 8.4.0
       acorn-typescript: 1.4.13(acorn@8.12.0)
       astring: 1.8.6
       magicast: 0.2.11
       recast: 0.23.9
-      vinxi: 0.3.12(@opentelemetry/api@1.9.0)(@types/node@20.14.6)(drizzle-orm@0.30.10(@opentelemetry/api@1.9.0)(@types/react@18.3.3)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1)
+      vinxi: 0.4.1(@opentelemetry/api@1.9.0)(@types/node@20.14.6)(drizzle-orm@0.30.10(@opentelemetry/api@1.9.0)(@types/react@18.3.3)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1)
 
   '@volar/kit@2.2.5(typescript@5.4.5)':
     dependencies:
@@ -10865,12 +11005,12 @@ snapshots:
       '@zag-js/types': 0.59.0
       '@zag-js/utils': 0.59.0
 
-  '@zag-js/solid@0.59.0(solid-js@1.8.17)':
+  '@zag-js/solid@0.59.0(solid-js@1.8.19)':
     dependencies:
       '@zag-js/core': 0.59.0
       '@zag-js/store': 0.59.0
       '@zag-js/types': 0.59.0
-      solid-js: 1.8.17
+      solid-js: 1.8.19
 
   '@zag-js/splitter@0.59.0':
     dependencies:
@@ -10997,12 +11137,12 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  ai@3.2.15(react@18.3.1)(solid-js@1.8.17)(svelte@4.2.18)(vue@3.4.27(typescript@5.5.2))(zod@3.23.8):
+  ai@3.2.15(react@18.3.1)(solid-js@1.8.19)(svelte@4.2.18)(vue@3.4.27(typescript@5.5.2))(zod@3.23.8):
     dependencies:
       '@ai-sdk/provider': 0.0.11
       '@ai-sdk/provider-utils': 1.0.0(zod@3.23.8)
       '@ai-sdk/react': 0.0.15(react@18.3.1)(zod@3.23.8)
-      '@ai-sdk/solid': 0.0.11(solid-js@1.8.17)(zod@3.23.8)
+      '@ai-sdk/solid': 0.0.11(solid-js@1.8.19)(zod@3.23.8)
       '@ai-sdk/svelte': 0.0.12(svelte@4.2.18)(zod@3.23.8)
       '@ai-sdk/ui-utils': 0.0.9(zod@3.23.8)
       '@ai-sdk/vue': 0.0.11(vue@3.4.27(typescript@5.5.2))(zod@3.23.8)
@@ -11700,8 +11840,6 @@ snapshots:
       get-intrinsic: 1.2.4
 
   es-errors@1.3.0: {}
-
-  es-module-lexer@1.5.3: {}
 
   es-module-lexer@1.5.4: {}
 
@@ -12747,6 +12885,10 @@ snapshots:
   lucide-solid@0.378.0(solid-js@1.8.17):
     dependencies:
       solid-js: 1.8.17
+
+  lucide-solid@0.378.0(solid-js@1.8.19):
+    dependencies:
+      solid-js: 1.8.19
 
   luxon@3.4.4: {}
 
@@ -14252,7 +14394,13 @@ snapshots:
     dependencies:
       seroval: 1.0.7
 
+  seroval-plugins@1.1.1(seroval@1.1.1):
+    dependencies:
+      seroval: 1.1.1
+
   seroval@1.0.7: {}
+
+  seroval@1.1.1: {}
 
   serve-placeholder@2.0.2:
     dependencies:
@@ -14370,6 +14518,20 @@ snapshots:
       vite: 5.3.1(@types/node@20.14.6)(terser@5.31.1)
     transitivePeerDependencies:
       - supports-color
+    optional: true
+
+  solid-devtools@0.30.1(solid-js@1.8.19)(vite@5.3.1(@types/node@20.14.6)(terser@5.31.1)):
+    dependencies:
+      '@babel/core': 7.24.7
+      '@babel/plugin-syntax-typescript': 7.24.7(@babel/core@7.24.7)
+      '@babel/types': 7.24.7
+      '@solid-devtools/debugger': 0.23.4(solid-js@1.8.19)
+      '@solid-devtools/shared': 0.13.2(solid-js@1.8.19)
+      solid-js: 1.8.19
+    optionalDependencies:
+      vite: 5.3.1(@types/node@20.14.6)(terser@5.31.1)
+    transitivePeerDependencies:
+      - supports-color
 
   solid-js@1.8.17:
     dependencies:
@@ -14377,15 +14539,21 @@ snapshots:
       seroval: 1.0.7
       seroval-plugins: 1.0.7(seroval@1.0.7)
 
-  solid-presence@0.1.7(solid-js@1.8.17):
+  solid-js@1.8.19:
     dependencies:
-      '@corvu/utils': 0.3.1(solid-js@1.8.17)
-      solid-js: 1.8.17
+      csstype: 3.1.3
+      seroval: 1.1.1
+      seroval-plugins: 1.1.1(seroval@1.1.1)
 
-  solid-prevent-scroll@0.1.8(solid-js@1.8.17):
+  solid-presence@0.1.7(solid-js@1.8.19):
     dependencies:
-      '@corvu/utils': 0.3.1(solid-js@1.8.17)
-      solid-js: 1.8.17
+      '@corvu/utils': 0.3.1(solid-js@1.8.19)
+      solid-js: 1.8.19
+
+  solid-prevent-scroll@0.1.8(solid-js@1.8.19):
+    dependencies:
+      '@corvu/utils': 0.3.1(solid-js@1.8.19)
+      solid-js: 1.8.19
 
   solid-refresh@0.6.3(solid-js@1.8.17):
     dependencies:
@@ -14394,9 +14562,16 @@ snapshots:
       '@babel/types': 7.24.7
       solid-js: 1.8.17
 
-  solid-use@0.8.0(solid-js@1.8.17):
+  solid-refresh@0.6.3(solid-js@1.8.19):
     dependencies:
-      solid-js: 1.8.17
+      '@babel/generator': 7.24.7
+      '@babel/helper-module-imports': 7.22.15
+      '@babel/types': 7.24.7
+      solid-js: 1.8.19
+
+  solid-use@0.8.0(solid-js@1.8.19):
+    dependencies:
+      solid-js: 1.8.19
 
   source-map-js@1.2.0: {}
 
@@ -14647,10 +14822,10 @@ snapshots:
       mkdirp: 1.0.4
       yallist: 4.0.0
 
-  terracotta@1.0.5(solid-js@1.8.17):
+  terracotta@1.0.5(solid-js@1.8.19):
     dependencies:
-      solid-js: 1.8.17
-      solid-use: 0.8.0(solid-js@1.8.17)
+      solid-js: 1.8.19
+      solid-use: 0.8.0(solid-js@1.8.19)
 
   terser@5.31.1:
     dependencies:
@@ -14995,7 +15170,7 @@ snapshots:
       unist-util-stringify-position: 4.0.0
       vfile-message: 4.0.2
 
-  vinxi@0.3.12(@opentelemetry/api@1.9.0)(@types/node@20.14.6)(drizzle-orm@0.30.10(@opentelemetry/api@1.9.0)(@types/react@18.3.3)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1):
+  vinxi@0.4.1(@opentelemetry/api@1.9.0)(@types/node@20.14.6)(drizzle-orm@0.30.10(@opentelemetry/api@1.9.0)(@types/react@18.3.3)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1):
     dependencies:
       '@babel/core': 7.24.7
       '@babel/plugin-syntax-jsx': 7.24.7(@babel/core@7.24.7)
@@ -15009,7 +15184,7 @@ snapshots:
       crossws: 0.2.4
       dax-sh: 0.39.2
       defu: 6.1.4
-      es-module-lexer: 1.5.3
+      es-module-lexer: 1.5.4
       esbuild: 0.20.2
       fast-glob: 3.3.2
       get-port-please: 3.1.2
@@ -15086,6 +15261,19 @@ snapshots:
       merge-anything: 5.1.7
       solid-js: 1.8.17
       solid-refresh: 0.6.3(solid-js@1.8.17)
+      vite: 5.3.1(@types/node@20.14.6)(terser@5.31.1)
+      vitefu: 0.2.5(vite@5.3.1(@types/node@20.14.6)(terser@5.31.1))
+    transitivePeerDependencies:
+      - supports-color
+
+  vite-plugin-solid@2.10.2(solid-js@1.8.19)(vite@5.3.1(@types/node@20.14.6)(terser@5.31.1)):
+    dependencies:
+      '@babel/core': 7.24.7
+      '@types/babel__core': 7.20.5
+      babel-preset-solid: 1.8.17(@babel/core@7.24.7)
+      merge-anything: 5.1.7
+      solid-js: 1.8.19
+      solid-refresh: 0.6.3(solid-js@1.8.19)
       vite: 5.3.1(@types/node@20.14.6)(terser@5.31.1)
       vitefu: 0.2.5(vite@5.3.1(@types/node@20.14.6)(terser@5.31.1))
     transitivePeerDependencies:

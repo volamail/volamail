@@ -1,5 +1,4 @@
 import dotenv from "dotenv";
-import devtools from "solid-devtools/vite";
 import { defineConfig } from "@solidjs/start/config";
 import packageJSON from "./package.json";
 
@@ -19,11 +18,6 @@ export default defineConfig({
   },
   middleware: "./src/middleware.ts",
   vite: {
-    plugins: [
-      devtools({
-        autoname: true,
-      }),
-    ],
     define: {
       "import.meta.env.VITE_PUBLIC_APP_VERSION": JSON.stringify(
         packageJSON.version
