@@ -2,14 +2,23 @@
 import { Title } from "@solidjs/meta";
 import { PlusIcon } from "lucide-solid";
 import { For, Show, Suspense } from "solid-js";
-import { A, createAsync, useParams } from "@solidjs/router";
+import {
+  A,
+  createAsync,
+  RouteDefinition,
+  RouteSectionProps,
+} from "@solidjs/router";
 
-import { Button, buttonVariants } from "~/lib/ui/components/button";
+import { Button } from "~/lib/ui/components/button";
 import { getProjectTemplates } from "~/lib/templates/queries";
 
-export default function Dashboard() {
-  const params = useParams();
+export const route: RouteDefinition = {
+  load({ params }) {
+    void getProjectTemplates(params.projectId);
+  },
+};
 
+export default function Dashboard({ params }: RouteSectionProps) {
   const templates = createAsync(() => getProjectTemplates(params.projectId));
 
   return (

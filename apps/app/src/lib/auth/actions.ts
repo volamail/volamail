@@ -171,7 +171,7 @@ export const verifyEmailOtp = action(async (formData: FormData) => {
 
     analytics.captureUserLoggedInEvent({
       id: existingUser.id,
-      email: existingUser.email,
+      email: body.email,
     });
 
     appendHeader(
@@ -191,12 +191,12 @@ export const verifyEmailOtp = action(async (formData: FormData) => {
 
     if (!project) {
       throw createError({
-        statusCode: 409,
+        statusCode: 404,
         statusMessage: "No project found",
       });
     }
 
-    throw redirect(`/t/${project.teamId}/p/${project.id}/emails`);
+    throw redirect("/teams");
   }
 
   const {
@@ -224,8 +224,8 @@ export const verifyEmailOtp = action(async (formData: FormData) => {
     throw redirect(body.to);
   }
 
-  throw redirect(`/t/${defaultTeamId}/p/${defaultProjectId}/emails`);
-});
+  throw redirect("/teams");
+}, "auth-state");
 
 export const changeEmail = action(async (formData: FormData) => {
   "use server";
