@@ -19,7 +19,7 @@ export function PasteHtmlButton(props: Props) {
 
       if (!contents.startsWith("<body")) {
         showToast({
-          title: "Unsupported HTML format",
+          title: "Clipboard text isn't valid HTML",
           variant: "error",
         });
 

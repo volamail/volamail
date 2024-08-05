@@ -18,8 +18,10 @@ export const route: RouteDefinition = {
   },
 };
 
-export default function Dashboard({ params }: RouteSectionProps) {
-  const templates = createAsync(() => getProjectTemplates(params.projectId));
+export default function Dashboard(props: RouteSectionProps) {
+  const templates = createAsync(() =>
+    getProjectTemplates(props.params.projectId)
+  );
 
   return (
     <main class="grow p-8 flex flex-col gap-1.5 max-w-2xl">
