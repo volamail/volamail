@@ -49,7 +49,7 @@ const HtmlTab = lazy(() => import("./html-tab"));
 export function Editor(props: Props) {
   let mainForm!: HTMLFormElement;
   let templatePreview!: HTMLDivElement;
-  let promptInput!: HTMLTextAreaElement;
+  let promptInput!: HTMLDivElement;
 
   const [deleteDialogOpen, setDeleteDialogOpen] = createSignal(false);
   const [selectedElement, setSelectedElement] = createSignal<HTMLElement>();
@@ -320,7 +320,7 @@ export function Editor(props: Props) {
           >
             <div
               ref={handleTemplatePreviewMounted}
-              class="revert-tailwind h-full [&>*]:cursor-pointer"
+              class="revert-tailwind h-full [&>*>*]:cursor-pointer"
               id="editor-view"
               innerHTML={displayedCode()}
             />

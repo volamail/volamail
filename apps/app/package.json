@@ -22,6 +22,7 @@
     "@solidjs/meta": "^0.29.4",
     "@solidjs/router": "^0.14.1",
     "@solidjs/start": "^1.0.5",
+    "@tanstack/solid-query": "^5.51.21",
     "@tiptap/core": "^2.5.7",
     "@tiptap/extension-color": "^2.5.7",
     "@tiptap/extension-font-family": "^2.5.8",
