@@ -1,7 +1,7 @@
 import { SparklesIcon } from "lucide-solid";
 import { createQuery } from "@tanstack/solid-query";
 import { debounce } from "@solid-primitives/scheduled";
-import { createSignal, onCleanup, onMount, Show } from "solid-js";
+import { createEffect, createSignal, onCleanup, onMount, Show } from "solid-js";
 
 import { ImagePicker } from "./image-picker";
 import { Button } from "~/lib/ui/components/button";
@@ -13,6 +13,7 @@ type Props = {
   selectedImageUrl?: string;
   onSelectImage: (imageUrl?: string) => void;
   ref?: HTMLDivElement;
+  placeholder?: string;
 };
 
 export function PromptInput(props: Props) {
@@ -26,7 +27,7 @@ export function PromptInput(props: Props) {
         query: debouncedContents(),
         projectId: props.projectId,
       }),
-    enabled: debouncedContents().length > 2,
+    enabled: debouncedContents().length > 2 && props.loading === false,
   }));
 
   const setDebouncedValue = debounce((contents: string) => {
@@ -85,8 +86,22 @@ export function PromptInput(props: Props) {
     }
   }
 
+  createEffect(() => {
+    if (contentEditableRef) {
+      if (props.loading === false) {
+        contentEditableRef.focus();
+
+        contentEditableRef.innerText = "";
+
+        setContents("");
+      } else if (props.loading === true) {
+        contentEditableRef.blur();
+      }
+    }
+  });
+
   return (
-    <div class="flex gap-1 has-[div:focus]:outline outline-blue-500 items-center w-full bg-white rounded-lg border border-gray-300 px-2 py-1">
+    <div class='flex gap-1 has-[div:focus]:outline bg-white has-[div[aria-disabled="true"]]:bg-gray-200 outline-blue-500 items-center w-full rounded-lg border border-gray-300 px-2 py-1'>
       <div class="flex gap-1 shrink-0 items-center py-1">
         <ImagePicker
           projectId={props.projectId}
@@ -101,7 +116,7 @@ export function PromptInput(props: Props) {
       <div
         contentEditable={!props.loading}
         onKeyDown={handleInputKeyDown}
-        tabIndex={0}
+        aria-disabled={props.loading}
         ref={(el) => {
           contentEditableRef = el;
           props.ref = el;
@@ -109,10 +124,13 @@ export function PromptInput(props: Props) {
         class="py-1 gap-1 grow text-sm outline-none after:content-[attr(data-suggestion)] after:text-gray-400"
         data-suggestion={
           query.isLoading ||
+          props.loading ||
           contents() !== debouncedContents() ||
           (query?.data && contents().includes(query.data))
             ? ""
-            : query?.data || "A welcome e-mail with a magic link button..."
+            : query?.data ||
+              props.placeholder ||
+              "A welcome e-mail with a magic link button..."
         }
         onInput={(e) => {
           const text = e.currentTarget.innerText;

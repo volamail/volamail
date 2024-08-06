@@ -1,19 +1,19 @@
 import {
   Show,
+  lazy,
+  onMount,
+  Suspense,
   onCleanup,
   createMemo,
   createEffect,
   createSignal,
-  onMount,
-  Suspense,
-  lazy,
 } from "solid-js";
 import {
   EyeIcon,
   CodeIcon,
   UndoIcon,
+  MailsIcon,
   Trash2Icon,
-  CloudDownloadIcon,
   LoaderIcon,
 } from "lucide-solid";
 import { Tabs } from "@kobalte/core/tabs";
@@ -280,7 +280,7 @@ export function Editor(props: Props) {
                       even: true,
                     })}
                   >
-                    <CloudDownloadIcon class="size-4" />
+                    <MailsIcon class="size-4" />
                   </TooltipTrigger>
                   <TooltipContent>
                     Import existing email template
@@ -379,6 +379,7 @@ export function Editor(props: Props) {
           projectId={props.projectId}
           selectedImageUrl={selectedImageUrl()}
           onSelectImage={handleSelectImage}
+          placeholder="Change it all to dark mode..."
         />
       </form>
 
