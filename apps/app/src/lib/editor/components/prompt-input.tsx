@@ -1,7 +1,14 @@
+import {
+  Show,
+  onMount,
+  onCleanup,
+  createMemo,
+  createEffect,
+  createSignal,
+} from "solid-js";
 import { SparklesIcon } from "lucide-solid";
 import { createQuery } from "@tanstack/solid-query";
 import { debounce } from "@solid-primitives/scheduled";
-import { createEffect, createSignal, onCleanup, onMount, Show } from "solid-js";
 
 import { ImagePicker } from "./image-picker";
 import { Button } from "~/lib/ui/components/button";
@@ -27,7 +34,7 @@ export function PromptInput(props: Props) {
         query: debouncedContents(),
         projectId: props.projectId,
       }),
-    enabled: debouncedContents().length > 2 && props.loading === false,
+    enabled: debouncedContents().length > 2,
   }));
 
   const setDebouncedValue = debounce((contents: string) => {
@@ -43,6 +50,31 @@ export function PromptInput(props: Props) {
     onCleanup(() => {
       document.removeEventListener("keydown", handleGlobalKeyDown);
     });
+  });
+
+  createEffect(() => {
+    if (contentEditableRef) {
+      if (props.loading === false) {
+        contentEditableRef.focus();
+
+        contentEditableRef.innerText = "";
+
+        setContents("");
+      } else if (props.loading === true) {
+        contentEditableRef.blur();
+      }
+    }
+  });
+
+  const suggestion = createMemo(() => {
+    return query.isLoading ||
+      props.loading ||
+      contents() !== debouncedContents() ||
+      (query?.data && contents().includes(query.data))
+      ? ""
+      : query?.data ||
+          props.placeholder ||
+          "A welcome e-mail with a magic link button...";
   });
 
   function handleGlobalKeyDown(event: KeyboardEvent) {
@@ -86,20 +118,6 @@ export function PromptInput(props: Props) {
     }
   }
 
-  createEffect(() => {
-    if (contentEditableRef) {
-      if (props.loading === false) {
-        contentEditableRef.focus();
-
-        contentEditableRef.innerText = "";
-
-        setContents("");
-      } else if (props.loading === true) {
-        contentEditableRef.blur();
-      }
-    }
-  });
-
   return (
     <div class='flex gap-1 has-[div:focus]:outline bg-white has-[div[aria-disabled="true"]]:bg-gray-200 outline-blue-500 items-center w-full rounded-lg border border-gray-300 px-2 py-1'>
       <div class="flex gap-1 shrink-0 items-center py-1">
@@ -122,16 +140,7 @@ export function PromptInput(props: Props) {
           props.ref = el;
         }}
         class="py-1 gap-1 grow text-sm outline-none after:content-[attr(data-suggestion)] after:text-gray-400"
-        data-suggestion={
-          query.isLoading ||
-          props.loading ||
-          contents() !== debouncedContents() ||
-          (query?.data && contents().includes(query.data))
-            ? ""
-            : query?.data ||
-              props.placeholder ||
-              "A welcome e-mail with a magic link button..."
-        }
+        data-suggestion={suggestion()}
         onInput={(e) => {
           const text = e.currentTarget.innerText;
 
