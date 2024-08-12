@@ -5,7 +5,7 @@ export default function ContextHintIllustration() {
     <img
       src={Illustration}
       alt="Add a project description"
-      class="absolute -left-48 -top-10 w-48 animate-pulse hidden xl:block"
+      class="absolute animate-in fade-in duration-1000 -left-48 -top-10 w-48 hidden xl:block"
     />
   );
 }

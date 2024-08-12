@@ -125,7 +125,8 @@ export default function EditTemplate(props: RouteSectionProps) {
             <Editor
               value={html()}
               onChange={setHtml}
-              project={project()!}
+              teamId={props.params.teamId}
+              projectId={props.params.projectId}
               templateId={props.params.id}
             />
           </div>

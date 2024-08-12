@@ -17,6 +17,7 @@ import {
   LoaderIcon,
 } from "lucide-solid";
 import { Tabs } from "@kobalte/core/tabs";
+import { createAsync } from "@solidjs/router";
 import quotedPrintable from "quoted-printable";
 
 import {
@@ -24,9 +25,10 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "~/lib/ui/components/tooltip";
-import { PromptInput } from "./prompt-input";
+import { PromptInput, PromptInputSkeleton } from "./prompt-input";
 import { Kbd } from "~/lib/ui/components/kbd";
 import { FloatingMenu } from "./floating-menu";
+import { getProject } from "~/lib/projects/queries";
 import { showToast } from "~/lib/ui/components/toasts";
 import { useMutation } from "~/lib/ui/hooks/useMutation";
 import { editHtmlTemplate } from "~/lib/templates/actions";
@@ -39,10 +41,8 @@ import { ImportExistingEmailDialogContents } from "../../templates/components/im
 type Props = {
   name?: string;
   value?: string;
-  project: {
-    id: string;
-    context?: string | null;
-  };
+  teamId: string;
+  projectId: string;
   templateId?: string;
   onChange: (value: string | undefined) => void;
 };
@@ -53,6 +53,13 @@ export function Editor(props: Props) {
   let mainForm!: HTMLFormElement;
   let templatePreview!: HTMLDivElement;
   let promptInput!: HTMLDivElement;
+
+  const project = createAsync(() =>
+    getProject({
+      teamId: props.teamId,
+      projectId: props.projectId,
+    })
+  );
 
   const [deleteDialogOpen, setDeleteDialogOpen] = createSignal(false);
   const [selectedElement, setSelectedElement] = createSignal<HTMLElement>();
@@ -292,7 +299,7 @@ export function Editor(props: Props) {
 
                 <ImportExistingEmailDialogContents
                   filter={(email) => email.id !== props.templateId}
-                  projectId={props.project.id}
+                  projectId={props.projectId}
                   onComplete={(email) =>
                     handleImportFromExistingComplete(email.body)
                   }
@@ -332,7 +339,7 @@ export function Editor(props: Props) {
               {(element) => (
                 <FloatingMenu
                   element={element()}
-                  projectId={props.project.id}
+                  projectId={props.projectId}
                   onComplete={modifyElement}
                   onDelete={deleteElement}
                   onClose={setSelectedElement}
@@ -372,18 +379,24 @@ export function Editor(props: Props) {
         class="w-full z-10"
         ref={mainForm}
       >
-        <input type="hidden" name="projectId" value={props.project.id} />
+        <input type="hidden" name="projectId" value={props.projectId} />
 
         <input type="hidden" name="html" value={props.value} />
 
-        <PromptInput
-          ref={promptInput}
-          loading={editTemplateAction.pending}
-          project={props.project}
-          selectedImageUrl={selectedImageUrl()}
-          onSelectImage={handleSelectImage}
-          placeholder="Change it all to dark mode..."
-        />
+        <Suspense fallback={<PromptInputSkeleton />}>
+          <Show when={project()}>
+            {(project) => (
+              <PromptInput
+                project={project()}
+                ref={promptInput}
+                loading={editTemplateAction.pending}
+                selectedImageUrl={selectedImageUrl()}
+                onSelectImage={handleSelectImage}
+                placeholder="Change it all to dark mode..."
+              />
+            )}
+          </Show>
+        </Suspense>
       </form>
 
       <input type="hidden" name={props.name} value={props.value} />
@@ -391,7 +404,7 @@ export function Editor(props: Props) {
       <Show when={props.templateId}>
         {(templateId) => (
           <DeleteTemplateDialog
-            projectId={props.project.id}
+            projectId={props.projectId}
             templateId={templateId()}
             open={deleteDialogOpen()}
             onClose={() => setDeleteDialogOpen(false)}

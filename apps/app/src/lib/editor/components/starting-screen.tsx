@@ -1,20 +1,20 @@
 import { Table2Icon } from "lucide-solid";
-import { createSignal, Show, lazy } from "solid-js";
+import { createAsync } from "@solidjs/router";
+import { createSignal, Show, lazy, Suspense } from "solid-js";
 
-import { PromptInput } from "./prompt-input";
+import { getProject } from "~/lib/projects/queries";
 import { PasteHtmlButton } from "./paste-html-button";
 import { showToast } from "~/lib/ui/components/toasts";
 import { useMutation } from "~/lib/ui/hooks/useMutation";
 import { generateTemplate } from "~/lib/templates/actions";
+import { PromptInput, PromptInputSkeleton } from "./prompt-input";
 import { Dialog, DialogTrigger } from "~/lib/ui/components/dialog";
 import { GridBgContainer } from "~/lib/ui/components/grid-bg-container";
 import { ImportExistingEmailDialogContents } from "~/lib/templates/components/import-existing-email-dialog";
 
 type Props = {
-  project: {
-    id: string;
-    context?: string | null;
-  };
+  teamId: string;
+  projectId: string;
   onDone: (email: { html: string; subject: string; slug: string }) => void;
 };
 
@@ -23,6 +23,13 @@ const ContextHintIllustration = lazy(
 );
 
 export function EditorStartingScreen(props: Props) {
+  const project = createAsync(() =>
+    getProject({
+      teamId: props.teamId,
+      projectId: props.projectId,
+    })
+  );
+
   const generateTemplateAction = useMutation({
     action: generateTemplate,
     onError() {
@@ -61,7 +68,7 @@ export function EditorStartingScreen(props: Props) {
         action={generateTemplate}
         class="w-full z-10 flex flex-col justify-center items-center"
       >
-        <input type="hidden" name="projectId" value={props.project.id} />
+        <input type="hidden" name="projectId" value={props.projectId} />
 
         <div class="flex flex-col gap-64 items-center w-full">
           <div class="flex flex-col gap-12 w-full items-center">
@@ -85,7 +92,7 @@ export function EditorStartingScreen(props: Props) {
                 </DialogTrigger>
 
                 <ImportExistingEmailDialogContents
-                  projectId={props.project.id}
+                  projectId={props.projectId}
                   onComplete={handleExistingEmailImported}
                 />
               </Dialog>
@@ -103,15 +110,24 @@ export function EditorStartingScreen(props: Props) {
           </div>
 
           <div class="w-full flex gap-2 max-w-3xl relative">
-            <Show when={!props.project.context}>
-              <ContextHintIllustration />
-            </Show>
-            <PromptInput
-              loading={generateTemplateAction.pending}
-              project={props.project}
-              selectedImageUrl={selectedImageUrl()}
-              onSelectImage={handleSelectImage}
-            />
+            <Suspense fallback={<PromptInputSkeleton />}>
+              <Show when={project()}>
+                {(project) => (
+                  <>
+                    <Show when={!project().context}>
+                      <ContextHintIllustration />
+                    </Show>
+
+                    <PromptInput
+                      loading={generateTemplateAction.pending}
+                      project={project()!}
+                      selectedImageUrl={selectedImageUrl()}
+                      onSelectImage={handleSelectImage}
+                    />
+                  </>
+                )}
+              </Show>
+            </Suspense>
           </div>
         </div>
       </form>

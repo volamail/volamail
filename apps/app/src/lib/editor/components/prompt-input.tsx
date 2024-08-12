@@ -187,3 +187,7 @@ export function PromptInput(props: Props) {
     </div>
   );
 }
+
+export function PromptInputSkeleton() {
+  return <div class="h-10 w-full rounded-lg bg-gray-200 animate-pulse" />;
+}

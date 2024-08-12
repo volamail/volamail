@@ -1,20 +1,17 @@
-// @refresh reload
 import "./editor.css";
 
-import { Title } from "@solidjs/meta";
-import { createSignal, Show, Suspense } from "solid-js";
 import {
-  createAsync,
   useBeforeLeave,
   BeforeLeaveEventArgs,
   type RouteSectionProps,
 } from "@solidjs/router";
+import { Title } from "@solidjs/meta";
+import { createSignal, Show, Suspense } from "solid-js";
 import { CircleCheckBigIcon, SendIcon } from "lucide-solid";
 
 import { Input } from "~/lib/ui/components/input";
 import { sendTestMail } from "~/lib/mail/actions";
 import { Button } from "~/lib/ui/components/button";
-import { getProject } from "~/lib/projects/queries";
 import { showToast } from "~/lib/ui/components/toasts";
 import { Editor } from "~/lib/editor/components/editor";
 import { createTemplate } from "~/lib/templates/actions";
@@ -28,13 +25,6 @@ export default function NewTemplate(props: RouteSectionProps) {
     subject: string;
     slug: string;
   }>();
-
-  const project = createAsync(() =>
-    getProject({
-      teamId: props.params.teamId,
-      projectId: props.params.projectId,
-    })
-  );
 
   const createEmailAction = useMutation({
     action: createTemplate,
@@ -174,17 +164,18 @@ export default function NewTemplate(props: RouteSectionProps) {
           <Show
             when={email()}
             fallback={
-              <Show when={project()}>
-                {(project) => (
-                  <EditorStartingScreen project={project()} onDone={setEmail} />
-                )}
-              </Show>
+              <EditorStartingScreen
+                onDone={setEmail}
+                projectId={props.params.projectId}
+                teamId={props.params.teamId}
+              />
             }
           >
             <Editor
               value={email()!.html}
               onChange={onEditorChange}
-              project={project()!}
+              projectId={props.params.projectId}
+              teamId={props.params.teamId}
             />
           </Show>
         </Suspense>
