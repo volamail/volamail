@@ -12,6 +12,7 @@ type FieldState = {
   dirty: boolean;
   error?: string;
   ref?: HTMLInputElement;
+  value?: string;
 };
 
 export function createForm<T extends Record<string, any>>(
@@ -47,6 +48,45 @@ export function createForm<T extends Record<string, any>>(
     return validationResult.issues[0].message;
   }
 
+  function getTextareaProps<Field extends keyof T>(field: Field) {
+    const fieldState = store.fields[field];
+
+    return {
+      ...fieldState,
+      children: options.defaultValues[field] as string,
+      name: field,
+      ref(el: HTMLElement) {
+        // @ts-expect-error TODO: Fix this
+        setStore("fields", field, {
+          ref: el,
+        });
+      },
+      async onInput(event: Event) {
+        // @ts-expect-error TODO: Fix this
+        setStore("fields", field, "value", event.currentTarget.value);
+
+        if (!store.form.submitted && !options.validateBeforeSubmit) {
+          // @ts-expect-error TODO: Fix this
+          setStore("fields", field, "dirty", true);
+
+          return;
+        }
+
+        const target = event.target as HTMLTextAreaElement;
+
+        const value = target.value;
+
+        const error = await validateField(field, value);
+
+        // @ts-expect-error TODO: Fix this
+        setStore("fields", field, {
+          error,
+          dirty: true,
+        });
+      },
+    };
+  }
+
   function getFieldProps(field: keyof T) {
     const fieldState = store.fields[field];
 
@@ -60,7 +100,10 @@ export function createForm<T extends Record<string, any>>(
           ref: el,
         });
       },
-      async onChange(event: Event) {
+      async onInput(event: Event) {
+        // @ts-expect-error TODO: Fix this
+        setStore("fields", field, "value", event.currentTarget.value);
+
         if (!store.form.submitted && !options.validateBeforeSubmit) {
           // @ts-expect-error TODO: Fix this
           setStore("fields", field, "dirty", true);
@@ -83,7 +126,7 @@ export function createForm<T extends Record<string, any>>(
     };
   }
 
-  async function handleSubmit(event: Event) {
+  async function handleSubmit(event: SubmitEvent) {
     setStore("form", "submitted", true);
 
     for (const field of Object.keys(options.defaultValues)) {
@@ -109,6 +152,10 @@ export function createForm<T extends Record<string, any>>(
         error,
       });
     }
+
+    if (store.form.invalid) {
+      return;
+    }
   }
 
   createEffect(() => {
@@ -120,6 +167,7 @@ export function createForm<T extends Record<string, any>>(
 
   return {
     getFieldProps,
+    getTextareaProps,
     handleSubmit,
     state: store.form,
   };

@@ -112,3 +112,29 @@ export const editProject = action(async (formData: FormData) => {
     })
     .where(eq(projectsTable.id, payload.id));
 }, "projects");
+
+export const editProjectContext = action(async (formData: FormData) => {
+  "use server";
+
+  const user = requireUser();
+
+  const payload = await parseFormData(
+    v.object({
+      projectId: v.string(),
+      context: v.pipe(v.string(), v.maxLength(200)),
+    }),
+    formData
+  );
+
+  await requireUserToBeMemberOfProject({
+    userId: user.id,
+    projectId: payload.projectId,
+  });
+
+  await db
+    .update(projectsTable)
+    .set({
+      context: payload.context,
+    })
+    .where(eq(projectsTable.id, payload.projectId));
+});

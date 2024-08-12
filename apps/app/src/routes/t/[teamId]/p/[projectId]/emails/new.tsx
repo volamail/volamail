@@ -2,10 +2,11 @@
 import "./editor.css";
 
 import { Title } from "@solidjs/meta";
-import { createSignal, Show } from "solid-js";
+import { createSignal, Show, Suspense } from "solid-js";
 import {
-  BeforeLeaveEventArgs,
+  createAsync,
   useBeforeLeave,
+  BeforeLeaveEventArgs,
   type RouteSectionProps,
 } from "@solidjs/router";
 import { CircleCheckBigIcon, SendIcon } from "lucide-solid";
@@ -13,8 +14,8 @@ import { CircleCheckBigIcon, SendIcon } from "lucide-solid";
 import { Input } from "~/lib/ui/components/input";
 import { sendTestMail } from "~/lib/mail/actions";
 import { Button } from "~/lib/ui/components/button";
+import { getProject } from "~/lib/projects/queries";
 import { showToast } from "~/lib/ui/components/toasts";
-import { Textarea } from "~/lib/ui/components/textarea";
 import { Editor } from "~/lib/editor/components/editor";
 import { createTemplate } from "~/lib/templates/actions";
 import { useMutation } from "~/lib/ui/hooks/useMutation";
@@ -27,6 +28,13 @@ export default function NewTemplate(props: RouteSectionProps) {
     subject: string;
     slug: string;
   }>();
+
+  const project = createAsync(() =>
+    getProject({
+      teamId: props.params.teamId,
+      projectId: props.params.projectId,
+    })
+  );
 
   const createEmailAction = useMutation({
     action: createTemplate,
@@ -162,21 +170,24 @@ export default function NewTemplate(props: RouteSectionProps) {
           </form>
         </Show>
 
-        <Show
-          when={email()}
-          fallback={
-            <EditorStartingScreen
-              projectId={props.params.projectId}
-              onDone={setEmail}
+        <Suspense>
+          <Show
+            when={email()}
+            fallback={
+              <Show when={project()}>
+                {(project) => (
+                  <EditorStartingScreen project={project()} onDone={setEmail} />
+                )}
+              </Show>
+            }
+          >
+            <Editor
+              value={email()!.html}
+              onChange={onEditorChange}
+              project={project()!}
             />
-          }
-        >
-          <Editor
-            value={email()!.html}
-            onChange={onEditorChange}
-            projectId={props.params.projectId}
-          />
-        </Show>
+          </Show>
+        </Suspense>
       </div>
     </main>
   );

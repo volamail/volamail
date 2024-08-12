@@ -12,6 +12,7 @@ import { createEffect, createSignal, Show, Suspense } from "solid-js";
 
 import { Input } from "~/lib/ui/components/input";
 import { sendTestMail } from "~/lib/mail/actions";
+import { getProject } from "~/lib/projects/queries";
 import { Button } from "~/lib/ui/components/button";
 import { getTemplate } from "~/lib/templates/queries";
 import { editTemplate } from "~/lib/templates/actions";
@@ -25,11 +26,21 @@ import { EditorSkeleton } from "~/lib/editor/components/editor-skeleton";
 export const route: RouteDefinition = {
   load({ params }) {
     void getTemplate(params.id);
+    void getProject({
+      teamId: params.teamId,
+      projectId: params.projectId,
+    });
   },
 };
 
 export default function EditTemplate(props: RouteSectionProps) {
   const template = createAsync(() => getTemplate(props.params.id));
+  const project = createAsync(() =>
+    getProject({
+      teamId: props.params.teamId,
+      projectId: props.params.projectId,
+    })
+  );
 
   const [html, setHtml] = createSignal(template()?.body);
 
@@ -104,22 +115,20 @@ export default function EditTemplate(props: RouteSectionProps) {
       </div>
 
       <Suspense fallback={<EditorSkeleton />}>
-        <Show when={template()}>
-          {(template) => (
-            <div class="flex h-full min-h-0">
-              <Sidebar
-                projectId={props.params.projectId}
-                template={template()}
-                html={html()!}
-              />
-              <Editor
-                value={html()}
-                onChange={setHtml}
-                projectId={props.params.projectId}
-                templateId={props.params.id}
-              />
-            </div>
-          )}
+        <Show when={template() && project()}>
+          <div class="flex h-full min-h-0">
+            <Sidebar
+              projectId={props.params.projectId}
+              template={template()!}
+              html={html()!}
+            />
+            <Editor
+              value={html()}
+              onChange={setHtml}
+              project={project()!}
+              templateId={props.params.id}
+            />
+          </div>
         </Show>
       </Suspense>
     </main>

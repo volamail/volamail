@@ -39,7 +39,10 @@ import { ImportExistingEmailDialogContents } from "../../templates/components/im
 type Props = {
   name?: string;
   value?: string;
-  projectId: string;
+  project: {
+    id: string;
+    context?: string | null;
+  };
   templateId?: string;
   onChange: (value: string | undefined) => void;
 };
@@ -289,7 +292,7 @@ export function Editor(props: Props) {
 
                 <ImportExistingEmailDialogContents
                   filter={(email) => email.id !== props.templateId}
-                  projectId={props.projectId}
+                  projectId={props.project.id}
                   onComplete={(email) =>
                     handleImportFromExistingComplete(email.body)
                   }
@@ -329,7 +332,7 @@ export function Editor(props: Props) {
               {(element) => (
                 <FloatingMenu
                   element={element()}
-                  projectId={props.projectId}
+                  projectId={props.project.id}
                   onComplete={modifyElement}
                   onDelete={deleteElement}
                   onClose={setSelectedElement}
@@ -369,14 +372,14 @@ export function Editor(props: Props) {
         class="w-full z-10"
         ref={mainForm}
       >
-        <input type="hidden" name="projectId" value={props.projectId} />
+        <input type="hidden" name="projectId" value={props.project.id} />
 
         <input type="hidden" name="html" value={props.value} />
 
         <PromptInput
           ref={promptInput}
           loading={editTemplateAction.pending}
-          projectId={props.projectId}
+          project={props.project}
           selectedImageUrl={selectedImageUrl()}
           onSelectImage={handleSelectImage}
           placeholder="Change it all to dark mode..."
@@ -388,7 +391,7 @@ export function Editor(props: Props) {
       <Show when={props.templateId}>
         {(templateId) => (
           <DeleteTemplateDialog
-            projectId={props.projectId}
+            projectId={props.project.id}
             templateId={templateId()}
             open={deleteDialogOpen()}
             onClose={() => setDeleteDialogOpen(false)}

@@ -11,7 +11,10 @@ import { GridBgContainer } from "~/lib/ui/components/grid-bg-container";
 import { ImportExistingEmailDialogContents } from "~/lib/templates/components/import-existing-email-dialog";
 
 type Props = {
-  projectId: string;
+  project: {
+    id: string;
+    context?: string | null;
+  };
   onDone: (email: { html: string; subject: string; slug: string }) => void;
 };
 
@@ -48,13 +51,13 @@ export function EditorStartingScreen(props: Props) {
   }
 
   return (
-    <GridBgContainer class="w-full">
+    <GridBgContainer class="w-full p-8">
       <form
         method="post"
         action={generateTemplate}
         class="w-full z-10 flex flex-col justify-center items-center"
       >
-        <input type="hidden" name="projectId" value={props.projectId} />
+        <input type="hidden" name="projectId" value={props.project.id} />
 
         <div class="flex flex-col gap-64 items-center w-full">
           <div class="flex flex-col gap-12 w-full items-center">
@@ -78,7 +81,7 @@ export function EditorStartingScreen(props: Props) {
                 </DialogTrigger>
 
                 <ImportExistingEmailDialogContents
-                  projectId={props.projectId}
+                  projectId={props.project.id}
                   onComplete={handleExistingEmailImported}
                 />
               </Dialog>
@@ -98,7 +101,7 @@ export function EditorStartingScreen(props: Props) {
           <div class="w-full flex gap-2 max-w-3xl">
             <PromptInput
               loading={generateTemplateAction.pending}
-              projectId={props.projectId}
+              project={props.project}
               selectedImageUrl={selectedImageUrl()}
               onSelectImage={handleSelectImage}
             />

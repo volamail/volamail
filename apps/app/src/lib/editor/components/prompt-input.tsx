@@ -12,11 +12,15 @@ import { debounce } from "@solid-primitives/scheduled";
 
 import { ImagePicker } from "./image-picker";
 import { Button } from "~/lib/ui/components/button";
+import { AiContextPopover } from "./ai-context-popover";
 import { getTemplateGenerationAutocomplete } from "~/lib/templates/queries";
 
 type Props = {
   loading?: boolean;
-  projectId: string;
+  project: {
+    id: string;
+    context?: string | null;
+  };
   selectedImageUrl?: string;
   onSelectImage: (imageUrl?: string) => void;
   ref?: HTMLDivElement;
@@ -25,6 +29,7 @@ type Props = {
 
 export function PromptInput(props: Props) {
   const [contents, setContents] = createSignal("");
+  const [aiContext, setAiContext] = createSignal(props.project.context);
   const [debouncedContents, setDebouncedContents] = createSignal(contents());
 
   const query = createQuery(() => ({
@@ -32,7 +37,7 @@ export function PromptInput(props: Props) {
     queryFn: () =>
       getTemplateGenerationAutocomplete({
         query: debouncedContents(),
-        projectId: props.projectId,
+        projectId: props.project.id,
       }),
     enabled: debouncedContents().length > 2,
   }));
@@ -119,12 +124,21 @@ export function PromptInput(props: Props) {
   }
 
   return (
-    <div class='flex gap-1 has-[div:focus]:outline bg-white has-[div[aria-disabled="true"]]:bg-gray-200 outline-blue-500 items-center w-full rounded-lg border border-gray-300 px-2 py-1'>
+    <div class='flex relative gap-1 has-[div:focus]:outline bg-white has-[div[aria-disabled="true"]]:bg-gray-200 outline-blue-500 items-center w-full rounded-lg border border-gray-300 px-2 py-1'>
       <div class="flex gap-1 shrink-0 items-center py-1">
+        <AiContextPopover
+          projectId={props.project.id}
+          defaultContext={props.project.context}
+          onChange={setAiContext}
+        />
+
+        <div class="h-6 w-[1px] bg-gray-300" />
+
         <ImagePicker
-          projectId={props.projectId}
+          projectId={props.project.id}
           onSelect={props.onSelectImage}
         />
+
         <Show when={props.selectedImageUrl}>
           <span class="text-gray-500 text-sm">Using this image,</span>
           <input type="hidden" name="image" value={props.selectedImageUrl} />
@@ -149,6 +163,10 @@ export function PromptInput(props: Props) {
         }}
       />
 
+      <Show when={aiContext()}>
+        {(context) => <input type="hidden" name="context" value={context()} />}
+      </Show>
+
       <input
         type="hidden"
         name="prompt"
@@ -162,6 +180,7 @@ export function PromptInput(props: Props) {
         class="p-1.5 mt-0.5"
         round
         even
+        disabled={!contents()}
         loading={props.loading}
         icon={() => <SparklesIcon class="size-4" />}
       />

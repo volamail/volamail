@@ -25,7 +25,7 @@ const Toaster: Component<ToasterProps> = (props) => {
           )}
           {...rest}
         />
-      </ToastPrimitive.Region >
+      </ToastPrimitive.Region>
     </Portal>
   );
 };
@@ -68,7 +68,7 @@ const ToastClose: Component<ToastCloseButtonProps> = (props) => {
   return (
     <ToastPrimitive.CloseButton
       class={twMerge(
-        "rounded-md text-white transition-opacity focus:outline-none focus:ring-2",
+        "rounded-md text-white focus:outline-none cursor-default hover:text-gray-400 transition-colors focus:ring-2",
         props.class
       )}
       {...rest}

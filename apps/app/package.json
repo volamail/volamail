@@ -50,7 +50,7 @@
     "tailwind-merge": "^2.3.0",
     "tailwind-variants": "^0.2.1",
     "ulid": "^2.3.0",
-    "valibot": "^0.31.1",
+    "valibot": "^0.37.0",
     "vinxi": "^0.4.1",
     "zod": "^3.23.8"
   },

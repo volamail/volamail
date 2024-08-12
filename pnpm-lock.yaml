@@ -135,8 +135,8 @@ importers:
         specifier: ^2.3.0
         version: 2.3.0
       valibot:
-        specifier: ^0.31.1
-        version: 0.31.1
+        specifier: ^0.37.0
+        version: 0.37.0(typescript@5.5.2)
       vinxi:
         specifier: ^0.4.1
         version: 0.4.1(@opentelemetry/api@1.9.0)(@types/node@20.14.6)(drizzle-orm@0.30.10(@opentelemetry/api@1.9.0)(@types/react@18.3.3)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1)
@@ -6798,8 +6798,13 @@ packages:
     resolution: {integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==}
     hasBin: true
 
-  valibot@0.31.1:
-    resolution: {integrity: sha512-2YYIhPrnVSz/gfT2/iXVTrSj92HwchCt9Cga/6hX4B26iCz9zkIsGTS0HjDYTZfTi1Un0X6aRvhBi1cfqs/i0Q==}
+  valibot@0.37.0:
+    resolution: {integrity: sha512-FQz52I8RXgFgOHym3XHYSREbNtkgSjF9prvMFH1nBsRyfL6SfCzoT1GuSDTlbsuPubM7/6Kbw0ZMQb8A+V+VsQ==}
+    peerDependencies:
+      typescript: '>=5'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
 
   validate-html-nesting@1.2.2:
     resolution: {integrity: sha512-hGdgQozCsQJMyfK5urgFcWEqsSSrK63Awe0t/IMR0bZ0QMtnuaiHzThW81guu3qx9abLi99NEuiaN6P9gVYsNg==}
@@ -15156,7 +15161,9 @@ snapshots:
 
   uuid@9.0.1: {}
 
-  valibot@0.31.1: {}
+  valibot@0.37.0(typescript@5.5.2):
+    optionalDependencies:
+      typescript: 5.5.2
 
   validate-html-nesting@1.2.2: {}
 

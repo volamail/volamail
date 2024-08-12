@@ -14,6 +14,7 @@ export const projectsTable = pgTable(
       .primaryKey()
       .$defaultFn(() => nanoid(8)),
     name: text("name").notNull(),
+    context: text("context"),
     teamId: text("team_id")
       .notNull()
       .references(() => teamsTable.id, {

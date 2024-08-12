@@ -29,7 +29,7 @@ export function Breadcrumbs(props: Props) {
                   <BreadcrumbsPrimitive.Link
                     as={A}
                     href={href()}
-                    class="text-sm font-medium text-gray-500 hover:text-gray-700"
+                    class="text-sm font-medium text-gray-500 hover:text-gray-800 cursor-default transition-colors"
                   >
                     {crumb.label}
                   </BreadcrumbsPrimitive.Link>

@@ -3,15 +3,15 @@ import { eq, and } from "drizzle-orm";
 import { createError } from "vinxi/http";
 import { generateObject, generateText } from "ai";
 import { action, redirect } from "@solidjs/router";
-import { object, string, optional } from "valibot";
+import { object, string, optional, pipe, maxLength } from "valibot";
 
 import { db } from "~/lib/db";
 import { getModelForTeam } from "./model";
 import * as schema from "~/lib/db/schema";
 import { requireUser } from "~/lib/auth/utils";
 import { parseFormData } from "../server-utils";
-import generatePrompt from "./prompts/generate.txt?raw";
 import editPrompt from "./prompts/edit.txt?raw";
+import generatePrompt from "./prompts/generate.txt?raw";
 import inlineEditPrompt from "./prompts/inline-edit.txt?raw";
 import { requireUserToBeMemberOfProject } from "~/lib/projects/utils";
 
@@ -109,6 +109,7 @@ export const generateTemplate = action(async (formData: FormData) => {
       prompt: string(),
       image: optional(string()),
       projectId: string(),
+      context: optional(pipe(string(), maxLength(200))),
     }),
     formData
   );
@@ -123,7 +124,10 @@ export const generateTemplate = action(async (formData: FormData) => {
       teamId: meta.project.team.id,
       tier: "large",
     }),
-    system: generatePrompt,
+    system: `${generatePrompt}\n${getProjectSystemMessage({
+      name: meta.project.name,
+      context: payload.context,
+    })}`,
     prompt: `Prompt: ${
       payload.image ? `Using the image with URL ${payload.image}, ` : ""
     }${payload.prompt}`,
@@ -132,6 +136,13 @@ export const generateTemplate = action(async (formData: FormData) => {
       subject: z.string(),
       html: z.string(),
     }),
+  }).catch((e) => {
+    console.log(e);
+
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Internal server error",
+    });
   });
 
   return result.object;
@@ -148,6 +159,7 @@ export const editHtmlTemplate = action(async (formData: FormData) => {
       html: string(),
       projectId: string(),
       image: optional(string()),
+      context: optional(pipe(string(), maxLength(200))),
     }),
     formData
   );
@@ -162,7 +174,10 @@ export const editHtmlTemplate = action(async (formData: FormData) => {
       teamId: meta.project.team.id,
       tier: "large",
     }),
-    system: editPrompt,
+    system: `${editPrompt}\n${getProjectSystemMessage({
+      name: meta.project.name,
+      context: payload.context,
+    })}`,
     prompt: `HTML: ${payload.html}\nPrompt: ${
       payload.image ? `Using the image with URL ${payload.image}, ` : ""
     }${payload.prompt}`,
@@ -263,3 +278,12 @@ export const getTemplateInForm = action(async (formData: FormData) => {
     slug: row.slug,
   };
 }, "templates");
+
+function getProjectSystemMessage(project: {
+  name: string;
+  context?: string | null;
+}) {
+  return `Project name: ${project.name}${
+    project.context ? `\nProject description: ${project.context}` : ""
+  }`;
+}
