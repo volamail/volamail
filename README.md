@@ -14,6 +14,9 @@ Volamail is an open source, self-hostable email provider and editor with AI feat
 > [!IMPORTANT]
 > This project is still in beta. You might encounter bugs, missing features or documentation.
 
+## About the project
+[![Volamail editing demo](./.github/assets/feature_demo.gif)](https://volamail.com)
+
 ## Features
 
 - AI-powered email generation
@@ -24,6 +27,20 @@ Volamail is an open source, self-hostable email provider and editor with AI feat
 - HTML export
 - Project-aware AI context
 - Rest API
+
+## Credits
+
+This project is built on top of incredible open source projects:
+
+- [Solid.js and SolidStart](https://github.com/solidjs/solid-start)
+- [Vercel AI SDK](https://github.com/vercel/ai)
+- [Supabase](https://supabase.com)
+- [Kobalte](https://github.com/kobaltedev/kobalte)
+- [Ark UI](https://github.com/chakra-ui/ark)
+- [Tailwind CSS](https://tailwindcss.com)
+- [Astro](https://astro.build)
+- [Drizzle ORM](https://orm.drizzle.team)
+- [Fumadocs](https://github.com/fuma-nama/fumadocs)
 
 ## Contributing
 
