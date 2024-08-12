@@ -1,5 +1,5 @@
-import { createSignal } from "solid-js";
 import { Table2Icon } from "lucide-solid";
+import { createSignal, Show, lazy } from "solid-js";
 
 import { PromptInput } from "./prompt-input";
 import { PasteHtmlButton } from "./paste-html-button";
@@ -17,6 +17,10 @@ type Props = {
   };
   onDone: (email: { html: string; subject: string; slug: string }) => void;
 };
+
+const ContextHintIllustration = lazy(
+  () => import("./context-hint-illustration")
+);
 
 export function EditorStartingScreen(props: Props) {
   const generateTemplateAction = useMutation({
@@ -98,7 +102,10 @@ export function EditorStartingScreen(props: Props) {
             </div>
           </div>
 
-          <div class="w-full flex gap-2 max-w-3xl">
+          <div class="w-full flex gap-2 max-w-3xl relative">
+            <Show when={!props.project.context}>
+              <ContextHintIllustration />
+            </Show>
             <PromptInput
               loading={generateTemplateAction.pending}
               project={props.project}
