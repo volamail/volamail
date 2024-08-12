@@ -57,18 +57,35 @@ export function PromptInput(props: Props) {
     });
   });
 
-  createEffect(() => {
-    if (contentEditableRef) {
-      if (props.loading === false) {
-        contentEditableRef.focus();
+  function handleContentEditableRef(element: HTMLDivElement) {
+    contentEditableRef = element;
 
-        contentEditableRef.innerText = "";
+    // is this illegal? idk
+    props.ref = element;
 
-        setContents("");
-      } else if (props.loading === true) {
-        contentEditableRef.blur();
-      }
+    if (props.loading === false) {
+      element.focus();
+
+      element.innerText = "";
+
+      setContents("");
+    } else if (props.loading === true) {
+      element.blur();
     }
+  }
+
+  createEffect((prev: boolean | undefined) => {
+    if (props.loading === false && prev === true) {
+      contentEditableRef!.focus();
+
+      contentEditableRef!.innerText = "";
+
+      setContents("");
+    } else if (props.loading === true) {
+      contentEditableRef.blur();
+    }
+
+    return props.loading;
   });
 
   const suggestion = createMemo(() => {
@@ -114,7 +131,7 @@ export function PromptInput(props: Props) {
   }
 
   function handleInputKeyDown(event: KeyboardEvent) {
-    if (event.key === "Enter") {
+    if (event.key === "Enter" && event.currentTarget === contentEditableRef) {
       event.preventDefault();
 
       const form = hiddenInputRef.form;
@@ -149,10 +166,7 @@ export function PromptInput(props: Props) {
         contentEditable={!props.loading}
         onKeyDown={handleInputKeyDown}
         aria-disabled={props.loading}
-        ref={(el) => {
-          contentEditableRef = el;
-          props.ref = el;
-        }}
+        ref={handleContentEditableRef}
         class="py-1 gap-1 grow text-sm outline-none after:content-[attr(data-suggestion)] after:text-gray-400"
         data-suggestion={suggestion()}
         onInput={(e) => {
