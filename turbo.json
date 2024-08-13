@@ -12,7 +12,8 @@
         "dist/**",
         ".next/**",
         "!.next/cache/**"
-      ]
+      ],
+      "env": ["AWS_BUCKET", "AWS_REGION", "VITE_SELF_HOSTED"]
     },
     "lint": {},
     "type-check": {},
