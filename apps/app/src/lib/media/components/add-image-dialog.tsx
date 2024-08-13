@@ -55,6 +55,7 @@ export function AddImageDialog(props: Props) {
           method="post"
           action={addImage}
           autocomplete="off"
+          enctype="multipart/form-data"
         >
           <input type="hidden" name="projectId" value={props.projectId} />
 

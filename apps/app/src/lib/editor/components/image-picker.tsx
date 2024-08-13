@@ -92,6 +92,7 @@ export function ImagePicker(props: Props) {
             action={addImage}
             method="post"
             class="flex text-sm p-1 gap-2 items-center border-b border-gray-300 bg-white"
+            enctype="multipart/form-data"
           >
             <input type="hidden" name="projectId" value={props.projectId} />
             <input
