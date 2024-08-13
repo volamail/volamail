@@ -59,7 +59,7 @@ const currentYear = new Date().getFullYear().toString();
             <div class="flex gap-8 justify-center items-center">
               <a
                 href={loginLink}
-                class="bg-black inline-flex gap-1.5 items-center self-center text-center hover:bg-gray-700 transition-colors text-white px-4 py-2 rounded-full text-sm font-medium"
+                class="bg-black inline-flex cursor-default gap-1.5 items-center self-center text-center hover:bg-gray-700 transition-colors text-white px-4 py-2 rounded-full text-sm font-medium"
               >
                 Get started
                 <ChevronRightIcon class="size-4" />
@@ -67,7 +67,7 @@ const currentYear = new Date().getFullYear().toString();
 
               <a
                 href="mailto:info@volamail.com"
-                class="text-black text-sm transition-colors hover:text-gray-500 inline-flex gap-1.5 items-center"
+                class="text-black text-sm cursor-default transition-colors hover:text-gray-500 inline-flex gap-1.5 items-center"
               >
                 Contact us
                 <ChevronRightIcon class="size-4" />
@@ -75,6 +75,20 @@ const currentYear = new Date().getFullYear().toString();
             </div>
           </div>
         </section>
+
+        <a
+          href="https://www.producthunt.com/posts/volamail?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-volamail"
+          target="_blank"
+          class="inline-block z-50 cursor-default hover:opacity-75 transition-opacity self-center -mb-6"
+        >
+          <img
+            src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=479469&theme=neutral"
+            alt="Volamail - Open source AI-powered email for everyone | Product Hunt"
+            style="width: 250px; height: 54px;"
+            width="250"
+            height="54"
+          />
+        </a>
         <Image
           src={screenshotImage}
           class="w-full mb-20 hidden shadow-2xl md:block mx-auto max-w-6xl border z-20 rounded-xl"
@@ -192,7 +206,7 @@ const currentYear = new Date().getFullYear().toString();
 
               <a
                 href={loginLink}
-                class="bg-transparent text-center hover:bg-gray-200 transition-colors text-black border-black border px-4 py-2 rounded-lg text-sm font-medium"
+                class="bg-transparent text-center hover:bg-gray-200 cursor-default transition-colors text-black border-black border px-4 py-2 rounded-lg text-sm font-medium"
               >
                 Get started
               </a>
@@ -231,7 +245,7 @@ const currentYear = new Date().getFullYear().toString();
 
               <a
                 href={loginLink}
-                class="bg-black text-center hover:bg-gray-700 transition-colors text-white px-4 py-2 rounded-lg text-sm font-medium"
+                class="bg-black text-center hover:bg-gray-700 cursor-default transition-colors text-white px-4 py-2 rounded-lg text-sm font-medium"
               >
                 Get started
               </a>
@@ -255,7 +269,7 @@ const currentYear = new Date().getFullYear().toString();
 
               <a
                 href="mailto:info@volamail.com"
-                class="border-black border hover:bg-gray-200 transition-colors bg-transparent text-center px-4 py-2 rounded-lg text-sm font-medium"
+                class="border-black border hover:bg-gray-200 cursor-default transition-colors bg-transparent text-center px-4 py-2 rounded-lg text-sm font-medium"
               >
                 Contact us
               </a>
@@ -277,21 +291,28 @@ const currentYear = new Date().getFullYear().toString();
           <a
             href="https://docs.volamail.com"
             target="_blank"
-            class="text-gray-500 hover:text-black transition-colors"
+            class="text-gray-500 hover:text-black cursor-default transition-colors"
           >
             Docs
           </a>
           <a
+            href="https://discord.gg/2mqaUv4urR"
+            target="_blank"
+            class="text-gray-500 hover:text-black cursor-default transition-colors"
+          >
+            Discord
+          </a>
+          <a
             href="https://github.com/volamail/volamail"
             target="_blank"
-            class="text-gray-500 hover:text-black transition-colors"
+            class="text-gray-500 hover:text-black cursor-default transition-colors"
           >
             GitHub
           </a>
           <a
             href="https://x.com/volamail"
             target="_blank"
-            class="text-gray-500 hover:text-black transition-colors"
+            class="text-gray-500 hover:text-black cursor-default transition-colors"
           >
             X
           </a>
