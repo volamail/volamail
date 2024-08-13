@@ -1,7 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import Logo from "../components/Logo.astro";
-import { ChevronRightIcon } from "lucide-solid";
+import { ChevronRightIcon, SendIcon } from "lucide-solid";
 import screenshotImage from "../assets/screenshot.png";
 import FeatureCard from "../components/FeatureCard.astro";
 import RoadmapItem from "../components/RoadmapItem.astro";
@@ -56,7 +56,7 @@ const currentYear = new Date().getFullYear().toString();
               </p>
             </div>
 
-            <div class="flex gap-8 justify-center items-center">
+            <div class="flex gap-4 justify-center items-center">
               <a
                 href={loginLink}
                 class="bg-black inline-flex cursor-default gap-1.5 items-center self-center text-center hover:bg-gray-700 transition-colors text-white px-4 py-2 rounded-full text-sm font-medium"
@@ -67,10 +67,10 @@ const currentYear = new Date().getFullYear().toString();
 
               <a
                 href="mailto:info@volamail.com"
-                class="text-black text-sm cursor-default transition-colors hover:text-gray-500 inline-flex gap-1.5 items-center"
+                class="text-black font-medium border border-gray-300 px-4 py-[0.49rem] rounded-full text-sm cursor-default transition-colors hover:text-gray-500 inline-flex gap-1.5 items-center"
               >
                 Contact us
-                <ChevronRightIcon class="size-4" />
+                <SendIcon class="size-4" />
               </a>
             </div>
           </div>
