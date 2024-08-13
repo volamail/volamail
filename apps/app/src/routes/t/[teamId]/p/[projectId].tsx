@@ -87,7 +87,7 @@ export default function DashboardLayout(props: Props) {
         />
       </div>
       <nav
-        class="bg-gray-100 overflow-y-auto border-r h-dvh flex-col w-64 shrink-0"
+        class="bg-gray-100 overflow-y-auto border-r h-dvh flex-col max-w-64 shrink-0"
         classList={{
           flex: sidebarExpanded(),
           hidden: !sidebarExpanded(),

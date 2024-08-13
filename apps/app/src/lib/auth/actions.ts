@@ -104,7 +104,7 @@ export const sendEmailOtp = action(async (formData: FormData) => {
     console.log("GENERATED EMAIL OTP:", code);
   } else {
     await sendMail({
-      from: env.NOREPLY_EMAIL,
+      from: `Volamail <${env.NOREPLY_EMAIL}>`,
       to: body.email,
       subject: "Here's your login code",
       body: otpTemplate,
@@ -223,6 +223,11 @@ export const verifyEmailOtp = action(async (formData: FormData) => {
   if (body.to) {
     throw redirect(body.to);
   }
+
+  // TODO: Redirect to a default project when SolidStart stops being silly
+  //
+  // If we compute the redirect path to a default project's emails it seems
+  // to break caches or something, so we redirect to the /teams page for now.
 
   throw redirect("/teams");
 }, "auth-state");
