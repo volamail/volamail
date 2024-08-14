@@ -1,7 +1,7 @@
 {
   "name": "@repo/app",
   "type": "module",
-  "version": "0.1.0",
+  "version": "0.1.1-0",
   "scripts": {
     "build": "vinxi build",
     "db": "drizzle-kit",
