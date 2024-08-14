@@ -146,7 +146,7 @@ export const verifyEmailOtp = action(async (formData: FormData) => {
   ) {
     throw createError({
       statusCode: 403,
-      statusMessage: "Bad code",
+      statusMessage: "Invalid code",
     });
   }
 
