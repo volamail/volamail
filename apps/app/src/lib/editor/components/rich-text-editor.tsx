@@ -86,7 +86,7 @@ export default function RichTextEditor(props: Props) {
 
   return (
     <div class="flex flex-col gap-1">
-      <div class="flex flex-col border border-gray-200 rounded-lg">
+      <div class="flex flex-col border border-gray-200 rounded-lg overflow-hidden">
         <div class="flex gap-2 border-b border-gray-200 p-1.5">
           <Show when={editor()}>
             {(editor) => (

@@ -6,7 +6,7 @@ import {
   CircleCheckBigIcon,
   ArrowUpNarrowWideIcon,
 } from "lucide-solid";
-import { JSX, Show, createMemo, createSignal } from "solid-js";
+import { JSX, Show, Suspense, createMemo, createSignal, lazy } from "solid-js";
 
 import {
   Tooltip,
@@ -14,7 +14,6 @@ import {
   TooltipTrigger,
 } from "~/lib/ui/components/tooltip";
 import ColorPicker from "./color-picker";
-import RichTextEditor from "./rich-text-editor";
 import { Input } from "~/lib/ui/components/input";
 import { Button } from "~/lib/ui/components/button";
 import { showToast } from "~/lib/ui/components/toasts";
@@ -31,6 +30,8 @@ type Props = {
   onDelete: () => void;
   onEdit: (changes: string) => void;
 };
+
+const RichTextEditor = lazy(() => import("./rich-text-editor"));
 
 export function FloatingMenu(props: Props) {
   const action = useMutation({
@@ -73,12 +74,18 @@ export function FloatingMenu(props: Props) {
       const contents = props.element.outerHTML;
 
       elements.push(
-        <RichTextEditor
-          defaultValue={contents}
-          backgroundColor={getComputedElementBackground(
-            props.element.parentElement!
-          )}
-        />
+        <Suspense
+          fallback={
+            <div class="animate-pulse w-full h-32 bg-gray-300 rounded-lg" />
+          }
+        >
+          <RichTextEditor
+            defaultValue={contents}
+            backgroundColor={getComputedElementBackground(
+              props.element.parentElement!
+            )}
+          />
+        </Suspense>
       );
     }
 
