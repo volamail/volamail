@@ -59,13 +59,13 @@ export default function Login() {
   }
 
   return (
-    <GridBgContainer class="h-dvh">
+    <GridBgContainer class="h-dvh p-4">
       <Title>Login - Volamail</Title>
 
       <form
         action={sendEmailOtp}
         method="post"
-        class="shadow-xl border rounded-xl bg-white max-w-sm w-full p-8 flex flex-col gap-1"
+        class="shadow-xl z-50 border rounded-xl bg-white max-w-sm w-full p-8 flex flex-col gap-1"
       >
         <h1 class="text-xl font-semibold">Login</h1>
         <p class="text-gray-600 text-sm">
