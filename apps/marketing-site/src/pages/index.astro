@@ -20,6 +20,10 @@ const currentYear = new Date().getFullYear().toString();
   <head>
     <BaseHead />
 
+    <script
+      src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs"
+      type="module"></script>
+
     <title>Simple email for everyone - Volamail</title>
 
     <meta
@@ -79,7 +83,7 @@ const currentYear = new Date().getFullYear().toString();
         <a
           href="https://www.producthunt.com/posts/volamail?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-volamail"
           target="_blank"
-          class="inline-block z-50 cursor-default hover:opacity-75 transition-opacity self-center -mb-6"
+          class="inline-block z-50 cursor-default hover:opacity-75 transition-opacity self-center md:-mb-6"
         >
           <img
             src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=479469&theme=neutral"
@@ -278,13 +282,45 @@ const currentYear = new Date().getFullYear().toString();
         </div>
       </section>
 
-      <footer
-        class="w-full border-t max-w-5xl mx-auto justify-between border-gray-100 p-8 flex items-center"
+      <section
+        class="px-8 py-32 bg-grid-black/5 w-full relative flex flex-col gap-3 justify-center items-center"
       >
-        <div class="flex gap-3 items-center">
+        <div
+          class="absolute pointer-events-none inset-0 w-full flex items-center justify-center bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,white)]"
+        >
+        </div>
+
+        <div class="flex flex-col gap-2 z-10 items-center">
+          <h1 class="text-4xl font-bold">Start now for free</h1>
+          <p class="text-center text-gray-500">
+            Create an account and start creating emails straight away.
+          </p>
+          <dotlottie-player
+            src="https://lottie.host/6f423c9f-4bd0-47ae-b759-5f4f598e7e9b/ntMDht2vq0.json"
+            background="transparent"
+            speed="1"
+            class="w-full max-w-md"
+            direction="1"
+            playMode="normal"
+            loop
+            autoplay></dotlottie-player>
+          <a
+            href={loginLink}
+            class="inline-flex items-center gap-2 text-center font-medium text-white bg-black rounded-full py-2 px-4 cursor-default hover:bg-gray-700 transition-colors"
+          >
+            Get started
+            <ChevronRightIcon class="size-4" />
+          </a>
+        </div>
+      </section>
+
+      <footer
+        class="w-full border-t max-w-5xl mx-auto justify-between border-gray-100 p-8 flex flex-col md:flex-row gap-6 items-start"
+      >
+        <div class="flex gap-3 items-center shrink-0">
           <Logo class="w-6" />
           <span class="text-sm text-gray-500">
-            Volamail © 2023 - {currentYear}
+            Volamail © {currentYear}
           </span>
         </div>
         <div class="flex gap-6 items-center text-sm">
