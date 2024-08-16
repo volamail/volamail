@@ -11,6 +11,7 @@ import * as schema from "~/lib/db/schema";
 import { requireUser } from "~/lib/auth/utils";
 import { parseFormData } from "../server-utils";
 import editPrompt from "./prompts/edit.txt?raw";
+import { captureAiRequestEvent } from "../analytics";
 import generatePrompt from "./prompts/generate.txt?raw";
 import inlineEditPrompt from "./prompts/inline-edit.txt?raw";
 import { requireUserToBeMemberOfProject } from "~/lib/projects/utils";
@@ -145,6 +146,8 @@ export const generateTemplate = action(async (formData: FormData) => {
     });
   });
 
+  await captureAiRequestEvent(user.id);
+
   return result.object;
 });
 
@@ -183,6 +186,8 @@ export const editHtmlTemplate = action(async (formData: FormData) => {
     }${payload.prompt}`,
   });
 
+  await captureAiRequestEvent(user.id);
+
   return result.text;
 });
 
@@ -213,6 +218,8 @@ export const editTemplateElement = action(async (formData: FormData) => {
     system: inlineEditPrompt,
     prompt: `HTML:${payload.element}\nPrompt:${payload.prompt}`,
   });
+
+  await captureAiRequestEvent(user.id);
 
   return {
     code: result.text,

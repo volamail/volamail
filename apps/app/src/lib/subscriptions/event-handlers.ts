@@ -10,6 +10,7 @@ import {
 } from "./constants";
 import { db } from "../db";
 import { subscriptionMetaSchema } from "./validations";
+import { capturePlanPurchaseEvent } from "../analytics";
 import { subscriptionsTable, teamsTable } from "../db/schema";
 
 export async function handleInvoicePaidEvent({
@@ -109,6 +110,8 @@ export async function handleInvoicePaidEvent({
       })
       .where(eq(teamsTable.id, team.id));
   });
+
+  await capturePlanPurchaseEvent(team);
 }
 
 export async function handleSubscriptionUpdatedEvent({

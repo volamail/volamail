@@ -39,3 +39,27 @@ export async function captureUserRegisteredEvent(user: {
 
   await client?.shutdown();
 }
+
+export async function capturePlanPurchaseEvent(team: {
+  id: string;
+  name: string;
+}) {
+  client?.capture({
+    distinctId: team.id,
+    event: "plan_purchased",
+    properties: {
+      team_name: team.name,
+    },
+  });
+
+  await client?.shutdown();
+}
+
+export async function captureAiRequestEvent(userId: string) {
+  client?.capture({
+    distinctId: userId,
+    event: "ai_request",
+  });
+
+  await client?.shutdown();
+}
