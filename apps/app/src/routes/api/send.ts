@@ -83,7 +83,7 @@ export async function POST({ request }: APIEvent) {
 
   const template = await db.query.templatesTable.findFirst({
     where: and(
-      eq(schema.templatesTable.id, payload.template),
+      eq(schema.templatesTable.slug, payload.template),
       eq(schema.templatesTable.projectId, project.id)
     ),
   });
@@ -100,7 +100,8 @@ export async function POST({ request }: APIEvent) {
   const domain = await db.query.domainsTable.findFirst({
     where: and(
       eq(schema.domainsTable.projectId, project.id),
-      eq(schema.domainsTable.domain, fromDomain)
+      eq(schema.domainsTable.domain, fromDomain),
+      eq(schema.domainsTable.verified, true)
     ),
     columns: {
       id: true,
