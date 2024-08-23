@@ -2,14 +2,14 @@ import { and, eq } from "drizzle-orm";
 import { action } from "@solidjs/router";
 import { createError } from "vinxi/http";
 import { object, string } from "valibot";
+import { AlreadyExistsException } from "@aws-sdk/client-sesv2";
 
 import { db } from "../db";
-import { sesClient } from "../mail/send";
+import { sesClientV2 } from "../mail/send";
 import { requireUser } from "../auth/utils";
 import { domainsTable } from "../db/schema";
 import { parseFormData } from "../server-utils";
 import { requireUserToBeMemberOfProject } from "../projects/utils";
-import { AlreadyExistsException } from "@aws-sdk/client-sesv2";
 
 export const createDomain = action(async (formData: FormData) => {
   "use server";
@@ -30,7 +30,7 @@ export const createDomain = action(async (formData: FormData) => {
   });
 
   try {
-    const identity = await sesClient.createEmailIdentity({
+    const identity = await sesClientV2.createEmailIdentity({
       EmailIdentity: body.domain,
     });
 
@@ -91,7 +91,7 @@ export const deleteDomain = action(async (formData: FormData) => {
   }
 
   await db.transaction(async (db) => {
-    await sesClient.deleteEmailIdentity({
+    await sesClientV2.deleteEmailIdentity({
       EmailIdentity: domain.domain,
     });
 

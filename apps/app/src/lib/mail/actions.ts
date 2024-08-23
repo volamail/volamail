@@ -5,12 +5,12 @@ import { object, optional, record, string } from "valibot";
 
 import { db } from "../db";
 import { sendMail } from "./send";
+import { env } from "../environment/env";
 import { requireUser } from "../auth/utils";
 import { parseFormData } from "../server-utils";
-import { subscriptionsTable } from "../db/schema";
-import { requireUserToBeMemberOfProject } from "../projects/utils";
 import { isSelfHosted } from "../environment/utils";
-import { env } from "../environment/env";
+import { emailsTable, subscriptionsTable } from "../db/schema";
+import { requireUserToBeMemberOfProject } from "../projects/utils";
 
 export const sendTestMail = action(async (formData: FormData) => {
   "use server";
@@ -57,20 +57,42 @@ export const sendTestMail = action(async (formData: FormData) => {
     });
   }
 
+  let messageId: string;
+
   try {
-    await sendMail({
+    const message = await sendMail({
       from: `Volamail <${env.NOREPLY_EMAIL}>`,
       to: user.email,
       body: payload.body,
       subject: payload.subject,
       data: payload.data || {},
     });
+
+    if (!message.MessageId) {
+      throw createError({
+        statusCode: 500,
+        statusMessage: "Internal server error",
+      });
+    }
+
+    messageId = message.MessageId;
   } catch {
     throw createError({
       statusCode: 500,
       statusMessage: "Internal server error",
     });
   }
+
+  await db.insert(emailsTable).values({
+    id: messageId,
+    status: "SENT",
+    projectId: payload.projectId,
+    to: user.email,
+    from: env.NOREPLY_EMAIL,
+    subject: payload.subject,
+    sentAt: new Date(),
+    updatedAt: new Date(),
+  });
 
   // TODO: wrap this (and above) in a transaction
   if (!isSelfHosted()) {

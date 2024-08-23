@@ -27,7 +27,7 @@ import { Button } from "~/lib/ui/components/button";
 import { createDomain } from "~/lib/domains/actions";
 import { showToast } from "~/lib/ui/components/toasts";
 import { useMutation } from "~/lib/ui/hooks/useMutation";
-import { getProjectDomains } from "~/lib/domains/queries";
+import { getProjectDomains } from "~/lib/domains/loaders";
 import { DeleteDomainDialog } from "~/lib/domains/components/delete-domain-dialog";
 
 export const route: RouteDefinition = {

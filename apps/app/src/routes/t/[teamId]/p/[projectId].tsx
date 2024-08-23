@@ -4,9 +4,11 @@ import {
   splitProps,
   type ComponentProps,
   createSignal,
+  createMemo,
 } from "solid-js";
 import {
   KeyIcon,
+  MailIcon,
   GlobeIcon,
   ImageIcon,
   UsersIcon,
@@ -42,6 +44,7 @@ import { getUserTeams } from "~/lib/teams/loaders";
 import { getCurrentUser } from "~/lib/auth/queries";
 import { Avatar } from "~/lib/ui/components/avatar";
 import { isSelfHosted } from "~/lib/environment/utils";
+import { getAppEnvironmentInfo } from "~/lib/environment/loaders";
 import { Button, buttonVariants } from "~/lib/ui/components/button";
 import { ProjectSelector } from "~/lib/projects/components/project-selector";
 
@@ -54,23 +57,25 @@ export const route: RouteDefinition = {
     void getUserTeams();
     void getCurrentUser();
     void getTeam(params.teamId);
+    void getAppEnvironmentInfo();
   },
 };
-
-const ENVIRONMENT_STRING = `Version: v${
-  import.meta.env.VITE_PUBLIC_APP_VERSION
-} - Stage: ${import.meta.env.PROD ? "prod" : "dev"} - SH: ${
-  import.meta.env.VITE_SELF_HOSTED ? "Y" : "N"
-}`;
 
 export default function DashboardLayout(props: Props) {
   const params = useParams();
 
   const user = createAsync(() => getCurrentUser());
+  const env = createAsync(() => getAppEnvironmentInfo());
 
   const logoutAction = useSubmission(logout);
 
   const [sidebarExpanded, setSidebarExpanded] = createSignal(true);
+
+  const environmentString = createMemo(() => {
+    return `v${env()?.instance.version} - ${
+      env()?.instance.prod ? "prod" : "dev"
+    } - ${env()?.instance.selfHosted ? "SH" : "CH"}`;
+  });
 
   return (
     <div class="flex">
@@ -130,6 +135,14 @@ export default function DashboardLayout(props: Props) {
                   >
                     <ImageIcon class="size-4" />
                     Media
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    href={`/t/${params.teamId}/p/${params.projectId}/logs`}
+                  >
+                    <MailIcon class="size-4" />
+                    Logs
                   </NavLink>
                 </li>
                 <li>
@@ -209,7 +222,7 @@ export default function DashboardLayout(props: Props) {
         </div>
 
         <p class="text-gray-300 self-stretch text-center text-xs px-4 py-2">
-          {ENVIRONMENT_STRING}
+          {environmentString()}
         </p>
 
         <form

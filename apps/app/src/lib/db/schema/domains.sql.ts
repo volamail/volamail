@@ -1,6 +1,6 @@
+import { nanoid } from "nanoid";
 import { relations } from "drizzle-orm";
 import { boolean, index, pgTable, text, timestamp } from "drizzle-orm/pg-core";
-import { nanoid } from "nanoid";
 
 import { projectsTable } from "./projects.sql";
 
@@ -14,6 +14,9 @@ export const domainsTable = pgTable(
     verified: boolean("verified").notNull().default(false),
     tokens: text("tokens").array().notNull(),
     createdAt: timestamp("created_at").notNull().defaultNow(),
+    receivesDeliveryNotifications: boolean("receives_delivery_notifications")
+      .notNull()
+      .default(false),
     projectId: text("project_id")
       .notNull()
       .references(() => projectsTable.id, {
