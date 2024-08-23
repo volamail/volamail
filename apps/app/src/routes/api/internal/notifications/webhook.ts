@@ -42,7 +42,7 @@ export async function POST({ request }: APIEvent) {
     body
   );
 
-  if (!payload.success || payload.output.TopicArn !== env.AWS_SNS_TOPIC_ARN) {
+  if (!payload.success || (payload.output.TopicArn !== env.AWS_SNS_TOPIC_ARN)) {
     console.warn("Validation failed on SNS payload");
 
     throw createError({
