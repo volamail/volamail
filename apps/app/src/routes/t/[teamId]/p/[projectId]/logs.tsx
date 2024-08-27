@@ -120,7 +120,7 @@ export default function Logs(props: RouteSectionProps) {
               </span>
               <div class="flex justify-end gap-1">
                 <Button
-                  as={A}
+                  as={page() === 0 ? undefined : A}
                   href={page() <= 1 ? "#" : `?page=${page() - 1}`}
                   even
                   variant="outline"
@@ -130,7 +130,7 @@ export default function Logs(props: RouteSectionProps) {
                   <ChevronLeftIcon class="size-4" />
                 </Button>
                 <Button
-                  as={A}
+                  as={page() === emails()!.pages - 1 ? undefined : A}
                   href={`?page=${page() + 1}`}
                   even
                   variant="outline"
