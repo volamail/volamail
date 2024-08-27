@@ -1,6 +1,7 @@
 import * as v from "valibot";
 import { eq } from "drizzle-orm";
 import { createError } from "vinxi/http";
+import Validator from 'sns-payload-validator';
 import { APIEvent } from "@solidjs/start/server";
 
 import { db } from "~/lib/db";
@@ -27,17 +28,9 @@ export async function POST({ request }: APIEvent) {
       SigningCertURL: v.string(),
       SignatureVersion: v.literal("1"),
       TopicArn: v.string(),
-      Message: v.object({
-        notificationType: v.union([
-          v.literal("Bounce"),
-          v.literal("Delivery"),
-          v.literal("Complaint"),
-        ]),
-        mail: v.object({
-          timestamp: v.string(),
-          messageId: v.string(),
-        }),
-      }),
+      Message: v.string(),
+      MessageId: v.string(),
+      Timestamp: v.string(),
     }),
     body
   );
@@ -51,9 +44,44 @@ export async function POST({ request }: APIEvent) {
     });
   }
 
-  // TODO: Verify request signature
+  const validator = new Validator();
 
-  const message = payload.output.Message;
+  try {
+    await validator.validate(payload.output);
+  } catch {
+    console.warn("Validation failed on SNS payload");
+
+    throw createError({
+      status: 400,
+      statusMessage: "Invalid signature",
+    });
+  }
+
+  const messageValidationResult = await v.safeParseAsync(
+    v.object({
+      notificationType: v.union([
+        v.literal("Bounce"),
+        v.literal("Delivery"),
+        v.literal("Complaint"),
+      ]),
+      mail: v.object({
+        timestamp: v.string(),
+        messageId: v.string(),
+      }),
+    }),
+    JSON.parse(payload.output.Message)
+  )
+
+  if (!messageValidationResult.success) {
+    console.warn("Validation failed on SNS payload");
+
+    throw createError({
+      status: 400,
+      statusMessage: "Invalid message",
+    });
+  }
+
+  const message = messageValidationResult.output;
 
   await db
     .update(emailsTable)
