@@ -6,8 +6,8 @@ import * as mutations from "./mutations";
 import { sesClientV2 } from "../mail/send";
 import { requireUser } from "../auth/utils";
 import { domainsTable } from "../db/schema";
-import { requireUserToBeMemberOfProject } from "../projects/utils";
 import { getDeliveryNotificationsEnabled } from "../mail/config";
+import { requireUserToBeMemberOfProject } from "../projects/utils";
 
 export const getProjectDomains = cache(async (projectId: string) => {
   "use server";

@@ -1,19 +1,19 @@
 import {
   For,
   Show,
-  Suspense,
-  createSignal,
-  onCleanup,
   onMount,
+  Suspense,
+  onCleanup,
+  createSignal,
 } from "solid-js";
-import { Title } from "@solidjs/meta";
-import { LoaderIcon, PlusIcon, Trash2Icon } from "lucide-solid";
 import {
-  createAsync,
   revalidate,
+  createAsync,
   type RouteDefinition,
   type RouteSectionProps,
 } from "@solidjs/router";
+import { Title } from "@solidjs/meta";
+import { InfoIcon, LoaderIcon, PlusIcon, Trash2Icon } from "lucide-solid";
 
 import {
   Dialog,
@@ -22,21 +22,29 @@ import {
   DialogContent,
   DialogDescription,
 } from "~/lib/ui/components/dialog";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "~/lib/ui/components/tooltip";
 import { Input } from "~/lib/ui/components/input";
 import { Button } from "~/lib/ui/components/button";
 import { createDomain } from "~/lib/domains/actions";
 import { showToast } from "~/lib/ui/components/toasts";
 import { useMutation } from "~/lib/ui/hooks/useMutation";
 import { getProjectDomains } from "~/lib/domains/loaders";
+import { getAppEnvironmentInfo } from "~/lib/environment/loaders";
 import { DeleteDomainDialog } from "~/lib/domains/components/delete-domain-dialog";
 
 export const route: RouteDefinition = {
   load({ params }) {
     void getProjectDomains(params.projectId);
+    void getAppEnvironmentInfo();
   },
 };
 
 export default function DomainsPage(props: RouteSectionProps) {
+  const environment = createAsync(() => getAppEnvironmentInfo());
   const domains = createAsync(() => getProjectDomains(props.params.projectId));
 
   const [refetching, setRefetching] = createSignal(false);
@@ -115,7 +123,10 @@ export default function DomainsPage(props: RouteSectionProps) {
                 <li
                   class="border flex flex-col gap-6 border-gray-300 bg-gray-50 rounded-lg px-3 py-2 text-sm"
                   classList={{
-                    "opacity-50": refetching() && !domain.verified,
+                    "opacity-50":
+                      refetching() &&
+                      (!domain.verified ||
+                        !domain.receivesDeliveryNotifications),
                   }}
                 >
                   <div class="flex justify-between">
@@ -137,7 +148,31 @@ export default function DomainsPage(props: RouteSectionProps) {
                       >
                         <div class="text-xs text-gray-500 inline-flex gap-1 items-center">
                           <div class="size-2 bg-green-500 rounded-full" />
-                          Verified
+                          <span>Verified</span>
+                          <Show
+                            when={domain.receivesDeliveryNotifications}
+                            fallback={
+                              <div class="inline-flex gap-1 items-center">
+                                - Delivery notifications not enabled
+                                <Tooltip>
+                                  <TooltipTrigger
+                                    as={Button}
+                                    even
+                                    class="p-0 text-gray-500"
+                                    variant="ghost"
+                                    icon={() => <InfoIcon class="size-4" />}
+                                  />
+                                  <TooltipContent>
+                                    {environment()?.notifications.enabled
+                                      ? "Please wait a few minutes for delivery notifications to be enabled for a domain."
+                                      : "Delivery notifications are not enabled for this Volamail instance. Please contact your admin."}
+                                  </TooltipContent>
+                                </Tooltip>
+                              </div>
+                            }
+                          >
+                            -<span>Delivery notifications enabled</span>
+                          </Show>
                         </div>
                       </Show>
                     </div>
