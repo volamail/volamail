@@ -1,5 +1,6 @@
 export * from "./api-tokens.sql";
 export * from "./domains.sql";
+export * from "./emails.sql";
 export * from "./images.sql";
 export * from "./mail-codes.sql";
 export * from "./projects.sql";

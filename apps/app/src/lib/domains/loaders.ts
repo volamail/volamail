@@ -2,9 +2,11 @@ import { desc, eq } from "drizzle-orm";
 import { cache } from "@solidjs/router";
 
 import { db } from "../db";
-import { sesClient } from "../mail/send";
+import * as mutations from "./mutations";
+import { sesClientV2 } from "../mail/send";
 import { requireUser } from "../auth/utils";
 import { domainsTable } from "../db/schema";
+import { getDeliveryNotificationsEnabled } from "../mail/config";
 import { requireUserToBeMemberOfProject } from "../projects/utils";
 
 export const getProjectDomains = cache(async (projectId: string) => {
@@ -24,16 +26,33 @@ export const getProjectDomains = cache(async (projectId: string) => {
 
   return await Promise.all(
     domainRows.map(async (row) => {
-      const identity = await sesClient.getEmailIdentity({
+      const identity = await sesClientV2.getEmailIdentity({
         EmailIdentity: row.domain,
       });
 
       const verified = identity.VerifiedForSendingStatus;
 
+      if (
+        verified &&
+        !row.receivesDeliveryNotifications &&
+        getDeliveryNotificationsEnabled()
+      ) {
+        await mutations.prepareNotificationsForIdentity(row.domain);
+
+        await db
+          .update(domainsTable)
+          .set({
+            receivesDeliveryNotifications: true,
+          })
+          .where(eq(domainsTable.id, row.id));
+      }
+
       if (verified !== row.verified) {
         await db
           .update(domainsTable)
-          .set({ verified })
+          .set({
+            verified,
+          })
           .where(eq(domainsTable.id, row.id));
       }
 

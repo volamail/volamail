@@ -7,6 +7,7 @@ import { db } from "~/lib/db";
 import { lucia } from "~/lib/auth/lucia";
 import * as schema from "~/lib/db/schema";
 import { sendMail } from "~/lib/mail/send";
+import * as analytics from "~/lib/analytics";
 import { isSelfHosted } from "~/lib/environment/utils";
 
 export async function POST({ request }: APIEvent) {
@@ -115,13 +116,41 @@ export async function POST({ request }: APIEvent) {
     });
   }
 
-  await sendMail({
-    from: `${project.name} <${payload.from}>`,
+  let messageId: string;
+
+  try {
+    const email = await sendMail({
+      from: `${project.name} <${payload.from}>`,
+      to: payload.to,
+      subject: template.subject,
+      body: template.body,
+      data: payload.data,
+    });
+
+    if (!email.MessageId) {
+      throw new Error("No message ID returned");
+    }
+
+    messageId = email.MessageId;
+  } catch {
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Internal server error",
+    });
+  }
+
+  await db.insert(schema.emailsTable).values({
+    id: messageId,
+    projectId: project.id,
     to: payload.to,
+    status: "SENT",
+    from: payload.from,
     subject: template.subject,
-    body: template.body,
-    data: payload.data,
+    sentAt: new Date(),
+    updatedAt: new Date(),
   });
+
+  await analytics.captureEmailSentEvent(project.teamId);
 
   // TODO: wrap this (and above) in a transaction
   if (!isSelfHosted()) {

@@ -323,6 +323,41 @@
       "when": 1723016608237,
       "tag": "0045_amazing_sway",
       "breakpoints": true
+    },
+    {
+      "idx": 46,
+      "version": "6",
+      "when": 1724060340616,
+      "tag": "0046_certain_secret_warriors",
+      "breakpoints": true
+    },
+    {
+      "idx": 47,
+      "version": "6",
+      "when": 1724134686208,
+      "tag": "0047_sticky_scalphunter",
+      "breakpoints": true
+    },
+    {
+      "idx": 48,
+      "version": "6",
+      "when": 1724135563473,
+      "tag": "0048_organic_imperial_guard",
+      "breakpoints": true
+    },
+    {
+      "idx": 49,
+      "version": "6",
+      "when": 1724135592236,
+      "tag": "0049_wooden_harrier",
+      "breakpoints": true
+    },
+    {
+      "idx": 50,
+      "version": "6",
+      "when": 1724224227706,
+      "tag": "0050_daily_phil_sheldon",
+      "breakpoints": true
     }
   ]
 }

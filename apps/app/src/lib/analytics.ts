@@ -63,3 +63,12 @@ export async function captureAiRequestEvent(userId: string) {
 
   await client?.shutdown();
 }
+
+export async function captureEmailSentEvent(teamId: string) {
+  client?.capture({
+    event: "email_sent",
+    distinctId: teamId,
+  });
+
+  await client?.shutdown();
+}

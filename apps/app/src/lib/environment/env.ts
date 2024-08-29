@@ -12,6 +12,7 @@ function getValidatedEnv() {
       AWS_REGION: v.string(),
       AWS_ACCESS_KEY_ID: v.string(),
       AWS_SECRET_ACCESS_KEY: v.string(),
+      AWS_SNS_TOPIC_ARN: v.optional(v.string()),
       DATABASE_URL: v.string(),
       VITE_GITHUB_CLIENT_ID: v.optional(v.string()),
       GITHUB_CLIENT_SECRET: v.optional(v.string()),

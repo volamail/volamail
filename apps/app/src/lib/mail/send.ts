@@ -1,3 +1,4 @@
+import { SES } from "@aws-sdk/client-ses";
 import { SESv2, SendEmailCommand } from "@aws-sdk/client-sesv2";
 
 import { env } from "../environment/env";
@@ -10,7 +11,15 @@ type Params = {
   data?: Record<string, string>;
 };
 
-export const sesClient = new SESv2({
+export const sesClientV2 = new SESv2({
+  region: env.AWS_REGION,
+  credentials: {
+    accessKeyId: env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: env.AWS_SECRET_ACCESS_KEY,
+  },
+});
+
+export const sesClientV1 = new SES({
   region: env.AWS_REGION,
   credentials: {
     accessKeyId: env.AWS_ACCESS_KEY_ID,
@@ -33,7 +42,7 @@ export async function sendMail(params: Params) {
     (match) => data[match.slice(2, -2)]
   );
 
-  await sesClient.send(
+  return await sesClientV2.send(
     new SendEmailCommand({
       FromEmailAddress: params.from,
       Destination: {

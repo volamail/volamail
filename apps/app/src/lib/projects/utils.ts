@@ -5,7 +5,7 @@ import { projectsTable, teamsTable } from "../db/schema";
 import { db } from "../db";
 import { env } from "../environment/env";
 import { s3 } from "../media/s3";
-import { sesClient } from "../mail/send";
+import { sesClientV2 } from "../mail/send";
 
 export async function requireUserToBeMemberOfTeam(params: {
   userId: string;
@@ -121,7 +121,7 @@ export async function deleteProjectWithCleanup(projectId: string) {
         }),
       Promise.all(
         project.domains.map((domain) =>
-          sesClient.deleteEmailIdentity({
+          sesClientV2.deleteEmailIdentity({
             EmailIdentity: domain.domain,
           })
         )
