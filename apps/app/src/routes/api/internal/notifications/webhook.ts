@@ -83,6 +83,8 @@ export async function POST({ request }: APIEvent) {
 
   const message = messageValidationResult.output;
 
+  console.log(message);
+
   await db
     .update(emailsTable)
     .set({
