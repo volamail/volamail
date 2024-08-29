@@ -9,7 +9,7 @@ const SITE_URL = `${import.meta.env.DEV ? "http" : "https"}://${
 export default createHandler(() => (
   <StartServer
     document={({ assets, children, scripts }) => (
-      <html lang="en">
+      <html lang="en" class="antialiased">
         <head>
           <meta charset="utf-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -61,7 +61,7 @@ export default createHandler(() => (
 
           {assets}
         </head>
-        <body class="overscroll-y-none">
+        <body class="overscroll-none overflow-x-hidden">
           <div id="app">{children}</div>
           {scripts}
         </body>
