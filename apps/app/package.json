@@ -7,6 +7,8 @@
     "db": "drizzle-kit",
     "db:studio": "drizzle-kit studio",
     "dev": "vinxi dev",
+    "format": "biome format . --write",
+    "lint": "biome lint --write ./src",
     "release": "release-it",
     "start": "vinxi start"
   },

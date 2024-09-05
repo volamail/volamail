@@ -9,6 +9,7 @@
     "clean": "turbo clean"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.7.3",
     "turbo": "latest"
   },
   "packageManager": "pnpm@9.1.4",

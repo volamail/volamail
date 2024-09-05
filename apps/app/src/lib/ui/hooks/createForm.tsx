@@ -1,174 +1,181 @@
 import { createEffect } from "solid-js";
 import { createStore } from "solid-js/store";
-import { ObjectSchema, safeParseAsync } from "valibot";
+import { type ObjectSchema, safeParseAsync } from "valibot";
 
+// biome-ignore lint/suspicious/noExplicitAny: This is fine
 type FormOptions<T extends Record<string, any>> = {
-  schema: ObjectSchema<Record<keyof T, any>, any>;
-  defaultValues: Partial<T>;
-  validateBeforeSubmit?: boolean;
+	// biome-ignore lint/suspicious/noExplicitAny: This is also fine
+	schema: ObjectSchema<Record<keyof T, any>, any>;
+	defaultValues: Partial<T>;
+	validateBeforeSubmit?: boolean;
 };
 
 type FieldState = {
-  dirty: boolean;
-  error?: string;
-  ref?: HTMLInputElement;
-  value?: string;
+	dirty: boolean;
+	error?: string;
+	ref?: HTMLInputElement;
+	value?: string;
 };
 
+// biome-ignore lint/suspicious/noExplicitAny: This is fine
 export function createForm<T extends Record<string, any>>(
-  options: FormOptions<T>
+	options: FormOptions<T>,
 ) {
-  const [store, setStore] = createStore({
-    fields: Object.keys(options.defaultValues).reduce((acc, current) => {
-      return {
-        ...acc,
-        [current]: {
-          error: undefined,
-          dirty: false,
-        },
-      };
-    }, {} as Record<keyof T, FieldState>),
-    form: {
-      dirty: false,
-      invalid: false,
-      submitted: false,
-    },
-  });
+	const [store, setStore] = createStore({
+		fields: Object.keys(options.defaultValues).reduce(
+			(acc, current) => {
+				const key = current as keyof T;
 
-  async function validateField(field: keyof T, value: string) {
-    const validationResult = await safeParseAsync(
-      options.schema.entries[field],
-      value
-    );
+				acc[key] = {
+					error: undefined,
+					dirty: false,
+				};
 
-    if (validationResult.success) {
-      return null;
-    }
+				return acc;
+			},
+			{} as Record<keyof T, FieldState>,
+		),
+		form: {
+			dirty: false,
+			invalid: false,
+			submitted: false,
+		},
+	});
 
-    return validationResult.issues[0].message;
-  }
+	async function validateField(field: keyof T, value: string) {
+		const validationResult = await safeParseAsync(
+			options.schema.entries[field],
+			value,
+		);
 
-  function getTextareaProps<Field extends keyof T>(field: Field) {
-    const fieldState = store.fields[field];
+		if (validationResult.success) {
+			return null;
+		}
 
-    return {
-      ...fieldState,
-      children: options.defaultValues[field] as string,
-      name: field,
-      ref(el: HTMLElement) {
-        // @ts-expect-error TODO: Fix this
-        setStore("fields", field, {
-          ref: el,
-        });
-      },
-      async onInput(event: Event) {
-        // @ts-expect-error TODO: Fix this
-        setStore("fields", field, "value", event.currentTarget.value);
+		return validationResult.issues[0].message;
+	}
 
-        if (!store.form.submitted && !options.validateBeforeSubmit) {
-          // @ts-expect-error TODO: Fix this
-          setStore("fields", field, "dirty", true);
+	function getTextareaProps<Field extends keyof T>(field: Field) {
+		const fieldState = store.fields[field];
 
-          return;
-        }
+		return {
+			...fieldState,
+			children: options.defaultValues[field] as string,
+			name: field,
+			ref(el: HTMLElement) {
+				// @ts-expect-error TODO: Fix this
+				setStore("fields", field, {
+					ref: el,
+				});
+			},
+			async onInput(event: Event) {
+				// @ts-expect-error TODO: Fix this
+				setStore("fields", field, "value", event.currentTarget.value);
 
-        const target = event.target as HTMLTextAreaElement;
+				if (!store.form.submitted && !options.validateBeforeSubmit) {
+					// @ts-expect-error TODO: Fix this
+					setStore("fields", field, "dirty", true);
 
-        const value = target.value;
+					return;
+				}
 
-        const error = await validateField(field, value);
+				const target = event.target as HTMLTextAreaElement;
 
-        // @ts-expect-error TODO: Fix this
-        setStore("fields", field, {
-          error,
-          dirty: true,
-        });
-      },
-    };
-  }
+				const value = target.value;
 
-  function getFieldProps(field: keyof T) {
-    const fieldState = store.fields[field];
+				const error = await validateField(field, value);
 
-    return {
-      ...fieldState,
-      value: options.defaultValues[field],
-      name: field,
-      ref(el: HTMLElement) {
-        // @ts-expect-error TODO: Fix this
-        setStore("fields", field, {
-          ref: el,
-        });
-      },
-      async onInput(event: Event) {
-        // @ts-expect-error TODO: Fix this
-        setStore("fields", field, "value", event.currentTarget.value);
+				// @ts-expect-error TODO: Fix this
+				setStore("fields", field, {
+					error,
+					dirty: true,
+				});
+			},
+		};
+	}
 
-        if (!store.form.submitted && !options.validateBeforeSubmit) {
-          // @ts-expect-error TODO: Fix this
-          setStore("fields", field, "dirty", true);
+	function getFieldProps(field: keyof T) {
+		const fieldState = store.fields[field];
 
-          return;
-        }
+		return {
+			...fieldState,
+			value: options.defaultValues[field],
+			name: field,
+			ref(el: HTMLElement) {
+				// @ts-expect-error TODO: Fix this
+				setStore("fields", field, {
+					ref: el,
+				});
+			},
+			async onInput(event: Event) {
+				// @ts-expect-error TODO: Fix this
+				setStore("fields", field, "value", event.currentTarget.value);
 
-        const target = event.target as HTMLInputElement;
+				if (!store.form.submitted && !options.validateBeforeSubmit) {
+					// @ts-expect-error TODO: Fix this
+					setStore("fields", field, "dirty", true);
 
-        const value = target.value;
+					return;
+				}
 
-        const error = await validateField(field, value);
+				const target = event.target as HTMLInputElement;
 
-        // @ts-expect-error TODO: Fix this
-        setStore("fields", field, {
-          error,
-          dirty: true,
-        });
-      },
-    };
-  }
+				const value = target.value;
 
-  async function handleSubmit(event: SubmitEvent) {
-    setStore("form", "submitted", true);
+				const error = await validateField(field, value);
 
-    for (const field of Object.keys(options.defaultValues)) {
-      const ref = store.fields[field].ref;
+				// @ts-expect-error TODO: Fix this
+				setStore("fields", field, {
+					error,
+					dirty: true,
+				});
+			},
+		};
+	}
 
-      if (!ref) {
-        continue;
-      }
+	async function handleSubmit(event: SubmitEvent) {
+		setStore("form", "submitted", true);
 
-      const value = ref.value;
+		for (const field of Object.keys(options.defaultValues)) {
+			const ref = store.fields[field].ref;
 
-      const error = await validateField(field, value);
+			if (!ref) {
+				continue;
+			}
 
-      if (error) {
-        event.preventDefault();
+			const value = ref.value;
 
-        ref.focus();
-        ref.select();
-      }
+			const error = await validateField(field, value);
 
-      // @ts-expect-error TODO: Fix this
-      setStore("fields", field, {
-        error,
-      });
-    }
+			if (error) {
+				event.preventDefault();
 
-    if (store.form.invalid) {
-      return;
-    }
-  }
+				ref.focus();
+				ref.select();
+			}
 
-  createEffect(() => {
-    setStore("form", {
-      dirty: Object.values(store.fields).some((field) => field.dirty),
-      invalid: Object.values(store.fields).some((field) => field.error),
-    });
-  });
+			// @ts-expect-error TODO: Fix this
+			setStore("fields", field, {
+				error,
+			});
+		}
 
-  return {
-    getFieldProps,
-    getTextareaProps,
-    handleSubmit,
-    state: store.form,
-  };
+		if (store.form.invalid) {
+			return;
+		}
+	}
+
+	createEffect(() => {
+		setStore("form", {
+			dirty: Object.values(store.fields).some((field) => field.dirty),
+			invalid: Object.values(store.fields).some((field) => field.error),
+		});
+	});
+
+	return {
+		getFieldProps,
+		getTextareaProps,
+		handleSubmit,
+		state: store.form,
+	};
 }
