@@ -28,7 +28,8 @@ export function useMutation<T extends Array<unknown>, U>(params: {
 		}
 
 		if (prevResult?.pending && !result.pending) {
-			params.onSuccess?.(result.result!);
+			// biome-ignore lint/suspicious/noExplicitAny: Should be fine
+			params.onSuccess?.(result.result as any);
 		}
 
 		return result;
