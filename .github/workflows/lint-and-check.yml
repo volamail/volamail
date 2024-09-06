@@ -1,4 +1,4 @@
-name: Link and Check
+name: Lint and Check
 
 on:
   pull_request:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  pull-request-job:
+  lint-and-check:
     runs-on: ubuntu-latest
 
     steps:
@@ -27,7 +27,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Run linter
+      - name: Run lint
         run: pnpm lint
 
       - name: Run typecheck
