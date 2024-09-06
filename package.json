@@ -5,10 +5,11 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
-    "type-check": "turbo type-check",
+    "typecheck": "turbo typecheck",
     "clean": "turbo clean"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.7.3",
     "turbo": "latest"
   },
   "packageManager": "pnpm@9.1.4",

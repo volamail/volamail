@@ -7,8 +7,11 @@
     "db": "drizzle-kit",
     "db:studio": "drizzle-kit studio",
     "dev": "vinxi dev",
+    "format": "biome format . --write",
+    "lint": "biome lint .",
     "release": "release-it",
-    "start": "vinxi start"
+    "start": "vinxi start",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^0.0.19",

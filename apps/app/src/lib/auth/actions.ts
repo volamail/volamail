@@ -21,333 +21,326 @@ import { mailCodesTable, usersTable } from "../db/schema";
 import otpTemplate from "../static-templates/mail-otp.html?raw";
 
 export const loginWithGithub = action(async (formData: FormData) => {
-  "use server";
+	"use server";
 
-  const body = await parseFormData(
-    object({
-      to: optional(string()),
-    }),
-    formData
-  );
+	const body = await parseFormData(
+		object({
+			to: optional(string()),
+		}),
+		formData,
+	);
 
-  const state = generateState();
+	const state = generateState();
 
-  // biome-ignore lint/style/noNonNullAssertion: Request event is safe in server action
-  const { nativeEvent } = getRequestEvent()!;
+	const { nativeEvent } = getRequestEvent()!;
 
-  const github = createGithubAuth({
-    to: body.to,
-  });
+	const github = createGithubAuth({
+		to: body.to,
+	});
 
-  const url = await github.createAuthorizationURL(state, {
-    scopes: ["user:email"],
-  });
+	const url = await github.createAuthorizationURL(state, {
+		scopes: ["user:email"],
+	});
 
-  setCookie(nativeEvent, "github_oauth_state", state, {
-    path: "/",
-    secure: import.meta.env.PROD,
-    httpOnly: true,
-    sameSite: "lax",
-    maxAge: 60 * 10,
-  });
+	setCookie(nativeEvent, "github_oauth_state", state, {
+		path: "/",
+		secure: import.meta.env.PROD,
+		httpOnly: true,
+		sameSite: "lax",
+		maxAge: 60 * 10,
+	});
 
-  throw redirect(url.toString());
+	throw redirect(url.toString());
 }, "user");
 
 export const logout = action(async () => {
-  "use server";
+	"use server";
 
-  // biome-ignore lint/style/noNonNullAssertion: Request event is safe in server action
-  const { locals, nativeEvent } = getRequestEvent()!;
+	const { locals, nativeEvent } = getRequestEvent()!;
 
-  if (!locals.session) {
-    throw createError({
-      statusCode: 403,
-    });
-  }
+	if (!locals.session) {
+		throw createError({
+			statusCode: 403,
+		});
+	}
 
-  await lucia.invalidateSession(locals.session.id);
+	await lucia.invalidateSession(locals.session.id);
 
-  appendHeader(
-    nativeEvent,
-    "Set-Cookie",
-    lucia.createBlankSessionCookie().serialize()
-  );
+	appendHeader(
+		nativeEvent,
+		"Set-Cookie",
+		lucia.createBlankSessionCookie().serialize(),
+	);
 
-  throw redirect("/login");
+	throw redirect("/login");
 }, "user");
 
 export const sendEmailOtp = action(async (formData: FormData) => {
-  "use server";
+	"use server";
 
-  const body = await parseFormData(
-    object({
-      email: pipe(string(), email(), toLowerCase()),
-      to: optional(string()),
-    }),
-    formData
-  );
+	const body = await parseFormData(
+		object({
+			email: pipe(string(), email(), toLowerCase()),
+			to: optional(string()),
+		}),
+		formData,
+	);
 
-  await db.delete(mailCodesTable).where(eq(mailCodesTable.email, body.email));
+	await db.delete(mailCodesTable).where(eq(mailCodesTable.email, body.email));
 
-  const nanoid = customAlphabet("0123456789", 6);
+	const nanoid = customAlphabet("0123456789", 6);
 
-  const code = nanoid();
+	const code = nanoid();
 
-  await db.insert(mailCodesTable).values({
-    email: body.email,
-    code,
-    expiresAt: DateTime.now().plus({ minutes: 15 }).toJSDate(),
-  });
+	await db.insert(mailCodesTable).values({
+		email: body.email,
+		code,
+		expiresAt: DateTime.now().plus({ minutes: 15 }).toJSDate(),
+	});
 
-  if (import.meta.env.DEV) {
-    console.log("GENERATED EMAIL OTP:", code);
-  } else {
-    await sendMail({
-      from: `Volamail <${env.NOREPLY_EMAIL}>`,
-      to: body.email,
-      subject: "Here's your login code",
-      body: otpTemplate,
-      data: {
-        otp: code,
-      },
-    });
-  }
+	if (import.meta.env.DEV) {
+		console.log("GENERATED EMAIL OTP:", code);
+	} else {
+		await sendMail({
+			from: `Volamail <${env.NOREPLY_EMAIL}>`,
+			to: body.email,
+			subject: "Here's your login code",
+			body: otpTemplate,
+			data: {
+				otp: code,
+			},
+		});
+	}
 
-  const searchParams = new URLSearchParams();
+	const searchParams = new URLSearchParams();
 
-  if (body.to) {
-    searchParams.set("to", body.to);
-  }
+	if (body.to) {
+		searchParams.set("to", body.to);
+	}
 
-  throw redirect(`/verify-mail-otp/${body.email}?${searchParams.toString()}`);
+	throw redirect(`/verify-mail-otp/${body.email}?${searchParams.toString()}`);
 });
 
 export const verifyEmailOtp = action(async (formData: FormData) => {
-  "use server";
+	"use server";
 
-  const body = await parseFormData(
-    object({
-      email: pipe(string(), email(), toLowerCase()),
-      code: string(),
-      to: optional(string()),
-    }),
-    formData
-  );
+	const body = await parseFormData(
+		object({
+			email: pipe(string(), email(), toLowerCase()),
+			code: string(),
+			to: optional(string()),
+		}),
+		formData,
+	);
 
-  const code = await db.query.mailCodesTable.findFirst({
-    where: eq(mailCodesTable.email, body.email),
-  });
+	const code = await db.query.mailCodesTable.findFirst({
+		where: eq(mailCodesTable.email, body.email),
+	});
 
-  if (
-    !code ||
-    Date.now() - code.expiresAt.getTime() > 0 ||
-    code.code !== body.code
-  ) {
-    throw createError({
-      statusCode: 403,
-      statusMessage: "Invalid code",
-    });
-  }
+	if (
+		!code ||
+		Date.now() - code.expiresAt.getTime() > 0 ||
+		code.code !== body.code
+	) {
+		throw createError({
+			statusCode: 403,
+			statusMessage: "Invalid code",
+		});
+	}
 
-  const [existingUser] = await Promise.all([
-    db.query.usersTable.findFirst({
-      where: eq(usersTable.email, body.email),
-      columns: { id: true },
-    }),
-    db.delete(mailCodesTable).where(eq(mailCodesTable.email, body.email)),
-  ]);
+	const [existingUser] = await Promise.all([
+		db.query.usersTable.findFirst({
+			where: eq(usersTable.email, body.email),
+			columns: { id: true },
+		}),
+		db.delete(mailCodesTable).where(eq(mailCodesTable.email, body.email)),
+	]);
 
-  // biome-ignore lint/style/noNonNullAssertion: Request event is safe in server action
-  const { nativeEvent } = getRequestEvent()!;
+	const { nativeEvent } = getRequestEvent()!;
 
-  if (existingUser) {
-    await lucia.invalidateUserSessions(existingUser.id);
+	if (existingUser) {
+		await lucia.invalidateUserSessions(existingUser.id);
 
-    const [session, teams] = await Promise.all([
-      lucia.createSession(existingUser.id, {}),
-      getUserTeams(existingUser.id),
-    ]);
+		const [session, teams] = await Promise.all([
+			lucia.createSession(existingUser.id, {}),
+			getUserTeams(existingUser.id),
+		]);
 
-    analytics.captureUserLoggedInEvent({
-      id: existingUser.id,
-      email: body.email,
-    });
+		analytics.captureUserLoggedInEvent({
+			id: existingUser.id,
+			email: body.email,
+		});
 
-    appendHeader(
-      nativeEvent,
-      "Set-Cookie",
-      lucia.createSessionCookie(session.id).serialize()
-    );
+		appendHeader(
+			nativeEvent,
+			"Set-Cookie",
+			lucia.createSessionCookie(session.id).serialize(),
+		);
 
-    if (body.to) {
-      throw redirect(body.to);
-    }
+		if (body.to) {
+			throw redirect(body.to);
+		}
 
-    const project = [
-      ...(teams.personal ? [teams.personal] : []),
-      ...teams.other,
-    ].find((t) => t.projects.length > 0)?.projects[0];
+		const project = [
+			...(teams.personal ? [teams.personal] : []),
+			...teams.other,
+		].find((t) => t.projects.length > 0)?.projects[0];
 
-    if (!project) {
-      throw createError({
-        statusCode: 404,
-        statusMessage: "No project found",
-      });
-    }
+		if (!project) {
+			throw createError({
+				statusCode: 404,
+				statusMessage: "No project found",
+			});
+		}
 
-    throw redirect("/teams");
-  }
+		throw redirect("/teams");
+	}
 
-  const {
-    id: userId,
-    defaultProjectId,
-    defaultTeamId,
-  } = await createUser({
-    email: body.email,
-  });
+	const { id: userId } = await createUser({
+		email: body.email,
+	});
 
-  analytics.captureUserRegisteredEvent({
-    id: userId,
-    email: body.email,
-  });
+	analytics.captureUserRegisteredEvent({
+		id: userId,
+		email: body.email,
+	});
 
-  const session = await lucia.createSession(userId, {});
+	const session = await lucia.createSession(userId, {});
 
-  appendHeader(
-    nativeEvent,
-    "Set-Cookie",
-    lucia.createSessionCookie(session.id).serialize()
-  );
+	appendHeader(
+		nativeEvent,
+		"Set-Cookie",
+		lucia.createSessionCookie(session.id).serialize(),
+	);
 
-  if (body.to) {
-    throw redirect(body.to);
-  }
+	if (body.to) {
+		throw redirect(body.to);
+	}
 
-  // TODO: Redirect to a default project when SolidStart stops being silly
-  //
-  // If we compute the redirect path to a default project's emails it seems
-  // to break caches or something, so we redirect to the /teams page for now.
+	// TODO: Redirect to a default project when SolidStart stops being silly
+	//
+	// If we compute the redirect path to a default project's emails it seems
+	// to break caches or something, so we redirect to the /teams page for now.
 
-  throw redirect("/teams");
+	throw redirect("/teams");
 }, "auth-state");
 
 export const changeEmail = action(async (formData: FormData) => {
-  "use server";
+	"use server";
 
-  const user = requireUser();
+	const user = requireUser();
 
-  const body = await parseFormData(
-    object({
-      email: pipe(string(), toLowerCase()),
-    }),
-    formData
-  );
+	const body = await parseFormData(
+		object({
+			email: pipe(string(), toLowerCase()),
+		}),
+		formData,
+	);
 
-  if (user.email === body.email) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: "New email is the same as the current one",
-    });
-  }
+	if (user.email === body.email) {
+		throw createError({
+			statusCode: 400,
+			statusMessage: "New email is the same as the current one",
+		});
+	}
 
-  const existingUser = await db.query.usersTable.findFirst({
-    where: eq(usersTable.email, body.email),
-  });
+	const existingUser = await db.query.usersTable.findFirst({
+		where: eq(usersTable.email, body.email),
+	});
 
-  if (existingUser) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: "Email already in use",
-    });
-  }
+	if (existingUser) {
+		throw createError({
+			statusCode: 400,
+			statusMessage: "Email already in use",
+		});
+	}
 
-  const nanoid = customAlphabet("0123456789", 6);
+	const nanoid = customAlphabet("0123456789", 6);
 
-  const code = nanoid();
+	const code = nanoid();
 
-  await db.delete(mailCodesTable).where(eq(mailCodesTable.email, body.email));
+	await db.delete(mailCodesTable).where(eq(mailCodesTable.email, body.email));
 
-  await db.insert(mailCodesTable).values({
-    code,
-    email: body.email,
-    expiresAt: DateTime.now().plus({ minutes: 10 }).toJSDate(),
-    userId: user.id,
-  });
+	await db.insert(mailCodesTable).values({
+		code,
+		email: body.email,
+		expiresAt: DateTime.now().plus({ minutes: 10 }).toJSDate(),
+		userId: user.id,
+	});
 
-  if (import.meta.env.PROD) {
-    await sendMail({
-      from: env.NOREPLY_EMAIL,
-      to: body.email,
-      subject: `Your email change verification code`,
-      body: otpTemplate,
-      data: {
-        otp: code,
-      },
-    });
-  } else {
-    console.log("GENERATED EMAIL OTP:", code);
-  }
+	if (import.meta.env.PROD) {
+		await sendMail({
+			from: env.NOREPLY_EMAIL,
+			to: body.email,
+			subject: "Your email change verification code",
+			body: otpTemplate,
+			data: {
+				otp: code,
+			},
+		});
+	} else {
+		console.log("GENERATED EMAIL OTP:", code);
+	}
 
-  return {
-    success: true,
-    data: {
-      email: body.email,
-    },
-  };
+	return {
+		success: true,
+		data: {
+			email: body.email,
+		},
+	};
 });
 
 export const verifyEmailChangeOtp = action(async (formData: FormData) => {
-  "use server";
+	"use server";
 
-  const body = await parseFormData(
-    object({
-      email: pipe(string(), email(), toLowerCase()),
-      code: string(),
-    }),
-    formData
-  );
+	const body = await parseFormData(
+		object({
+			email: pipe(string(), email(), toLowerCase()),
+			code: string(),
+		}),
+		formData,
+	);
 
-  const user = requireUser();
+	const user = requireUser();
 
-  const code = await db.query.mailCodesTable.findFirst({
-    where: and(
-      eq(mailCodesTable.email, body.email),
-      eq(mailCodesTable.code, body.code),
-      eq(mailCodesTable.userId, user.id)
-    ),
-  });
+	const code = await db.query.mailCodesTable.findFirst({
+		where: and(
+			eq(mailCodesTable.email, body.email),
+			eq(mailCodesTable.code, body.code),
+			eq(mailCodesTable.userId, user.id),
+		),
+	});
 
-  if (!code) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: "Bad code",
-    });
-  }
+	if (!code) {
+		throw createError({
+			statusCode: 400,
+			statusMessage: "Bad code",
+		});
+	}
 
-  if (DateTime.fromJSDate(code.expiresAt).diffNow().seconds < 0) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: "Code expired",
-    });
-  }
+	if (DateTime.fromJSDate(code.expiresAt).diffNow().seconds < 0) {
+		throw createError({
+			statusCode: 400,
+			statusMessage: "Code expired",
+		});
+	}
 
-  await Promise.all([
-    db
-      .update(usersTable)
-      .set({ email: body.email })
-      .where(eq(usersTable.id, user.id)),
-    db
-      .delete(mailCodesTable)
-      .where(
-        and(
-          eq(mailCodesTable.code, body.code),
-          eq(mailCodesTable.userId, user.id)
-        )
-      ),
-  ]);
+	await Promise.all([
+		db
+			.update(usersTable)
+			.set({ email: body.email })
+			.where(eq(usersTable.id, user.id)),
+		db
+			.delete(mailCodesTable)
+			.where(
+				and(
+					eq(mailCodesTable.code, body.code),
+					eq(mailCodesTable.userId, user.id),
+				),
+			),
+	]);
 
-  return {
-    success: true,
-  };
+	return {
+		success: true,
+	};
 });
