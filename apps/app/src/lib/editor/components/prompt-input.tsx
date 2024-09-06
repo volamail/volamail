@@ -93,7 +93,7 @@ export function PromptInput(props: Props) {
       props.loading ||
       contents() !== debouncedContents() ||
       (query?.data && contents().includes(query.data))
-      ? ""
+      ? " "
       : query?.data ||
           props.placeholder ||
           "A welcome e-mail with a magic link button...";
