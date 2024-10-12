@@ -8,4 +8,5 @@ export * from "./sessions.sql";
 export * from "./subscriptions.sql";
 export * from "./teams.sql";
 export * from "./templates.sql";
+export * from "./template-translations.sql";
 export * from "./users.sql";

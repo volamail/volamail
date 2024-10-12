@@ -1,1 +1,0 @@
-ALTER TABLE "waitlist" ADD COLUMN "approved" boolean DEFAULT false NOT NULL;

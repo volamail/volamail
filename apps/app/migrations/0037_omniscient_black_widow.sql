@@ -1,1 +1,0 @@
-ALTER TABLE "subscriptions" ALTER COLUMN "storage_quota" DROP DEFAULT;

@@ -1,1 +1,0 @@
-ALTER TABLE "domains" ADD COLUMN "receives_delivery_notifications" boolean DEFAULT false NOT NULL;

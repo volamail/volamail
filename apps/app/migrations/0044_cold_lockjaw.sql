@@ -1,1 +1,0 @@
-CREATE INDEX IF NOT EXISTS "mail_codes_user_idx" ON "mail_codes" ("user_id");

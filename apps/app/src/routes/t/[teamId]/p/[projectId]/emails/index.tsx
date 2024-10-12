@@ -1,4 +1,3 @@
-// @refresh reload
 import {
 	A,
 	createAsync,
@@ -60,7 +59,7 @@ export default function Dashboard(props: RouteSectionProps) {
 							{(template) => (
 								<li>
 									<A
-										href={template.id.toString()}
+										href={template.slug}
 										class="flex flex-col gap-0.5 hover:bg-gray-200 rounded-lg px-2.5 py-2 text-sm bg-gray-100 shadow-sm transition-colors cursor-default"
 									>
 										<p class="font-semibold">{template.slug}</p>
@@ -73,6 +72,7 @@ export default function Dashboard(props: RouteSectionProps) {
 						</For>
 					</ul>
 				</Show>
+
 				<Button
 					as={A}
 					href="new"

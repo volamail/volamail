@@ -1,1 +1,0 @@
-ALTER TABLE "templates" ADD COLUMN "subject" text NOT NULL;
