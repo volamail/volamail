@@ -6,8 +6,6 @@ export async function parseFormData<
 >(schema: T, formData: FormData) {
 	const entries = Object.fromEntries(formData);
 
-	console.log({ entries });
-
 	const result = await v.safeParseAsync(schema, entries);
 
 	if (result.success) {

@@ -8,6 +8,7 @@ import type { Viewport } from "../types";
 interface EditorProps {
 	defaultContents?: JSONContent;
 	name: string;
+	onChange?: (contents: JSONContent) => void;
 }
 
 export function Editor(props: EditorProps) {
@@ -18,6 +19,14 @@ export function Editor(props: EditorProps) {
 	});
 
 	const [viewport, setViewport] = createSignal<Viewport>("desktop");
+
+	function handleChange(contents: JSONContent) {
+		setContents(contents);
+
+		if (props.onChange) {
+			props.onChange(contents);
+		}
+	}
 
 	function handleEditorRef(element: HTMLDivElement) {
 		if (editor()) {
@@ -36,10 +45,11 @@ export function Editor(props: EditorProps) {
 						"outline-none revert-tailwind max-w-2xl w-full border border-gray-200 px-8 py-6 bg-white",
 				},
 			},
+			onUpdate({ editor }) {
+				handleChange(editor.getJSON());
+			},
 			onTransaction({ editor }) {
 				setEditor(editor);
-
-				setContents(editor.getJSON());
 			},
 			content: props.defaultContents,
 		});

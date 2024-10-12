@@ -5,7 +5,6 @@ import { CircleCheckBigIcon, SendIcon } from "lucide-solid";
 import { Editor } from "~/lib/editor/components/editor";
 import { useMutation } from "~/lib/ui/hooks/useMutation";
 import { showToast } from "~/lib/ui/components/toasts";
-import { createTemplate } from "~/lib/templates/actions/createTemplate";
 import { sendTestMail } from "~/lib/mail/actions";
 import {
 	createAsync,
@@ -15,7 +14,9 @@ import {
 import { Show } from "solid-js";
 import { getTemplate } from "~/lib/templates/queries";
 
-import "./editor.css";
+import "../editor.css";
+import { createForm } from "~/lib/ui/hooks/createForm";
+import { editTemplate } from "~/lib/templates/actions/editTemplate";
 
 export const route: RouteDefinition = {
 	preload({ params }) {
@@ -34,6 +35,22 @@ export default function EditTemplatePage(props: RouteSectionProps) {
 		}),
 	);
 
+	const editTemplateAction = useMutation({
+		action: editTemplate,
+		onSuccess() {
+			showToast({
+				title: "Changes saved",
+				variant: "success",
+			});
+		},
+		onError(e) {
+			showToast({
+				title: e.statusMessage || "Unable to save changes",
+				variant: "error",
+			});
+		},
+	});
+
 	const sendTestMailAction = useMutation({
 		action: sendTestMail,
 		onSuccess() {
@@ -50,9 +67,17 @@ export default function EditTemplatePage(props: RouteSectionProps) {
 		},
 	});
 
+	const form = createForm({
+		defaultValues: {
+			subject: template()?.subject,
+			contents: template()?.contents,
+			slug: template()?.slug,
+		},
+	});
+
 	return (
 		<main class="grow h-full flex flex-col justify-center items-stretch">
-			<Title>Edit template - Volamail</Title>
+			<Title>Edit email - Volamail</Title>
 
 			<div class="flex justify-between items-center px-4 py-3 border-b gap-8 border-gray-200 text-sm bg-white">
 				<Breadcrumbs
@@ -64,7 +89,7 @@ export default function EditTemplatePage(props: RouteSectionProps) {
 						variant="outline"
 						type="submit"
 						icon={() => <SendIcon class="size-4" />}
-						form="create-email-form"
+						form="edit-email-form"
 						formAction={sendTestMail}
 						loading={sendTestMailAction.pending}
 					>
@@ -75,6 +100,8 @@ export default function EditTemplatePage(props: RouteSectionProps) {
 						icon={() => <CircleCheckBigIcon class="size-4" />}
 						type="submit"
 						form="edit-email-form"
+						disabled={!form.state.dirty}
+						loading={editTemplateAction.pending}
 					>
 						Save changes
 					</Button>
@@ -88,7 +115,8 @@ export default function EditTemplatePage(props: RouteSectionProps) {
 						autocomplete="off"
 						method="post"
 						id="edit-email-form"
-						action={createTemplate}
+						action={editTemplate}
+						onSubmit={form.handleSubmit}
 					>
 						<input
 							type="hidden"
@@ -96,15 +124,29 @@ export default function EditTemplatePage(props: RouteSectionProps) {
 							value={props.params.projectId}
 						/>
 
+						<input
+							type="hidden"
+							name="templateSlug"
+							value={props.params.slug}
+						/>
+
+						<Show when={props.params.language}>
+							<input
+								type="hidden"
+								name="language"
+								value={props.params.language}
+							/>
+						</Show>
+
 						<div class="flex flex-col p-4 gap-2 bg-white border-b border-gray-200">
 							<div class="flex gap-1 items-center">
 								<label for="slug" class="text-sm font-medium">
 									Slug:
 								</label>
 								<input
+									{...form.getFieldProps("slug")}
 									type="text"
 									id="slug"
-									name="slug"
 									required
 									placeholder="welcome-email"
 									class="outline-none text-sm grow"
@@ -117,9 +159,9 @@ export default function EditTemplatePage(props: RouteSectionProps) {
 									Subject:
 								</label>
 								<input
+									{...form.getFieldProps("subject")}
 									type="text"
 									id="subject"
-									name="subject"
 									required
 									placeholder="Welcome to Volamail"
 									class="outline-none text-sm grow"
@@ -128,7 +170,11 @@ export default function EditTemplatePage(props: RouteSectionProps) {
 							</div>
 						</div>
 
-						<Editor name="contents" defaultContents={template().contents} />
+						<Editor
+							name="contents"
+							defaultContents={template().contents}
+							onChange={form.getFieldProps("contents").triggerUpdate}
+						/>
 					</form>
 				)}
 			</Show>
