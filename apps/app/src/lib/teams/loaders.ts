@@ -8,71 +8,71 @@ import { teamInvitesTable, teamsTable } from "../db/schema";
 import { getUserTeams as queryGetUserTeams } from "./queries";
 
 export const getTeam = cache(async (id: string) => {
-  "use server";
+	"use server";
 
-  requireUser();
+	requireUser();
 
-  const team = await db.query.teamsTable.findFirst({
-    where: eq(teamsTable.id, id),
-    with: {
-      members: {
-        with: {
-          user: true,
-        },
-      },
-      invites: true,
-      personalTeamOwner: true,
-    },
-  });
+	const team = await db.query.teamsTable.findFirst({
+		where: eq(teamsTable.id, id),
+		with: {
+			members: {
+				with: {
+					user: true,
+				},
+			},
+			invites: true,
+			personalTeamOwner: true,
+		},
+	});
 
-  if (!team) {
-    throw createError({
-      statusCode: 404,
-      statusMessage: "Team not found",
-    });
-  }
+	if (!team) {
+		throw createError({
+			statusCode: 404,
+			statusMessage: "Team not found",
+		});
+	}
 
-  return {
-    ...team,
-    personal: team.personalTeamOwner !== null,
-  };
+	return {
+		...team,
+		personal: team.personalTeamOwner !== null,
+	};
 }, "teams");
 
 export const getTeamInvite = cache(async (id: string) => {
-  "use server";
+	"use server";
 
-  let user: User;
+	let user: User;
 
-  try {
-    user = requireUser();
-  } catch {
-    throw redirect(`/login?to=${`/join-team/${id}`}`);
-  }
+	try {
+		user = requireUser();
+	} catch {
+		throw redirect(`/login?to=${`/join-team/${id}`}`);
+	}
 
-  const invite = await db.query.teamInvitesTable.findFirst({
-    where: and(
-      eq(teamInvitesTable.email, user.email),
-      eq(teamInvitesTable.teamId, id)
-    ),
-    with: {
-      team: true,
-    },
-  });
+	const invite = await db.query.teamInvitesTable.findFirst({
+		where: and(
+			eq(teamInvitesTable.email, user.email),
+			eq(teamInvitesTable.teamId, id),
+		),
+		with: {
+			team: true,
+		},
+	});
 
-  if (!invite) {
-    throw createError({
-      statusCode: 404,
-      statusMessage: "Invite not found",
-    });
-  }
+	if (!invite) {
+		throw createError({
+			statusCode: 404,
+			statusMessage: "Invite not found",
+		});
+	}
 
-  return invite;
+	return invite;
 }, "team-invites");
 
 export const getUserTeams = cache(async () => {
-  "use server";
+	"use server";
 
-  const user = requireUser();
+	const user = requireUser();
 
-  return await queryGetUserTeams(user.id);
+	return await queryGetUserTeams(user.id);
 }, "teams");

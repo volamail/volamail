@@ -11,8 +11,12 @@ import { parseFormData } from "../server-utils";
 import { isSelfHosted } from "../environment/utils";
 import { emailsTable, subscriptionsTable } from "../db/schema";
 import { requireUserToBeMemberOfProject } from "../projects/utils";
-import { renderTemplateToHtml } from "~/lib/templates/render";
+import {
+	renderTemplateToHtml,
+	renderTemplateToText,
+} from "~/lib/templates/render";
 import type { JSONContent } from "@tiptap/core";
+import { validTemplateLanguage } from "~/lib/templates/languages";
 
 export const sendTestMail = action(async (formData: FormData) => {
 	"use server";
@@ -35,6 +39,7 @@ export const sendTestMail = action(async (formData: FormData) => {
 				transform((contents) => JSON.parse(contents) as JSONContent),
 			),
 			data: optional(record(string(), string())),
+			language: optional(validTemplateLanguage),
 		}),
 		formData,
 	);
@@ -65,7 +70,10 @@ export const sendTestMail = action(async (formData: FormData) => {
 	let messageId: string;
 
 	try {
-		const body = await renderTemplateToHtml(payload.contents);
+		const [body, text] = await Promise.all([
+			renderTemplateToHtml(payload.contents),
+			renderTemplateToText(payload.contents),
+		]);
 
 		const message = await sendMail({
 			from: `Volamail <${env.NOREPLY_EMAIL}>`,
@@ -73,6 +81,7 @@ export const sendTestMail = action(async (formData: FormData) => {
 			body,
 			subject: payload.subject,
 			data: payload.data || {},
+			text,
 		});
 
 		if (!message.MessageId) {
@@ -100,6 +109,7 @@ export const sendTestMail = action(async (formData: FormData) => {
 		subject: payload.subject,
 		sentAt: new Date(),
 		updatedAt: new Date(),
+		language: payload.language || meta.project.defaultTemplateLanguage,
 	});
 
 	// TODO: wrap this (and above) in a transaction

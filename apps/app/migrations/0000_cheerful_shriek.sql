@@ -55,7 +55,8 @@ CREATE TABLE IF NOT EXISTS "emails" (
 	"to" text NOT NULL,
 	"status" "email_status" NOT NULL,
 	"sent_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp DEFAULT now() NOT NULL
+	"updated_at" timestamp DEFAULT now() NOT NULL,
+	"language" "template_languages" DEFAULT 'en' NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "images" (

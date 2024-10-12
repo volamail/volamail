@@ -1,19 +1,20 @@
 {
-  "name": "volamail",
-  "private": true,
-  "scripts": {
-    "build": "turbo build",
-    "dev": "turbo dev",
-    "lint": "turbo lint",
-    "typecheck": "turbo typecheck",
-    "clean": "turbo clean"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "1.7.3",
-    "turbo": "latest"
-  },
-  "packageManager": "pnpm@9.1.4",
-  "engines": {
-    "node": ">=18"
-  }
+	"name": "volamail",
+	"private": true,
+	"scripts": {
+		"build": "turbo build",
+		"dev": "turbo dev",
+		"lint": "turbo lint",
+		"format": "turbo format",
+		"typecheck": "turbo typecheck",
+		"clean": "turbo clean"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "1.7.3",
+		"turbo": "latest"
+	},
+	"packageManager": "pnpm@9.1.4",
+	"engines": {
+		"node": ">=18"
+	}
 }

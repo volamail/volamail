@@ -1,15 +1,15 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json",
-  "rewrites": [
-    {
-      "source": "/:path*",
-      "has": [
-        {
-          "type": "host",
-          "value": "api.volamail.com"
-        }
-      ],
-      "destination": "https://app.volamail.com/api/:path*"
-    }
-  ]
+	"$schema": "https://openapi.vercel.sh/vercel.json",
+	"rewrites": [
+		{
+			"source": "/:path*",
+			"has": [
+				{
+					"type": "host",
+					"value": "api.volamail.com"
+				}
+			],
+			"destination": "https://app.volamail.com/api/:path*"
+		}
+	]
 }

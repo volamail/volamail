@@ -8,21 +8,21 @@ import { requireUserToBeMemberOfProject } from "../projects/utils";
 import { getMediaUrl } from "./utils";
 
 export const getProjectImages = cache(async (projectId: string) => {
-  "use server";
+	"use server";
 
-  const user = requireUser();
+	const user = requireUser();
 
-  await requireUserToBeMemberOfProject({
-    userId: user.id,
-    projectId,
-  });
+	await requireUserToBeMemberOfProject({
+		userId: user.id,
+		projectId,
+	});
 
-  const rows = await db.query.imagesTable.findMany({
-    where: eq(imagesTable.projectId, projectId),
-  });
+	const rows = await db.query.imagesTable.findMany({
+		where: eq(imagesTable.projectId, projectId),
+	});
 
-  return rows.map((row) => ({
-    ...row,
-    url: getMediaUrl(row.id),
-  }));
+	return rows.map((row) => ({
+		...row,
+		url: getMediaUrl(row.id),
+	}));
 }, "media");

@@ -7,20 +7,20 @@ import { apiTokensTable } from "../db/schema";
 import { requireUserToBeMemberOfProject } from "../projects/utils";
 
 export const getProjectTokens = cache(async (projectId: string) => {
-  "use server";
+	"use server";
 
-  const user = requireUser();
+	const user = requireUser();
 
-  await requireUserToBeMemberOfProject({
-    userId: user.id,
-    projectId,
-  });
+	await requireUserToBeMemberOfProject({
+		userId: user.id,
+		projectId,
+	});
 
-  return await db.query.apiTokensTable.findMany({
-    where: eq(apiTokensTable.projectId, projectId),
-    with: {
-      creator: true,
-    },
-    orderBy: desc(apiTokensTable.revokedAt),
-  });
+	return await db.query.apiTokensTable.findMany({
+		where: eq(apiTokensTable.projectId, projectId),
+		with: {
+			creator: true,
+		},
+		orderBy: desc(apiTokensTable.revokedAt),
+	});
 }, "tokens");
