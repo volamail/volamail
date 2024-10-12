@@ -8,7 +8,7 @@ type Params = {
 	subject: string;
 	from: string;
 	to: string | string[];
-	text: string;
+	text?: string;
 	data?: Record<string, string>;
 };
 

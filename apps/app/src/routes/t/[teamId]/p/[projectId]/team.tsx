@@ -85,7 +85,6 @@ export default function TeamPage(props: RouteSectionProps) {
 										{member.joinedAt.toLocaleDateString("en-US")}
 									</td>
 
-									{/* @ts-expect-error idk align attribute is deprecated or something*/}
 									<td align="right">
 										<Tooltip>
 											<TooltipTrigger
@@ -156,7 +155,6 @@ export default function TeamPage(props: RouteSectionProps) {
 											<td class="py-2 pr-4">
 												{invite.createdAt.toLocaleString("en-US")}
 											</td>
-											{/* @ts-expect-error idk align attribute is deprecated or something*/}
 											<td align="right">
 												<Button
 													color="destructive"

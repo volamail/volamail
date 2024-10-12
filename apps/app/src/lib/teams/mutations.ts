@@ -5,8 +5,14 @@ import { customAlphabet } from "nanoid";
 import { db } from "~/lib/db";
 import * as schema from "~/lib/db/schema";
 import * as subscriptions from "~/lib/subscriptions/constants";
+import type { PostgresJsTransaction } from "drizzle-orm/postgres-js";
 
-export async function createTeam(name: string, database: typeof db = db) {
+export async function createTeam(
+	name: string,
+	database:
+		| typeof db
+		| Parameters<Parameters<typeof db.transaction>[0]>[0] = db,
+) {
 	let id = slugify(name, { lower: true, strict: true });
 
 	const existingTeam = await database.query.teamsTable.findFirst({
