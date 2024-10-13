@@ -1,8 +1,8 @@
 name: Deploy to Staging
 
 env:
-  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+  VERCEL_ORG_ID: ${{ vars.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ vars.VERCEL_PROJECT_ID }}
 
 on:
   push:
@@ -46,4 +46,4 @@ jobs:
       - name: Deploy project to Staging
         run: |
           url="$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})"
-          vercel alias --token=${{ secrets.VERCEL_TOKEN }} set "$url" ${{ vars.STAGING_DOMAIN }} --scope=${{ secrets.VERCEL_TEAM_SLUG }}
+          vercel alias --token=${{ secrets.VERCEL_TOKEN }} set "$url" ${{ vars.STAGING_DOMAIN }} --scope=${{ vars.VERCEL_TEAM_SLUG }}
