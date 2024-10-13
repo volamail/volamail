@@ -1,1 +1,0 @@
-ALTER TABLE "subscriptions" ALTER COLUMN "price" SET DATA TYPE numeric(12, 2);

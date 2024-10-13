@@ -28,7 +28,7 @@ export const buttonVariants = tv({
 		},
 		round: {
 			true: "rounded-full",
-			false: "rounded-lg",
+			false: "rounded-[0.5rem/0.45rem]",
 		},
 		color: {
 			primary: "",

@@ -4,33 +4,33 @@ import { cache, redirect } from "@solidjs/router";
 import { env } from "../environment/env";
 
 export const getCurrentUser = cache(async () => {
-  "use server";
+	"use server";
 
-  const event = getRequestEvent()!;
+	const event = getRequestEvent()!;
 
-  const user = event.locals.user;
+	const user = event.locals.user;
 
-  if (!user) {
-    throw redirect("/login");
-  }
+	if (!user) {
+		throw redirect("/login");
+	}
 
-  return {
-    ...user,
-    imageUrl: user.githubId
-      ? `https://avatars.githubusercontent.com/u/${user.githubId}`
-      : null,
-    superadmin: "ADMIN_ID" in env && env.ADMIN_ID === user.id,
-  };
+	return {
+		...user,
+		imageUrl: user.githubId
+			? `https://avatars.githubusercontent.com/u/${user.githubId}`
+			: null,
+		superadmin: "ADMIN_ID" in env && env.ADMIN_ID === user.id,
+	};
 }, "user");
 
 export const getAuthState = cache(async () => {
-  "use server";
+	"use server";
 
-  const event = getRequestEvent()!;
+	const event = getRequestEvent()!;
 
-  const user = event.locals.user;
+	const user = event.locals.user;
 
-  return {
-    authenticated: !!user,
-  };
+	return {
+		authenticated: !!user,
+	};
 }, "auth");

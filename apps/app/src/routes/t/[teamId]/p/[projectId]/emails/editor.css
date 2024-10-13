@@ -1,74 +1,22 @@
 /**
  * Editor stuff
  */
- .revert-tailwind {
-  all: initial;
-  font-size: initial;
-  position: relative;
-}
 
 .revert-tailwind > div {
   min-height: 100%;
 }
 
 .revert-tailwind * {
-  font-size: inherit;
+  font-size: revert;
   margin: revert;
   font-weight: revert;
   list-style: revert;
 }
 
-.revert-tailwind *[data-selected] {
-  @apply outline-2 outline-blue-600 outline-dashed bg-blue-600/25;
-}
-
-.revert-tailwind *[align=center] {
-  margin: 0 auto;
-}
-
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation-duration: 0s;
-}
-
-#editor-view {
-  view-transition-name: editor-view;
-}
-
-::view-transition-old(editor-view),
-::view-transition-new(editor-view) {
-  animation-duration: 0.6s;
-  animation-timing-function: ease-in-out;
-} 
-
-::view-transition-old(editor-view) {
-  animation-name: blur-out;
-}
-
-::view-transition-new(editor-view) {
-  animation-name: blur-in;
-}
-
-@keyframes blur-in {
-  0% {
-    filter: blur(8px);
-    opacity: 0; 
-  }
-
-  100% {
-    filter: blur(0px);
-    opacity: 1;
-  }
-}
-
-@keyframes blur-out {
-  0% {
-    filter: blur(0px);
-    opacity: 1;
-  }
-
-  100% {
-    filter: blur(8px);
-    opacity: 0; 
-  }
+.tiptap p.is-editor-empty:first-child::before {
+  color: #adb5bd;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
 }

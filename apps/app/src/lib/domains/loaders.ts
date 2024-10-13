@@ -10,56 +10,56 @@ import { getDeliveryNotificationsEnabled } from "../mail/config";
 import { requireUserToBeMemberOfProject } from "../projects/utils";
 
 export const getProjectDomains = cache(async (projectId: string) => {
-  "use server";
+	"use server";
 
-  const user = requireUser();
+	const user = requireUser();
 
-  await requireUserToBeMemberOfProject({
-    userId: user.id,
-    projectId,
-  });
+	await requireUserToBeMemberOfProject({
+		userId: user.id,
+		projectId,
+	});
 
-  const domainRows = await db.query.domainsTable.findMany({
-    where: eq(domainsTable.projectId, projectId),
-    orderBy: desc(domainsTable.createdAt),
-  });
+	const domainRows = await db.query.domainsTable.findMany({
+		where: eq(domainsTable.projectId, projectId),
+		orderBy: desc(domainsTable.createdAt),
+	});
 
-  return await Promise.all(
-    domainRows.map(async (row) => {
-      const identity = await sesClientV2.getEmailIdentity({
-        EmailIdentity: row.domain,
-      });
+	return await Promise.all(
+		domainRows.map(async (row) => {
+			const identity = await sesClientV2.getEmailIdentity({
+				EmailIdentity: row.domain,
+			});
 
-      const verified = identity.VerifiedForSendingStatus;
+			const verified = identity.VerifiedForSendingStatus;
 
-      if (
-        verified &&
-        !row.receivesDeliveryNotifications &&
-        getDeliveryNotificationsEnabled()
-      ) {
-        await mutations.prepareNotificationsForIdentity(row.domain);
+			if (
+				verified &&
+				!row.receivesDeliveryNotifications &&
+				getDeliveryNotificationsEnabled()
+			) {
+				await mutations.prepareNotificationsForIdentity(row.domain);
 
-        await db
-          .update(domainsTable)
-          .set({
-            receivesDeliveryNotifications: true,
-          })
-          .where(eq(domainsTable.id, row.id));
-      }
+				await db
+					.update(domainsTable)
+					.set({
+						receivesDeliveryNotifications: true,
+					})
+					.where(eq(domainsTable.id, row.id));
+			}
 
-      if (verified !== row.verified) {
-        await db
-          .update(domainsTable)
-          .set({
-            verified,
-          })
-          .where(eq(domainsTable.id, row.id));
-      }
+			if (verified !== row.verified) {
+				await db
+					.update(domainsTable)
+					.set({
+						verified,
+					})
+					.where(eq(domainsTable.id, row.id));
+			}
 
-      return {
-        ...row,
-        verified,
-      };
-    })
-  );
+			return {
+				...row,
+				verified,
+			};
+		}),
+	);
 }, "domains");

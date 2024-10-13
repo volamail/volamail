@@ -5,7 +5,7 @@ import { type ObjectSchema, safeParseAsync } from "valibot";
 // biome-ignore lint/suspicious/noExplicitAny: This is fine
 type FormOptions<T extends Record<string, any>> = {
 	// biome-ignore lint/suspicious/noExplicitAny: This is also fine
-	schema: ObjectSchema<Record<keyof T, any>, any>;
+	schema?: ObjectSchema<Record<keyof T, any>, any>;
 	defaultValues: Partial<T>;
 	validateBeforeSubmit?: boolean;
 };
@@ -42,7 +42,14 @@ export function createForm<T extends Record<string, any>>(
 		},
 	});
 
-	async function validateField(field: keyof T, value: string) {
+	async function validateField<Field extends keyof T>(
+		field: Field,
+		value: T[Field],
+	) {
+		if (!options.schema) {
+			return null;
+		}
+
 		const validationResult = await safeParseAsync(
 			options.schema.entries[field],
 			value,
@@ -55,8 +62,32 @@ export function createForm<T extends Record<string, any>>(
 		return validationResult.issues[0].message;
 	}
 
+	function createFieldTriggerUpdate<Field extends keyof T>(field: Field) {
+		return (value: T[Field]) => {
+			// @ts-expect-error TODO: Fix this
+			setStore("fields", field, "value", value);
+
+			if (!store.form.submitted && !options.validateBeforeSubmit) {
+				// @ts-expect-error TODO: Fix this
+				setStore("fields", field, "dirty", true);
+
+				return;
+			}
+
+			const error = validateField(field, value);
+
+			// @ts-expect-error TODO: Fix this
+			setStore("fields", field, {
+				error,
+				dirty: true,
+			});
+		};
+	}
+
 	function getTextareaProps<Field extends keyof T>(field: Field) {
 		const fieldState = store.fields[field];
+
+		const triggerUpdate = createFieldTriggerUpdate(field);
 
 		return {
 			...fieldState,
@@ -69,33 +100,27 @@ export function createForm<T extends Record<string, any>>(
 				});
 			},
 			async onInput(event: Event) {
-				// @ts-expect-error TODO: Fix this
-				setStore("fields", field, "value", event.currentTarget.value);
-
-				if (!store.form.submitted && !options.validateBeforeSubmit) {
-					// @ts-expect-error TODO: Fix this
-					setStore("fields", field, "dirty", true);
+				if (!(event.target instanceof HTMLTextAreaElement)) {
+					console.warn(
+						"Bound a non-textarea element to an onInput handler. Please trigger change manually using the triggerUpdate function instead.",
+					);
 
 					return;
 				}
 
-				const target = event.target as HTMLTextAreaElement;
+				if (event.target.textContent === null) {
+					return;
+				}
 
-				const value = target.value;
-
-				const error = await validateField(field, value);
-
-				// @ts-expect-error TODO: Fix this
-				setStore("fields", field, {
-					error,
-					dirty: true,
-				});
+				triggerUpdate(event.target.textContent as T[Field]);
 			},
 		};
 	}
 
-	function getFieldProps(field: keyof T) {
+	function getFieldProps<Field extends keyof T>(field: Field) {
 		const fieldState = store.fields[field];
+
+		const triggerUpdate = createFieldTriggerUpdate(field);
 
 		return {
 			...fieldState,
@@ -107,28 +132,17 @@ export function createForm<T extends Record<string, any>>(
 					ref: el,
 				});
 			},
-			async onInput(event: Event) {
-				// @ts-expect-error TODO: Fix this
-				setStore("fields", field, "value", event.currentTarget.value);
-
-				if (!store.form.submitted && !options.validateBeforeSubmit) {
-					// @ts-expect-error TODO: Fix this
-					setStore("fields", field, "dirty", true);
+			triggerUpdate,
+			onInput(event: Event) {
+				if (!(event.currentTarget instanceof HTMLInputElement)) {
+					console.warn(
+						"Bound a non-input element to an onInput handler. Please trigger change manually using the triggerUpdate function instead.",
+					);
 
 					return;
 				}
 
-				const target = event.target as HTMLInputElement;
-
-				const value = target.value;
-
-				const error = await validateField(field, value);
-
-				// @ts-expect-error TODO: Fix this
-				setStore("fields", field, {
-					error,
-					dirty: true,
-				});
+				triggerUpdate(event.currentTarget.value as T[Field]);
 			},
 		};
 	}
@@ -143,7 +157,7 @@ export function createForm<T extends Record<string, any>>(
 				continue;
 			}
 
-			const value = ref.value;
+			const value = ref.value as T[typeof field];
 
 			const error = await validateField(field, value);
 

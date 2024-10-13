@@ -12,100 +12,100 @@ import { parseFormData } from "../server-utils";
 import { requireUserToBeMemberOfProject } from "../projects/utils";
 
 export const createDomain = action(async (formData: FormData) => {
-  "use server";
+	"use server";
 
-  const user = requireUser();
+	const user = requireUser();
 
-  const body = await parseFormData(
-    object({
-      projectId: string(),
-      domain: string(),
-    }),
-    formData
-  );
+	const body = await parseFormData(
+		object({
+			projectId: string(),
+			domain: string(),
+		}),
+		formData,
+	);
 
-  await requireUserToBeMemberOfProject({
-    userId: user.id,
-    projectId: body.projectId,
-  });
+	await requireUserToBeMemberOfProject({
+		userId: user.id,
+		projectId: body.projectId,
+	});
 
-  try {
-    const identity = await sesClientV2.createEmailIdentity({
-      EmailIdentity: body.domain,
-    });
+	try {
+		const identity = await sesClientV2.createEmailIdentity({
+			EmailIdentity: body.domain,
+		});
 
-    await db.insert(domainsTable).values({
-      domain: body.domain,
-      projectId: body.projectId,
-      tokens: identity.DkimAttributes!.Tokens!,
-    });
-  } catch (e) {
-    if (e instanceof AlreadyExistsException) {
-      throw createError({
-        statusCode: 409,
-        statusMessage: "Domain already registered",
-      });
-    }
+		await db.insert(domainsTable).values({
+			domain: body.domain,
+			projectId: body.projectId,
+			tokens: identity.DkimAttributes!.Tokens!,
+		});
+	} catch (e) {
+		if (e instanceof AlreadyExistsException) {
+			throw createError({
+				statusCode: 409,
+				statusMessage: "Domain already registered",
+			});
+		}
 
-    throw createError({
-      statusCode: 500,
-      statusMessage: "Internal server error",
-    });
-  }
+		throw createError({
+			statusCode: 500,
+			statusMessage: "Internal server error",
+		});
+	}
 
-  return {
-    success: true,
-  };
+	return {
+		success: true,
+	};
 }, "domains");
 
 export const deleteDomain = action(async (formData: FormData) => {
-  "use server";
+	"use server";
 
-  const user = requireUser();
+	const user = requireUser();
 
-  const body = await parseFormData(
-    object({
-      projectId: string(),
-      domainId: string(),
-    }),
-    formData
-  );
+	const body = await parseFormData(
+		object({
+			projectId: string(),
+			domainId: string(),
+		}),
+		formData,
+	);
 
-  await requireUserToBeMemberOfProject({
-    userId: user.id,
-    projectId: body.projectId,
-  });
+	await requireUserToBeMemberOfProject({
+		userId: user.id,
+		projectId: body.projectId,
+	});
 
-  const domain = await db.query.domainsTable.findFirst({
-    where: and(
-      eq(domainsTable.id, body.domainId),
-      eq(domainsTable.projectId, body.projectId)
-    ),
-  });
+	const domain = await db.query.domainsTable.findFirst({
+		where: and(
+			eq(domainsTable.id, body.domainId),
+			eq(domainsTable.projectId, body.projectId),
+		),
+	});
 
-  if (!domain) {
-    throw createError({
-      statusCode: 404,
-      statusMessage: "Domain not found",
-    });
-  }
+	if (!domain) {
+		throw createError({
+			statusCode: 404,
+			statusMessage: "Domain not found",
+		});
+	}
 
-  await db.transaction(async (db) => {
-    await sesClientV2.deleteEmailIdentity({
-      EmailIdentity: domain.domain,
-    });
+	await db.transaction(async (db) => {
+		await sesClientV2.deleteEmailIdentity({
+			EmailIdentity: domain.domain,
+		});
 
-    await db
-      .delete(domainsTable)
-      .where(
-        and(
-          eq(domainsTable.id, body.domainId),
-          eq(domainsTable.projectId, body.projectId)
-        )
-      );
-  });
+		await db
+			.delete(domainsTable)
+			.where(
+				and(
+					eq(domainsTable.id, body.domainId),
+					eq(domainsTable.projectId, body.projectId),
+				),
+			);
+	});
 
-  return {
-    success: true,
-  };
+	return {
+		success: true,
+	};
 }, "domains");

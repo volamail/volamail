@@ -25,4 +25,7 @@ export default defineConfig({
 		},
 		envPrefix: "VITE_",
 	},
+	solid: {
+		exclude: "render.tsx",
+	},
 });

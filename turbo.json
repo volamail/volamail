@@ -1,20 +1,33 @@
 {
-  "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": ["**/.env.*local"],
-  "tasks": {
-    "build": {
-      "dependsOn": ["^build"],
-      "outputs": ["dist/**", ".next/**", "!.next/cache/**"],
-      "env": ["AWS_BUCKET", "AWS_REGION", "VITE_SELF_HOSTED"]
-    },
-    "lint": {},
-    "typecheck": {},
-    "dev": {
-      "cache": false,
-      "persistent": true
-    },
-    "clean": {
-      "cache": false
-    }
-  }
+	"$schema": "https://turbo.build/schema.json",
+	"globalDependencies": [
+		"**/.env.*local"
+	],
+	"tasks": {
+		"build": {
+			"dependsOn": [
+				"^build"
+			],
+			"outputs": [
+				"dist/**",
+				".next/**",
+				"!.next/cache/**"
+			],
+			"env": [
+				"AWS_BUCKET",
+				"AWS_REGION",
+				"VITE_SELF_HOSTED"
+			]
+		},
+		"lint": {},
+		"format": {},
+		"typecheck": {},
+		"dev": {
+			"cache": false,
+			"persistent": true
+		},
+		"clean": {
+			"cache": false
+		}
+	}
 }

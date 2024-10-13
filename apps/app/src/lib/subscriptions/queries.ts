@@ -8,28 +8,28 @@ import { requireUser } from "../auth/utils";
 import { requireUserToBeMemberOfTeam } from "../projects/utils";
 
 export const getTeamSubcription = cache(async (teamId: string) => {
-  "use server";
+	"use server";
 
-  const user = requireUser();
+	const user = requireUser();
 
-  await requireUserToBeMemberOfTeam({
-    userId: user.id,
-    teamId,
-  });
+	await requireUserToBeMemberOfTeam({
+		userId: user.id,
+		teamId,
+	});
 
-  const team = await db.query.teamsTable.findFirst({
-    where: eq(teamsTable.id, teamId),
-    with: {
-      subscription: true,
-    },
-  });
+	const team = await db.query.teamsTable.findFirst({
+		where: eq(teamsTable.id, teamId),
+		with: {
+			subscription: true,
+		},
+	});
 
-  if (!team) {
-    throw createError({
-      statusCode: 404,
-      statusMessage: "Team not found",
-    });
-  }
+	if (!team) {
+		throw createError({
+			statusCode: 404,
+			statusMessage: "Team not found",
+		});
+	}
 
-  return team.subscription;
+	return team.subscription;
 }, "subscription");

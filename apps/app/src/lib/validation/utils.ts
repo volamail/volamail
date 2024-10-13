@@ -1,13 +1,12 @@
-import type { ObjectPathItem, ValiError } from "valibot";
+import {
+	flatten,
+	type BaseIssue,
+	type BaseSchema,
+	type ValiError,
+} from "valibot";
 
-// biome-ignore lint/suspicious/noExplicitAny: This is fine
-export function formatValiError(error: ValiError<any>) {
-	return `${error.issues
-		.map(
-			(issue) =>
-				`${issue.path?.map((path: ObjectPathItem) => path.key).join(".")}: ${
-					issue.message
-				}`,
-		)
-		.join(", ")}`;
+export function formatValiError<
+	T extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+>(error: ValiError<T>) {
+	return JSON.stringify(flatten(error.issues).nested);
 }

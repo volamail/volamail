@@ -1,71 +1,102 @@
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { generateText } from "ai";
 import { cache } from "@solidjs/router";
 import { createError } from "vinxi/http";
 
 import { db } from "~/lib/db";
-import * as schema from "~/lib/db/schema";
+import { templatesTable, templateTranslationsTable } from "~/lib/db/schema";
 import { requireUser } from "../auth/utils";
 import { getModelForTeam } from "./model";
 import autocompletePrompt from "./prompts/autocomplete.txt?raw";
 import { requireUserToBeMemberOfProject } from "../projects/utils";
+import type { TemplateLanguage } from "~/lib/templates/languages";
 
 export const getProjectTemplates = cache(async (projectId: string) => {
-  "use server";
+	"use server";
 
-  const user = requireUser();
+	const user = requireUser();
 
-  await requireUserToBeMemberOfProject({
-    userId: user.id,
-    projectId,
-  });
+	await requireUserToBeMemberOfProject({
+		userId: user.id,
+		projectId,
+	});
 
-  return await db.query.templatesTable.findMany({
-    where: eq(schema.templatesTable.projectId, projectId),
-    columns: {
-      body: false,
-    },
-  });
+	return await db.query.templatesTable.findMany({
+		where: eq(templatesTable.projectId, projectId),
+	});
 }, "templates");
 
-export const getTemplate = cache(async (id: string) => {
-  "use server";
+export const getTemplate = cache(
+	async ({
+		projectId,
+		slug,
+		language,
+	}: {
+		projectId: string;
+		slug: string;
+		language?: TemplateLanguage;
+	}) => {
+		"use server";
 
-  const template = await db.query.templatesTable.findFirst({
-    where: eq(schema.templatesTable.id, id),
-  });
+		const user = requireUser();
 
-  if (!template) {
-    throw createError({
-      statusCode: 404,
-      statusMessage: "Template not found",
-    });
-  }
+		const { meta } = await requireUserToBeMemberOfProject({
+			userId: user.id,
+			projectId,
+		});
 
-  return template;
-}, "templates");
+		const translation = await db.query.templateTranslationsTable.findFirst({
+			where: and(
+				eq(templateTranslationsTable.projectId, projectId),
+				eq(templateTranslationsTable.templateSlug, slug),
+				eq(
+					templateTranslationsTable.language,
+					language || meta.project.defaultTemplateLanguage,
+				),
+			),
+			with: {
+				template: true,
+			},
+		});
+
+		if (!translation) {
+			throw createError({
+				statusCode: 404,
+				statusMessage: "Template not found",
+			});
+		}
+
+		const { template, ...rest } = translation;
+
+		return {
+			...template,
+			...rest,
+		};
+	},
+	"templates",
+);
 
 export async function getTemplateGenerationAutocomplete(params: {
-  query: string;
-  projectId: string;
+	query: string;
+	projectId: string;
 }) {
-  "use server";
+	"use server";
 
-  const user = requireUser();
+	const user = requireUser();
 
-  const { meta } = await requireUserToBeMemberOfProject({
-    userId: user.id,
-    projectId: params.projectId,
-  });
+	const { meta } = await requireUserToBeMemberOfProject({
+		userId: user.id,
+		projectId: params.projectId,
+	});
 
-  const result = await generateText({
-    model: await getModelForTeam({
-      teamId: meta.project.team.id,
-      tier: "small",
-    }),
-    system: autocompletePrompt,
-    prompt: `Prompt: ${params.query}`,
-  });
+	const result = await generateText({
+		model: await getModelForTeam({
+			teamId: meta.project.team.id,
+			tier: "small",
+		}),
+		system: autocompletePrompt,
+		prompt: `Prompt: ${params.query}`,
+	});
 
-  return result.text;
+	return result.text;
 }
