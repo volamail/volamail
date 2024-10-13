@@ -28,9 +28,6 @@ jobs:
           node-version: 20
           cache: "pnpm"
 
-      - name: Install dependencies
-        run: pnpm install
-
       - name: Install Vercel CLI
         run: pnpm add -g vercel@latest
 
@@ -42,6 +39,7 @@ jobs:
 
       - name: Run migrations
         run: pnpm db migrate
+        working-directory: apps/app
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
