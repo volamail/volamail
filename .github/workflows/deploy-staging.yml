@@ -46,4 +46,4 @@ jobs:
       - name: Deploy project to Staging
         run: |
           url="$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})"
-          vercel alias --token=${{ secrets.VERCEL_TOKEN }} set "$url" ${{ vars.STAGING_DOMAIN }}
+          vercel alias --token=${{ secrets.VERCEL_TOKEN }} set "$url" ${{ vars.STAGING_DOMAIN }} --scope=${{ secrets.VERCEL_TEAM_SLUG }}
