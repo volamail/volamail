@@ -12,6 +12,7 @@ on:
 jobs:
   deploy-staging:
     runs-on: ubuntu-latest
+    environment: staging
     steps:
       - uses: actions/checkout@v4
         name: Checkout
