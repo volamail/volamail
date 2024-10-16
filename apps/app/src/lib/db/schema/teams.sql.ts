@@ -1,4 +1,3 @@
-import { nanoid } from "nanoid";
 import { relations } from "drizzle-orm";
 import {
 	index,
@@ -7,11 +6,12 @@ import {
 	text,
 	timestamp,
 } from "drizzle-orm/pg-core";
+import { nanoid } from "nanoid";
 
-import { usersTable } from "./users.sql";
-import { projectsTable } from "./projects.sql";
 import { domainsTable } from "./domains.sql";
+import { projectsTable } from "./projects.sql";
 import { subscriptionsTable } from "./subscriptions.sql";
+import { usersTable } from "./users.sql";
 
 export const teamsTable = pgTable(
 	"teams",
@@ -74,7 +74,6 @@ export const teamInvitesTable = pgTable(
 );
 
 export const teamsRelations = relations(teamsTable, ({ many, one }) => ({
-	domains: many(domainsTable),
 	projects: many(projectsTable),
 	invites: many(teamInvitesTable),
 	members: many(teamMembersTable),

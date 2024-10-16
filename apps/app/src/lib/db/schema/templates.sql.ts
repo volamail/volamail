@@ -1,8 +1,9 @@
 import { relations } from "drizzle-orm";
-import { pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { jsonb, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 
 import { projectsTable } from "./projects.sql";
 import { primaryKey } from "drizzle-orm/pg-core";
+import { DEFAULT_THEME, type Theme } from "~/lib/templates/theme";
 
 export const templatesTable = pgTable(
 	"templates",
@@ -13,6 +14,7 @@ export const templatesTable = pgTable(
 			.references(() => projectsTable.id, {
 				onDelete: "cascade",
 			}),
+		theme: jsonb("theme").notNull().$type<Theme>().default(DEFAULT_THEME),
 		createdAt: timestamp("created_at").notNull().defaultNow(),
 	},
 	(table) => ({

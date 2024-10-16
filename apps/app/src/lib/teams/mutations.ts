@@ -5,7 +5,6 @@ import { customAlphabet } from "nanoid";
 import { db } from "~/lib/db";
 import * as schema from "~/lib/db/schema";
 import * as subscriptions from "~/lib/subscriptions/constants";
-import type { PostgresJsTransaction } from "drizzle-orm/postgres-js";
 
 export async function createTeam(
 	name: string,

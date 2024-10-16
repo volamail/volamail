@@ -1,6 +1,6 @@
 import { sharedConfig } from "@repo/tailwind-config";
+import type { Config } from "tailwindcss";
 
-/** @type {import('tailwindcss').Config} */
 export default {
 	content: ["./src/**/*.tsx"],
 	presets: [sharedConfig],
@@ -17,4 +17,4 @@ export default {
 			},
 		},
 	},
-};
+} satisfies Config;
