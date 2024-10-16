@@ -1,14 +1,14 @@
+import type { APIEvent } from "@solidjs/start/server";
+import { and, eq, sql } from "drizzle-orm";
 import * as v from "valibot";
 import { createError } from "vinxi/http";
-import { and, eq, sql } from "drizzle-orm";
-import type { APIEvent } from "@solidjs/start/server";
 
-import { db } from "~/lib/db";
-import { lucia } from "~/lib/auth/lucia";
-import * as schema from "~/lib/db/schema";
-import { sendMail } from "~/lib/mail/send";
 import * as analytics from "~/lib/analytics";
+import { lucia } from "~/lib/auth/lucia";
+import { db } from "~/lib/db";
+import * as schema from "~/lib/db/schema";
 import { isSelfHosted } from "~/lib/environment/utils";
+import { sendMail } from "~/lib/mail/send";
 import { validTemplateLanguage } from "~/lib/templates/languages";
 import {
 	renderTemplateToHtml,
@@ -122,6 +122,13 @@ export async function POST({ request }: APIEvent) {
 				payload.language || project.defaultTemplateLanguage,
 			),
 		),
+		with: {
+			template: {
+				columns: {
+					theme: true,
+				},
+			},
+		},
 	});
 
 	if (!translation) {
@@ -135,6 +142,13 @@ export async function POST({ request }: APIEvent) {
 						project.defaultTemplateLanguage,
 					),
 				),
+				with: {
+					template: {
+						columns: {
+							theme: true,
+						},
+					},
+				},
 			});
 		}
 	} else {
@@ -160,8 +174,8 @@ export async function POST({ request }: APIEvent) {
 
 	try {
 		const [html, text] = await Promise.all([
-			renderTemplateToHtml(translation.contents),
-			renderTemplateToText(translation.contents),
+			renderTemplateToHtml(translation.contents, translation.template.theme),
+			renderTemplateToText(translation.contents, translation.template.theme),
 		]);
 
 		const email = await sendMail({
