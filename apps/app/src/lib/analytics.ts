@@ -55,15 +55,6 @@ export async function capturePlanPurchaseEvent(team: {
 	await client?.shutdown();
 }
 
-export async function captureAiRequestEvent(userId: string) {
-	client?.capture({
-		distinctId: userId,
-		event: "ai_request",
-	});
-
-	await client?.shutdown();
-}
-
 export async function captureEmailSentEvent(teamId: string) {
 	client?.capture({
 		event: "email_sent",

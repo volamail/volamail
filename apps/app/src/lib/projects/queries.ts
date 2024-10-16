@@ -1,22 +1,12 @@
-import type { User } from "lucia";
-import { and, eq } from "drizzle-orm";
-import { createError } from "vinxi/http";
 import { cache, redirect } from "@solidjs/router";
+import { and, eq } from "drizzle-orm";
+import type { User } from "lucia";
+import { createError } from "vinxi/http";
 
-import { db } from "../db";
 import { requireUser } from "../auth/utils";
-import { requireUserToBeMemberOfTeam } from "./utils";
+import { db } from "../db";
 import { projectsTable, teamsTable } from "../db/schema";
-
-export const getTeamDefaultProject = cache(async (teamId: string) => {
-	"use server";
-
-	requireUser();
-
-	return await db.query.projectsTable.findFirst({
-		where: and(eq(projectsTable.teamId, teamId)),
-	});
-}, "projects:default");
+import { requireUserToBeMemberOfTeam } from "./utils";
 
 export const getCurrentUserDefaultProject = cache(async () => {
 	"use server";

@@ -28,8 +28,3 @@ export const SUBSCRIPTION_QUOTAS = {
 };
 
 export const MAX_TEAMS_PER_USER = 2;
-
-export const PAID_SUBSCRIPTION_TIERS = [
-	SUBSCRIPTION_TYPE_PRO,
-	SUBSCRIPTION_TYPE_CUSTOM,
-] as const;

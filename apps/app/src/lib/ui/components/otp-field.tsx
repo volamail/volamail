@@ -1,15 +1,13 @@
+import OtpField, { type DynamicProps, type RootProps } from "@corvu/otp-field";
 import {
-	Show,
-	splitProps,
 	type Component,
 	type ComponentProps,
+	Show,
 	type ValidComponent,
+	splitProps,
 } from "solid-js";
-import OtpField, { type DynamicProps, type RootProps } from "@corvu/otp-field";
 
 import { cn } from "../utils/cn";
-
-export const REGEXP_ONLY_DIGITS = "^\\d*$";
 
 const OTPField = <T extends ValidComponent = "div">(
 	props: DynamicProps<T, RootProps<T> & { class?: string | undefined }>,
