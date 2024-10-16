@@ -1,5 +1,5 @@
 // @refresh reload
-import { createHandler, StartServer } from "@solidjs/start/server";
+import { StartServer, createHandler } from "@solidjs/start/server";
 import { env } from "./lib/environment/env";
 
 const SITE_URL = `${import.meta.env.DEV ? "http" : "https"}://${

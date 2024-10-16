@@ -1,0 +1,2 @@
+ALTER TABLE "projects" ADD COLUMN "default_theme" jsonb DEFAULT '{"background":"#eeeeee","contentBackground":"#ffffff","contentMaxWidth":"600px"}'::jsonb NOT NULL;--> statement-breakpoint
+ALTER TABLE "templates" ADD COLUMN "theme" jsonb DEFAULT '{"background":"#eeeeee","contentBackground":"#ffffff","contentMaxWidth":"600px"}'::jsonb NOT NULL;

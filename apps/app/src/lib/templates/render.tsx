@@ -4,13 +4,10 @@ import { Node } from "@tiptap/pm/model";
 
 import StarterKit from "@tiptap/starter-kit";
 import { renderToStringAsync } from "solid-js/web";
+import type { Theme } from "./theme";
 
-function getExtensions() {
-	return [StarterKit];
-}
-
-export function renderTemplateToHtml(jsonContents: JSONContent) {
-	const contents = generateHTML(jsonContents, getExtensions());
+export function renderTemplateToHtml(jsonContents: JSONContent, theme: Theme) {
+	const contents = generateHTML(jsonContents, getExtensionsFromTheme(theme));
 
 	return renderToStringAsync(() => (
 		<html lang="en">
@@ -19,7 +16,14 @@ export function renderTemplateToHtml(jsonContents: JSONContent) {
 				<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 				<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 			</head>
-			<body style="margin: 0; background-color: #eee; padding: 5em; font-family: Helvetica, sans-serif;">
+			<body
+				style={{
+					margin: 0,
+					"background-color": theme.background,
+					padding: "5em",
+					"font-family": "Helvetica, sans-serif",
+				}}
+			>
 				<table width="100%" cellpadding="0" cellspacing="0" border="0">
 					<tbody>
 						<tr>
@@ -28,7 +32,13 @@ export function renderTemplateToHtml(jsonContents: JSONContent) {
 									align="center"
 									cellpadding="0"
 									cellspacing="0"
-									style="max-width: 600px; width: 100%; padding: 2.5em; border: 1px solid #ddd; background-color: #fff;"
+									style={{
+										"max-width": theme.contentMaxWidth,
+										width: "100%",
+										padding: "2.5em",
+										border: "1px solid #ddd",
+										"background-color": theme.contentBackground,
+									}}
 								>
 									<tbody>
 										<tr>
@@ -45,6 +55,18 @@ export function renderTemplateToHtml(jsonContents: JSONContent) {
 	));
 }
 
+export function renderTemplateToText(jsonContents: JSONContent, theme: Theme) {
+	const schema = getSchema(getExtensionsFromTheme(theme));
+
+	const contentNode = Node.fromJSON(schema, jsonContents);
+
+	return contentNode.textBetween(0, contentNode.content.size, "\n\n");
+}
+
+function getExtensionsFromTheme(theme: Theme) {
+	return [StarterKit];
+}
+
 declare module "solid-js" {
 	namespace JSX {
 		interface HTMLAttributes<T> extends AriaAttributes, DOMAttributes<T> {
@@ -55,12 +77,4 @@ declare module "solid-js" {
 			align?: string;
 		}
 	}
-}
-
-export function renderTemplateToText(jsonContents: JSONContent) {
-	const schema = getSchema(getExtensions());
-
-	const contentNode = Node.fromJSON(schema, jsonContents);
-
-	return contentNode.textBetween(0, contentNode.content.size, "\n\n");
 }

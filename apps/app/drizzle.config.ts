@@ -10,6 +10,5 @@ export default defineConfig({
 	},
 	schema: "./src/lib/db/schema/index.ts",
 	out: "./migrations",
-	verbose: true,
 	strict: true,
 });
