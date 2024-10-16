@@ -1,15 +1,15 @@
-import { and, eq } from "drizzle-orm";
-import { generateText } from "ai";
 import { cache } from "@solidjs/router";
+import { generateText } from "ai";
+import { and, eq } from "drizzle-orm";
 import { createError } from "vinxi/http";
 
 import { db } from "~/lib/db";
-import { templatesTable, templateTranslationsTable } from "~/lib/db/schema";
+import { templateTranslationsTable, templatesTable } from "~/lib/db/schema";
+import type { TemplateLanguage } from "~/lib/templates/languages";
 import { requireUser } from "../auth/utils";
+import { requireUserToBeMemberOfProject } from "../projects/utils";
 import { getModelForTeam } from "./model";
 import autocompletePrompt from "./prompts/autocomplete.txt?raw";
-import { requireUserToBeMemberOfProject } from "../projects/utils";
-import type { TemplateLanguage } from "~/lib/templates/languages";
 
 export const getProjectTemplates = cache(async (projectId: string) => {
 	"use server";
@@ -75,28 +75,3 @@ export const getTemplate = cache(
 	},
 	"templates",
 );
-
-export async function getTemplateGenerationAutocomplete(params: {
-	query: string;
-	projectId: string;
-}) {
-	"use server";
-
-	const user = requireUser();
-
-	const { meta } = await requireUserToBeMemberOfProject({
-		userId: user.id,
-		projectId: params.projectId,
-	});
-
-	const result = await generateText({
-		model: await getModelForTeam({
-			teamId: meta.project.team.id,
-			tier: "small",
-		}),
-		system: autocompletePrompt,
-		prompt: `Prompt: ${params.query}`,
-	});
-
-	return result.text;
-}

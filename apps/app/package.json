@@ -12,7 +12,8 @@
 		"lint": "biome lint .",
 		"release": "release-it",
 		"start": "vinxi start",
-		"typecheck": "tsc --noEmit"
+		"typecheck": "tsc --noEmit",
+		"knip": "knip"
 	},
 	"dependencies": {
 		"@ai-sdk/anthropic": "^0.0.19",
@@ -26,19 +27,11 @@
 		"@lucia-auth/adapter-drizzle": "^1.0.7",
 		"@maskito/core": "^3.1.0",
 		"@maskito/kit": "^3.1.0",
-		"@modular-forms/solid": "^0.24.1",
-		"@solid-primitives/scheduled": "^1.4.3",
 		"@solidjs/meta": "^0.29.4",
 		"@solidjs/router": "^0.14.8",
 		"@solidjs/start": "^1.0.8",
-		"@tanstack/solid-query": "^5.51.21",
 		"@tiptap/core": "^2.5.7",
-		"@tiptap/extension-color": "^2.5.7",
-		"@tiptap/extension-font-family": "^2.5.8",
-		"@tiptap/extension-hard-break": "^2.5.8",
-		"@tiptap/extension-link": "^2.5.8",
 		"@tiptap/extension-placeholder": "^2.8.0",
-		"@tiptap/extension-text-style": "^2.5.7",
 		"@tiptap/html": "^2.8.0",
 		"@tiptap/pm": "^2.5.7",
 		"@tiptap/starter-kit": "^2.5.7",
@@ -54,8 +47,6 @@
 		"nanoid": "^5.0.7",
 		"postgres": "^3.4.4",
 		"posthog-node": "^4.0.1",
-		"quoted-printable": "^1.0.1",
-		"shiki": "^1.12.0",
 		"slugify": "^1.6.6",
 		"sns-payload-validator": "^2.1.0",
 		"solid-js": "^1.8.19",
@@ -76,12 +67,13 @@
 		"@types/dom-view-transitions": "^1.0.5",
 		"@types/lodash": "^4.17.10",
 		"@types/luxon": "^3.4.2",
-		"@types/quoted-printable": "^1.0.2",
+		"@types/node": "^22.7.5",
 		"autoprefixer": "^10.4.19",
 		"drizzle-kit": "^0.25.0",
+		"knip": "^5.33.3",
 		"postcss": "^8.4.38",
 		"release-it": "^17.6.0",
-		"solid-devtools": "^0.30.1",
-		"tailwindcss": "^3.4.4"
+		"tailwindcss": "^3.4.4",
+		"typescript": "^5.4.5"
 	}
 }
