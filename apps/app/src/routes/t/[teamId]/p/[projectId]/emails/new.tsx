@@ -95,7 +95,7 @@ export default function NewTemplate(props: RouteSectionProps) {
 		>
 			<Title>New email - Volamail</Title>
 
-			<div class="flex justify-between items-center px-4 shrink-0 h-14 border-b gap-8 border-gray-200 text-sm bg-white">
+			<div class="flex justify-between items-center px-4 py-3 shrink-0 border-b gap-8 border-gray-200 text-sm bg-white">
 				<Breadcrumbs
 					crumbs={[{ label: "Emails", href: ".." }, { label: "New email" }]}
 				/>
