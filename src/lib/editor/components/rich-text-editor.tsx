@@ -1,10 +1,10 @@
-import { Meta } from "@solidjs/meta";
 import { type JSONContent, Editor as TipTapEditor } from "@tiptap/core";
 import Placeholder from "@tiptap/extension-placeholder";
 import StarterKit from "@tiptap/starter-kit";
 import { createSignal } from "solid-js";
 import { ViewportPreviewSwitch } from "~/lib/editor/components/viewport-preview-switch";
 import type { Theme } from "~/lib/templates/theme";
+import { Label } from "~/lib/ui/components/label";
 import type { Viewport } from "../types";
 
 interface EditorProps {
@@ -82,9 +82,9 @@ export function RichTextEditor(props: EditorProps) {
 			>
 				<div class="p-4 border-b border-gray-200 bg-gray-100">
 					<div class="flex gap-1 items-center">
-						<label for="subject" class="text-sm font-medium">
+						<Label for="subject" class="text-sm font-medium">
 							Subject:
-						</label>
+						</Label>
 						<input
 							type="text"
 							id="subject"
@@ -92,7 +92,7 @@ export function RichTextEditor(props: EditorProps) {
 							required
 							placeholder="Welcome to Volamail"
 							class="outline-none text-sm grow bg-transparent"
-							value={props.defaultSubject}
+							{...(props.defaultSubject ? { value: props.defaultSubject } : {})}
 						/>
 					</div>
 				</div>

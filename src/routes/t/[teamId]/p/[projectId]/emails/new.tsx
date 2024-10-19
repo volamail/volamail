@@ -156,7 +156,7 @@ export default function NewTemplate(props: RouteSectionProps) {
 				</div>
 			</div>
 
-			<Show when={project()} fallback={<span>loading...</span>}>
+			<Show when={project()}>
 				{(project) => <Editor project={project()} />}
 			</Show>
 		</form>
