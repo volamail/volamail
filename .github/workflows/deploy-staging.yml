@@ -39,7 +39,6 @@ jobs:
 
       - name: Run migrations
         run: pnpm db migrate
-        working-directory: apps/app
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
 

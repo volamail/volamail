@@ -1,6 +1,5 @@
 import * as v from "valibot";
 
-import { llms } from "../templates/model";
 import { formatValiError } from "../validation/utils";
 
 export const env = getValidatedEnv();
@@ -35,11 +34,6 @@ function getValidatedEnv() {
 			}),
 			v.object({
 				VITE_SELF_HOSTED: v.literal("true"),
-				LLM: v.union(
-					(Object.keys(llms) as Array<keyof typeof llms>).map((key) =>
-						v.literal(key),
-					),
-				),
 			}),
 		]),
 	]);

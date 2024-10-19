@@ -1,5 +1,4 @@
 import { cache } from "@solidjs/router";
-import { generateText } from "ai";
 import { and, eq } from "drizzle-orm";
 import { createError } from "vinxi/http";
 
@@ -8,8 +7,6 @@ import { templateTranslationsTable, templatesTable } from "~/lib/db/schema";
 import type { TemplateLanguage } from "~/lib/templates/languages";
 import { requireUser } from "../auth/utils";
 import { requireUserToBeMemberOfProject } from "../projects/utils";
-import { getModelForTeam } from "./model";
-import autocompletePrompt from "./prompts/autocomplete.txt?raw";
 
 export const getProjectTemplates = cache(async (projectId: string) => {
 	"use server";
