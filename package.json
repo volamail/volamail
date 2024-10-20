@@ -16,7 +16,7 @@
     "knip": "knip"
   },
   "dependencies": {
-    "@ai-sdk/anthropic": "^0.0.19",
+    "@ai-sdk/anthropic": "^0.0.51",
     "@ai-sdk/openai": "^0.0.34",
     "@ark-ui/solid": "^4.2.1",
     "@aws-sdk/client-s3": "^3.600.0",
