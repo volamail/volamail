@@ -28,7 +28,7 @@ importers:
         version: 0.13.7(solid-js@1.9.2)
       '@lucia-auth/adapter-drizzle':
         specifier: ^1.0.7
-        version: 1.0.7(lucia@3.2.0)
+        version: 1.1.0(drizzle-orm@0.34.1(@opentelemetry/api@1.9.0)(postgres@3.4.4)(react@18.3.1))(lucia@3.2.0)
       '@maskito/core':
         specifier: ^3.1.0
         version: 3.1.1
@@ -1113,9 +1113,10 @@ packages:
     peerDependencies:
       solid-js: ^1.8.8
 
-  '@lucia-auth/adapter-drizzle@1.0.7':
-    resolution: {integrity: sha512-X/V7fLBca8EC/gPXCntwbQpb0+F9oEuRoHElvsi9rCrdnGhCMNxHgwAvgiQ6pes+rIYpyvx4n3hvjqo/fPo03A==}
+  '@lucia-auth/adapter-drizzle@1.1.0':
+    resolution: {integrity: sha512-iCTnZWvfI5lLZOdUHZYiXA1jaspIFEeo2extLxQ3DjP3uOVys7IPwBi7zezLIRu9dhro4H4Kji+7gSYyjcef2A==}
     peerDependencies:
+      drizzle-orm: '>= 0.29 <1'
       lucia: 3.x
 
   '@mapbox/node-pre-gyp@1.0.11':
@@ -6570,8 +6571,9 @@ snapshots:
       '@solid-primitives/utils': 6.2.3(solid-js@1.9.2)
       solid-js: 1.9.2
 
-  '@lucia-auth/adapter-drizzle@1.0.7(lucia@3.2.0)':
+  '@lucia-auth/adapter-drizzle@1.1.0(drizzle-orm@0.34.1(@opentelemetry/api@1.9.0)(postgres@3.4.4)(react@18.3.1))(lucia@3.2.0)':
     dependencies:
+      drizzle-orm: 0.34.1(@opentelemetry/api@1.9.0)(postgres@3.4.4)(react@18.3.1)
       lucia: 3.2.0
 
   '@mapbox/node-pre-gyp@1.0.11':
