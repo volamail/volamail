@@ -59,7 +59,7 @@
   },
   "packageManager": "pnpm@9.1.4",
   "devDependencies": {
-    "@biomejs/biome": "1.7.3",
+    "@biomejs/biome": "1.9.4",
     "@types/dom-view-transitions": "^1.0.5",
     "@types/lodash": "^4.17.10",
     "@types/luxon": "^3.4.2",
