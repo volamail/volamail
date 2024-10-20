@@ -16,8 +16,6 @@
     "knip": "knip"
   },
   "dependencies": {
-    "@ai-sdk/anthropic": "^0.0.19",
-    "@ai-sdk/openai": "^0.0.34",
     "@ark-ui/solid": "^4.2.1",
     "@aws-sdk/client-s3": "^3.600.0",
     "@aws-sdk/client-ses": "^3.632.0",
@@ -35,7 +33,6 @@
     "@tiptap/html": "^2.8.0",
     "@tiptap/pm": "^2.5.7",
     "@tiptap/starter-kit": "^2.5.7",
-    "ai": "^3.2.15",
     "arctic": "^1.9.1",
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.34.1",
@@ -55,8 +52,7 @@
     "tailwind-variants": "^0.2.1",
     "ulid": "^2.3.0",
     "valibot": "1.0.0-beta.0",
-    "vinxi": "^0.4.3",
-    "zod": "^3.23.8"
+    "vinxi": "^0.4.3"
   },
   "engines": {
     "node": ">=18"
