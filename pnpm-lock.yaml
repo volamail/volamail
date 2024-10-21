@@ -43,7 +43,7 @@ importers:
         version: 0.14.10(solid-js@1.9.2)
       '@solidjs/start':
         specifier: ^1.0.8
-        version: 1.0.9(solid-js@1.9.2)(vinxi@0.4.3(@opentelemetry/api@1.9.0)(@types/node@22.7.7)(drizzle-orm@0.34.1(@opentelemetry/api@1.9.0)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1))(vite@5.2.13(@types/node@22.7.7)(terser@5.31.1))
+        version: 1.0.9(solid-js@1.9.2)(vinxi@0.4.3(@opentelemetry/api@1.9.0)(@types/node@22.7.7)(drizzle-orm@0.35.2(@opentelemetry/api@1.9.0)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1))(vite@5.2.13(@types/node@22.7.7)(terser@5.31.1))
       '@tiptap/core':
         specifier: ^2.5.7
         version: 2.8.0(@tiptap/pm@2.8.0)
@@ -66,8 +66,8 @@ importers:
         specifier: ^16.4.5
         version: 16.4.5
       drizzle-orm:
-        specifier: ^0.34.1
-        version: 0.34.1(@opentelemetry/api@1.9.0)(postgres@3.4.4)(react@18.3.1)
+        specifier: ^0.35.0
+        version: 0.35.2(@opentelemetry/api@1.9.0)(postgres@3.4.4)(react@18.3.1)
       image-size:
         specifier: ^1.1.1
         version: 1.1.1
@@ -118,7 +118,7 @@ importers:
         version: 1.0.0-beta.0(typescript@5.6.3)
       vinxi:
         specifier: ^0.4.3
-        version: 0.4.3(@opentelemetry/api@1.9.0)(@types/node@22.7.7)(drizzle-orm@0.34.1(@opentelemetry/api@1.9.0)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1)
+        version: 0.4.3(@opentelemetry/api@1.9.0)(@types/node@22.7.7)(drizzle-orm@0.35.2(@opentelemetry/api@1.9.0)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1)
     devDependencies:
       '@biomejs/biome':
         specifier: 1.7.3
@@ -3006,8 +3006,8 @@ packages:
     resolution: {integrity: sha512-Rcf0nYCAKizwjWQCY+d3zytyuTbDb81NcaPor+8NebESlUz1+9W3uGl0+r9FhU4Qal5Zv9j/7neXCSCe7DHzjA==}
     hasBin: true
 
-  drizzle-orm@0.34.1:
-    resolution: {integrity: sha512-t+zCwyWWt8xTqtYV4doE/xYmT7hpv1L8pQ66zddEz+3VWyedBBtctjMAp22mAJPfyWurRQXUJ1nrTtqLq+DqNA==}
+  drizzle-orm@0.35.2:
+    resolution: {integrity: sha512-bLQtRchl8QvRo2MyG6kcZC90UDzR7Ubir4YwOHV3cZPdJbF+4jU/Yt0QOczsoXe25wLRt6CtCWLXtSDQKft3yg==}
     peerDependencies:
       '@aws-sdk/client-rds-data': '>=3'
       '@cloudflare/workers-types': '>=3'
@@ -7497,11 +7497,11 @@ snapshots:
     dependencies:
       solid-js: 1.9.2
 
-  '@solidjs/start@1.0.9(solid-js@1.9.2)(vinxi@0.4.3(@opentelemetry/api@1.9.0)(@types/node@22.7.7)(drizzle-orm@0.34.1(@opentelemetry/api@1.9.0)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1))(vite@5.2.13(@types/node@22.7.7)(terser@5.31.1))':
+  '@solidjs/start@1.0.9(solid-js@1.9.2)(vinxi@0.4.3(@opentelemetry/api@1.9.0)(@types/node@22.7.7)(drizzle-orm@0.35.2(@opentelemetry/api@1.9.0)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1))(vite@5.2.13(@types/node@22.7.7)(terser@5.31.1))':
     dependencies:
-      '@vinxi/plugin-directives': 0.4.3(vinxi@0.4.3(@opentelemetry/api@1.9.0)(@types/node@22.7.7)(drizzle-orm@0.34.1(@opentelemetry/api@1.9.0)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1))
-      '@vinxi/server-components': 0.4.3(vinxi@0.4.3(@opentelemetry/api@1.9.0)(@types/node@22.7.7)(drizzle-orm@0.34.1(@opentelemetry/api@1.9.0)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1))
-      '@vinxi/server-functions': 0.4.3(vinxi@0.4.3(@opentelemetry/api@1.9.0)(@types/node@22.7.7)(drizzle-orm@0.34.1(@opentelemetry/api@1.9.0)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1))
+      '@vinxi/plugin-directives': 0.4.3(vinxi@0.4.3(@opentelemetry/api@1.9.0)(@types/node@22.7.7)(drizzle-orm@0.35.2(@opentelemetry/api@1.9.0)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1))
+      '@vinxi/server-components': 0.4.3(vinxi@0.4.3(@opentelemetry/api@1.9.0)(@types/node@22.7.7)(drizzle-orm@0.35.2(@opentelemetry/api@1.9.0)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1))
+      '@vinxi/server-functions': 0.4.3(vinxi@0.4.3(@opentelemetry/api@1.9.0)(@types/node@22.7.7)(drizzle-orm@0.35.2(@opentelemetry/api@1.9.0)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1))
       defu: 6.1.4
       error-stack-parser: 2.1.4
       html-to-image: 1.11.11
@@ -7766,7 +7766,7 @@ snapshots:
     transitivePeerDependencies:
       - uWebSockets.js
 
-  '@vinxi/plugin-directives@0.4.3(vinxi@0.4.3(@opentelemetry/api@1.9.0)(@types/node@22.7.7)(drizzle-orm@0.34.1(@opentelemetry/api@1.9.0)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1))':
+  '@vinxi/plugin-directives@0.4.3(vinxi@0.4.3(@opentelemetry/api@1.9.0)(@types/node@22.7.7)(drizzle-orm@0.35.2(@opentelemetry/api@1.9.0)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1))':
     dependencies:
       '@babel/parser': 7.25.8
       acorn: 8.13.0
@@ -7777,29 +7777,29 @@ snapshots:
       magicast: 0.2.11
       recast: 0.23.9
       tslib: 2.8.0
-      vinxi: 0.4.3(@opentelemetry/api@1.9.0)(@types/node@22.7.7)(drizzle-orm@0.34.1(@opentelemetry/api@1.9.0)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1)
+      vinxi: 0.4.3(@opentelemetry/api@1.9.0)(@types/node@22.7.7)(drizzle-orm@0.35.2(@opentelemetry/api@1.9.0)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1)
 
-  '@vinxi/server-components@0.4.3(vinxi@0.4.3(@opentelemetry/api@1.9.0)(@types/node@22.7.7)(drizzle-orm@0.34.1(@opentelemetry/api@1.9.0)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1))':
+  '@vinxi/server-components@0.4.3(vinxi@0.4.3(@opentelemetry/api@1.9.0)(@types/node@22.7.7)(drizzle-orm@0.35.2(@opentelemetry/api@1.9.0)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1))':
     dependencies:
-      '@vinxi/plugin-directives': 0.4.3(vinxi@0.4.3(@opentelemetry/api@1.9.0)(@types/node@22.7.7)(drizzle-orm@0.34.1(@opentelemetry/api@1.9.0)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1))
+      '@vinxi/plugin-directives': 0.4.3(vinxi@0.4.3(@opentelemetry/api@1.9.0)(@types/node@22.7.7)(drizzle-orm@0.35.2(@opentelemetry/api@1.9.0)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1))
       acorn: 8.13.0
       acorn-loose: 8.4.0
       acorn-typescript: 1.4.13(acorn@8.13.0)
       astring: 1.9.0
       magicast: 0.2.11
       recast: 0.23.9
-      vinxi: 0.4.3(@opentelemetry/api@1.9.0)(@types/node@22.7.7)(drizzle-orm@0.34.1(@opentelemetry/api@1.9.0)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1)
+      vinxi: 0.4.3(@opentelemetry/api@1.9.0)(@types/node@22.7.7)(drizzle-orm@0.35.2(@opentelemetry/api@1.9.0)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1)
 
-  '@vinxi/server-functions@0.4.3(vinxi@0.4.3(@opentelemetry/api@1.9.0)(@types/node@22.7.7)(drizzle-orm@0.34.1(@opentelemetry/api@1.9.0)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1))':
+  '@vinxi/server-functions@0.4.3(vinxi@0.4.3(@opentelemetry/api@1.9.0)(@types/node@22.7.7)(drizzle-orm@0.35.2(@opentelemetry/api@1.9.0)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1))':
     dependencies:
-      '@vinxi/plugin-directives': 0.4.3(vinxi@0.4.3(@opentelemetry/api@1.9.0)(@types/node@22.7.7)(drizzle-orm@0.34.1(@opentelemetry/api@1.9.0)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1))
+      '@vinxi/plugin-directives': 0.4.3(vinxi@0.4.3(@opentelemetry/api@1.9.0)(@types/node@22.7.7)(drizzle-orm@0.35.2(@opentelemetry/api@1.9.0)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1))
       acorn: 8.13.0
       acorn-loose: 8.4.0
       acorn-typescript: 1.4.13(acorn@8.13.0)
       astring: 1.9.0
       magicast: 0.2.11
       recast: 0.23.9
-      vinxi: 0.4.3(@opentelemetry/api@1.9.0)(@types/node@22.7.7)(drizzle-orm@0.34.1(@opentelemetry/api@1.9.0)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1)
+      vinxi: 0.4.3(@opentelemetry/api@1.9.0)(@types/node@22.7.7)(drizzle-orm@0.35.2(@opentelemetry/api@1.9.0)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1)
 
   '@zag-js/accordion@0.74.2':
     dependencies:
@@ -8754,9 +8754,9 @@ snapshots:
       '@deno/shim-deno': 0.19.2
       undici-types: 5.28.4
 
-  db0@0.1.4(drizzle-orm@0.34.1(@opentelemetry/api@1.9.0)(postgres@3.4.4)(react@18.3.1)):
+  db0@0.1.4(drizzle-orm@0.35.2(@opentelemetry/api@1.9.0)(postgres@3.4.4)(react@18.3.1)):
     optionalDependencies:
-      drizzle-orm: 0.34.1(@opentelemetry/api@1.9.0)(postgres@3.4.4)(react@18.3.1)
+      drizzle-orm: 0.35.2(@opentelemetry/api@1.9.0)(postgres@3.4.4)(react@18.3.1)
 
   debug@2.6.9:
     dependencies:
@@ -8846,7 +8846,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.34.1(@opentelemetry/api@1.9.0)(postgres@3.4.4)(react@18.3.1):
+  drizzle-orm@0.35.2(@opentelemetry/api@1.9.0)(postgres@3.4.4)(react@18.3.1):
     optionalDependencies:
       '@opentelemetry/api': 1.9.0
       postgres: 3.4.4
@@ -9824,7 +9824,7 @@ snapshots:
     dependencies:
       type-fest: 2.19.0
 
-  nitropack@2.9.6(@opentelemetry/api@1.9.0)(drizzle-orm@0.34.1(@opentelemetry/api@1.9.0)(postgres@3.4.4)(react@18.3.1)):
+  nitropack@2.9.6(@opentelemetry/api@1.9.0)(drizzle-orm@0.35.2(@opentelemetry/api@1.9.0)(postgres@3.4.4)(react@18.3.1)):
     dependencies:
       '@cloudflare/kv-asset-handler': 0.3.2
       '@netlify/functions': 2.7.0(@opentelemetry/api@1.9.0)
@@ -9847,7 +9847,7 @@ snapshots:
       cookie-es: 1.1.0
       croner: 8.0.2
       crossws: 0.2.4
-      db0: 0.1.4(drizzle-orm@0.34.1(@opentelemetry/api@1.9.0)(postgres@3.4.4)(react@18.3.1))
+      db0: 0.1.4(drizzle-orm@0.35.2(@opentelemetry/api@1.9.0)(postgres@3.4.4)(react@18.3.1))
       defu: 6.1.4
       destr: 2.0.3
       dot-prop: 8.0.2
@@ -11078,7 +11078,7 @@ snapshots:
 
   validate-html-nesting@1.2.2: {}
 
-  vinxi@0.4.3(@opentelemetry/api@1.9.0)(@types/node@22.7.7)(drizzle-orm@0.34.1(@opentelemetry/api@1.9.0)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1):
+  vinxi@0.4.3(@opentelemetry/api@1.9.0)(@types/node@22.7.7)(drizzle-orm@0.35.2(@opentelemetry/api@1.9.0)(postgres@3.4.4)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1):
     dependencies:
       '@babel/core': 7.24.7
       '@babel/plugin-syntax-jsx': 7.24.7(@babel/core@7.24.7)
@@ -11100,7 +11100,7 @@ snapshots:
       hookable: 5.5.3
       http-proxy: 1.18.1
       micromatch: 4.0.7
-      nitropack: 2.9.6(@opentelemetry/api@1.9.0)(drizzle-orm@0.34.1(@opentelemetry/api@1.9.0)(postgres@3.4.4)(react@18.3.1))
+      nitropack: 2.9.6(@opentelemetry/api@1.9.0)(drizzle-orm@0.35.2(@opentelemetry/api@1.9.0)(postgres@3.4.4)(react@18.3.1))
       node-fetch-native: 1.6.4
       path-to-regexp: 6.2.2
       pathe: 1.1.2
