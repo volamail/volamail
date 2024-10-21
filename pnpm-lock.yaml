@@ -78,8 +78,8 @@ importers:
         specifier: ^3.2.0
         version: 3.2.0
       lucide-solid:
-        specifier: ^0.378.0
-        version: 0.378.0(solid-js@1.9.2)
+        specifier: ^0.453.0
+        version: 0.453.0(solid-js@1.9.2)
       luxon:
         specifier: ^3.4.4
         version: 3.5.0
@@ -3850,8 +3850,8 @@ packages:
   lucia@3.2.0:
     resolution: {integrity: sha512-eXMxXwk6hqtjRTj4W/x3EnTUtAztLPm0p2N2TEBMDEbakDLXiYnDQ9z/qahjPdPdhPguQc+vwO0/88zIWxlpuw==}
 
-  lucide-solid@0.378.0:
-    resolution: {integrity: sha512-flJIh53qIVnHMsq4WipY+5dlclhnAIrVIIatK3TjUD+9aNNwvb8dSOYw5+Gyxdy69k0A4fWKmtU3k6O9AUdgLA==}
+  lucide-solid@0.453.0:
+    resolution: {integrity: sha512-+yaTXOPSnfXpOCs5DwRyEya9MGRS3ZlHvz/cWOgDDqyZ/5/B6xx8C4p2ihT0i6Gb1+xe9b9pjlmUHfv2yq6t0g==}
     peerDependencies:
       solid-js: ^1.4.7
 
@@ -9681,7 +9681,7 @@ snapshots:
     dependencies:
       oslo: 1.2.0
 
-  lucide-solid@0.378.0(solid-js@1.9.2):
+  lucide-solid@0.453.0(solid-js@1.9.2):
     dependencies:
       solid-js: 1.9.2
 
