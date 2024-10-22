@@ -1,7 +1,5 @@
 import { type JSONContent, Editor as TipTapEditor } from "@tiptap/core";
-import Image from "@tiptap/extension-image";
 import Placeholder from "@tiptap/extension-placeholder";
-import StarterKit from "@tiptap/starter-kit";
 import { Show, createSignal } from "solid-js";
 import { ViewportPreviewSwitch } from "~/lib/editor/components/viewport-preview-switch";
 import type { Theme } from "~/lib/templates/theme";

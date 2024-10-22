@@ -120,4 +120,4 @@ function showToast(props: {
 	));
 }
 
-export { Toaster, Toast, ToastClose, ToastTitle, showToast };
+export { Toaster, showToast };
