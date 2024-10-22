@@ -1,6 +1,7 @@
 import { FileIcon, TextSelectIcon } from "lucide-solid";
 import type { Theme } from "~/lib/templates/theme";
 import { ColorInput } from "~/lib/ui/components/color-input";
+import { NumberInput } from "~/lib/ui/components/number-input";
 import { CssSizeInput } from "./css-size-input";
 
 type ThemeTabProps = {
@@ -56,12 +57,18 @@ export function ThemeTab(props: ThemeTabProps) {
 						hint="Use px or em"
 						value={props.theme.contentMaxWidth}
 					/>
+
+					<NumberInput
+						name="theme.contentBorderRadius"
+						label="Border radius"
+						min={0}
+						onValueChange={({ valueAsNumber }) =>
+							props.onUpdate({ contentBorderRadius: valueAsNumber })
+						}
+						value={String(props.theme.contentBorderRadius)}
+					/>
 				</div>
 			</section>
 		</div>
 	);
-}
-
-function cssSizeToNumber(size: string) {
-	return size.replace("px", "");
 }

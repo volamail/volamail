@@ -43,6 +43,7 @@ export function NumberInput(props: Props) {
 			disabled={rest.disabled}
 			invalid={rest.invalid}
 			required={rest.required}
+			class="flex flex-col"
 		>
 			<ArkNumberInput.Root
 				{...rest}
@@ -50,7 +51,6 @@ export function NumberInput(props: Props) {
 					class: local.classes?.container,
 				})}
 			>
-				<ArkNumberInput.Scrubber />
 				<Show when={local.label}>
 					<ArkNumberInput.Label
 						asChild={(labelProps) => (

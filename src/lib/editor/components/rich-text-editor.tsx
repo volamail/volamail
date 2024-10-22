@@ -1,14 +1,18 @@
 import { type JSONContent, Editor as TipTapEditor } from "@tiptap/core";
+import Image from "@tiptap/extension-image";
 import Placeholder from "@tiptap/extension-placeholder";
 import StarterKit from "@tiptap/starter-kit";
-import { createSignal } from "solid-js";
+import { Show, createSignal } from "solid-js";
 import { ViewportPreviewSwitch } from "~/lib/editor/components/viewport-preview-switch";
 import type { Theme } from "~/lib/templates/theme";
 import { Label } from "~/lib/ui/components/label";
+import { getExtensionsFromTheme } from "../extensions";
 import type { Viewport } from "../types";
+import { Toolbar } from "./toolbar";
 
 interface EditorProps {
 	theme: Theme;
+	projectId: string;
 	defaultSubject?: string;
 	defaultContents?: JSONContent;
 	onChange?: (contents: JSONContent) => void;
@@ -39,13 +43,13 @@ export function RichTextEditor(props: EditorProps) {
 		const instance = new TipTapEditor({
 			element,
 			extensions: [
-				StarterKit,
+				...getExtensionsFromTheme(props.theme),
 				Placeholder.configure({ placeholder: "Write your email here..." }),
 			],
 			editorProps: {
 				attributes: {
 					class:
-						"transition-all mx-auto outline-none revert-tailwind max-w-[var(--editor-content-max-width)] w-full border border-gray-200 px-8 py-6 bg-[var(--editor-content-bg)]",
+						"transition-all mx-auto rounded-[var(--editor-content-border-radius)] outline-none revert-tailwind max-w-[var(--editor-content-max-width)] w-full border border-gray-200 px-8 py-6 bg-[var(--editor-content-bg)]",
 				},
 			},
 			onUpdate({ editor }) {
@@ -68,7 +72,7 @@ export function RichTextEditor(props: EditorProps) {
 				value={JSON.stringify(contents())}
 			/>
 			<div
-				class="border rounded-2xl overflow-hidden transition-all flex flex-col justify-center text-sm grow z-10 w-full shadow-2xl shadow-gray-200"
+				class="relative border rounded-2xl overflow-hidden transition-all flex flex-col justify-center text-sm grow z-10 w-full shadow-2xl shadow-gray-200"
 				classList={{
 					"max-w-5xl": viewport() === "desktop",
 					"max-w-xl": viewport() === "tablet",
@@ -78,13 +82,12 @@ export function RichTextEditor(props: EditorProps) {
 					"background-color": props.theme.background,
 					"--editor-content-bg": props.theme.contentBackground,
 					"--editor-content-max-width": props.theme.contentMaxWidth,
+					"--editor-content-border-radius": `${props.theme.contentBorderRadius}px`,
 				}}
 			>
-				<div class="p-4 border-b border-gray-200 bg-gray-100">
+				<div class="p-4 border-b border-gray-200 bg-gray-100 relative">
 					<div class="flex gap-1 items-center">
-						<Label for="subject" class="text-sm font-medium">
-							Subject:
-						</Label>
+						<Label for="subject">Subject:</Label>
 						<input
 							type="text"
 							id="subject"
@@ -98,6 +101,12 @@ export function RichTextEditor(props: EditorProps) {
 				</div>
 
 				<div ref={handleEditorRef} class="grow p-8" />
+
+				<Show when={editor()}>
+					{(editor) => (
+						<Toolbar editor={editor()} projectId={props.projectId} />
+					)}
+				</Show>
 			</div>
 			<ViewportPreviewSwitch value={viewport()} onChange={setViewport} />
 		</div>

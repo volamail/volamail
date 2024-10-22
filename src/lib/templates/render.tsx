@@ -1,9 +1,9 @@
-import { getSchema, type JSONContent } from "@tiptap/core";
+import { type JSONContent, getSchema } from "@tiptap/core";
 import { generateHTML } from "@tiptap/html";
 import { Node } from "@tiptap/pm/model";
-
-import StarterKit from "@tiptap/starter-kit";
 import { renderToStringAsync } from "solid-js/web";
+
+import { getExtensionsFromTheme } from "../editor/extensions";
 import type { Theme } from "./theme";
 
 export function renderTemplateToHtml(jsonContents: JSONContent, theme: Theme) {
@@ -38,6 +38,7 @@ export function renderTemplateToHtml(jsonContents: JSONContent, theme: Theme) {
 										padding: "2.5em",
 										border: "1px solid #ddd",
 										"background-color": theme.contentBackground,
+										"border-radius": `${theme.contentBorderRadius}px`,
 									}}
 								>
 									<tbody>
@@ -61,10 +62,6 @@ export function renderTemplateToText(jsonContents: JSONContent, theme: Theme) {
 	const contentNode = Node.fromJSON(schema, jsonContents);
 
 	return contentNode.textBetween(0, contentNode.content.size, "\n\n");
-}
-
-function getExtensionsFromTheme(theme: Theme) {
-	return [StarterKit];
 }
 
 declare module "solid-js" {

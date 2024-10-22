@@ -1,21 +1,21 @@
-import { nanoid } from "nanoid";
-import sizeOf from "image-size";
-import { and, eq } from "drizzle-orm";
-import { createError } from "vinxi/http";
 import { action } from "@solidjs/router";
-import { object, instance, string, optional } from "valibot";
+import { and, eq } from "drizzle-orm";
+import sizeOf from "image-size";
 import type { ISizeCalculationResult } from "image-size/dist/types/interface";
+import { nanoid } from "nanoid";
+import { instance, object, optional, string } from "valibot";
+import { createError } from "vinxi/http";
 
-import { s3 } from "./s3";
-import { db } from "../db";
-import { getMediaUrl } from "./utils";
-import { imagesTable } from "../db/schema";
 import { requireUser } from "../auth/utils";
+import { db } from "../db";
+import { imagesTable } from "../db/schema";
+import { env } from "../environment/env";
+import { isSelfHosted } from "../environment/utils";
+import { requireUserToBeMemberOfProject } from "../projects/utils";
 import { parseFormData } from "../server-utils";
 import { requireProjectStorageLeft } from "./guards";
-import { requireUserToBeMemberOfProject } from "../projects/utils";
-import { isSelfHosted } from "../environment/utils";
-import { env } from "../environment/env";
+import { s3 } from "./s3";
+import { getMediaUrl } from "./utils";
 
 export const addImage = action(async (formData: FormData) => {
 	"use server";
@@ -66,21 +66,30 @@ export const addImage = action(async (formData: FormData) => {
 
 	const id = nanoid(32);
 
-	await Promise.all([
-		s3.putObject({
-			Bucket: env.AWS_BUCKET,
-			Key: `media/${id}`,
-			Body: buffer,
-			ContentType: body.file.type,
-		}),
-		db.insert(imagesTable).values({
-			id,
-			projectId: body.projectId,
-			name: body.name || body.file.name,
-			size: Math.floor(body.file.size / 1000),
-			dimensions: `${dimensions.width}x${dimensions.height}`,
-		}),
-	]);
+	try {
+		await Promise.all([
+			s3.putObject({
+				Bucket: env.AWS_BUCKET,
+				Key: `media/${id}`,
+				Body: buffer,
+				ContentType: body.file.type,
+			}),
+			db.insert(imagesTable).values({
+				id,
+				projectId: body.projectId,
+				name: body.name || body.file.name,
+				size: Math.floor(body.file.size / 1000),
+				dimensions: `${dimensions.width}x${dimensions.height}`,
+			}),
+		]);
+	} catch (e) {
+		console.log(e);
+
+		throw createError({
+			statusCode: 500,
+			statusMessage: "Internal server error",
+		});
+	}
 
 	return {
 		success: true,

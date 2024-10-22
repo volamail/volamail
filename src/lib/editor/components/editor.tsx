@@ -22,6 +22,7 @@ export function Editor(props: EditorProps) {
 				theme={props.template?.theme || props.project.defaultTheme}
 				defaultContents={props.template?.contents}
 				defaultSubject={props.template?.subject}
+				project={props.project}
 			/>
 		</div>
 	);
@@ -31,6 +32,7 @@ type EditorContentsProps = {
 	theme: Theme;
 	defaultSubject?: string;
 	defaultContents?: JSONContent;
+	project: DbProject;
 };
 
 function EditorContents(props: EditorContentsProps) {
@@ -41,6 +43,7 @@ function EditorContents(props: EditorContentsProps) {
 			<GridBgContainer class="h-full w-full flex-row items-stretch">
 				<RichTextEditor
 					theme={theme}
+					projectId={props.project.id}
 					defaultContents={props.defaultContents}
 					defaultSubject={props.defaultSubject}
 				/>

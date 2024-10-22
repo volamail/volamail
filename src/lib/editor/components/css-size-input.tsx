@@ -11,7 +11,7 @@ export function CssSizeInput(props: Props) {
 			mask: /^\d+(p|px|e|em)?$/,
 			plugins: [
 				maskitoEventHandler("blur", (element) => {
-					if (!element.value.endsWith("px") || !element.value.endsWith("em")) {
+					if (!element.value.endsWith("px") && !element.value.endsWith("em")) {
 						const numericValue = element.value.replace(/\D/g, "");
 
 						if (element.value.endsWith("e")) {
