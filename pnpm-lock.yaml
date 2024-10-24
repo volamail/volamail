@@ -28,7 +28,7 @@ importers:
         version: 0.13.7(solid-js@1.9.3)
       '@lucia-auth/adapter-drizzle':
         specifier: ^1.0.7
-        version: 1.0.7(lucia@3.2.2)
+        version: 1.1.0(drizzle-orm@0.35.3(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(postgres@3.4.4)(react@18.3.1))(lucia@3.2.2)
       '@maskito/core':
         specifier: ^3.1.0
         version: 3.1.2
@@ -1120,9 +1120,10 @@ packages:
   '@libsql/core@0.14.0':
     resolution: {integrity: sha512-nhbuXf7GP3PSZgdCY2Ecj8vz187ptHlZQ0VRc751oB2C1W8jQUXKKklvt7t1LJiUTQBVJuadF628eUk+3cRi4Q==}
 
-  '@lucia-auth/adapter-drizzle@1.0.7':
-    resolution: {integrity: sha512-X/V7fLBca8EC/gPXCntwbQpb0+F9oEuRoHElvsi9rCrdnGhCMNxHgwAvgiQ6pes+rIYpyvx4n3hvjqo/fPo03A==}
+  '@lucia-auth/adapter-drizzle@1.1.0':
+    resolution: {integrity: sha512-iCTnZWvfI5lLZOdUHZYiXA1jaspIFEeo2extLxQ3DjP3uOVys7IPwBi7zezLIRu9dhro4H4Kji+7gSYyjcef2A==}
     peerDependencies:
+      drizzle-orm: '>= 0.29 <1'
       lucia: 3.x
 
   '@mapbox/node-pre-gyp@1.0.11':
@@ -6601,8 +6602,9 @@ snapshots:
     dependencies:
       js-base64: 3.7.7
 
-  '@lucia-auth/adapter-drizzle@1.0.7(lucia@3.2.2)':
+  '@lucia-auth/adapter-drizzle@1.1.0(drizzle-orm@0.35.3(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(postgres@3.4.4)(react@18.3.1))(lucia@3.2.2)':
     dependencies:
+      drizzle-orm: 0.35.3(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(postgres@3.4.4)(react@18.3.1)
       lucia: 3.2.2
 
   '@mapbox/node-pre-gyp@1.0.11':
