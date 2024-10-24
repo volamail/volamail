@@ -34,7 +34,7 @@ importers:
         version: 3.1.2
       '@maskito/kit':
         specifier: ^3.1.0
-        version: 3.1.1(@maskito/core@3.1.2)
+        version: 3.1.2(@maskito/core@3.1.2)
       '@solidjs/meta':
         specifier: ^0.29.4
         version: 0.29.4(solid-js@1.9.2)
@@ -1128,10 +1128,10 @@ packages:
   '@maskito/core@3.1.2':
     resolution: {integrity: sha512-1AsSBYZ8GxZ6xDhkwcGaMVrTm5oQpBscYX5CeJMG2IUG93pV8EUcEdzpD3bZc2G9DhpjjcM1xVRyWS9ynfckeA==}
 
-  '@maskito/kit@3.1.1':
-    resolution: {integrity: sha512-pJxMAhjKfLQM4qx4qXwPTeRvC612YCzjb9iFF3/mVlAW25LfBdgV9s8JYEsXkcoF0m+OIoU71aw303ZQ8C+MwQ==}
+  '@maskito/kit@3.1.2':
+    resolution: {integrity: sha512-zSEMwCmp0EUS9wwZUP4EJp90g/diay4DM0Mtayg4k+ep+lT3kRffUrTsXj4Noa60OO4875h0k29QCwI/oIVEqA==}
     peerDependencies:
-      '@maskito/core': ^3.1.1
+      '@maskito/core': ^3.1.2
 
   '@netlify/functions@2.7.0':
     resolution: {integrity: sha512-4pXC/fuj3eGQ86wbgPiM4zY8+AsNrdz6vcv6FEdUJnZW+LqF8IWjQcY3S0d1hLeLKODYOqq4CkrzGyCpce63Nw==}
@@ -6596,7 +6596,7 @@ snapshots:
 
   '@maskito/core@3.1.2': {}
 
-  '@maskito/kit@3.1.1(@maskito/core@3.1.2)':
+  '@maskito/kit@3.1.2(@maskito/core@3.1.2)':
     dependencies:
       '@maskito/core': 3.1.2
 
