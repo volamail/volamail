@@ -31,10 +31,10 @@ importers:
         version: 1.0.7(lucia@3.2.0)
       '@maskito/core':
         specifier: ^3.1.0
-        version: 3.1.1
+        version: 3.1.2
       '@maskito/kit':
         specifier: ^3.1.0
-        version: 3.1.1(@maskito/core@3.1.1)
+        version: 3.1.1(@maskito/core@3.1.2)
       '@solidjs/meta':
         specifier: ^0.29.4
         version: 0.29.4(solid-js@1.9.2)
@@ -1125,8 +1125,8 @@ packages:
     resolution: {integrity: sha512-Yhlar6v9WQgUp/He7BdgzOz8lqMQ8sU+jkCq7Wx8Myc5YFJLbEe7lgui/V7G1qB1DJykHSGwreceSaD60Y0PUQ==}
     hasBin: true
 
-  '@maskito/core@3.1.1':
-    resolution: {integrity: sha512-EY3HcfyQEU963uzYGE7c3W8TTa5JJO67tWxO/DYVdenXXy/Ey/SPOHSkTrFGdZTeSdovnsA7wulkUZv9ETT+DA==}
+  '@maskito/core@3.1.2':
+    resolution: {integrity: sha512-1AsSBYZ8GxZ6xDhkwcGaMVrTm5oQpBscYX5CeJMG2IUG93pV8EUcEdzpD3bZc2G9DhpjjcM1xVRyWS9ynfckeA==}
 
   '@maskito/kit@3.1.1':
     resolution: {integrity: sha512-pJxMAhjKfLQM4qx4qXwPTeRvC612YCzjb9iFF3/mVlAW25LfBdgV9s8JYEsXkcoF0m+OIoU71aw303ZQ8C+MwQ==}
@@ -6594,11 +6594,11 @@ snapshots:
       - encoding
       - supports-color
 
-  '@maskito/core@3.1.1': {}
+  '@maskito/core@3.1.2': {}
 
-  '@maskito/kit@3.1.1(@maskito/core@3.1.1)':
+  '@maskito/kit@3.1.1(@maskito/core@3.1.2)':
     dependencies:
-      '@maskito/core': 3.1.1
+      '@maskito/core': 3.1.2
 
   '@netlify/functions@2.7.0(@opentelemetry/api@1.9.0)':
     dependencies:
