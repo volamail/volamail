@@ -8,5 +8,6 @@ const labelVariants = tv({
 });
 
 export function Label(props: Props) {
+	// biome-ignore lint/a11y/noLabelWithoutControl: Not needed for a generic label
 	return <label class={labelVariants({ class: props.class })} {...props} />;
 }
