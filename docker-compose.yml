@@ -3,7 +3,7 @@ version: "3.9"
 services:
   postgres:
     container_name: volamail-postgres
-    image: postgres:15-alpine
+    image: postgres:17-alpine
     ports:
       - 5432:5432
     volumes:
