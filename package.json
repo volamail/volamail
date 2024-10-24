@@ -52,7 +52,7 @@
     "tailwind-merge": "^2.3.0",
     "tailwind-variants": "^0.2.1",
     "ulid": "^2.3.0",
-    "valibot": "1.0.0-beta.0",
+    "valibot": "1.0.0-beta.1",
     "vinxi": "^0.4.3"
   },
   "engines": {
