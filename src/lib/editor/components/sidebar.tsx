@@ -27,7 +27,7 @@ export function Sidebar(props: SidebarProps) {
 		<Tabs.Root
 			deselectable
 			orientation="vertical"
-			class="shrink-0 flex -ml-8 translate-x-52 has-[[data-state=open]]:translate-x-0 transition-all z-50"
+			class="shrink-0 flex -ml-8 -mr-52 has-[[data-state=open]]:mr-0 transition-all z-50"
 		>
 			<Tabs.List class="relative self-center flex flex-col items-center">
 				<For each={TABS}>

@@ -7,8 +7,11 @@ import {
 	createAsync,
 } from "@solidjs/router";
 import { CircleCheckBigIcon, SendIcon } from "lucide-solid";
+import slugify from "slugify";
+import { Suspense } from "solid-js";
 import { Show, createSignal } from "solid-js";
-import { Editor } from "~/lib/editor/components/editor";
+import * as v from "valibot";
+import { Editor, EditorSkeleton } from "~/lib/editor/components/editor";
 import { sendTestMail } from "~/lib/mail/actions";
 import { getProject } from "~/lib/projects/queries";
 import { createTemplate } from "~/lib/templates/actions";
@@ -23,6 +26,7 @@ import {
 } from "~/lib/ui/components/dialog";
 import { Input } from "~/lib/ui/components/input";
 import { showToast } from "~/lib/ui/components/toasts";
+import { createForm } from "~/lib/ui/hooks/createForm";
 import { useMutation } from "~/lib/ui/hooks/useMutation";
 
 export const route: RouteDefinition = {
@@ -76,6 +80,22 @@ export default function NewTemplate(props: RouteSectionProps) {
 		},
 	});
 
+	const form = createForm({
+		schema: v.object({
+			"template.slug": v.pipe(
+				v.string(),
+				v.minLength(2, "Must be at least 2 characters"),
+				v.maxLength(64, "Must be less than 64 characters"),
+				v.custom(
+					(slug) =>
+						slugify(slug as string, { lower: true, strict: true }) === slug,
+					"Must be lowercase with dashes (e.g. my-welcome-email)",
+				),
+			),
+		}),
+		defaultValues: {},
+	});
+
 	return (
 		<form
 			class="flex flex-col h-dvh"
@@ -83,8 +103,10 @@ export default function NewTemplate(props: RouteSectionProps) {
 			method="post"
 			action={createTemplate}
 			id="create-template-form"
-			onSubmit={(event) => {
+			onSubmit={async (event) => {
 				if (dialogOpen()) {
+					await form.handleSubmit(event);
+
 					return;
 				}
 
@@ -134,11 +156,10 @@ export default function NewTemplate(props: RouteSectionProps) {
 							</div>
 
 							<Input
-								type="text"
-								name="template.slug"
+								{...form.getFieldProps("template.slug")}
 								required
 								label="Name"
-								hint="Must be lowercase with dashes (e.g. my-welcome-email)"
+								hint="Should be lowercase with dashes (e.g. my-welcome-email)"
 								form="create-template-form"
 							/>
 
@@ -156,9 +177,11 @@ export default function NewTemplate(props: RouteSectionProps) {
 				</div>
 			</div>
 
-			<Show when={project()}>
-				{(project) => <Editor project={project()} />}
-			</Show>
+			<Suspense fallback={<EditorSkeleton />}>
+				<Show when={project()}>
+					{(project) => <Editor project={project()} />}
+				</Show>
+			</Suspense>
 		</form>
 	);
 }

@@ -65,7 +65,11 @@ export function ThemeTab(props: ThemeTabProps) {
 						onValueChange={({ valueAsNumber }) =>
 							props.onUpdate({ contentBorderRadius: valueAsNumber })
 						}
-						value={String(props.theme.contentBorderRadius)}
+						value={
+							props.theme.contentBorderRadius
+								? String(props.theme.contentBorderRadius)
+								: "0"
+						}
 					/>
 				</div>
 			</section>

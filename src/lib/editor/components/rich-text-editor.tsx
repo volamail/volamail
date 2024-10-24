@@ -34,11 +34,11 @@ export function RichTextEditor(props: EditorProps) {
 	}
 
 	function handleEditorRef(element: HTMLDivElement) {
-		if (editor()) {
+		if (editor() || !element) {
 			return;
 		}
 
-		const instance = new TipTapEditor({
+		new TipTapEditor({
 			element,
 			extensions: [
 				...getExtensionsFromTheme(props.theme),
@@ -58,8 +58,6 @@ export function RichTextEditor(props: EditorProps) {
 			},
 			content: props.defaultContents,
 		});
-
-		setEditor(instance);
 	}
 
 	return (
@@ -106,6 +104,7 @@ export function RichTextEditor(props: EditorProps) {
 					)}
 				</Show>
 			</div>
+
 			<ViewportPreviewSwitch value={viewport()} onChange={setViewport} />
 		</div>
 	);

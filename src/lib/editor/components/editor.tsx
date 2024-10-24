@@ -40,7 +40,7 @@ function EditorContents(props: EditorContentsProps) {
 
 	return (
 		<>
-			<GridBgContainer class="h-full w-full flex-row items-stretch">
+			<GridBgContainer class="h-full w-full grow flex-row items-stretch bg-grid-black/10">
 				<RichTextEditor
 					theme={theme}
 					projectId={props.project.id}
@@ -50,5 +50,14 @@ function EditorContents(props: EditorContentsProps) {
 			</GridBgContainer>
 			<Sidebar theme={theme} onUpdate={setTheme} />
 		</>
+	);
+}
+
+export function EditorSkeleton() {
+	return (
+		<GridBgContainer class="h-full w-full grow flex gap-4 flex-col justify-center items-center bg-grid-black/10 p-16">
+			<div class="animate-pulse bg-gray-300 max-w-5xl grow rounded-xl w-full" />
+			<div class="w-32 h-6 rounded-full animate-pulse bg-gray-300" />
+		</GridBgContainer>
 	);
 }

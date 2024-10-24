@@ -63,7 +63,7 @@ export function createForm<T extends Record<string, any>>(
 	}
 
 	function createFieldTriggerUpdate<Field extends keyof T>(field: Field) {
-		return (value: T[Field]) => {
+		return async (value: T[Field]) => {
 			// @ts-expect-error TODO: Fix this
 			setStore("fields", field, "value", value);
 
@@ -74,7 +74,7 @@ export function createForm<T extends Record<string, any>>(
 				return;
 			}
 
-			const error = validateField(field, value);
+			const error = await validateField(field, value);
 
 			// @ts-expect-error TODO: Fix this
 			setStore("fields", field, {
@@ -150,7 +150,7 @@ export function createForm<T extends Record<string, any>>(
 	async function handleSubmit(event: SubmitEvent) {
 		setStore("form", "submitted", true);
 
-		for (const field of Object.keys(options.defaultValues)) {
+		for (const field in store.fields) {
 			const ref = store.fields[field].ref;
 
 			if (!ref) {

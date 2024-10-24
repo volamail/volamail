@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from "@solidjs/router";
+import slugify from "slugify";
 import * as v from "valibot";
 import { db } from "~/lib/db";
 import { templateTranslationsTable, templatesTable } from "~/lib/db/schema";
@@ -13,7 +14,16 @@ export const createTemplate = createFormDataMutation({
 	schema: v.object({
 		projectId: v.string(),
 		template: v.object({
-			slug: v.string(),
+			slug: v.pipe(
+				v.string(),
+				v.minLength(2, "Name can't be shorter than 2 characters"),
+				v.maxLength(64, "Name can't be longer than 64 characters"),
+				v.custom(
+					(slug) =>
+						slugify(slug as string, { lower: true, strict: true }) === slug,
+					"Name can only contain lowercase letters, numbers and dashes",
+				),
+			),
 			subject: v.string(),
 			contents: v.any(),
 		}),
