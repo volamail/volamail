@@ -48,7 +48,7 @@
     "slugify": "^1.6.6",
     "sns-payload-validator": "^2.1.0",
     "solid-js": "^1.8.19",
-    "stripe": "^16.1.0",
+    "stripe": "^17.0.0",
     "tailwind-merge": "^2.3.0",
     "tailwind-variants": "^0.2.1",
     "ulid": "^2.3.0",
