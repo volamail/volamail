@@ -34,7 +34,7 @@
     "@tiptap/html": "^2.8.0",
     "@tiptap/pm": "^2.5.7",
     "@tiptap/starter-kit": "^2.5.7",
-    "arctic": "^1.9.1",
+    "arctic": "^2.0.0",
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.35.0",
     "image-size": "^1.1.1",
