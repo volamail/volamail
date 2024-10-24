@@ -58,7 +58,7 @@
   "engines": {
     "node": ">=18"
   },
-  "packageManager": "pnpm@9.1.4",
+  "packageManager": "pnpm@9.12.2",
   "devDependencies": {
     "@biomejs/biome": "1.7.3",
     "@types/dom-view-transitions": "^1.0.5",
