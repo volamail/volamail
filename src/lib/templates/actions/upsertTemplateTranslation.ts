@@ -68,7 +68,6 @@ export const upsertTemplateTranslation = createFormDataMutation({
 				getTemplate.keyFor({
 					projectId: payload.projectId,
 					slug: payload.slug,
-					language: payload.language,
 				}),
 			],
 		});

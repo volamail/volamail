@@ -1,7 +1,9 @@
 import { type TabContentProps, Tabs } from "@ark-ui/solid";
 import { LanguagesIcon, PaletteIcon } from "lucide-solid";
 import { For } from "solid-js";
+import type { TemplateLanguage } from "~/lib/templates/languages";
 import type { Theme } from "~/lib/templates/theme";
+import { I18nTab } from "./i18n-tab";
 import { ThemeTab } from "./theme-tab";
 
 const TABS = [
@@ -18,8 +20,15 @@ const TABS = [
 ];
 
 type SidebarProps = {
-	theme: Theme;
-	onUpdate: (theme: Partial<Theme>) => void;
+	isEditing: boolean;
+	i18n: {
+		defaultLanguage: TemplateLanguage;
+		languages: Array<TemplateLanguage>;
+	};
+	theme: {
+		theme: Theme;
+		onUpdate: (theme: Partial<Theme>) => void;
+	};
 };
 
 export function Sidebar(props: SidebarProps) {
@@ -43,17 +52,14 @@ export function Sidebar(props: SidebarProps) {
 				</For>
 			</Tabs.List>
 			<TabsContent value="i18n">
-				<div class="flex gap-3 items-center px-4 h-14 border-b border-gray-200">
-					<img
-						alt="English"
-						src="https://hatscripts.github.io/circle-flags/flags/us.svg"
-						class="size-6 rounded-full"
-					/>
-					<span class="text-sm font-medium grow">English</span>
-				</div>
+				<I18nTab
+					isEditing={props.isEditing}
+					defaultLanguage={props.i18n.defaultLanguage}
+					templateLanguages={props.i18n.languages}
+				/>
 			</TabsContent>
 			<TabsContent value="theme">
-				<ThemeTab theme={props.theme} onUpdate={props.onUpdate} />
+				<ThemeTab theme={props.theme.theme} onUpdate={props.theme.onUpdate} />
 			</TabsContent>
 			<div class="w-52 h-full peer-[[data-state=open]]:hidden" />
 		</Tabs.Root>
@@ -63,7 +69,7 @@ export function Sidebar(props: SidebarProps) {
 function TabsContent(props: TabContentProps) {
 	return (
 		<Tabs.Content
-			class="peer w-52 bg-gray-50 border-l border-gray-200"
+			class="peer w-52 bg-gray-100 border-l border-gray-200"
 			{...props}
 		/>
 	);

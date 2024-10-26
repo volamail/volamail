@@ -12,16 +12,14 @@ import { Button } from "~/lib/ui/components/button";
 import { showToast } from "~/lib/ui/components/toasts";
 import { useMutation } from "~/lib/ui/hooks/useMutation";
 
-import "../editor.css";
+import "./editor.css";
 import { Show, Suspense } from "solid-js";
 import { Editor, EditorSkeleton } from "~/lib/editor/components/editor";
 import { getProject } from "~/lib/projects/queries";
 import { upsertTemplateTranslation } from "~/lib/templates/actions";
-import type { TemplateLanguage } from "~/lib/templates/languages";
-import { createForm } from "~/lib/ui/hooks/createForm";
 
 export const route: RouteDefinition = {
-	preload({ params }) {
+	preload({ params, location }) {
 		void getProject({
 			teamId: params.teamId,
 			projectId: params.projectId,
@@ -46,7 +44,6 @@ export default function EditTemplatePage(props: RouteSectionProps) {
 		getTemplate({
 			projectId: props.params.projectId,
 			slug: props.params.slug,
-			language: props.params.language as TemplateLanguage | undefined,
 		}),
 	);
 
@@ -108,16 +105,6 @@ export default function EditTemplatePage(props: RouteSectionProps) {
 
 					<input type="hidden" name="slug" value={props.params.slug} />
 
-					<Suspense>
-						<input
-							type="hidden"
-							name="language"
-							value={
-								props.params.language || project()?.defaultTemplateLanguage
-							}
-						/>
-					</Suspense>
-
 					<Button
 						variant="outline"
 						type="submit"
@@ -140,7 +127,7 @@ export default function EditTemplatePage(props: RouteSectionProps) {
 
 			<Suspense fallback={<EditorSkeleton />}>
 				<Show when={project() && template()}>
-					<Editor project={project()!} template={template()!} />
+					<Editor project={project()!} template={template()} />
 				</Show>
 			</Suspense>
 		</form>

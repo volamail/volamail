@@ -3,8 +3,7 @@ import { and, eq } from "drizzle-orm";
 import { createError } from "vinxi/http";
 
 import { db } from "~/lib/db";
-import { templateTranslationsTable, templatesTable } from "~/lib/db/schema";
-import type { TemplateLanguage } from "~/lib/templates/languages";
+import { templatesTable } from "~/lib/db/schema";
 import { requireUser } from "../auth/utils";
 import { requireUserToBeMemberOfProject } from "../projects/utils";
 
@@ -27,48 +26,43 @@ export const getTemplate = cache(
 	async ({
 		projectId,
 		slug,
-		language,
 	}: {
 		projectId: string;
 		slug: string;
-		language?: TemplateLanguage;
 	}) => {
 		"use server";
 
 		const user = requireUser();
 
-		const { meta } = await requireUserToBeMemberOfProject({
+		await requireUserToBeMemberOfProject({
 			userId: user.id,
 			projectId,
 		});
 
-		const translation = await db.query.templateTranslationsTable.findFirst({
+		const template = await db.query.templatesTable.findFirst({
 			where: and(
-				eq(templateTranslationsTable.projectId, projectId),
-				eq(templateTranslationsTable.templateSlug, slug),
-				eq(
-					templateTranslationsTable.language,
-					language || meta.project.defaultTemplateLanguage,
-				),
+				eq(templatesTable.projectId, projectId),
+				eq(templatesTable.slug, slug),
 			),
 			with: {
-				template: true,
+				translations: {
+					columns: {
+						language: true,
+						contents: true,
+						subject: true,
+					},
+				},
 			},
 		});
 
-		if (!translation) {
+		if (!template) {
 			throw createError({
 				statusCode: 404,
 				statusMessage: "Template not found",
 			});
 		}
 
-		const { template, ...rest } = translation;
-
-		return {
-			...template,
-			...rest,
-		};
+		return template;
 	},
 	"templates",
 );

@@ -15,6 +15,13 @@
       "when": 1728935833666,
       "tag": "0001_elite_nocturne",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1729956378314,
+      "tag": "0002_brainy_the_liberteens",
+      "breakpoints": true
     }
   ]
 }

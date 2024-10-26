@@ -1,6 +1,6 @@
 import { type JSONContent, Editor as TipTapEditor } from "@tiptap/core";
 import Placeholder from "@tiptap/extension-placeholder";
-import { Show, createSignal } from "solid-js";
+import { Show, createEffect, createSignal, on } from "solid-js";
 import { ViewportPreviewSwitch } from "~/lib/editor/components/viewport-preview-switch";
 import type { Theme } from "~/lib/templates/theme";
 import { Label } from "~/lib/ui/components/label";
@@ -59,6 +59,17 @@ export function RichTextEditor(props: EditorProps) {
 			content: props.defaultContents,
 		});
 	}
+
+	createEffect(
+		on(
+			() => props.defaultContents,
+			() => {
+				if (props.defaultContents) {
+					editor()?.commands.setContent(props.defaultContents);
+				}
+			},
+		),
+	);
 
 	return (
 		<div class="grow p-16 flex flex-col justify-center items-center gap-4">

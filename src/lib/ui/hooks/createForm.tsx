@@ -6,7 +6,7 @@ import { type ObjectSchema, safeParseAsync } from "valibot";
 type FormOptions<T extends Record<string, any>> = {
 	// biome-ignore lint/suspicious/noExplicitAny: This is also fine
 	schema?: ObjectSchema<Record<keyof T, any>, any>;
-	defaultValues: Partial<T>;
+	defaultValues?: Partial<T>;
 	validateBeforeSubmit?: boolean;
 };
 
@@ -22,7 +22,7 @@ export function createForm<T extends Record<string, any>>(
 	options: FormOptions<T>,
 ) {
 	const [store, setStore] = createStore({
-		fields: Object.keys(options.defaultValues).reduce(
+		fields: Object.keys(options.defaultValues || {}).reduce(
 			(acc, current) => {
 				const key = current as keyof T;
 
@@ -91,7 +91,7 @@ export function createForm<T extends Record<string, any>>(
 
 		return {
 			...fieldState,
-			children: options.defaultValues[field] as string,
+			children: options.defaultValues?.[field] || "",
 			name: field,
 			ref(el: HTMLElement) {
 				// @ts-expect-error TODO: Fix this
@@ -124,7 +124,7 @@ export function createForm<T extends Record<string, any>>(
 
 		return {
 			...fieldState,
-			value: options.defaultValues[field],
+			value: options.defaultValues?.[field] || "",
 			name: field,
 			ref(el: HTMLElement) {
 				// @ts-expect-error TODO: Fix this

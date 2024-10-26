@@ -1,9 +1,10 @@
 import { relations } from "drizzle-orm";
 import { jsonb, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 
-import { projectsTable } from "./projects.sql";
 import { primaryKey } from "drizzle-orm/pg-core";
 import { DEFAULT_THEME, type Theme } from "~/lib/templates/theme";
+import { projectsTable } from "./projects.sql";
+import { templateTranslationsTable } from "./template-translations.sql";
 
 export const templatesTable = pgTable(
 	"templates",
@@ -24,9 +25,13 @@ export const templatesTable = pgTable(
 	}),
 );
 
-export const templatesRelations = relations(templatesTable, ({ one }) => ({
-	project: one(projectsTable, {
-		fields: [templatesTable.projectId],
-		references: [projectsTable.id],
+export const templatesRelations = relations(
+	templatesTable,
+	({ one, many }) => ({
+		project: one(projectsTable, {
+			fields: [templatesTable.projectId],
+			references: [projectsTable.id],
+		}),
+		translations: many(templateTranslationsTable),
 	}),
-}));
+);
