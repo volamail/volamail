@@ -42,8 +42,8 @@ importers:
         specifier: ^0.29.4
         version: 0.29.4(solid-js@1.9.3)
       '@solidjs/router':
-        specifier: ^0.14.8
-        version: 0.14.10(solid-js@1.9.3)
+        specifier: ^0.15.0
+        version: 0.15.0(solid-js@1.9.3)
       '@solidjs/start':
         specifier: ^1.0.8
         version: 1.0.9(solid-js@1.9.3)(vinxi@0.4.3(@opentelemetry/api@1.9.0)(@types/node@22.8.6)(drizzle-orm@0.35.3(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(postgres@3.4.5)(react@18.3.1))(ioredis@5.4.1)(terser@5.31.1))(vite@5.2.13(@types/node@22.8.6)(terser@5.31.1))
@@ -1829,8 +1829,8 @@ packages:
     peerDependencies:
       solid-js: '>=1.8.4'
 
-  '@solidjs/router@0.14.10':
-    resolution: {integrity: sha512-5B8LVgvvXijfXyXWPVLUm7RQ05BhjIpAyRkYVDZtrR3OaSvftXobWc6qSEwk4ICLoGi/IE9CUp2LUdCBIs9AXg==}
+  '@solidjs/router@0.15.0':
+    resolution: {integrity: sha512-Q286eKFh9sY2OeSISqiNrZW5ZJ7M58fkxCfFeYg0KE15P9QMwhT9YqnInE/OdzavWzXU3ZYclV2NGVKz8pfqWg==}
     peerDependencies:
       solid-js: ^1.8.6
 
@@ -7209,7 +7209,7 @@ snapshots:
     dependencies:
       solid-js: 1.9.3
 
-  '@solidjs/router@0.14.10(solid-js@1.9.3)':
+  '@solidjs/router@0.15.0(solid-js@1.9.3)':
     dependencies:
       solid-js: 1.9.3
 

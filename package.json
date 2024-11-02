@@ -27,7 +27,7 @@
     "@oslojs/crypto": "^1.0.1",
     "@oslojs/encoding": "^1.1.0",
     "@solidjs/meta": "^0.29.4",
-    "@solidjs/router": "^0.14.8",
+    "@solidjs/router": "^0.15.0",
     "@solidjs/start": "^1.0.8",
     "@tiptap/core": "^2.5.7",
     "@tiptap/extension-image": "^2.8.0",
