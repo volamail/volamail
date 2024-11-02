@@ -1,10 +1,15 @@
 import { createMiddleware } from "@solidjs/start/middleware";
-import { appendHeader, createError, getCookie } from "vinxi/http";
-import { type Session, type User, verifyRequestOrigin } from "lucia";
+import { createError, deleteCookie, getCookie } from "vinxi/http";
 
-import { lucia } from "./lib/auth/lucia";
-import { env } from "~/lib/environment/env";
 import { redirect } from "@solidjs/router";
+import { env } from "~/lib/environment/env";
+import {
+	deleteSessionCookie,
+	getSessionCookie,
+	setSessionCookie,
+} from "./lib/auth/cookies";
+import { validateSessionToken } from "./lib/auth/sessions";
+import type { DbSession, DbUser } from "./lib/db/schema";
 
 export default createMiddleware({
 	onRequest: async (solidEvent) => {
@@ -23,17 +28,13 @@ export default createMiddleware({
 		}
 
 		if (request.method !== "GET" && import.meta.env.PROD) {
-			const hostHeader = request.headers.get("Host") ?? null;
+			const hostHeader =
+				request.headers.get("Host") ??
+				request.headers.get("X-Forwarded-Host") ??
+				null;
 			const originHeader = request.headers.get("Origin") ?? null;
 
-			const origin = new URL(originHeader || "https://volamail.com");
-
-			origin.hostname = clearSubdomain(origin.hostname);
-
-			if (
-				!hostHeader ||
-				!verifyRequestOrigin(origin.toString(), [clearSubdomain(hostHeader)])
-			) {
+			if (originHeader === null || originHeader !== hostHeader) {
 				console.warn("CSRF protection triggered");
 
 				throw createError({
@@ -42,31 +43,23 @@ export default createMiddleware({
 			}
 		}
 
-		const sessionId = getCookie(event, lucia.sessionCookieName) ?? null;
+		const sessionToken = getSessionCookie(event);
 
-		if (!sessionId) {
+		if (!sessionToken) {
 			locals.session = null;
 			locals.user = null;
 
 			return;
 		}
 
-		const { session, user } = await lucia.validateSession(sessionId);
+		const { session, user } = await validateSessionToken(sessionToken);
 
-		if (session?.fresh) {
-			appendHeader(
-				event,
-				"Set-Cookie",
-				lucia.createSessionCookie(session.id).serialize(),
-			);
+		if (session) {
+			setSessionCookie(event, sessionToken, session.expiresAt);
 		}
 
 		if (!session) {
-			appendHeader(
-				event,
-				"Set-Cookie",
-				lucia.createBlankSessionCookie().serialize(),
-			);
+			deleteSessionCookie(event);
 		}
 
 		locals.session = session;
@@ -76,17 +69,7 @@ export default createMiddleware({
 
 declare module "@solidjs/start/server" {
 	interface RequestEventLocals {
-		user: User | null;
-		session: Session | null;
+		user: DbUser | null;
+		session: DbSession | null;
 	}
-}
-
-function clearSubdomain(url: string) {
-	const parts = url.split(".");
-
-	if (parts.length < 3) {
-		return url;
-	}
-
-	return parts.slice(1).join(".");
 }

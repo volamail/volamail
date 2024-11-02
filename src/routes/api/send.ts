@@ -4,7 +4,6 @@ import * as v from "valibot";
 import { createError } from "vinxi/http";
 
 import * as analytics from "~/lib/analytics";
-import { lucia } from "~/lib/auth/lucia";
 import { db } from "~/lib/db";
 import * as schema from "~/lib/db/schema";
 import { isSelfHosted } from "~/lib/environment/utils";
@@ -20,7 +19,7 @@ export async function POST({ request }: APIEvent) {
 
 	const authHeader = request.headers.get("Authorization");
 
-	const token = lucia.readBearerToken(authHeader || "");
+	const token = authHeader?.split(" ")[1];
 
 	if (!token) {
 		throw createError({

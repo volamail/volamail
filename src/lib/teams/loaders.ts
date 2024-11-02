@@ -1,10 +1,9 @@
 import { cache, redirect } from "@solidjs/router";
 import { and, eq } from "drizzle-orm";
-import type { User } from "lucia";
 import { createError } from "vinxi/http";
 import { requireUser } from "../auth/utils";
 import { db } from "../db";
-import { teamInvitesTable, teamsTable } from "../db/schema";
+import { type DbUser, teamInvitesTable, teamsTable } from "../db/schema";
 import { getUserTeams as queryGetUserTeams } from "./queries";
 
 export const getTeam = cache(async (id: string) => {
@@ -41,7 +40,7 @@ export const getTeam = cache(async (id: string) => {
 export const getTeamInvite = cache(async (id: string) => {
 	"use server";
 
-	let user: User;
+	let user: DbUser;
 
 	try {
 		user = requireUser();

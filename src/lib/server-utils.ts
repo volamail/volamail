@@ -1,9 +1,8 @@
 import _ from "lodash";
-import type { User } from "lucia";
 import { type RequestEvent, getRequestEvent } from "solid-js/web";
 import * as v from "valibot";
 import { createError } from "vinxi/http";
-import { formatValiError } from "./validation/utils";
+import type { DbUser } from "./db/schema";
 
 export async function parseFormData<
 	T extends v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>,
@@ -32,7 +31,7 @@ export function createFormDataMutation<
 	schema: Schema;
 	handler: (context: {
 		payload: v.InferOutput<Schema>;
-		user: Public extends true ? User | null : User;
+		user: Public extends true ? DbUser | null : DbUser;
 		event: RequestEvent;
 	}) => Promise<Return>;
 }) {
