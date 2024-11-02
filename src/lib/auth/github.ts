@@ -20,7 +20,9 @@ export function createGithubAuth({ to }: GithubAuthParams = {}) {
 		url.searchParams.set("to", to);
 	}
 
-	return new GitHub(env.GITHUB_CLIENT_ID, env.GITHUB_CLIENT_SECRET, {
-		redirectURI: url.toString(),
-	});
+	return new GitHub(
+		env.GITHUB_CLIENT_ID,
+		env.GITHUB_CLIENT_SECRET,
+		url.toString(),
+	);
 }

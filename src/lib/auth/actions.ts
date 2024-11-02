@@ -1,24 +1,24 @@
-import { DateTime } from "luxon";
-import { and, eq } from "drizzle-orm";
+import { action, redirect } from "@solidjs/router";
 import { generateState } from "arctic";
+import { and, eq } from "drizzle-orm";
+import { DateTime } from "luxon";
 import { customAlphabet } from "nanoid";
 import { getRequestEvent } from "solid-js/web";
-import { action, redirect } from "@solidjs/router";
-import { appendHeader, createError, setCookie } from "vinxi/http";
 import { email, object, optional, pipe, string, toLowerCase } from "valibot";
+import { appendHeader, createError, setCookie } from "vinxi/http";
 
-import { db } from "../db";
-import { lucia } from "./lucia";
-import { requireUser } from "./utils";
-import { sendMail } from "../mail/send";
-import { env } from "../environment/env";
-import { createGithubAuth } from "./github";
 import * as analytics from "~/lib/analytics";
+import { db } from "../db";
+import { mailCodesTable, usersTable } from "../db/schema";
+import { env } from "../environment/env";
+import { sendMail } from "../mail/send";
 import { parseFormData } from "../server-utils";
+import otpTemplate from "../static-templates/mail-otp.html?raw";
 import { getUserTeams } from "../teams/queries";
 import { createUser } from "../users/mutations";
-import { mailCodesTable, usersTable } from "../db/schema";
-import otpTemplate from "../static-templates/mail-otp.html?raw";
+import { createGithubAuth } from "./github";
+import { lucia } from "./lucia";
+import { requireUser } from "./utils";
 
 export const loginWithGithub = action(async (formData: FormData) => {
 	"use server";
@@ -38,9 +38,7 @@ export const loginWithGithub = action(async (formData: FormData) => {
 		to: body.to,
 	});
 
-	const url = await github.createAuthorizationURL(state, {
-		scopes: ["user:email"],
-	});
+	const url = github.createAuthorizationURL(state, ["user:email"]);
 
 	setCookie(nativeEvent, "github_oauth_state", state, {
 		path: "/",
