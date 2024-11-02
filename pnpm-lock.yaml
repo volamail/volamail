@@ -106,7 +106,7 @@ importers:
         version: 1.9.3
       stripe:
         specifier: ^17.0.0
-        version: 17.2.1
+        version: 17.3.1
       tailwind-merge:
         specifier: ^2.3.0
         version: 2.5.4
@@ -4649,8 +4649,8 @@ packages:
   strip-literal@2.1.0:
     resolution: {integrity: sha512-Op+UycaUt/8FbN/Z2TWPBLge3jWrP3xj10f3fnYxf052bKuS3EKs1ZQcVGjnEMdsNVAM+plXRdmjrZ/KgG3Skw==}
 
-  stripe@17.2.1:
-    resolution: {integrity: sha512-Mwb0SitV/UjxTLSUiTlUQ0VDE/gfyQ7OHDGdvDdvKIH4CNNqobPKlzlWhoZHFFU0OA/YsZyBtPULK4JG86BAAg==}
+  stripe@17.3.1:
+    resolution: {integrity: sha512-E9/u+GFBPkYnTmfFCoKX3+gP4R3SkZoGunHe4cw9J+sqkj5uxpLFf1LscuI9BuEyIQ0PFAgPTHavgQwRtOvnag==}
     engines: {node: '>=12.*'}
 
   strnum@1.0.5:
@@ -10497,7 +10497,7 @@ snapshots:
     dependencies:
       js-tokens: 9.0.0
 
-  stripe@17.2.1:
+  stripe@17.3.1:
     dependencies:
       '@types/node': 22.8.6
       qs: 6.13.0
