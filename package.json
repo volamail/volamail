@@ -37,7 +37,7 @@
     "@tiptap/starter-kit": "^2.5.7",
     "arctic": "^2.0.0",
     "dotenv": "^16.4.5",
-    "drizzle-orm": "^0.35.0",
+    "drizzle-orm": "^0.36.0",
     "image-size": "^1.1.1",
     "lodash": "^4.17.21",
     "lucide-solid": "^0.454.0",
