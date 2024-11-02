@@ -1,17 +1,16 @@
 import { cache, redirect } from "@solidjs/router";
 import { and, eq } from "drizzle-orm";
-import type { User } from "lucia";
 import { createError } from "vinxi/http";
 
 import { requireUser } from "../auth/utils";
 import { db } from "../db";
-import { projectsTable, teamsTable } from "../db/schema";
+import { type DbUser, projectsTable, teamsTable } from "../db/schema";
 import { requireUserToBeMemberOfTeam } from "./utils";
 
 export const getCurrentUserDefaultProject = cache(async () => {
 	"use server";
 
-	let user: User;
+	let user: DbUser;
 	try {
 		user = requireUser();
 	} catch {

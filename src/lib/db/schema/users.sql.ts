@@ -1,7 +1,6 @@
-import { relations } from "drizzle-orm";
+import { type InferSelectModel, relations } from "drizzle-orm";
 import { index, integer, pgTable, text } from "drizzle-orm/pg-core";
 
-import { projectsTable } from "./projects.sql";
 import { teamMembersTable, teamsTable } from "./teams.sql";
 
 export const usersTable = pgTable(
@@ -29,3 +28,5 @@ export const usersRelations = relations(usersTable, ({ many, one }) => ({
 		references: [teamsTable.id],
 	}),
 }));
+
+export type DbUser = InferSelectModel<typeof usersTable>;

@@ -1,20 +1,15 @@
-import {
-	getQuery,
-	getCookie,
-	createError,
-	appendHeader,
-	sendRedirect,
-} from "vinxi/http";
-import { eq } from "drizzle-orm";
-import { OAuth2RequestError } from "arctic";
 import type { APIEvent } from "@solidjs/start/server";
+import { OAuth2RequestError } from "arctic";
+import { eq } from "drizzle-orm";
+import { createError, getCookie, getQuery, sendRedirect } from "vinxi/http";
 
-import { db } from "~/lib/db";
-import { lucia } from "~/lib/auth/lucia";
 import * as analytics from "~/lib/analytics";
+import { setSessionCookie } from "~/lib/auth/cookies";
+import { createGithubAuth } from "~/lib/auth/github";
+import { createSession, generateSessionToken } from "~/lib/auth/sessions";
+import { db } from "~/lib/db";
 import { usersTable } from "~/lib/db/schema";
 import { createUser } from "~/lib/users/mutations";
-import { createGithubAuth } from "~/lib/auth/github";
 
 export async function GET({ nativeEvent }: APIEvent) {
 	const query = getQuery(nativeEvent);
@@ -34,9 +29,11 @@ export async function GET({ nativeEvent }: APIEvent) {
 
 		const tokens = await github.validateAuthorizationCode(code);
 
+		const accessToken = tokens.accessToken();
+
 		const githubUserResponse = await fetch("https://api.github.com/user", {
 			headers: {
-				Authorization: `Bearer ${tokens.accessToken}`,
+				Authorization: `Bearer ${accessToken}`,
 			},
 		});
 
@@ -46,7 +43,7 @@ export async function GET({ nativeEvent }: APIEvent) {
 			"https://api.github.com/user/emails",
 			{
 				headers: {
-					Authorization: `Bearer ${tokens.accessToken}`,
+					Authorization: `Bearer ${accessToken}`,
 				},
 			},
 		);
@@ -61,6 +58,8 @@ export async function GET({ nativeEvent }: APIEvent) {
 			where: eq(usersTable.email, userEmail),
 		});
 
+		const sessionToken = generateSessionToken();
+
 		if (existingUser) {
 			if (!existingUser.githubId) {
 				await db
@@ -74,13 +73,9 @@ export async function GET({ nativeEvent }: APIEvent) {
 				email: existingUser.email,
 			});
 
-			const session = await lucia.createSession(existingUser.id, {});
+			const session = await createSession(sessionToken, existingUser.id);
 
-			appendHeader(
-				nativeEvent,
-				"Set-Cookie",
-				lucia.createSessionCookie(session.id).serialize(),
-			);
+			setSessionCookie(nativeEvent, sessionToken, session.expiresAt);
 
 			if (query.to?.toString()) {
 				return sendRedirect(nativeEvent, query.to.toString());
@@ -100,13 +95,9 @@ export async function GET({ nativeEvent }: APIEvent) {
 			email: userEmail,
 		});
 
-		const session = await lucia.createSession(userId, {});
+		const session = await createSession(sessionToken, userId);
 
-		appendHeader(
-			nativeEvent,
-			"Set-Cookie",
-			lucia.createSessionCookie(session.id).serialize(),
-		);
+		setSessionCookie(nativeEvent, sessionToken, session.expiresAt);
 
 		if (query.to?.toString()) {
 			return sendRedirect(nativeEvent, query.to.toString());

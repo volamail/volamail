@@ -1,3 +1,4 @@
+import type { InferSelectModel } from "drizzle-orm";
 import { index, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { usersTable } from "./users.sql";
 
@@ -20,3 +21,5 @@ export const sessionsTable = pgTable(
 		userIdx: index("sessions_user_id_idx").on(table.userId),
 	}),
 );
+
+export type DbSession = InferSelectModel<typeof sessionsTable>;

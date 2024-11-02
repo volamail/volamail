@@ -1,19 +1,19 @@
-import { and, eq } from "drizzle-orm";
-import { appendHeader } from "vinxi/http";
-import { getRequestEvent } from "solid-js/web";
 import { action, redirect } from "@solidjs/router";
+import { and, eq } from "drizzle-orm";
+import { getRequestEvent } from "solid-js/web";
 
+import { deleteSessionCookie } from "../auth/cookies";
+import { invalidateAllUserSessions } from "../auth/sessions";
+import { requireUser } from "../auth/utils";
+import { db } from "../db";
 import {
-	usersTable,
-	teamsTable,
 	sessionsTable,
 	teamMembersTable,
+	teamsTable,
+	usersTable,
 } from "../db/schema";
-import { db } from "../db";
-import { lucia } from "../auth/lucia";
-import { requireUser } from "../auth/utils";
-import { getUserTeams } from "../teams/queries";
 import { deleteProjectWithCleanup } from "../projects/utils";
+import { getUserTeams } from "../teams/queries";
 
 export const deleteAccount = action(async () => {
 	"use server";
@@ -74,11 +74,9 @@ export const deleteAccount = action(async () => {
 
 	const { nativeEvent } = getRequestEvent()!;
 
-	appendHeader(
-		nativeEvent,
-		"Set-Cookie",
-		lucia.createBlankSessionCookie().serialize(),
-	);
+	await invalidateAllUserSessions(user.id);
+
+	deleteSessionCookie(nativeEvent);
 
 	throw redirect("/login");
 });

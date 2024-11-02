@@ -5,7 +5,7 @@ import { DateTime } from "luxon";
 import { customAlphabet } from "nanoid";
 import { getRequestEvent } from "solid-js/web";
 import { email, object, optional, pipe, string, toLowerCase } from "valibot";
-import { appendHeader, createError, setCookie } from "vinxi/http";
+import { createError, setCookie } from "vinxi/http";
 
 import * as analytics from "~/lib/analytics";
 import { db } from "../db";
@@ -16,8 +16,14 @@ import { parseFormData } from "../server-utils";
 import otpTemplate from "../static-templates/mail-otp.html?raw";
 import { getUserTeams } from "../teams/queries";
 import { createUser } from "../users/mutations";
+import { deleteSessionCookie, setSessionCookie } from "./cookies";
 import { createGithubAuth } from "./github";
-import { lucia } from "./lucia";
+import {
+	createSession,
+	generateSessionToken,
+	invalidateAllUserSessions,
+	invalidateSession,
+} from "./sessions";
 import { requireUser } from "./utils";
 
 export const loginWithGithub = action(async (formData: FormData) => {
@@ -62,13 +68,9 @@ export const logout = action(async () => {
 		});
 	}
 
-	await lucia.invalidateSession(locals.session.id);
+	await invalidateSession(locals.session.id);
 
-	appendHeader(
-		nativeEvent,
-		"Set-Cookie",
-		lucia.createBlankSessionCookie().serialize(),
-	);
+	deleteSessionCookie(nativeEvent);
 
 	throw redirect("/login");
 }, "user");
@@ -156,11 +158,13 @@ export const verifyEmailOtp = action(async (formData: FormData) => {
 
 	const { nativeEvent } = getRequestEvent()!;
 
+	const sessionToken = generateSessionToken();
+
 	if (existingUser) {
-		await lucia.invalidateUserSessions(existingUser.id);
+		await invalidateAllUserSessions(existingUser.id);
 
 		const [session, teams] = await Promise.all([
-			lucia.createSession(existingUser.id, {}),
+			createSession(sessionToken, existingUser.id),
 			getUserTeams(existingUser.id),
 		]);
 
@@ -169,11 +173,7 @@ export const verifyEmailOtp = action(async (formData: FormData) => {
 			email: body.email,
 		});
 
-		appendHeader(
-			nativeEvent,
-			"Set-Cookie",
-			lucia.createSessionCookie(session.id).serialize(),
-		);
+		setSessionCookie(nativeEvent, sessionToken, session.expiresAt);
 
 		if (body.to) {
 			throw redirect(body.to);
@@ -203,13 +203,9 @@ export const verifyEmailOtp = action(async (formData: FormData) => {
 		email: body.email,
 	});
 
-	const session = await lucia.createSession(userId, {});
+	const session = await createSession(sessionToken, userId);
 
-	appendHeader(
-		nativeEvent,
-		"Set-Cookie",
-		lucia.createSessionCookie(session.id).serialize(),
-	);
+	setSessionCookie(nativeEvent, sessionToken, session.expiresAt);
 
 	if (body.to) {
 		throw redirect(body.to);
