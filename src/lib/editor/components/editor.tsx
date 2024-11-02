@@ -12,6 +12,7 @@ import { Sidebar } from "./sidebar";
 type EditorProps = {
 	project: DbProject;
 	template?: {
+		slug: string;
 		theme: Theme;
 		translations: Array<{
 			subject: string;
@@ -67,6 +68,8 @@ export function Editor(props: EditorProps) {
 				/>
 			</GridBgContainer>
 			<Sidebar
+				projectId={props.project.id}
+				templateSlug={props.template?.slug}
 				isEditing={isEditing()}
 				theme={{ theme, onUpdate: setTheme }}
 				i18n={{

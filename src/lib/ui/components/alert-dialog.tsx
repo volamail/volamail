@@ -1,7 +1,7 @@
-import { XIcon } from "lucide-solid";
-import { splitProps } from "solid-js";
 import * as AlertDialogPrimitive from "@kobalte/core/alert-dialog";
 import type { PolymorphicProps } from "@kobalte/core/polymorphic";
+import { XIcon } from "lucide-solid";
+import { splitProps } from "solid-js";
 import type { Component, ComponentProps, JSX, ValidComponent } from "solid-js";
 
 import { cn } from "../utils/cn";

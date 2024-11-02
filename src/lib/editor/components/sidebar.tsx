@@ -20,6 +20,8 @@ const TABS = [
 ];
 
 type SidebarProps = {
+	projectId: string;
+	templateSlug?: string;
 	isEditing: boolean;
 	i18n: {
 		defaultLanguage: TemplateLanguage;
@@ -53,6 +55,8 @@ export function Sidebar(props: SidebarProps) {
 			</Tabs.List>
 			<TabsContent value="i18n">
 				<I18nTab
+					projectId={props.projectId}
+					templateSlug={props.templateSlug}
 					isEditing={props.isEditing}
 					defaultLanguage={props.i18n.defaultLanguage}
 					templateLanguages={props.i18n.languages}

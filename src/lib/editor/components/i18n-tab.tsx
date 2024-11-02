@@ -1,6 +1,6 @@
 import { Select, createListCollection } from "@ark-ui/solid";
 import { A, useSearchParams } from "@solidjs/router";
-import { ChevronDownIcon } from "lucide-solid";
+import { ChevronDownIcon, XIcon } from "lucide-solid";
 import { For, Index, Show, createMemo } from "solid-js";
 import { Portal } from "solid-js/web";
 import {
@@ -8,9 +8,13 @@ import {
 	TEMPLATE_LANGUAGES_MAP,
 	type TemplateLanguage,
 } from "~/lib/templates/languages";
+import { Button } from "~/lib/ui/components/button";
 import { cn } from "~/lib/ui/utils/cn";
+import { DeleteTemplateTranlationDialog } from "./delete-template-translation-dialog";
 
 interface I18nTabProps {
+	projectId: string;
+	templateSlug?: string;
 	isEditing: boolean;
 	defaultLanguage: TemplateLanguage;
 	templateLanguages: Array<TemplateLanguage>;
@@ -21,20 +25,37 @@ export function I18nTab(props: I18nTabProps) {
 
 	const templateLanguages = createMemo(() => {
 		if (!searchParams.lang) {
-			return props.templateLanguages;
+			return props.templateLanguages.map((t) => ({ lang: t, temp: false }));
 		}
 
-		return [
-			...new Set([
-				...props.templateLanguages,
-				searchParams.lang as TemplateLanguage,
-			]),
-		];
+		let foundTemporaryLang = false;
+
+		const langs: Array<{ lang: TemplateLanguage; temp: boolean }> = [];
+
+		for (const lang of props.templateLanguages) {
+			langs.push({
+				lang,
+				temp: false,
+			});
+
+			if (lang === searchParams.lang) {
+				foundTemporaryLang = true;
+			}
+		}
+
+		if (!foundTemporaryLang) {
+			langs.push({
+				lang: searchParams.lang as TemplateLanguage,
+				temp: true,
+			});
+		}
+
+		return langs;
 	});
 
 	const availableLanguages = createMemo(() => {
 		return TEMPLATE_LANGUAGES.filter(
-			(lang) => !templateLanguages().includes(lang),
+			(lang) => !templateLanguages().find((t) => t.lang === lang),
 		);
 	});
 
@@ -53,11 +74,15 @@ export function I18nTab(props: I18nTabProps) {
 				<For each={templateLanguages()}>
 					{(language) => (
 						<LanguageListItem
-							language={language}
+							default={language.lang === props.defaultLanguage}
+							projectId={props.projectId}
+							slug={props.templateSlug}
+							language={language.lang}
 							active={
-								language === searchParams.lang ||
-								(!searchParams.lang && language === props.defaultLanguage)
+								language.lang === searchParams.lang ||
+								(!searchParams.lang && language.lang === props.defaultLanguage)
 							}
+							temp={language.temp}
 						/>
 					)}
 				</For>
@@ -74,6 +99,9 @@ export function I18nTab(props: I18nTabProps) {
 				<Show when={availableLanguages().length > 0}>
 					<Select.Root
 						collection={collection()}
+						value={[]}
+						unmountOnExit
+						lazyMount
 						onValueChange={({ value }) =>
 							setSearchParams({
 								...searchParams,
@@ -84,7 +112,7 @@ export function I18nTab(props: I18nTabProps) {
 					>
 						<Select.Control>
 							<Select.Trigger class="w-full rounded-lg bg-white hover:bg-gray-100 transition-colors py-1 px-2 border border-gray-300 inline-flex gap-2 items-center text-sm text-gray-600">
-								<span class="grow text-left">Add a language...</span>
+								<span class="grow text-left">Add translation...</span>
 								<Select.Indicator>
 									<ChevronDownIcon class="size-4" />
 								</Select.Indicator>
@@ -122,8 +150,12 @@ export function I18nTab(props: I18nTabProps) {
 }
 
 interface LanguageListItemProps {
+	projectId: string;
+	slug?: string;
 	language: TemplateLanguage;
 	active: boolean;
+	temp?: boolean;
+	default?: boolean;
 }
 
 function LanguageListItem(props: LanguageListItemProps) {
@@ -132,8 +164,10 @@ function LanguageListItem(props: LanguageListItemProps) {
 			<A
 				href={`?lang=${props.language}`}
 				class={cn(
-					"relative flex cursor-default gap-3 items-center px-4 py-3 bg-white hover:bg-gray-100 border-b border-gray-200 transition-colors",
-					props.active ? "text-black font-medium" : "text-gray-400",
+					"relative flex cursor-default gap-3 items-center px-4 py-3 bg-white border-b border-gray-200 transition-colors",
+					props.active
+						? "text-black font-medium"
+						: "text-gray-400 hover:bg-gray-100",
 				)}
 			>
 				<Show when={props.active}>
@@ -150,6 +184,23 @@ function LanguageListItem(props: LanguageListItemProps) {
 						{props.language}
 					</span>
 				</span>
+				<Show when={props.active && !props.default}>
+					<Show
+						when={!props.temp && props.slug}
+						fallback={
+							<Button as={A} href="." variant="ghost" even class="p-0.5">
+								<XIcon class="size-4" />
+								<span class="sr-only">Delete translation</span>
+							</Button>
+						}
+					>
+						<DeleteTemplateTranlationDialog
+							projectId={props.projectId}
+							language={props.language}
+							slug={props.slug!}
+						/>
+					</Show>
+				</Show>
 			</A>
 		</li>
 	);
