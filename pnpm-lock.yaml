@@ -28,10 +28,10 @@ importers:
         version: 0.13.7(solid-js@1.9.3)
       '@maskito/core':
         specifier: ^3.1.0
-        version: 3.1.2
+        version: 3.2.0
       '@maskito/kit':
         specifier: ^3.1.0
-        version: 3.1.2(@maskito/core@3.1.2)
+        version: 3.1.2(@maskito/core@3.2.0)
       '@oslojs/crypto':
         specifier: ^1.0.1
         version: 1.0.1
@@ -1115,8 +1115,8 @@ packages:
     resolution: {integrity: sha512-Yhlar6v9WQgUp/He7BdgzOz8lqMQ8sU+jkCq7Wx8Myc5YFJLbEe7lgui/V7G1qB1DJykHSGwreceSaD60Y0PUQ==}
     hasBin: true
 
-  '@maskito/core@3.1.2':
-    resolution: {integrity: sha512-1AsSBYZ8GxZ6xDhkwcGaMVrTm5oQpBscYX5CeJMG2IUG93pV8EUcEdzpD3bZc2G9DhpjjcM1xVRyWS9ynfckeA==}
+  '@maskito/core@3.2.0':
+    resolution: {integrity: sha512-c8GNwuz4PQmZqf5CSXIncwIkZSwBeU2FZtpBJtD21DaIe4uBQ541C0BncHMqEbLP2+n+HyFKEnT90m03BBlGrw==}
 
   '@maskito/kit@3.1.2':
     resolution: {integrity: sha512-zSEMwCmp0EUS9wwZUP4EJp90g/diay4DM0Mtayg4k+ep+lT3kRffUrTsXj4Noa60OO4875h0k29QCwI/oIVEqA==}
@@ -6406,11 +6406,11 @@ snapshots:
       - encoding
       - supports-color
 
-  '@maskito/core@3.1.2': {}
+  '@maskito/core@3.2.0': {}
 
-  '@maskito/kit@3.1.2(@maskito/core@3.1.2)':
+  '@maskito/kit@3.1.2(@maskito/core@3.2.0)':
     dependencies:
-      '@maskito/core': 3.1.2
+      '@maskito/core': 3.2.0
 
   '@netlify/functions@2.7.0(@opentelemetry/api@1.9.0)':
     dependencies:
