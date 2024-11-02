@@ -31,7 +31,7 @@ importers:
         version: 3.2.0
       '@maskito/kit':
         specifier: ^3.1.0
-        version: 3.1.2(@maskito/core@3.2.0)
+        version: 3.2.0(@maskito/core@3.2.0)
       '@oslojs/crypto':
         specifier: ^1.0.1
         version: 1.0.1
@@ -1118,10 +1118,10 @@ packages:
   '@maskito/core@3.2.0':
     resolution: {integrity: sha512-c8GNwuz4PQmZqf5CSXIncwIkZSwBeU2FZtpBJtD21DaIe4uBQ541C0BncHMqEbLP2+n+HyFKEnT90m03BBlGrw==}
 
-  '@maskito/kit@3.1.2':
-    resolution: {integrity: sha512-zSEMwCmp0EUS9wwZUP4EJp90g/diay4DM0Mtayg4k+ep+lT3kRffUrTsXj4Noa60OO4875h0k29QCwI/oIVEqA==}
+  '@maskito/kit@3.2.0':
+    resolution: {integrity: sha512-fIUBu+RzWQtmDyBCV9cksFqLqCq4ag1Gv1pwn9PgB7m0pkjhJoBMfQAVkded6MKrUk+QLIZUjzbUwgJm0D98Aw==}
     peerDependencies:
-      '@maskito/core': ^3.1.2
+      '@maskito/core': ^3.2.0
 
   '@netlify/functions@2.7.0':
     resolution: {integrity: sha512-4pXC/fuj3eGQ86wbgPiM4zY8+AsNrdz6vcv6FEdUJnZW+LqF8IWjQcY3S0d1hLeLKODYOqq4CkrzGyCpce63Nw==}
@@ -6408,7 +6408,7 @@ snapshots:
 
   '@maskito/core@3.2.0': {}
 
-  '@maskito/kit@3.1.2(@maskito/core@3.2.0)':
+  '@maskito/kit@3.2.0(@maskito/core@3.2.0)':
     dependencies:
       '@maskito/core': 3.2.0
 
