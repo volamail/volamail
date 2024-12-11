@@ -10,6 +10,7 @@ import {
 } from "vinxi/http";
 import { db } from "../database";
 import { usersTable } from "../database/schema";
+import { getOrigin } from "../rpcs/origin";
 import { setSessionCookie } from "./cookies";
 import { createSession, generateSessionToken } from "./sessions";
 import { createUser } from "./users";
@@ -17,12 +18,7 @@ import { createUser } from "./users";
 export const GITHUB_OAUTH_STATE_COOKIE_NAME = "github_oauth_state";
 
 export async function signInWithGithub() {
-	const request = getWebRequest();
-
-	const origin =
-		request.headers.get("origin") || request.headers.get("host") || "";
-
-	const githubOauth = createGithubOauth(origin);
+	const githubOauth = createGithubOauth();
 
 	const state = generateState();
 
@@ -56,10 +52,7 @@ export async function handleGithubCallback(request: Request) {
 
 	deleteCookie(GITHUB_OAUTH_STATE_COOKIE_NAME);
 
-	const origin =
-		request.headers.get("origin") || request.headers.get("host") || "";
-
-	const githubOauth = createGithubOauth(origin);
+	const githubOauth = createGithubOauth();
 
 	const tokens = await githubOauth.validateAuthorizationCode(code);
 
@@ -104,11 +97,11 @@ export async function handleGithubCallback(request: Request) {
 	return user;
 }
 
-function createGithubOauth(origin: string) {
+function createGithubOauth() {
 	return new GitHub(
 		serverEnv.GITHUB_CLIENT_ID,
 		serverEnv.GITHUB_CLIENT_SECRET,
-		`${origin}/api/internal/auth/oauth/github/callback`,
+		`${getOrigin()}/api/internal/auth/oauth/github/callback`,
 	);
 }
 

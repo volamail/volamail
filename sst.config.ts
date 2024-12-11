@@ -21,7 +21,8 @@ export default $config({
 			"EmailNotificationsTopic",
 		);
 
-		const email = sst.aws.Email.get("Email", serverEnv.NOREPLY_EMAIL, {
+		const email = new sst.aws.Email("Email", {
+			sender: serverEnv.NOREPLY_EMAIL,
 			events: [
 				{
 					name: "DeliveryNotification",
@@ -49,8 +50,8 @@ export default $config({
 			domain: $dev
 				? undefined
 				: {
-						name: serverEnv.DOMAIN,
 						dns: false,
+						name: serverEnv.DOMAIN,
 						cert: process.env.ACM_CERTIFICATE_ARN,
 					},
 			permissions: [
