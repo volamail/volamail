@@ -51,7 +51,7 @@ export default $config({
 				: {
 						name: serverEnv.DOMAIN,
 						dns: false,
-						cert: serverEnv.ACM_CERTIFICATE_ARN,
+						cert: process.env.ACM_CERTIFICATE_ARN,
 					},
 			permissions: [
 				{
