@@ -1,7 +1,13 @@
 import { serverEnv } from "@/modules/environment/server";
 import { GitHub, generateState } from "arctic";
 import { eq } from "drizzle-orm";
-import { createError, deleteCookie, getCookie, setCookie } from "vinxi/http";
+import {
+	createError,
+	deleteCookie,
+	getCookie,
+	getWebRequest,
+	setCookie,
+} from "vinxi/http";
 import { db } from "../database";
 import { usersTable } from "../database/schema";
 import { setSessionCookie } from "./cookies";
@@ -11,7 +17,12 @@ import { createUser } from "./users";
 export const GITHUB_OAUTH_STATE_COOKIE_NAME = "github_oauth_state";
 
 export async function signInWithGithub() {
-	const githubOauth = createGithubOauth();
+	const request = getWebRequest();
+
+	const origin =
+		request.headers.get("origin") || request.headers.get("host") || "";
+
+	const githubOauth = createGithubOauth(origin);
 
 	const state = generateState();
 
@@ -45,7 +56,10 @@ export async function handleGithubCallback(request: Request) {
 
 	deleteCookie(GITHUB_OAUTH_STATE_COOKIE_NAME);
 
-	const githubOauth = createGithubOauth();
+	const origin =
+		request.headers.get("origin") || request.headers.get("host") || "";
+
+	const githubOauth = createGithubOauth(origin);
 
 	const tokens = await githubOauth.validateAuthorizationCode(code);
 
@@ -90,11 +104,11 @@ export async function handleGithubCallback(request: Request) {
 	return user;
 }
 
-function createGithubOauth() {
+function createGithubOauth(origin: string) {
 	return new GitHub(
 		serverEnv.GITHUB_CLIENT_ID,
 		serverEnv.GITHUB_CLIENT_SECRET,
-		`${serverEnv.SITE_URL}/api/internal/auth/oauth/github/callback`,
+		`${origin}/api/internal/auth/oauth/github/callback`,
 	);
 }
 

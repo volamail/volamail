@@ -38,10 +38,11 @@ jobs:
       - name: Deploy to Staging
         run: bun run sst deploy --stage staging --print-logs
         env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          SITE_URL: ${{ vars.SITE_URL }}
-          GITHUB_CLIENT_ID: ${{ secrets.GH_CLIENT_ID }}
-          GITHUB_CLIENT_SECRET: ${{ secrets.GH_CLIENT_SECRET }}
           SELF_HOSTED: "false"
+          DOMAIN: ${{ vars.DOMAIN }}
           NOREPLY_EMAIL: ${{ vars.NOREPLY_EMAIL }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
           VITE_SUPPORT_EMAIL: ${{ vars.SUPPORT_EMAIL }}
+          GITHUB_CLIENT_ID: ${{ secrets.GH_CLIENT_ID }}
+          ACM_CERTIFICATE_ARN: ${{ vars.ACM_CERTIFICATE_ARN }}
+          GITHUB_CLIENT_SECRET: ${{ secrets.GH_CLIENT_SECRET }}

@@ -8,7 +8,7 @@ import { createServerFn } from "@tanstack/start";
 import { addHours } from "date-fns";
 import { and, eq, lt } from "drizzle-orm";
 import { ulid } from "ulid";
-import { createError } from "vinxi/http";
+import { createError, getHeader, getWebRequest } from "vinxi/http";
 import { z } from "zod";
 import teamInviteTemplate from "./templates/team-invite.html?raw";
 
@@ -24,7 +24,7 @@ export const sendTeamInviteFn = createServerFn({
 			}),
 		),
 	)
-	.handler(async ({ data }) => {
+	.handler(async ({ data, context }) => {
 		const team = await db.query.teamsTable.findFirst({
 			where: eq(teamsTable.id, data.teamId),
 		});
@@ -73,7 +73,11 @@ export const sendTeamInviteFn = createServerFn({
 			});
 		}
 
-		const link = `${serverEnv.SITE_URL}/join-team/${inviteCode}`;
+		const request = getWebRequest();
+
+		const origin = request.headers.get("origin") || request.headers.get("host");
+
+		const link = `${origin}/join-team/${inviteCode}`;
 
 		await sendEmail({
 			from: {

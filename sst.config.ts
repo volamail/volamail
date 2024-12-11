@@ -46,6 +46,13 @@ export default $config({
 
 		new sst.aws.TanstackStart("Web", {
 			link: [email, bucket, sesNotificationsTopic],
+			domain: $dev
+				? undefined
+				: {
+						name: serverEnv.DOMAIN,
+						dns: false,
+						cert: serverEnv.ACM_CERTIFICATE_ARN,
+					},
 			permissions: [
 				{
 					actions: ["ses:*"],
@@ -57,8 +64,8 @@ export default $config({
 				},
 			],
 			environment: {
+				DOMAIN: serverEnv.DOMAIN,
 				DATABASE_URL: serverEnv.DATABASE_URL,
-				SITE_URL: serverEnv.SITE_URL,
 				GITHUB_CLIENT_ID: serverEnv.GITHUB_CLIENT_ID,
 				GITHUB_CLIENT_SECRET: serverEnv.GITHUB_CLIENT_SECRET,
 				SELF_HOSTED: serverEnv.SELF_HOSTED,
