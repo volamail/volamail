@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light dark;
+}
+
+body {
+  @apply dark:bg-gray-950 overscroll-y-none;
+}
+
+button,
+a {
+  cursor: default;
+  user-select: none;
+}
+
+.tailwind-revert * {
+  all: revert;
+  color: black;
+}

@@ -1,0 +1,2 @@
+ALTER TABLE "emails" ALTER COLUMN "language" DROP NOT NULL;--> statement-breakpoint
+ALTER TABLE "projects" ALTER COLUMN "default_theme" SET DEFAULT '{"background":"#EEEEEE","contentBackground":"#FFFFFF","contentMaxWidth":576,"contentBorderRadius":8}'::jsonb;

@@ -1,6 +1,6 @@
 {
-  "id": "5c9ce737-665c-42a3-af93-3b4cdfd9e782",
-  "prevId": "dc36904d-6d0e-4f4f-9232-88905345a4de",
+  "id": "6a549f6f-a1d3-48df-8e8f-a8cade1ce0fd",
+  "prevId": "6b134593-bfe7-4e34-ae5c-3e492e0a3ccc",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -27,6 +27,12 @@
           "notNull": true,
           "default": "now()"
         },
+        "team_id": {
+          "name": "team_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
         "project_id": {
           "name": "project_id",
           "type": "text",
@@ -47,21 +53,6 @@
         }
       },
       "indexes": {
-        "api_tokens_project_id_idx": {
-          "name": "api_tokens_project_id_idx",
-          "columns": [
-            {
-              "expression": "project_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
         "api_tokens_creator_id_idx": {
           "name": "api_tokens_creator_id_idx",
           "columns": [
@@ -79,19 +70,6 @@
         }
       },
       "foreignKeys": {
-        "api_tokens_project_id_projects_id_fk": {
-          "name": "api_tokens_project_id_projects_id_fk",
-          "tableFrom": "api_tokens",
-          "tableTo": "projects",
-          "columnsFrom": [
-            "project_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
         "api_tokens_creator_id_users_id_fk": {
           "name": "api_tokens_creator_id_users_id_fk",
           "tableFrom": "api_tokens",
@@ -104,11 +82,28 @@
           ],
           "onDelete": "no action",
           "onUpdate": "no action"
+        },
+        "api_tokens_team_id_project_id_projects_team_id_id_fk": {
+          "name": "api_tokens_team_id_project_id_projects_team_id_id_fk",
+          "tableFrom": "api_tokens",
+          "tableTo": "projects",
+          "columnsFrom": [
+            "team_id",
+            "project_id"
+          ],
+          "columnsTo": [
+            "team_id",
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
-      "checkConstraints": {}
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
     "public.domains": {
       "name": "domains",
@@ -153,6 +148,12 @@
           "notNull": true,
           "default": false
         },
+        "team_id": {
+          "name": "team_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
         "project_id": {
           "name": "project_id",
           "type": "text",
@@ -160,41 +161,29 @@
           "notNull": true
         }
       },
-      "indexes": {
-        "domains_project_id_idx": {
-          "name": "domains_project_id_idx",
-          "columns": [
-            {
-              "expression": "project_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
+      "indexes": {},
       "foreignKeys": {
-        "domains_project_id_projects_id_fk": {
-          "name": "domains_project_id_projects_id_fk",
+        "domains_team_id_project_id_projects_team_id_id_fk": {
+          "name": "domains_team_id_project_id_projects_team_id_id_fk",
           "tableFrom": "domains",
           "tableTo": "projects",
           "columnsFrom": [
+            "team_id",
             "project_id"
           ],
           "columnsTo": [
+            "team_id",
             "id"
           ],
-          "onDelete": "cascade",
+          "onDelete": "no action",
           "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
-      "checkConstraints": {}
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
     "public.emails": {
       "name": "emails",
@@ -204,6 +193,12 @@
           "name": "id",
           "type": "text",
           "primaryKey": true,
+          "notNull": true
+        },
+        "team_id": {
+          "name": "team_id",
+          "type": "text",
+          "primaryKey": false,
           "notNull": true
         },
         "project_id": {
@@ -260,41 +255,29 @@
           "default": "'en'"
         }
       },
-      "indexes": {
-        "emails_project_id_idx": {
-          "name": "emails_project_id_idx",
-          "columns": [
-            {
-              "expression": "project_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
+      "indexes": {},
       "foreignKeys": {
-        "emails_project_id_projects_id_fk": {
-          "name": "emails_project_id_projects_id_fk",
+        "emails_team_id_project_id_projects_team_id_id_fk": {
+          "name": "emails_team_id_project_id_projects_team_id_id_fk",
           "tableFrom": "emails",
           "tableTo": "projects",
           "columnsFrom": [
+            "team_id",
             "project_id"
           ],
           "columnsTo": [
+            "team_id",
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "cascade"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
-      "checkConstraints": {}
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
     "public.images": {
       "name": "images",
@@ -331,6 +314,12 @@
           "notNull": true,
           "default": "now()"
         },
+        "team_id": {
+          "name": "team_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
         "project_id": {
           "name": "project_id",
           "type": "text",
@@ -338,41 +327,29 @@
           "notNull": true
         }
       },
-      "indexes": {
-        "images_project_id_idx": {
-          "name": "images_project_id_idx",
-          "columns": [
-            {
-              "expression": "project_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
+      "indexes": {},
       "foreignKeys": {
-        "images_project_id_projects_id_fk": {
-          "name": "images_project_id_projects_id_fk",
+        "images_team_id_project_id_projects_team_id_id_fk": {
+          "name": "images_team_id_project_id_projects_team_id_id_fk",
           "tableFrom": "images",
           "tableTo": "projects",
           "columnsFrom": [
+            "team_id",
             "project_id"
           ],
           "columnsTo": [
+            "team_id",
             "id"
           ],
-          "onDelete": "cascade",
+          "onDelete": "no action",
           "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
-      "checkConstraints": {}
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
     "public.mail_codes": {
       "name": "mail_codes",
@@ -451,7 +428,9 @@
           ]
         }
       },
-      "checkConstraints": {}
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
     "public.projects": {
       "name": "projects",
@@ -460,7 +439,7 @@
         "id": {
           "name": "id",
           "type": "text",
-          "primaryKey": true,
+          "primaryKey": false,
           "notNull": true
         },
         "name": {
@@ -497,41 +476,21 @@
           "notNull": true
         }
       },
-      "indexes": {
-        "projects_team_id_idx": {
-          "name": "projects_team_id_idx",
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "projects_id_team_id_pk": {
+          "name": "projects_id_team_id_pk",
           "columns": [
-            {
-              "expression": "team_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "projects_team_id_teams_id_fk": {
-          "name": "projects_team_id_teams_id_fk",
-          "tableFrom": "projects",
-          "tableTo": "teams",
-          "columnsFrom": [
+            "id",
             "team_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          ]
         }
       },
-      "compositePrimaryKeys": {},
       "uniqueConstraints": {},
-      "checkConstraints": {}
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
     "public.sessions": {
       "name": "sessions",
@@ -590,7 +549,9 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
-      "checkConstraints": {}
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
     "public.subscriptions": {
       "name": "subscriptions",
@@ -670,7 +631,9 @@
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
-      "checkConstraints": {}
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
     "public.team_invites": {
       "name": "team_invites",
@@ -722,7 +685,9 @@
         }
       },
       "uniqueConstraints": {},
-      "checkConstraints": {}
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
     "public.team_members": {
       "name": "team_members",
@@ -787,7 +752,9 @@
         }
       },
       "uniqueConstraints": {},
-      "checkConstraints": {}
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
     "public.teams": {
       "name": "teams",
@@ -846,20 +813,28 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
-      "checkConstraints": {}
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
     "public.templates": {
       "name": "templates",
       "schema": "",
       "columns": {
-        "slug": {
-          "name": "slug",
+        "team_id": {
+          "name": "team_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
         "project_id": {
           "name": "project_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "slug": {
+          "name": "slug",
           "type": "text",
           "primaryKey": false,
           "notNull": true
@@ -871,6 +846,13 @@
           "notNull": true,
           "default": "'{\"background\":\"#eeeeee\",\"contentBackground\":\"#ffffff\",\"contentMaxWidth\":\"600px\",\"contentBorderRadius\":2}'::jsonb"
         },
+        "default_translation_language": {
+          "name": "default_translation_language",
+          "type": "template_languages",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
         "created_at": {
           "name": "created_at",
           "type": "timestamp",
@@ -881,36 +863,51 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "templates_project_id_projects_id_fk": {
-          "name": "templates_project_id_projects_id_fk",
+        "templates_team_id_project_id_slug_default_translation_language_template_translations_team_id_project_id_template_slug_language_fk": {
+          "name": "templates_team_id_project_id_slug_default_translation_language_template_translations_team_id_project_id_template_slug_language_fk",
           "tableFrom": "templates",
-          "tableTo": "projects",
+          "tableTo": "template_translations",
           "columnsFrom": [
-            "project_id"
+            "team_id",
+            "project_id",
+            "slug",
+            "default_translation_language"
           ],
           "columnsTo": [
-            "id"
+            "team_id",
+            "project_id",
+            "template_slug",
+            "language"
           ],
-          "onDelete": "cascade",
+          "onDelete": "no action",
           "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
-        "templates_project_id_slug_pk": {
-          "name": "templates_project_id_slug_pk",
+        "templates_team_id_project_id_slug_pk": {
+          "name": "templates_team_id_project_id_slug_pk",
           "columns": [
+            "team_id",
             "project_id",
             "slug"
           ]
         }
       },
       "uniqueConstraints": {},
-      "checkConstraints": {}
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
     "public.template_translations": {
       "name": "template_translations",
       "schema": "",
       "columns": {
+        "team_id": {
+          "name": "team_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
         "project_id": {
           "name": "project_id",
           "type": "text",
@@ -945,15 +942,17 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "template_translations_project_id_template_slug_templates_project_id_slug_fk": {
-          "name": "template_translations_project_id_template_slug_templates_project_id_slug_fk",
+        "template_translations_team_id_project_id_template_slug_templates_team_id_project_id_slug_fk": {
+          "name": "template_translations_team_id_project_id_template_slug_templates_team_id_project_id_slug_fk",
           "tableFrom": "template_translations",
           "tableTo": "templates",
           "columnsFrom": [
+            "team_id",
             "project_id",
             "template_slug"
           ],
           "columnsTo": [
+            "team_id",
             "project_id",
             "slug"
           ],
@@ -962,9 +961,10 @@
         }
       },
       "compositePrimaryKeys": {
-        "template_translations_project_id_template_slug_language_pk": {
-          "name": "template_translations_project_id_template_slug_language_pk",
+        "template_translations_team_id_project_id_template_slug_language_pk": {
+          "name": "template_translations_team_id_project_id_template_slug_language_pk",
           "columns": [
+            "team_id",
             "project_id",
             "template_slug",
             "language"
@@ -972,7 +972,9 @@
         }
       },
       "uniqueConstraints": {},
-      "checkConstraints": {}
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
     "public.users": {
       "name": "users",
@@ -999,6 +1001,12 @@
         "github_id": {
           "name": "github_id",
           "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "avatar_url": {
+          "name": "avatar_url",
+          "type": "text",
           "primaryKey": false,
           "notNull": false
         },
@@ -1043,10 +1051,23 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
-      "checkConstraints": {}
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     }
   },
   "enums": {
+    "public.template_languages": {
+      "name": "template_languages",
+      "schema": "public",
+      "values": [
+        "en",
+        "it",
+        "fr",
+        "es",
+        "de"
+      ]
+    },
     "public.email_status": {
       "name": "email_status",
       "schema": "public",
@@ -1082,21 +1103,12 @@
         "PRO",
         "CUSTOM"
       ]
-    },
-    "public.template_languages": {
-      "name": "template_languages",
-      "schema": "public",
-      "values": [
-        "en",
-        "it",
-        "fr",
-        "es",
-        "de"
-      ]
     }
   },
   "schemas": {},
   "sequences": {},
+  "roles": {},
+  "policies": {},
   "views": {},
   "_meta": {
     "columns": {},

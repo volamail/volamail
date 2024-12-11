@@ -1,0 +1,108 @@
+import { FormGroup } from "@/modules/ui/components/form-group";
+import { Select } from "@/modules/ui/components/select";
+import { FileIcon, TextSelectIcon } from "lucide-react";
+import { observer } from "mobx-react-lite";
+import type { ComponentType, ReactNode } from "react";
+import { useEditorStore } from "../store";
+import {
+	CONTENT_BORDER_RADIUS_OPTIONS,
+	CONTENT_MAX_WIDTH_OPTIONS,
+} from "../theme";
+import { ColorInput } from "./color-input";
+
+export const ThemeTab = observer(function ThemeTab() {
+	const store = useEditorStore();
+
+	return (
+		<div className="flex flex-col gap-8">
+			<ThemeTabSection title="Page" icon={FileIcon}>
+				<ColorInput
+					label="Background"
+					classes={{
+						label: "text-xs dark:text-gray-400",
+						input: "text-xs",
+					}}
+					defaultValue={store.theme.background}
+					onChange={store.theme.setBackground}
+				/>
+			</ThemeTabSection>
+
+			<ThemeTabSection title="Content" icon={TextSelectIcon}>
+				<ColorInput
+					label="Background"
+					classes={{
+						label: "text-xs dark:text-gray-400",
+						input: "text-xs",
+					}}
+					defaultValue={store.theme.contentBackground}
+					onChange={store.theme.setContentBackground}
+				/>
+
+				<FormGroup
+					label="Width"
+					classes={{
+						container: "flex-row justify-between items-center gap-2",
+						label: "text-xs dark:text-gray-400",
+					}}
+				>
+					<Select
+						defaultValue={[store.theme.contentMaxWidth.toString()]}
+						items={CONTENT_MAX_WIDTH_OPTIONS.map((option) => ({
+							label: option.toString(),
+							value: option.toString(),
+						}))}
+						onChange={(values) => {
+							store.theme.setContentMaxWidth(Number(values[0]));
+						}}
+						classes={{
+							trigger: "text-xs",
+							item: "text-xs",
+						}}
+					/>
+				</FormGroup>
+				<FormGroup
+					label="Border radius"
+					classes={{
+						container: "flex-row justify-between items-center gap-2",
+						label: "text-xs dark:text-gray-400",
+					}}
+				>
+					<Select
+						defaultValue={[store.theme.contentBorderRadius.toString()]}
+						items={CONTENT_BORDER_RADIUS_OPTIONS.map((option) => ({
+							label: option.toString(),
+							value: option.toString(),
+						}))}
+						onChange={(values) => {
+							store.theme.setContentBorderRadius(Number(values[0]));
+						}}
+						classes={{
+							trigger: "text-xs",
+							item: "text-xs",
+						}}
+					/>
+				</FormGroup>
+			</ThemeTabSection>
+		</div>
+	);
+});
+
+interface ThemeTabSectionProps {
+	title: string;
+	icon: ComponentType<{ className?: string }>;
+	children: ReactNode | ReactNode[];
+}
+
+function ThemeTabSection(props: ThemeTabSectionProps) {
+	const { icon: Icon, title, children } = props;
+
+	return (
+		<section className="flex flex-col gap-2">
+			<h3 className="dark:text-gray-50 font-medium text-xs inline-flex gap-1.5 items-center mb-1">
+				{title}
+				<Icon className="size-4" />
+			</h3>
+			{children}
+		</section>
+	);
+}
