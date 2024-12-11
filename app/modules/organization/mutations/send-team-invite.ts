@@ -24,7 +24,7 @@ export const sendTeamInviteFn = createServerFn({
 			}),
 		),
 	)
-	.handler(async ({ data, context }) => {
+	.handler(async ({ data }) => {
 		const team = await db.query.teamsTable.findFirst({
 			where: eq(teamsTable.id, data.teamId),
 		});
