@@ -29,11 +29,18 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v2
         with:
           role-to-assume: ${{ vars.AWS_ROLE_TO_ASSUME }}
-          role-duration-seconds: 14390
+          role-duration-seconds: 3600
           aws-region: eu-central-1
 
       - name: Install dependencies
         run: bun install
 
       - name: Deploy to Staging
-        run: bun run sst deploy --stage staging
+        run: bun run sst deploy --stage staging --print-logs
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          SITE_URL: ${{ vars.SITE_URL }}
+          GITHUB_CLIENT_ID: ${{ secrets.GH_CLIENT_ID }}
+          GITHUB_CLIENT_SECRET: ${{ secrets.GH_CLIENT_SECRET }}
+          SELF_HOSTED: "false"
+          NOREPLY_EMAIL: ${{ vars.NOREPLY_EMAIL }}
