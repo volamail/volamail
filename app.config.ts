@@ -6,6 +6,6 @@ export default defineConfig({
 		plugins: [tsConfigPaths()],
 	},
 	server: {
-		preset: "aws-lambda-streaming",
+		preset: "aws-lambda",
 	},
 });

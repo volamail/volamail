@@ -59,7 +59,9 @@ function RouteComponent() {
 							trailing={<ChevronRightIcon className="size-4" />}
 							onClick={() =>
 								mutation.mutate({
-									code: inviteResult.data.code,
+									data: {
+										code: inviteResult.data.code,
+									},
 								})
 							}
 							loading={mutation.isPending}

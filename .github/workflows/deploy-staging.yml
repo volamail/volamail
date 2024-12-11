@@ -44,3 +44,4 @@ jobs:
           GITHUB_CLIENT_SECRET: ${{ secrets.GH_CLIENT_SECRET }}
           SELF_HOSTED: "false"
           NOREPLY_EMAIL: ${{ vars.NOREPLY_EMAIL }}
+          VITE_SUPPORT_EMAIL: ${{ vars.SUPPORT_EMAIL }}
