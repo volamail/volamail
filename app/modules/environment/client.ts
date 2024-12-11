@@ -4,4 +4,4 @@ const schema = z.object({
 	VITE_SUPPORT_EMAIL: z.string().email(),
 });
 
-export const clientEnv = schema.parse(import.meta.env);
+export const clientEnv = schema.parse({ ...process.env, ...import.meta.env });

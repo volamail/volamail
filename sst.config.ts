@@ -1,5 +1,6 @@
 /// <reference path="./.sst/platform/config.d.ts" />
 
+import { clientEnv } from "@/modules/environment/client";
 import { serverEnv } from "@/modules/environment/server";
 
 export default $config({
@@ -61,6 +62,8 @@ export default $config({
 				GITHUB_CLIENT_ID: serverEnv.GITHUB_CLIENT_ID,
 				GITHUB_CLIENT_SECRET: serverEnv.GITHUB_CLIENT_SECRET,
 				SELF_HOSTED: serverEnv.SELF_HOSTED,
+				NOREPLY_EMAIL: serverEnv.NOREPLY_EMAIL,
+				VITE_SUPPORT_EMAIL: clientEnv.VITE_SUPPORT_EMAIL,
 			},
 		});
 
