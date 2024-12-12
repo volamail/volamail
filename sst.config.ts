@@ -1,8 +1,5 @@
 /// <reference path="./.sst/platform/config.d.ts" />
 
-import { clientEnv } from "@/modules/environment/client";
-import { serverEnv } from "@/modules/environment/server";
-
 export default $config({
 	app(input) {
 		return {
@@ -22,7 +19,7 @@ export default $config({
 		);
 
 		const email = new sst.aws.Email("Email", {
-			sender: serverEnv.NOREPLY_EMAIL,
+			sender: process.env.VITE_NOREPLY_EMAIL!,
 			events: [
 				{
 					name: "DeliveryNotification",
@@ -45,13 +42,29 @@ export default $config({
 
 		const bucket = new sst.aws.Bucket("Bucket");
 
+		const databaseUrlSecret = new sst.Secret(
+			"DatabaseUrl",
+			process.env.DATABASE_URL!,
+		);
+
+		const githubClientSecret = new sst.Secret(
+			"GithubClientSecret",
+			process.env.GITHUB_CLIENT_SECRET!,
+		);
+
 		new sst.aws.TanstackStart("Web", {
-			link: [email, bucket, sesNotificationsTopic],
+			link: [
+				email,
+				bucket,
+				sesNotificationsTopic,
+				databaseUrlSecret,
+				githubClientSecret,
+			],
 			domain: $dev
 				? undefined
 				: {
 						dns: false,
-						name: serverEnv.DOMAIN,
+						name: process.env.VITE_DOMAIN!,
 						cert: process.env.ACM_CERTIFICATE_ARN,
 					},
 			permissions: [
@@ -65,19 +78,17 @@ export default $config({
 				},
 			],
 			environment: {
-				DOMAIN: serverEnv.DOMAIN,
-				DATABASE_URL: serverEnv.DATABASE_URL,
-				GITHUB_CLIENT_ID: serverEnv.GITHUB_CLIENT_ID,
-				GITHUB_CLIENT_SECRET: serverEnv.GITHUB_CLIENT_SECRET,
-				SELF_HOSTED: serverEnv.SELF_HOSTED,
-				NOREPLY_EMAIL: serverEnv.NOREPLY_EMAIL,
-				VITE_SUPPORT_EMAIL: clientEnv.VITE_SUPPORT_EMAIL,
+				VITE_DOMAIN: process.env.VITE_DOMAIN!,
+				VITE_SELF_HOSTED: process.env.VITE_SELF_HOSTED!,
+				VITE_NOREPLY_EMAIL: process.env.VITE_NOREPLY_EMAIL!,
+				VITE_SUPPORT_EMAIL: process.env.VITE_SUPPORT_EMAIL!,
+				VITE_GITHUB_CLIENT_ID: process.env.VITE_GITHUB_CLIENT_ID!,
 			},
 		});
 
 		new sst.x.DevCommand("Studio", {
 			environment: {
-				DATABASE_URL: serverEnv.DATABASE_URL,
+				DATABASE_URL: process.env.DATABASE_URL!,
 			},
 			dev: {
 				command: "bun db studio",

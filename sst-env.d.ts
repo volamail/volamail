@@ -10,6 +10,10 @@ declare module "sst" {
       "name": string
       "type": "sst.aws.Bucket"
     }
+    "DatabaseUrl": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
     "Email": {
       "configSet": string
       "sender": string
@@ -18,6 +22,10 @@ declare module "sst" {
     "EmailNotificationsTopic": {
       "arn": string
       "type": "sst.aws.SnsTopic"
+    }
+    "GithubClientSecret": {
+      "type": "sst.sst.Secret"
+      "value": string
     }
     "Web": {
       "type": "sst.aws.TanstackStart"

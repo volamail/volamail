@@ -1,15 +1,15 @@
+import type { ExtractTablesWithRelations } from "drizzle-orm";
+import type { PgTransaction } from "drizzle-orm/pg-core";
 import {
 	type PostgresJsQueryResultHKT,
 	drizzle,
 } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
+import { Resource } from "sst";
 
-import type { ExtractTablesWithRelations } from "drizzle-orm";
-import type { PgTransaction } from "drizzle-orm/pg-core";
-import { serverEnv } from "../environment/server";
 import * as schema from "./schema";
 
-const client = postgres(serverEnv.DATABASE_URL, {
+const client = postgres(Resource.DatabaseUrl.value, {
 	prepare: false,
 });
 

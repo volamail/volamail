@@ -35,17 +35,20 @@ jobs:
       - name: Install dependencies
         run: bun install
 
+      - name: Set SST secrets
+        run: |
+          bun run sst secret set DatabaseUrl ${{ secrets.DATABASE_URL }} --stage staging
+          bun run sst secret set GithubClientSecret ${{ secrets.GH_CLIENT_ID }} --stage staging
+
       - name: Deploy to Staging
         run: bun run sst deploy --stage staging
         env:
-          SELF_HOSTED: "false"
-          DOMAIN: ${{ vars.DOMAIN }}
-          NOREPLY_EMAIL: ${{ vars.NOREPLY_EMAIL }}
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          VITE_SELF_HOSTED: "false"
+          VITE_DOMAIN: ${{ vars.DOMAIN }}
+          VITE_NOREPLY_EMAIL: ${{ vars.NOREPLY_EMAIL }}
           VITE_SUPPORT_EMAIL: ${{ vars.SUPPORT_EMAIL }}
-          GITHUB_CLIENT_ID: ${{ secrets.GH_CLIENT_ID }}
+          VITE_GITHUB_CLIENT_ID: ${{ secrets.GH_CLIENT_ID }}
           ACM_CERTIFICATE_ARN: ${{ vars.ACM_CERTIFICATE_ARN }}
-          GITHUB_CLIENT_SECRET: ${{ secrets.GH_CLIENT_SECRET }}
 
       - name: Run DB migrations
         run: bun run db migrate
