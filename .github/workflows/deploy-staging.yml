@@ -36,7 +36,7 @@ jobs:
         run: bun install
 
       - name: Deploy to Staging
-        run: bun run sst deploy --stage staging --print-logs
+        run: bun run sst deploy --stage staging
         env:
           SELF_HOSTED: "false"
           DOMAIN: ${{ vars.DOMAIN }}
@@ -46,3 +46,8 @@ jobs:
           GITHUB_CLIENT_ID: ${{ secrets.GH_CLIENT_ID }}
           ACM_CERTIFICATE_ARN: ${{ vars.ACM_CERTIFICATE_ARN }}
           GITHUB_CLIENT_SECRET: ${{ secrets.GH_CLIENT_SECRET }}
+
+      - name: Run DB migrations
+        run: bun run db migrate
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
