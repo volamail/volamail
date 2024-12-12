@@ -1,8 +1,33 @@
-CREATE TYPE "public"."email_status" AS ENUM('SENT', 'DELIVERED', 'BOUNCED', 'COMPLAINED');--> statement-breakpoint
-CREATE TYPE "public"."subscription_period_type" AS ENUM('MONTHLY', 'ANNUAL');--> statement-breakpoint
-CREATE TYPE "public"."subscription_status" AS ENUM('ACTIVE', 'CANCELED', 'PAST_DUE');--> statement-breakpoint
-CREATE TYPE "public"."subscription_tier" AS ENUM('FREE', 'PRO', 'CUSTOM');--> statement-breakpoint
-CREATE TYPE "public"."template_languages" AS ENUM('en', 'it', 'fr', 'es', 'de');--> statement-breakpoint
+DO $$ BEGIN
+	CREATE TYPE "public"."email_status" AS ENUM('SENT', 'DELIVERED', 'BOUNCED', 'COMPLAINED');--> statement-breakpoint
+EXCEPTION
+	WHEN duplicate_object THEN null;
+END $$;
+
+DO $$ BEGIN
+	CREATE TYPE "public"."subscription_period_type" AS ENUM('MONTHLY', 'ANNUAL');--> statement-breakpoint
+EXCEPTION
+	WHEN duplicate_object THEN null;
+END $$;
+
+DO $$ BEGIN
+	CREATE TYPE "public"."subscription_status" AS ENUM('ACTIVE', 'CANCELED', 'PAST_DUE');--> statement-breakpoint
+EXCEPTION
+	WHEN duplicate_object THEN null;
+END $$;
+
+DO $$ BEGIN
+	CREATE TYPE "public"."subscription_tier" AS ENUM('FREE', 'PRO', 'CUSTOM');--> statement-breakpoint
+EXCEPTION
+	WHEN duplicate_object THEN null;
+END $$;
+
+DO $$ BEGIN
+	CREATE TYPE "public"."template_languages" AS ENUM('en', 'it', 'fr', 'es', 'de');--> statement-breakpoint
+EXCEPTION
+	WHEN duplicate_object THEN null;
+END $$;
+
 CREATE TABLE IF NOT EXISTS "api_tokens" (
 	"id" text PRIMARY KEY NOT NULL,
 	"token" text NOT NULL,
