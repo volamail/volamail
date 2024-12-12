@@ -4,7 +4,7 @@ import { subscriptionsTable, teamsTable } from "../database/schema";
 import { serverEnv } from "../environment/server";
 
 export function shouldLowerQuota(teamId?: string) {
-	return serverEnv.SELF_HOSTED;
+	return serverEnv.VITE_SELF_HOSTED === "false";
 }
 
 export async function lowerTeamEmailQuota(teamId: string, amount = 1) {

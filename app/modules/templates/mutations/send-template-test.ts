@@ -56,7 +56,7 @@ export const sendTemplateTestFn = createServerFn({ method: "POST" })
 
 		const email = await sendEmail({
 			from: {
-				address: serverEnv.NOREPLY_EMAIL,
+				address: serverEnv.VITE_NOREPLY_EMAIL,
 				label: "Volamail",
 			},
 			to: user.email,
@@ -66,7 +66,7 @@ export const sendTemplateTestFn = createServerFn({ method: "POST" })
 		});
 
 		await db.insert(emailsTable).values({
-			from: serverEnv.NOREPLY_EMAIL,
+			from: serverEnv.VITE_NOREPLY_EMAIL,
 			to: user.email,
 			subject: template.subject,
 			id: email.MessageId!,

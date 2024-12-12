@@ -81,7 +81,7 @@ export const sendTeamInviteFn = createServerFn({
 
 		await sendEmail({
 			from: {
-				address: serverEnv.NOREPLY_EMAIL,
+				address: serverEnv.VITE_NOREPLY_EMAIL,
 				label: "Volamail",
 			},
 			to: data.email,
