@@ -29,17 +29,6 @@ export default $config({
 			],
 		});
 
-		sesNotificationsTopic.subscribe(
-			"WebEmailNotificationsSubscriber",
-			"functions/email-notifications-handler.handler",
-		);
-
-		const sesArn = await new Promise((resolve) => {
-			email.nodes.identity.arn.apply((arn) => {
-				resolve(arn.split("/")[0]);
-			});
-		});
-
 		const bucket = new sst.aws.Bucket("Bucket");
 
 		const databaseUrlSecret = new sst.Secret(
@@ -51,6 +40,17 @@ export default $config({
 			"GithubClientSecret",
 			process.env.GITHUB_CLIENT_SECRET!,
 		);
+
+		sesNotificationsTopic.subscribe("WebEmailNotificationsSubscriber", {
+			handler: "functions/email-notifications-handler.handler",
+			link: [databaseUrlSecret],
+		});
+
+		const sesArn = await new Promise((resolve) => {
+			email.nodes.identity.arn.apply((arn) => {
+				resolve(arn.split("/")[0]);
+			});
+		});
 
 		new sst.aws.TanstackStart("Web", {
 			link: [
