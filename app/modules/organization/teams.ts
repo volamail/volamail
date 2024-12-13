@@ -1,11 +1,7 @@
 import { customAlphabet } from "nanoid";
 import slugify from "slugify";
 import { db } from "../database";
-import {
-	projectsTable,
-	teamMembersTable,
-	teamsTable,
-} from "../database/schema";
+import { projectsTable, teamsTable } from "../database/schema";
 import { createFreeTierSubscription } from "../payments/subscriptions";
 
 const customNanoId = customAlphabet("01234567890abcdefghijklmnopqrstuvwxyz");
@@ -30,7 +26,6 @@ export async function generateValidTeamIdFromName(name: string) {
 export async function createTeam(params: {
 	id: string;
 	name: string;
-	userId: string;
 }) {
 	const { id, name } = params;
 
@@ -41,11 +36,6 @@ export async function createTeam(params: {
 		});
 
 		await createFreeTierSubscription(id, db);
-
-		await db.insert(teamMembersTable).values({
-			teamId: id,
-			userId: params.userId,
-		});
 
 		const [{ insertedId: projectId }] = await db
 			.insert(projectsTable)

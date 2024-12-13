@@ -21,7 +21,6 @@ export async function createUser(
 		const { defaultProjectId } = await createTeam({
 			id: teamId,
 			name: `${name}'s Team`,
-			userId: id,
 		});
 
 		const user: DbUser = {
