@@ -39,6 +39,8 @@ jobs:
         run: |
           bun run sst secret set DatabaseUrl ${{ secrets.DATABASE_URL }} --stage staging
           bun run sst secret set GithubClientSecret ${{ secrets.GH_CLIENT_SECRET }} --stage staging
+          bun run sst secret set StripeSecretKey ${{ secrets.STRIPE_SECRET_KEY }} --stage staging
+          bun run sst secret set StripeWebhookSecret ${{ secrets.STRIPE_WEBHOOK_SECRET }} --stage staging
 
       - name: Deploy to Staging
         run: bun run sst deploy --stage staging
