@@ -44,7 +44,7 @@ export function Toolbar(props: Props) {
 	);
 
 	return (
-		<div className="absolute bottom-4 left-1/2 -translate-x-1/2 hover:bottom-5 flex gap-[1px] dark:bg-gray-700 shadow-2xl shadow-black z-0 items-center rounded-full overflow-hidden transition-all opacity-50 hover:opacity-100">
+		<div className="-translate-x-1/2 absolute bottom-4 left-1/2 z-0 flex items-center gap-[1px] overflow-hidden rounded-full opacity-50 shadow-2xl shadow-black transition-all hover:bottom-5 hover:opacity-100 dark:bg-gray-700">
 			<ToolbarButton className="pl-2.5" aria-label="Add image">
 				<ImagePlusIcon className="size-4" />
 			</ToolbarButton>
@@ -101,7 +101,7 @@ function ToolbarButton({
 		<ActionButton
 			color="neutral"
 			className={cn(
-				"dark:bg-gray-900 dark:text-gray-400 hover:dark:text-gray-50 rounded-none border-none",
+				"rounded-none border-none dark:bg-gray-900 dark:text-gray-400 hover:dark:text-gray-50",
 				active && "dark:bg-gray-700 dark:text-gray-300",
 				className,
 			)}

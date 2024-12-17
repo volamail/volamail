@@ -6,8 +6,8 @@ import { Label } from "./label";
 const styles = tv({
 	slots: {
 		container: "flex flex-col gap-1",
-		hint: "text-xs text-gray-600 dark:text-gray-400",
-		error: "text-xs text-red-500 dark:text-red-400",
+		hint: "text-gray-600 text-xs dark:text-gray-400",
+		error: "text-red-500 text-xs dark:text-red-400",
 	},
 });
 

@@ -23,8 +23,8 @@ function RouteComponent() {
 	const { data: team } = useSuspenseQuery(teamQueryOptions(params.teamId));
 
 	return (
-		<div className="flex flex-col items-center justify-start h-full py-16 px-8">
-			<div className="flex flex-col gap-8 w-full max-w-3xl">
+		<div className="flex h-full flex-col items-center justify-start px-8 py-16">
+			<div className="flex w-full max-w-3xl flex-col gap-8">
 				<DashboardPageHeader
 					title="Billing"
 					description="Manage your team's billing information and subscription"
@@ -32,24 +32,24 @@ function RouteComponent() {
 
 				<section className="flex flex-col rounded-xl border dark:border-gray-700 dark:bg-gray-900">
 					<div className="flex flex-col gap-8 p-8">
-						<div className="flex justify-between items-start gap-4">
+						<div className="flex items-start justify-between gap-4">
 							<div className="flex flex-col gap-1">
-								<h3 className="text-lg font-medium">
-									{team.subscription!.tier === "FREE" ? "Free" : "Pro"} plan
+								<h3 className="font-medium text-lg">
+									{team.subscription?.tier === "FREE" ? "Free" : "Pro"} plan
 								</h3>
 								<p className="text-sm dark:text-gray-400">
-									{team.subscription!.tier === "FREE"
+									{team.subscription?.tier === "FREE"
 										? "Our free plan offers 500 emails per month, 20MB of image storage, 2 projects and 1 domain per project."
-										: team.subscription!.tier === "PRO"
+										: team.subscription?.tier === "PRO"
 											? "Our pro plan offers 1000 emails per month, 5 projects and 3 domains per project."
 											: "Customized plan"}
 								</p>
 							</div>
 
-							<span className="text-3xl font-medium shrink-0">
-								${team.subscription!.price}{" "}
-								<span className="text-sm font-normal">
-									{team.subscription!.periodType === "MONTHLY"
+							<span className="shrink-0 font-medium text-3xl">
+								${team.subscription?.price}{" "}
+								<span className="font-normal text-sm">
+									{team.subscription?.periodType === "MONTHLY"
 										? "per month"
 										: "per year"}
 								</span>
@@ -57,32 +57,32 @@ function RouteComponent() {
 						</div>
 
 						<Progress.Root
-							className="w-full flex flex-col gap-2"
+							className="flex w-full flex-col gap-2"
 							value={
-								team.subscription!.monthlyQuota -
-								team.subscription!.remainingQuota
+								team.subscription?.monthlyQuota -
+								team.subscription?.remainingQuota
 							}
 							min={0}
-							max={team.subscription!.monthlyQuota}
+							max={team.subscription?.monthlyQuota}
 						>
 							<Progress.ValueText className="font-medium text-sm">
-								{team.subscription!.monthlyQuota -
-									team.subscription!.remainingQuota}{" "}
-								of {team.subscription!.monthlyQuota} emails sent
+								{team.subscription?.monthlyQuota -
+									team.subscription?.remainingQuota}{" "}
+								of {team.subscription?.monthlyQuota} emails sent
 							</Progress.ValueText>
-							<Progress.Track className="bg-gray-600 w-full h-2.5 rounded-full relative">
-								<Progress.Range className="bg-green-500 h-full rounded-full" />
+							<Progress.Track className="relative h-2.5 w-full rounded-full bg-gray-600">
+								<Progress.Range className="h-full rounded-full bg-green-500" />
 							</Progress.Track>
 						</Progress.Root>
 
 						<Progress.Root
-							className="w-full flex flex-col gap-2"
+							className="flex w-full flex-col gap-2"
 							value={team.projects.length}
 							min={0}
-							max={team.subscription!.maxProjects}
+							max={team.subscription?.maxProjects}
 						>
 							<Progress.ValueText className="font-medium text-sm">
-								{team.projects.length} of {team.subscription!.maxProjects}{" "}
+								{team.projects.length} of {team.subscription?.maxProjects}{" "}
 								projects used
 							</Progress.ValueText>
 							<Progress.Track className="relative h-2.5 w-full rounded-full bg-gray-600">

@@ -21,7 +21,13 @@
     "rules": {
       "recommended": true,
       "style": {
-        "noNonNullAssertion": "info"
+        "noNonNullAssertion": "off"
+      },
+      "a11y": {
+        "noSvgWithoutTitle": "off"
+      },
+      "correctness": {
+        "noUnknownFunction": "off"
       },
       "nursery": {
         "useSortedClasses": {

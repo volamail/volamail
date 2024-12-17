@@ -47,13 +47,13 @@ function RouteComponent() {
 	);
 
 	return (
-		<div className="flex flex-col h-dvh">
+		<div className="flex h-dvh flex-col">
 			<EditorStoreProvider
 				defaultLanguage={template.defaultTranslation.language}
 				theme={template.theme}
 				template={template}
 			>
-				<div className="p-3 flex justify-between items-center border-b dark:border-gray-800">
+				<div className="flex items-center justify-between border-b p-3 dark:border-gray-800">
 					<div className="flex flex-col">
 						<h3 className="font-medium">{template.slug}</h3>
 						<p className="text-gray-500 text-sm">
@@ -173,7 +173,7 @@ function EditTemplateActions() {
 	}
 
 	return (
-		<div className="flex gap-4 items-center">
+		<div className="flex items-center gap-4">
 			<Menu
 				placement="bottom-end"
 				trigger={
@@ -204,7 +204,7 @@ function EditTemplateActions() {
 				</MenuItem>
 			</Menu>
 
-			<div className="flex gap-2 items-center">
+			<div className="flex items-center gap-2">
 				<Button
 					type="button"
 					color="neutral"

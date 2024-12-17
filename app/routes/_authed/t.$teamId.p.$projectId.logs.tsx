@@ -54,8 +54,8 @@ function RouteComponent() {
 	);
 
 	return (
-		<div className="py-16 px-8 grow">
-			<div className="flex flex-col max-w-3xl mx-auto gap-8">
+		<div className="grow px-8 py-16">
+			<div className="mx-auto flex max-w-3xl flex-col gap-8">
 				<DashboardPageHeader
 					title="Logs"
 					description="List of emails sent from this project."
@@ -102,7 +102,7 @@ function RouteComponent() {
 									))}
 								</TableBody>
 							</Table>
-							<div className="flex justify-between items-center">
+							<div className="flex items-center justify-between">
 								<span className="text-sm dark:text-gray-500">
 									Showing {logs.rows.length} of {logs.total} logs
 								</span>

@@ -5,21 +5,21 @@ import { ThemeTab } from "./theme-tab";
 
 export function Sidebar() {
 	return (
-		<div className="w-60 border-r dark:border-gray-800 p-3">
+		<div className="w-60 border-r p-3 dark:border-gray-800">
 			<Tabs.Root defaultValue="theme" className="flex flex-col gap-3">
 				<div className="flex justify-center">
-					<Tabs.List className="w-full flex bg-gray-800/50 rounded-lg p-1">
-						<Tabs.Indicator className="bg-gray-700/50 border border-gray-700 w-[var(--width)] h-[var(--height)] rounded-md z-0" />
+					<Tabs.List className="flex w-full rounded-lg bg-gray-800/50 p-1">
+						<Tabs.Indicator className="z-0 h-[var(--height)] w-[var(--width)] rounded-md border border-gray-700 bg-gray-700/50" />
 						<Tabs.Trigger
 							value="theme"
-							className="inline-flex gap-2 items-center justify-center grow z-10 transition-colors text-sm py-1.5 px-3 text-gray-500 data-[selected]:text-gray-50 hover:dark:text-gray-400"
+							className="z-10 inline-flex grow items-center justify-center gap-2 px-3 py-1.5 text-gray-500 text-sm transition-colors data-[selected]:text-gray-50 hover:dark:text-gray-400"
 						>
 							Theme
 							<PaletteIcon className="size-4" />
 						</Tabs.Trigger>
 						<Tabs.Trigger
 							value="locales"
-							className="inline-flex gap-2 items-center justify-center grow z-10 transition-colors text-sm py-1.5 px-3 text-gray-500 data-[selected]:text-gray-50 hover:dark:text-gray-400"
+							className="z-10 inline-flex grow items-center justify-center gap-2 px-3 py-1.5 text-gray-500 text-sm transition-colors data-[selected]:text-gray-50 hover:dark:text-gray-400"
 						>
 							Locale
 							<LanguagesIcon className="size-4" />

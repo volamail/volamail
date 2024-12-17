@@ -8,11 +8,11 @@ interface Props {
 }
 
 const styles = tv({
-	base: "rounded-lg border border-dashed dark:border-gray-700 text-center dark:bg-gray-900 p-4 flex flex-col gap-8 items-center py-16",
+	base: "flex flex-col items-center gap-8 rounded-lg border border-dashed p-4 py-16 text-center dark:border-gray-700 dark:bg-gray-900",
 	slots: {
-		header: "flex flex-col gap-2 items-center",
+		header: "flex flex-col items-center gap-2",
 		title: "dark:text-gray-50",
-		description: "dark:text-gray-400 text-sm max-w-xs",
+		description: "max-w-xs text-sm dark:text-gray-400",
 	},
 });
 

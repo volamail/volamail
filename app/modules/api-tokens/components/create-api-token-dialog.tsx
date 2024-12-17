@@ -57,7 +57,7 @@ export function CreateApiTokenDialog(props: Props) {
 							Here's the generated API token:
 						</p>
 
-						<div className="font-mono dark:bg-gray-700 text-center flex justify-center items-center p-4 rounded-md text-xs">
+						<div className="flex items-center justify-center rounded-md p-4 text-center font-mono text-xs dark:bg-gray-700">
 							{mutation.data}
 						</div>
 
@@ -95,7 +95,7 @@ export function CreateApiTokenDialog(props: Props) {
 							<TextInput {...register("description")} />
 						</FormGroup>
 
-						<div className="flex gap-2 justify-end mt-4">
+						<div className="mt-4 flex justify-end gap-2">
 							<DialogCloseTrigger asChild>
 								<Button color="neutral">Cancel</Button>
 							</DialogCloseTrigger>

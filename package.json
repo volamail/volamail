@@ -6,6 +6,8 @@
     "db": "drizzle-kit",
     "dev": "vinxi dev",
     "docker:dev": "docker compose up -d",
+    "format": "biome format ./app",
+    "lint": "biome lint ./app",
     "start": "vinxi start"
   },
   "dependencies": {

@@ -29,8 +29,8 @@ export function DeleteTemplateDialog(
 			navigate({
 				to: "/t/$teamId/p/$projectId/templates",
 				params: {
-					teamId: dynamicProps!.teamId,
-					projectId: dynamicProps!.projectId,
+					teamId: dynamicProps?.teamId,
+					projectId: dynamicProps?.projectId,
 				},
 			});
 		},
@@ -44,7 +44,7 @@ export function DeleteTemplateDialog(
 					undone.
 				</p>
 
-				<div className="flex justify-end gap-2 mt-6">
+				<div className="mt-6 flex justify-end gap-2">
 					<DialogCloseTrigger asChild>
 						<Button color="neutral">Cancel</Button>
 					</DialogCloseTrigger>
@@ -55,9 +55,9 @@ export function DeleteTemplateDialog(
 						onClick={() =>
 							mutation.mutate({
 								data: {
-									teamId: dynamicProps!.teamId,
-									projectId: dynamicProps!.projectId,
-									slug: dynamicProps!.slug,
+									teamId: dynamicProps?.teamId,
+									projectId: dynamicProps?.projectId,
+									slug: dynamicProps?.slug,
 								},
 							})
 						}

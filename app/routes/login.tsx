@@ -23,11 +23,11 @@ function RouteComponent() {
 	});
 
 	return (
-		<GridBgContainer className="h-dvh flex flex-col items-center justify-center bg-grid-small-black/10 dark:bg-grid-small-white/10">
-			<main className="z-10 max-w-sm rounded-lg w-full shadow-2xl border flex flex-col gap-6 border-gray-300 dark:border-gray-700 bg-gradient-to-br dark:from-gray-900 dark:to-gray-950 p-12">
+		<GridBgContainer className="flex h-dvh flex-col items-center justify-center bg-grid-small-black/10 dark:bg-grid-small-white/10">
+			<main className="z-10 flex w-full max-w-sm flex-col gap-6 rounded-lg border border-gray-300 bg-gradient-to-br p-12 shadow-2xl dark:border-gray-700 dark:from-gray-900 dark:to-gray-950">
 				<div className="flex flex-col gap-2">
-					<h1 className="text-2xl font-semibold">Login</h1>
-					<p className="text-gray-600 dark:text-gray-400 text-sm">
+					<h1 className="font-semibold text-2xl">Login</h1>
+					<p className="text-gray-600 text-sm dark:text-gray-400">
 						Welcome to Volamail, please sign in to continue.
 					</p>
 				</div>
@@ -42,17 +42,17 @@ function RouteComponent() {
 					Sign in with Github
 				</Button>
 			</main>
-			<footer className="text-gray-500 dark:text-gray-600 text-xs mt-4">
+			<footer className="mt-4 text-gray-500 text-xs dark:text-gray-600">
 				<a
 					href="https://docs.volamail.com/legal/privacy-policy"
-					className="hover:dark:text-gray-400 transition-colors"
+					className="transition-colors hover:dark:text-gray-400"
 				>
 					Privacy
 				</a>
 				<span className="mx-2">•</span>
 				<a
 					href="https://docs.volamail.com/legal/terms-of-service"
-					className="hover:dark:text-gray-400 transition-colors"
+					className="transition-colors hover:dark:text-gray-400"
 				>
 					Terms
 				</a>

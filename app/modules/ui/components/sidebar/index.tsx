@@ -36,10 +36,10 @@ export function Sidebar(props: SidebarProps) {
 	}
 
 	return (
-		<nav className="sticky top-0 h-dvh self-stretch dark:bg-gray-950 w-64 p-4 flex flex-col gap-6 border-r dark:border-gray-800">
+		<nav className="sticky top-0 flex h-dvh w-64 flex-col gap-6 self-stretch border-r p-4 dark:border-gray-800 dark:bg-gray-950">
 			<ProjectSwitch teams={props.teams} current={props.current} />
 
-			<div className="flex flex-col gap-6 grow">
+			<div className="flex grow flex-col gap-6">
 				<SidebarSection
 					title="Project"
 					links={[

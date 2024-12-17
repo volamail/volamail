@@ -19,7 +19,7 @@ export const LocalesTab = observer(() => {
 
 	return (
 		<div className="flex flex-col gap-2 overflow-hidden">
-			<ul className="flex flex-col rounded-lg bg-gray-800/50 border dark:border-gray-700 overflow-hidden">
+			<ul className="flex flex-col overflow-hidden rounded-lg border bg-gray-800/50 dark:border-gray-700">
 				{store.template.sortedTranslations.map((translation) => (
 					<LocaleTabItem
 						key={translation.language}
@@ -61,12 +61,12 @@ export const LocalesTab = observer(() => {
 					</Select.Control>
 					<Portal>
 						<Select.Positioner>
-							<Select.Content className="shadow-xl dark:bg-gray-800 overflow-hidden rounded-lg border dark:border-gray-700 w-[var(--reference-width)] data-[state=open]:animate-in data-[state=open]:fade-in data-[state=open]:slide-in-from-top-2 data-[state=closed]:animate-out data-[state=closed]:fade-out">
+							<Select.Content className="data-[state=open]:fade-in data-[state=open]:slide-in-from-top-2 data-[state=closed]:fade-out w-[var(--reference-width)] overflow-hidden rounded-lg border shadow-xl data-[state=closed]:animate-out data-[state=open]:animate-in dark:border-gray-700 dark:bg-gray-800">
 								{availableLanguagesCollection.items.map((item) => (
 									<Select.Item
 										key={item.value}
 										item={item}
-										className="flex cursor-default gap-2 data-[highlighted]:bg-gray-700 transition-colors items-center p-2.5 border-b dark:border-gray-700 last:border-b-0 text-sm"
+										className="flex cursor-default items-center gap-2 border-b p-2.5 text-sm transition-colors last:border-b-0 data-[highlighted]:bg-gray-700 dark:border-gray-700"
 									>
 										<TemplateLanguageIcon lang={item.value} />
 										<Select.ItemText>{item.label}</Select.ItemText>

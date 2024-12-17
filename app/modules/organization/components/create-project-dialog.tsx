@@ -78,7 +78,7 @@ export function CreateProjectDialog(
 			await navigate({
 				to: "/t/$teamId/p/$projectId/templates",
 				params: {
-					teamId: props.dynamicProps!.teamId,
+					teamId: props.dynamicProps?.teamId,
 					projectId: data.data.id,
 				},
 			});
@@ -90,7 +90,7 @@ export function CreateProjectDialog(
 			data: {
 				id: values.id,
 				name: values.name,
-				teamId: props.dynamicProps!.teamId,
+				teamId: props.dynamicProps?.teamId,
 			},
 		});
 	}
@@ -152,7 +152,7 @@ export function CreateProjectDialog(
 							</Callout>
 						)}
 
-						<div className="flex gap-2 items-center justify-end mt-4">
+						<div className="mt-4 flex items-center justify-end gap-2">
 							<DialogCloseTrigger asChild>
 								<Button color="neutral">Cancel</Button>
 							</DialogCloseTrigger>

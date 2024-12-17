@@ -29,10 +29,10 @@ export const RichTextEditor = observer(() => {
 	);
 
 	return (
-		<div className="grow flex flex-col relative min-h-0">
+		<div className="relative flex min-h-0 grow flex-col">
 			<EditorContent
 				editor={editor}
-				className="grow relative p-16 overflow-y-auto min-h-0"
+				className="relative min-h-0 grow overflow-y-auto p-16"
 				style={{
 					background: store.theme.background,
 					// @ts-expect-error: CSS variable

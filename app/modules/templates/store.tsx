@@ -56,7 +56,6 @@ const Template = types
 			self.currentLanguage = language;
 		},
 		setDefaultTranslation(language: TemplateLanguage) {
-			// biome-ignore lint/style/noNonNullAssertion: should be ok?
 			const translation = clone(self.translations.get(language)!);
 
 			const prevDefault = clone(self.defaultTranslation);

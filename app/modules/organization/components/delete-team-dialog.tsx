@@ -70,12 +70,12 @@ export function DeleteTeamDialog(props: Props) {
 						}),
 					)}
 				>
-					<p className="text-sm text-gray-500">
+					<p className="text-gray-500 text-sm">
 						Are you sure you want to delete this team? This action cannot be
 						undone.
 					</p>
 
-					<p className="text-sm text-gray-500 mt-4">
+					<p className="mt-4 text-gray-500 text-sm">
 						Type{" "}
 						<span className="rounded dark:text-gray-300">
 							{props.teamId.toLowerCase()}
@@ -90,7 +90,7 @@ export function DeleteTeamDialog(props: Props) {
 						<TextInput {...form.register("confirm")} />
 					</FormGroup>
 
-					<div className="flex justify-end space-x-2 mt-6">
+					<div className="mt-6 flex justify-end space-x-2">
 						<DialogCloseTrigger asChild>
 							<Button color="neutral" type="button">
 								Cancel

@@ -28,8 +28,8 @@ function Home() {
   )
 
   return (
-    <div className="py-16 px-8 grow">
-      <div className="flex flex-col max-w-3xl mx-auto gap-8">
+    <div className="grow px-8 py-16">
+      <div className="mx-auto flex max-w-3xl flex-col gap-8">
         <DashboardPageHeader
           title="Templates"
           description="List of templates defined in this project."
@@ -48,30 +48,30 @@ function Home() {
         />
 
         {templates.length > 0 ? (
-          <ul className="flex flex-col md:grid grid-cols-2 gap-4 content-stretch">
+          <ul className="flex grid-cols-2 flex-col content-stretch gap-4 md:grid">
             {templates.map((template) => (
               <li key={template.slug}>
                 <Link
-                  className="flex flex-col h-full gap-6 justify-start p-6 dark:bg-gray-800 hover:dark:bg-gray-700 transition-colors border dark:border-gray-700 rounded-lg"
+                  className="flex h-full flex-col justify-start gap-6 rounded-lg border p-6 transition-colors dark:border-gray-700 dark:bg-gray-800 hover:dark:bg-gray-700"
                   to="/t/$teamId/p/$projectId/templates/$slug"
                   params={{ ...params, slug: template.slug }}
                 >
-                  <div className="grow flex flex-col gap-2">
-                    <span className="dark:text-gray-50 font-medium">
+                  <div className="flex grow flex-col gap-2">
+                    <span className="font-medium dark:text-gray-50">
                       {template.slug}
                     </span>
 
-                    <span className="text-xs dark:text-gray-400 italic line-clamp-3">
+                    <span className="line-clamp-3 text-xs italic dark:text-gray-400">
                       {template.defaultTranslation.contents}
                     </span>
                   </div>
 
-                  <div className="flex flex-col gap-1 items-start text-xs dark:text-gray-500">
+                  <div className="flex flex-col items-start gap-1 text-xs dark:text-gray-500">
                     <div className="flex items-center gap-1">
                       <LanguagesIcon className="size-3.5" />
                       {template.translationCount} translations
                     </div>
-                    <div className="text-xs text-gray-500 inline-flex gap-1 items-center">
+                    <div className="inline-flex items-center gap-1 text-gray-500 text-xs">
                       <PencilIcon className="size-3.5" />
                       {new Date(template.createdAt).toLocaleString('en-US', {
                         dateStyle: 'short',

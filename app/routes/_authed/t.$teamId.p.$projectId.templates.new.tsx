@@ -41,12 +41,12 @@ function RouteComponent() {
 	const { project } = Route.useLoaderData();
 
 	return (
-		<div className="flex flex-col h-dvh">
+		<div className="flex h-dvh flex-col">
 			<EditorStoreProvider
 				defaultLanguage={project.defaultTemplateLanguage}
 				theme={project.defaultTheme}
 			>
-				<div className="p-3 flex justify-between items-center border-b dark:border-gray-800">
+				<div className="flex items-center justify-between border-b p-3 dark:border-gray-800">
 					<div className="flex flex-col">
 						<h3 className="font-medium">New template</h3>
 						<p className="text-gray-500 text-sm">
@@ -152,7 +152,7 @@ function NewTemplateActions(props) {
 	}
 
 	return (
-		<div className="flex gap-2 items-center">
+		<div className="flex items-center gap-2">
 			<Button
 				color="neutral"
 				trailing={<SendIcon className="size-4" />}
@@ -171,7 +171,7 @@ function NewTemplateActions(props) {
 					</Button>
 				</DialogTrigger>
 				<DialogContent title="Create template">
-					<p className="dark:text-gray-400 text-sm">
+					<p className="text-sm dark:text-gray-400">
 						Enter a name to identify this template.
 					</p>
 
@@ -190,7 +190,7 @@ function NewTemplateActions(props) {
 							/>
 						</FormGroup>
 
-						<div className="flex gap-2 justify-end">
+						<div className="flex justify-end gap-2">
 							<DialogCloseTrigger asChild>
 								<Button color="neutral">Cancel</Button>
 							</DialogCloseTrigger>

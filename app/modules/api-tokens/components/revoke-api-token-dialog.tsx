@@ -60,7 +60,7 @@ export function RevokeApiTokenDialog(props: Props) {
 					This action cannot be undone.
 				</p>
 
-				<div className="mt-6 flex justify-end gap-2 items-center">
+				<div className="mt-6 flex items-center justify-end gap-2">
 					<DialogCloseTrigger asChild>
 						<Button color="neutral">Cancel</Button>
 					</DialogCloseTrigger>

@@ -22,7 +22,7 @@ export function RevokeTeamInviteDialog(
 		mutationFn: revokeTeamInviteFn,
 		async onSuccess() {
 			await queryClient.invalidateQueries(
-				teamInvitesOptions(props.dynamicProps!.teamId),
+				teamInvitesOptions(props.dynamicProps?.teamId),
 			);
 
 			toast.success("Invite revoked");
@@ -54,7 +54,7 @@ export function RevokeTeamInviteDialog(
 					them if you want them to join your team.
 				</p>
 
-				<div className="flex justify-end gap-2 mt-6">
+				<div className="mt-6 flex justify-end gap-2">
 					<DialogCloseTrigger asChild>
 						<Button color="neutral">Cancel</Button>
 					</DialogCloseTrigger>
@@ -63,8 +63,8 @@ export function RevokeTeamInviteDialog(
 						loading={mutation.isPending}
 						onClick={() =>
 							mutation.mutate({
-								teamId: props.dynamicProps!.teamId,
-								email: props.dynamicProps!.email,
+								teamId: props.dynamicProps?.teamId,
+								email: props.dynamicProps?.email,
 							})
 						}
 					>

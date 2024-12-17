@@ -35,11 +35,10 @@ export function SidebarUserSection() {
 		<div className="flex items-center gap-2">
 			<Avatar
 				src={user?.avatarUrl}
-				// biome-ignore lint/style/noNonNullAssertion: current user is loaded in layout
 				fallback={user!.name.charAt(0).toUpperCase()}
 			/>
-			<div className="flex flex-col grow">
-				<span className="text-sm font-medium dark:text-gray-50 text-gray-900 grow">
+			<div className="flex grow flex-col">
+				<span className="grow font-medium text-gray-900 text-sm dark:text-gray-50">
 					{user?.name}
 				</span>
 				<span className="text-gray-500 text-xs">Admin</span>

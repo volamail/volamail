@@ -80,14 +80,14 @@ export function ProjectSwitch(props: ProjectSwitchProps) {
 	return (
 		<>
 			<Menu.Root onSelect={handleTeamMenuSelect}>
-				<Menu.Trigger className="min-w-0 truncate w-full flex gap-2.5 justify-start items-center px-2.5 py-1.5 text-sm rounded-lg border dark:border-gray-800 dark:bg-gray-900 hover:dark:bg-gray-800 transition-colors outline-none focus-visible:ring-[1px] ring-primary-600">
+				<Menu.Trigger className="flex w-full min-w-0 items-center justify-start gap-2.5 truncate rounded-lg border px-2.5 py-1.5 text-sm outline-none ring-primary-600 transition-colors focus-visible:ring-[1px] dark:border-gray-800 dark:bg-gray-900 hover:dark:bg-gray-800">
 					{currentProject?.name ? (
 						<>
 							<Avatar
 								fallback={currentProject?.initials || "?"}
 								className="shrink-0"
 							/>
-							<div className="flex flex-col text-left items-start grow min-w-0 truncate">
+							<div className="flex min-w-0 grow flex-col items-start truncate text-left">
 								<span className="text-xs dark:text-gray-400">
 									{currentProject.team.name}
 								</span>
@@ -100,9 +100,9 @@ export function ProjectSwitch(props: ProjectSwitchProps) {
 					<ChevronsUpDownIcon className="size-4 shrink-0" />
 				</Menu.Trigger>
 				<Menu.Positioner>
-					<Menu.Content className="w-[--reference-width] rounded-md border dark:border-gray-800 dark:bg-gray-900 data-[state=open]:animate-in data-[state=open]:fade-in data-[state=open]:slide-in-from-top-1 data-[state=closed]:animate-out data-[state=closed]:fade-out outline-none">
-						<Menu.ItemGroup className="p-1.5 flex flex-col">
-							<Menu.ItemGroupLabel className="text-xs py-1.5 px-2 dark:text-gray-500">
+					<Menu.Content className="data-[state=open]:fade-in data-[state=open]:slide-in-from-top-1 data-[state=closed]:fade-out w-[--reference-width] rounded-md border outline-none data-[state=closed]:animate-out data-[state=open]:animate-in dark:border-gray-800 dark:bg-gray-900">
+						<Menu.ItemGroup className="flex flex-col p-1.5">
+							<Menu.ItemGroupLabel className="px-2 py-1.5 text-xs dark:text-gray-500">
 								Teams
 							</Menu.ItemGroupLabel>
 							<div className="flex flex-col gap-0.5">
@@ -112,7 +112,7 @@ export function ProjectSwitch(props: ProjectSwitchProps) {
 										key={team.id}
 										positioning={{ placement: "right-start", gutter: 14 }}
 									>
-										<Menu.TriggerItem className="text-sm inline-flex gap-2 items-center justify-between rounded-md py-1.5 cursor-default transition-colors px-2 data-[highlighted]:dark:bg-gray-800">
+										<Menu.TriggerItem className="inline-flex cursor-default items-center justify-between gap-2 rounded-md px-2 py-1.5 text-sm transition-colors data-[highlighted]:dark:bg-gray-800">
 											{team.name}
 											<ChevronRightIcon
 												className={cn(
@@ -124,9 +124,9 @@ export function ProjectSwitch(props: ProjectSwitchProps) {
 										</Menu.TriggerItem>
 										<Portal>
 											<Menu.Positioner>
-												<Menu.Content className="shadow w-[--reference-width] rounded-md border dark:border-gray-800 dark:bg-gray-900 data-[state=open]:animate-in data-[state=open]:fade-in data-[state=open]:slide-in-from-top-1 data-[state=closed]:animate-out data-[state=closed]:fade-out outline-none">
-													<Menu.ItemGroup className="p-1.5 flex flex-col">
-														<Menu.ItemGroupLabel className="text-xs py-1.5 px-2 dark:text-gray-500">
+												<Menu.Content className="data-[state=open]:fade-in data-[state=open]:slide-in-from-top-1 data-[state=closed]:fade-out w-[--reference-width] rounded-md border shadow outline-none data-[state=closed]:animate-out data-[state=open]:animate-in dark:border-gray-800 dark:bg-gray-900">
+													<Menu.ItemGroup className="flex flex-col p-1.5">
+														<Menu.ItemGroupLabel className="px-2 py-1.5 text-xs dark:text-gray-500">
 															{team.name}
 														</Menu.ItemGroupLabel>
 														<div className="flex flex-col gap-0.5">
@@ -155,7 +155,7 @@ export function ProjectSwitch(props: ProjectSwitchProps) {
 														</div>
 													</Menu.ItemGroup>
 													<Menu.Separator className="dark:border-gray-800" />
-													<Menu.ItemGroup className="p-1.5 flex flex-col">
+													<Menu.ItemGroup className="flex flex-col p-1.5">
 														{team.projects.length < 3 ? (
 															<MenuItem value={`${team.id}:create-project`}>
 																Create project
@@ -197,7 +197,7 @@ export function ProjectSwitch(props: ProjectSwitchProps) {
 						</Menu.ItemGroup>
 
 						<Menu.Separator className="dark:border-gray-800" />
-						<Menu.ItemGroup className="p-1.5 flex flex-col">
+						<Menu.ItemGroup className="flex flex-col p-1.5">
 							{props.teams.length < 3 ? (
 								<MenuItem value="create-team">
 									Create team
@@ -230,7 +230,7 @@ function MenuItem({ className, ...props }: MenuItemProps) {
 		<Menu.Item
 			{...props}
 			className={cn(
-				"text-sm inline-flex aria-[disabled=true]:opacity-50 aria-[disabled=true]:dark:hover:bg-gray-800 gap-2 dark:text-gray-50 items-center justify-between rounded-md py-1.5 cursor-default transition-colors px-2 data-[highlighted]:dark:bg-gray-800",
+				"inline-flex cursor-default items-center justify-between gap-2 rounded-md px-2 py-1.5 text-sm transition-colors aria-[disabled=true]:opacity-50 dark:text-gray-50 data-[highlighted]:dark:bg-gray-800 aria-[disabled=true]:dark:hover:bg-gray-800",
 				className,
 			)}
 		/>

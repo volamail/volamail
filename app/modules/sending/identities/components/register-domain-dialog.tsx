@@ -81,7 +81,7 @@ export function RegisterDomainDialog(props: Props) {
 						<TextInput {...form.register("domain")} placeholder="example.com" />
 					</FormGroup>
 
-					<div className="flex gap-2 justify-end mt-4">
+					<div className="mt-4 flex justify-end gap-2">
 						<DialogCloseTrigger asChild>
 							<Button color="neutral">Cancel</Button>
 						</DialogCloseTrigger>

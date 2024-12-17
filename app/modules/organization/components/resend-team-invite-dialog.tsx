@@ -22,7 +22,7 @@ export function ResendTeamInviteDialog(
 		mutationFn: sendTeamInviteFn,
 		async onSuccess() {
 			await queryClient.invalidateQueries(
-				teamInvitesOptions(props.dynamicProps!.teamId),
+				teamInvitesOptions(props.dynamicProps?.teamId),
 			);
 
 			toast.success("Invite resent");
@@ -50,7 +50,7 @@ export function ResendTeamInviteDialog(
 					new email with the invite link.
 				</p>
 
-				<div className="flex justify-end gap-2 mt-6">
+				<div className="mt-6 flex justify-end gap-2">
 					<DialogCloseTrigger asChild>
 						<Button color="neutral">Cancel</Button>
 					</DialogCloseTrigger>

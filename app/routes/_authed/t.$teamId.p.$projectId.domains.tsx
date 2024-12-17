@@ -42,7 +42,7 @@ function RouteComponent() {
 					description="Manage the domains registered for this project"
 					trailing={
 						domains.length > 0 &&
-						(domains.length < team.subscription!.maxDomains ? (
+						(domains.length < team.subscription?.maxDomains ? (
 							<RegisterDomainDialog
 								teamId={params.teamId}
 								projectId={params.projectId}
@@ -68,24 +68,24 @@ function RouteComponent() {
 				/>
 
 				{domains.length > 0 ? (
-					<ul className="flex flex-col gap-4 w-full">
+					<ul className="flex w-full flex-col gap-4">
 						{domains.map((domain) => (
 							<li
 								key={domain.id}
-								className="relative w-full flex items-center gap-4 border dark:border-gray-700 dark:bg-gray-900 rounded-xl p-6"
+								className="relative flex w-full items-center gap-4 rounded-xl border p-6 dark:border-gray-700 dark:bg-gray-900"
 							>
 								<DeleteDomainDialog
 									teamId={params.teamId}
 									projectId={params.projectId}
 									domainId={domain.id}
 								/>
-								<div className="flex flex-col gap-6 w-full">
-									<div className="font-bold dark:text-gray-50 text-xl inline-flex items-center gap-4">
+								<div className="flex w-full flex-col gap-6">
+									<div className="inline-flex items-center gap-4 font-bold text-xl dark:text-gray-50">
 										<p>{domain.domain}</p>
 									</div>
 
-									<div className="grid grid-cols-2 gap-2 items-center justify-items-start self-start">
-										<span className="dark:text-gray-400 text-sm">Status:</span>
+									<div className="grid grid-cols-2 items-center justify-items-start gap-2 self-start">
+										<span className="text-sm dark:text-gray-400">Status:</span>
 										<Badge color={domain.verified ? "green" : "yellow"}>
 											{domain.verified ? (
 												"Verified"
@@ -96,20 +96,20 @@ function RouteComponent() {
 												</>
 											)}
 										</Badge>
-										<span className="dark:text-gray-400 text-sm">
+										<span className="text-sm dark:text-gray-400">
 											Added at:
 										</span>
-										<p className="dark:text-gray-50 text-sm">
+										<p className="text-sm dark:text-gray-50">
 											{new Date(domain.createdAt).toLocaleString("en-US")}
 										</p>
 									</div>
 
-									<div className="flex flex-col w-full mt-2 gap-1">
+									<div className="mt-2 flex w-full flex-col gap-1">
 										<h3 className="font-medium dark:text-gray-50">
 											DNS entries
 										</h3>
 										{!domain.verified && (
-											<p className="dark:text-gray-400 text-sm">
+											<p className="text-sm dark:text-gray-400">
 												To verify your domain, add the following DNS records to
 												your domain's DNS settings.
 											</p>
@@ -117,13 +117,13 @@ function RouteComponent() {
 										<table className="text-xs">
 											<thead className="border-b dark:border-gray-700">
 												<tr>
-													<th className="font-medium dark:text-gray-400 py-3">
+													<th className="py-3 font-medium dark:text-gray-400">
 														Type
 													</th>
-													<th className="font-medium dark:text-gray-400 py-3">
+													<th className="py-3 font-medium dark:text-gray-400">
 														Name
 													</th>
-													<th className="font-medium dark:text-gray-400 py-3">
+													<th className="py-3 font-medium dark:text-gray-400">
 														Value
 													</th>
 												</tr>
@@ -132,7 +132,7 @@ function RouteComponent() {
 												{domain.tokens.map((token) => (
 													<tr
 														key={token}
-														className="border-b dark:border-gray-800 font-mono text-[0.7rem]"
+														className="border-b font-mono text-[0.7rem] dark:border-gray-800"
 													>
 														<td className="py-3 pr-4">CNAME</td>
 														<td className="py-3 pr-4">{`${token}._domainkey.`}</td>

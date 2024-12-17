@@ -253,24 +253,24 @@ ol > li:before {
   left: 0;
 }
 
-> ul > li p {
+ul > li p {
   margin-top: 0.75em;
   margin-bottom: 0.75em;
 }
 
-> ul > li > *:first-child {
+ul > li > *:first-child {
   margin-top: 1.25em;
 }
 
-> ul > li > *:last-child {
+ul > li > *:last-child {
   margin-bottom: 1.25em;
 }
 
-> ol > li > *:first-child {
+ol > li > *:first-child {
   margin-top: 1.25em;
 }
 
-> ol > li > *:last-child {
+ol > li > *:last-child {
   margin-bottom: 1.25em;
 }
 
@@ -314,10 +314,10 @@ tbody td:last-child {
   padding-right: 0;
 }
 
-> :first-child {
+:first-child {
   margin-top: 0;
 }
 
-> :last-child {
+:last-child {
   margin-bottom: 0;
 }

@@ -89,8 +89,8 @@ function RouteComponent() {
 	});
 
 	return (
-		<div className="flex flex-col items-center justify-start h-full py-16 px-8">
-			<div className="flex flex-col gap-8 w-full max-w-3xl">
+		<div className="flex h-full flex-col items-center justify-start px-8 py-16">
+			<div className="flex w-full max-w-3xl flex-col gap-8">
 				<DashboardPageHeader
 					title="Project settings"
 					description="Manage this project's settings"
@@ -110,7 +110,7 @@ function RouteComponent() {
 						}),
 					)}
 				>
-					<div className="flex flex-col gap-1.5 md:grid md:grid-cols-2 md:gap-4 items-start">
+					<div className="flex flex-col items-start gap-1.5 md:grid md:grid-cols-2 md:gap-4">
 						<div className="flex flex-col">
 							<Label htmlFor="id">Project ID</Label>
 							<p className="text-gray-500 text-sm">
@@ -121,7 +121,7 @@ function RouteComponent() {
 							<TextInput id="id" {...form.register("id")} />
 						</FormGroup>
 					</div>
-					<div className="flex flex-col gap-1.5 md:grid md:grid-cols-2 md:gap-4 items-start">
+					<div className="flex flex-col items-start gap-1.5 md:grid md:grid-cols-2 md:gap-4">
 						<div className="flex flex-col">
 							<Label htmlFor="name">Name</Label>
 							<p className="text-gray-500 text-sm">
@@ -144,11 +144,11 @@ function RouteComponent() {
 
 				<hr className="dark:border-gray-800" />
 
-				<section className="flex flex-col gap-6 items-start">
+				<section className="flex flex-col items-start gap-6">
 					<div className="flex flex-col gap-1">
 						<h2 className="font-medium text-lg text-white">Danger zone</h2>
 
-						<p className="dark:text-gray-500 text-sm">
+						<p className="text-sm dark:text-gray-500">
 							Permanently delete this project. This action cannot be undone as
 							all templates, media files, and data will be removed.
 						</p>

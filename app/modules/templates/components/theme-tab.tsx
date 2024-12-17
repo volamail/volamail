@@ -98,7 +98,7 @@ function ThemeTabSection(props: ThemeTabSectionProps) {
 
 	return (
 		<section className="flex flex-col gap-2">
-			<h3 className="dark:text-gray-50 font-medium text-xs inline-flex gap-1.5 items-center mb-1">
+			<h3 className="mb-1 inline-flex items-center gap-1.5 font-medium text-xs dark:text-gray-50">
 				{title}
 				<Icon className="size-4" />
 			</h3>

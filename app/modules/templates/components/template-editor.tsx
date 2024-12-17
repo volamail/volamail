@@ -11,16 +11,16 @@ export const TemplateEditor = observer(() => {
 	const store = useEditorStore();
 
 	return (
-		<div className="flex grow min-h-0">
+		<div className="flex min-h-0 grow">
 			<Sidebar />
 			<GridBgContainer
-				className="flex flex-col justify-center items-center grow p-8"
+				className="flex grow flex-col items-center justify-center p-8"
 				classes={{
 					background: "dark:bg-gray-800",
 				}}
 			>
-				<div className="z-0 shadow-2xl flex flex-col overflow-hidden grow w-full rounded-2xl border dark:border-gray-700">
-					<div className="p-4 border-b dark:border-gray-700 dark:bg-gray-800 inline-flex items-center">
+				<div className="z-0 flex w-full grow flex-col overflow-hidden rounded-2xl border shadow-2xl dark:border-gray-700">
+					<div className="inline-flex items-center border-b p-4 dark:border-gray-700 dark:bg-gray-800">
 						<Label htmlFor="subject">Subject:</Label>
 						<TextInput
 							className="border-none focus-visible:ring-0"

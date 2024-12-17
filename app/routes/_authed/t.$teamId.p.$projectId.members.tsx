@@ -54,8 +54,8 @@ function RouteComponent() {
   }>()
 
   return (
-    <div className="flex flex-col items-center justify-start h-full py-16 px-8">
-      <div className="flex flex-col gap-8 w-full max-w-3xl">
+    <div className="flex h-full flex-col items-center justify-start px-8 py-16">
+      <div className="flex w-full max-w-3xl flex-col gap-8">
         <DashboardPageHeader
           title="Members"
           description="Manage your team's members"

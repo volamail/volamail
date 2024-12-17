@@ -4,7 +4,7 @@ import { tv } from "tailwind-variants";
 type Props = ComponentProps<"label">;
 
 const labelVariants = tv({
-	base: "text-sm font-medium",
+	base: "font-medium text-sm",
 });
 
 export function Label(props: Props) {

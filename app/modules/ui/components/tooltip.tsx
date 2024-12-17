@@ -38,7 +38,7 @@ export function Tooltip(props: Props) {
 			<TooltipPositioner>
 				<TooltipContent
 					className={cn(
-						"p-3 rounded-lg max-w-xs z-50 text-xs shadow border dark:border-gray-700 dark:bg-gray-800 dark:text-gray-50 data-[state=open]:animate-in data-[state=open]:fade-in data-[state=closed]:animate-out data-[state=closed]:fade-out",
+						"data-[state=open]:fade-in data-[state=closed]:fade-out z-50 max-w-xs rounded-lg border p-3 text-xs shadow data-[state=closed]:animate-out data-[state=open]:animate-in dark:border-gray-700 dark:bg-gray-800 dark:text-gray-50",
 						props.className,
 					)}
 					style={{

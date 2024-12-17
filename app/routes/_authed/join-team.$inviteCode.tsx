@@ -37,17 +37,17 @@ function RouteComponent() {
 	});
 
 	return (
-		<GridBgContainer className="h-dvh flex flex-col items-center justify-center bg-grid-small-black/10 dark:bg-grid-small-white/10">
-			<main className="z-10 max-w-sm rounded-lg w-full shadow-2xl border flex flex-col gap-6 border-gray-300 dark:border-gray-700 bg-gradient-to-br dark:from-gray-900 dark:to-gray-950 p-12">
+		<GridBgContainer className="flex h-dvh flex-col items-center justify-center bg-grid-small-black/10 dark:bg-grid-small-white/10">
+			<main className="z-10 flex w-full max-w-sm flex-col gap-6 rounded-lg border border-gray-300 bg-gradient-to-br p-12 shadow-2xl dark:border-gray-700 dark:from-gray-900 dark:to-gray-950">
 				{inviteResult.success ? (
 					<>
 						<div className="flex flex-col gap-2">
-							<h1 className="text-2xl font-semibold">Join team</h1>
-							<p className="text-gray-600 dark:text-gray-400 text-sm">
+							<h1 className="font-semibold text-2xl">Join team</h1>
+							<p className="text-gray-600 text-sm dark:text-gray-400">
 								You've been invited to join <b>{inviteResult.data.team.name}</b>
 								.
 							</p>
-							<p className="text-gray-600 dark:text-gray-400 text-sm">
+							<p className="text-gray-600 text-sm dark:text-gray-400">
 								Click the following button to accept the invitation and start
 								collaborating with them.
 							</p>
@@ -71,8 +71,8 @@ function RouteComponent() {
 					</>
 				) : inviteResult.error === "EXPIRED" ? (
 					<div className="flex flex-col gap-2 text-center">
-						<h1 className="text-2xl font-semibold">Invitation expired</h1>
-						<p className="text-gray-600 dark:text-gray-400 text-sm">
+						<h1 className="font-semibold text-2xl">Invitation expired</h1>
+						<p className="text-gray-600 text-sm dark:text-gray-400">
 							This invitation has expired. Ask the team owner to send you a new
 							invitation.
 						</p>
@@ -91,8 +91,8 @@ function RouteComponent() {
 					</div>
 				) : (
 					<div className="flex flex-col gap-2 text-center">
-						<h1 className="text-2xl font-semibold">Invalid invitation</h1>
-						<p className="text-gray-600 dark:text-gray-400 text-sm">
+						<h1 className="font-semibold text-2xl">Invalid invitation</h1>
+						<p className="text-gray-600 text-sm dark:text-gray-400">
 							The invitation is invalid. It's either expired, revoked by a team
 							member, or already accepted.
 						</p>

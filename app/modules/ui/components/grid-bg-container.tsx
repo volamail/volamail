@@ -22,7 +22,7 @@ export function GridBgContainer(props: Props) {
 		>
 			<div
 				className={cn(
-					"absolute pointer-events-none inset-0 dark:bg-gray-950 bg-gray-50 [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]",
+					"pointer-events-none absolute inset-0 bg-gray-50 [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)] dark:bg-gray-950",
 					classes?.background,
 				)}
 			/>

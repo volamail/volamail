@@ -24,7 +24,7 @@ export function Menu(props: Props) {
 		>
 			<ArkMenu.Trigger asChild>{props.trigger}</ArkMenu.Trigger>
 			<ArkMenu.Positioner>
-				<ArkMenu.Content className="z-10 shadow outline-none space-y-0.5 dark:border-gray-800 text-sm border rounded-md dark:bg-gray-900 data-[state=open]:animate-in data-[state=open]:fade-in data-[state=open]:slide-in-from-top-1">
+				<ArkMenu.Content className="data-[state=open]:fade-in data-[state=open]:slide-in-from-top-1 z-10 space-y-0.5 rounded-md border text-sm shadow outline-none data-[state=open]:animate-in dark:border-gray-800 dark:bg-gray-900">
 					{props.children}
 				</ArkMenu.Content>
 			</ArkMenu.Positioner>
@@ -45,7 +45,7 @@ export function MenuItem(props: MenuItemProps) {
 			disabled={props.disabled}
 			value={props.value}
 			className={cn(
-				"flex gap-2 data-[disabled]:opacity-50 items-center text-sm data-[highlighted]:dark:bg-gray-800/50 dark:text-gray-400 px-2.5 py-1.5 cursor-default transition-colors",
+				"flex cursor-default items-center gap-2 px-2.5 py-1.5 text-sm transition-colors data-[disabled]:opacity-50 dark:text-gray-400 data-[highlighted]:dark:bg-gray-800/50",
 				props.className,
 			)}
 		>

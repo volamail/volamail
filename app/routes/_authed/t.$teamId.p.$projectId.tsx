@@ -16,7 +16,7 @@ function RouteComponent() {
 	const { data: teams } = useSuspenseQuery(userTeamsOptions());
 
 	return (
-		<div className="flex min-h-dvh z-0 relative">
+		<div className="relative z-0 flex min-h-dvh">
 			<Sidebar teams={teams} current={params} />
 
 			<div className="grow bg-gradient-to-br dark:from-gray-900 dark:to-gray-900/10">

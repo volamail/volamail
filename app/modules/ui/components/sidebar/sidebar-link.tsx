@@ -3,12 +3,12 @@ import type { ComponentProps } from "react";
 import { type VariantProps, tv } from "tailwind-variants";
 
 const sidebarLinkStyles = tv({
-	base: "w-full inline-flex items-center gap-2 py-1.5 px-2.5 rounded-md text-sm  transition-colors",
+	base: "inline-flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-sm transition-colors",
 	variants: {
 		state: {
 			inactive: "dark:text-gray-500 dark:hover:bg-gray-900",
 			active:
-				"bg-gray-100 ring-[1px] dark:ring-gray-800 dark:text-white dark:bg-gray-900",
+				"bg-gray-100 ring-[1px] dark:bg-gray-900 dark:text-white dark:ring-gray-800",
 		},
 		comingSoon: {
 			false: "",
@@ -18,7 +18,7 @@ const sidebarLinkStyles = tv({
 	slots: {
 		text: "grow",
 		comingSoonBadge:
-			"bg-yellow-50 inline-flex items-center gap-1 dark:bg-yellow-900 dark:text-yellow-400 text-yellow-500 text-xs rounded-full px-1.5",
+			"inline-flex items-center gap-1 rounded-full bg-yellow-50 px-1.5 text-xs text-yellow-500 dark:bg-yellow-900 dark:text-yellow-400",
 	},
 	defaultVariants: {
 		state: "inactive",

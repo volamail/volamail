@@ -13,7 +13,7 @@ interface SidebarSectionProps {
 export function SidebarSection(props: SidebarSectionProps) {
 	return (
 		<section className="flex flex-col gap-3">
-			<h3 className="font-medium dark:text-white text-gray-600 text-xs">
+			<h3 className="font-medium text-gray-600 text-xs dark:text-white">
 				{props.title}
 			</h3>
 			<ul className="flex flex-col gap-1">

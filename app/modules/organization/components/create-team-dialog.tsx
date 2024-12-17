@@ -150,7 +150,7 @@ export function CreateTeamDialog(props: ImperativeDialogProps<undefined>) {
 							</Callout>
 						)}
 
-						<div className="flex gap-2 items-center justify-end mt-4">
+						<div className="mt-4 flex items-center justify-end gap-2">
 							<DialogCloseTrigger asChild>
 								<Button color="neutral">Cancel</Button>
 							</DialogCloseTrigger>

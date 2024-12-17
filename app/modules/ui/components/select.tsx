@@ -44,10 +44,10 @@ export function Select(props: SelectProps) {
 			onValueChange={handleChange}
 			className={props.classes?.container}
 		>
-			<ArkSelect.Control className="min-w-24 flex gap-2 justify-between items-center ">
+			<ArkSelect.Control className="flex min-w-24 items-center justify-between gap-2 ">
 				<ArkSelect.Trigger
 					className={cn(
-						"outline-none focus-visible:ring-[1px] ring-primary-600 rounded-md text-sm grow flex gap-2 pl-2 pr-1.5 py-1.5 justify-between items-center border dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 transition-colors",
+						"flex grow items-center justify-between gap-2 rounded-md border py-1.5 pr-1.5 pl-2 text-sm outline-none ring-primary-600 transition-colors focus-visible:ring-[1px] dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700",
 						props.classes?.trigger,
 					)}
 				>
@@ -59,13 +59,13 @@ export function Select(props: SelectProps) {
 			</ArkSelect.Control>
 			<Portal>
 				<ArkSelect.Positioner>
-					<ArkSelect.Content className="outline-none z-50 overflow-hidden rounded-md w-[var(--reference-width)] border shadow dark:bg-gray-800 dark:border-gray-700 data-[state=open]:animate-in data-[state=open]:fade-in data-[state=open]:slide-in-from-top-1 data-[state=closed]:animate-out data-[state=closed]:fade-out">
+					<ArkSelect.Content className="data-[state=open]:fade-in data-[state=open]:slide-in-from-top-1 data-[state=closed]:fade-out z-50 w-[var(--reference-width)] overflow-hidden rounded-md border shadow outline-none data-[state=closed]:animate-out data-[state=open]:animate-in dark:border-gray-700 dark:bg-gray-800">
 						{collection.items.map((item) => (
 							<ArkSelect.Item
 								key={item.value}
 								item={item}
 								className={cn(
-									"flex gap-2 cursor-default justify-between text-sm px-2 py-1.5 items-center data-[highlighted]:dark:bg-gray-700",
+									"flex cursor-default items-center justify-between gap-2 px-2 py-1.5 text-sm data-[highlighted]:dark:bg-gray-700",
 									props.classes?.item,
 								)}
 							>

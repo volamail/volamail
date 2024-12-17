@@ -46,8 +46,8 @@ export const getEmailLogs = createServerFn({ method: "GET" })
 		]);
 
 		return {
-			pages: Math.ceil(total!.count / PAGE_SIZE),
+			pages: Math.ceil(total?.count / PAGE_SIZE),
 			rows,
-			total: total!.count,
+			total: total?.count,
 		};
 	});

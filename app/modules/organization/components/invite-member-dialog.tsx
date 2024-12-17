@@ -81,7 +81,7 @@ export function InviteMemberDialog(props: Props) {
 						/>
 					</FormGroup>
 
-					<div className="flex gap-2 justify-end">
+					<div className="flex justify-end gap-2">
 						<DialogCloseTrigger asChild>
 							<Button color="neutral">Cancel</Button>
 						</DialogCloseTrigger>

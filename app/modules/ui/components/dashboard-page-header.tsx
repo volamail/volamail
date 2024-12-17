@@ -10,7 +10,7 @@ interface Props extends Omit<ComponentProps<"div">, "title"> {
 const styles = tv({
 	base: "flex items-start",
 	slots: {
-		title: "font-medium text-2xl inline-flex gap-3 items-center",
+		title: "inline-flex items-center gap-3 font-medium text-2xl",
 		description: "text-gray-500 text-sm",
 	},
 });
@@ -20,7 +20,7 @@ export function DashboardPageHeader(props: Props) {
 
 	return (
 		<div className={styles().base({ className })} {...rest}>
-			<div className="flex flex-col grow gap-1">
+			<div className="flex grow flex-col gap-1">
 				<h1 className={styles().title()}>{title}</h1>
 				{description && <p className={styles().description()}>{description}</p>}
 			</div>

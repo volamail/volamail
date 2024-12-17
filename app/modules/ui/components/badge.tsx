@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { type VariantProps, tv } from "tailwind-variants";
 
 const styles = tv({
-	base: "inline-flex items-center px-1.5 py-0.5 gap-1.5 text-xs rounded-md font-normal",
+	base: "inline-flex items-center gap-1.5 rounded-md px-1.5 py-0.5 font-normal text-xs",
 	variants: {
 		color: {
 			red: "dark:bg-red-950 dark:text-red-400",

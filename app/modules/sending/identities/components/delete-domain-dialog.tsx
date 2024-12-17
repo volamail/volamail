@@ -50,7 +50,7 @@ export function DeleteDomainDialog(props: Props) {
 				<ActionButton
 					variant="ghost"
 					color="neutral"
-					className="absolute right-4 top-4"
+					className="absolute top-4 right-4"
 					padding="sm"
 				>
 					<XIcon className="size-4" />
@@ -62,7 +62,7 @@ export function DeleteDomainDialog(props: Props) {
 					again if you want to use it in the future.
 				</p>
 
-				<div className="flex justify-end gap-2 mt-8">
+				<div className="mt-8 flex justify-end gap-2">
 					<DialogCloseTrigger asChild>
 						<Button color="neutral">Cancel</Button>
 					</DialogCloseTrigger>

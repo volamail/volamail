@@ -13,21 +13,21 @@ import { tv } from "tailwind-variants";
 
 const styles = tv({
 	slots: {
-		container: "flex gap-3 items-center",
+		container: "flex items-center gap-3",
 		control:
-			"min-w-0 flex gap-2 has-[:focus]:ring-[1px] ring-primary-600 items-center border border-gray-20 bg-white dark:bg-gray-800 dark:border-gray-700 rounded-md py-1 px-1.5",
-		input: "min-w-0 grow outline-none text-sm bg-transparent",
+			"flex min-w-0 items-center gap-2 rounded-md border border-gray-20 bg-white px-1.5 py-1 ring-primary-600 has-[:focus]:ring-[1px] dark:border-gray-700 dark:bg-gray-800",
+		input: "min-w-0 grow bg-transparent text-sm outline-none",
 		trigger: "rounded-lg bg-gray-900 p-1",
 		valueSwatch: "size-3 rounded",
 		content:
-			"z-50 shadow-lg bg-white border space-y-2 border-gray-200 p-2 rounded-lg dark:bg-gray-800 dark:border-gray-700",
+			"z-50 space-y-2 rounded-lg border border-gray-200 bg-white p-2 shadow-lg dark:border-gray-700 dark:bg-gray-800",
 		areaBackground: "size-48 rounded",
-		areaThumb: "size-4 rounded-full bg-white border border-gray-200",
+		areaThumb: "size-4 rounded-full border border-gray-200 bg-white",
 		eyeDropperTrigger: "p-1",
 		channelSliderContainer: "grow",
-		channelSliderTrack: "w-full h-4 border border-white rounded",
+		channelSliderTrack: "h-4 w-full rounded border border-white",
 		channelSliderThumb:
-			"border border-white rounded w-4 -translate-x-1/2 h-5 -translate-y-1/2 shadow",
+			"-translate-x-1/2 -translate-y-1/2 h-5 w-4 rounded border border-white shadow",
 	},
 });
 
@@ -102,7 +102,7 @@ export function ColorInput(props: Props) {
 							})}
 						/>
 					</ColorPicker.Area>
-					<div className="flex gap-2 items-center">
+					<div className="flex items-center gap-2">
 						<ColorPicker.EyeDropperTrigger asChild>
 							<ActionButton
 								variant="outline"
