@@ -1,7 +1,7 @@
 import { teamQueryOptions } from "@/modules/organization/queries";
 import { Button } from "@/modules/ui/components/button";
 import { DashboardPageHeader } from "@/modules/ui/components/dashboard-page-header";
-import { Progress } from "@ark-ui/react/progress";
+import { Progress } from "@/modules/ui/components/progress";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { ExternalLinkIcon } from "lucide-react";
@@ -56,39 +56,26 @@ function RouteComponent() {
 							</span>
 						</div>
 
-						<Progress.Root
-							className="flex w-full flex-col gap-2"
+						<Progress
+							label="Emails"
+							trend="positive"
 							value={
 								team.subscription!.monthlyQuota -
 								team.subscription!.remainingQuota
 							}
 							min={0}
 							max={team.subscription?.monthlyQuota}
-						>
-							<Progress.ValueText className="font-medium text-sm">
-								{team.subscription!.monthlyQuota -
-									team.subscription!.remainingQuota}{" "}
-								of {team.subscription?.monthlyQuota} emails sent
-							</Progress.ValueText>
-							<Progress.Track className="relative h-2.5 w-full rounded-full bg-gray-600">
-								<Progress.Range className="h-full rounded-full bg-green-500" />
-							</Progress.Track>
-						</Progress.Root>
+							valueText={`${team.subscription!.monthlyQuota - team.subscription!.remainingQuota} of ${team.subscription?.monthlyQuota} emails sent`}
+						/>
 
-						<Progress.Root
-							className="flex w-full flex-col gap-2"
+						<Progress
+							label="Projects"
+							trend="positive"
 							value={team.projects.length}
 							min={0}
-							max={team.subscription?.maxProjects}
-						>
-							<Progress.ValueText className="font-medium text-sm">
-								{team.projects.length} of {team.subscription?.maxProjects}{" "}
-								projects used
-							</Progress.ValueText>
-							<Progress.Track className="relative h-2.5 w-full rounded-full bg-gray-600">
-								<Progress.Range className="h-full rounded-full bg-yellow-500" />
-							</Progress.Track>
-						</Progress.Root>
+							max={team.subscription!.maxProjects}
+							valueText={`${team.projects.length} of ${team.subscription?.maxProjects} projects used`}
+						/>
 
 						<Button
 							trailing={<ExternalLinkIcon className="size-4" />}
