@@ -13,6 +13,7 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as LoginImport } from './routes/login'
 import { Route as AuthedImport } from './routes/_authed'
+import { Route as AuthedIndexImport } from './routes/_authed/index'
 import { Route as AuthedJoinTeamInviteCodeImport } from './routes/_authed/join-team.$inviteCode'
 import { Route as AuthedTTeamIdPProjectIdImport } from './routes/_authed/t.$teamId.p.$projectId'
 import { Route as AuthedTTeamIdPProjectIdTeamSettingsImport } from './routes/_authed/t.$teamId.p.$projectId.team-settings'
@@ -20,6 +21,7 @@ import { Route as AuthedTTeamIdPProjectIdSettingsImport } from './routes/_authed
 import { Route as AuthedTTeamIdPProjectIdMembersImport } from './routes/_authed/t.$teamId.p.$projectId.members'
 import { Route as AuthedTTeamIdPProjectIdLogsImport } from './routes/_authed/t.$teamId.p.$projectId.logs'
 import { Route as AuthedTTeamIdPProjectIdDomainsImport } from './routes/_authed/t.$teamId.p.$projectId.domains'
+import { Route as AuthedTTeamIdPProjectIdBillingImport } from './routes/_authed/t.$teamId.p.$projectId.billing'
 import { Route as AuthedTTeamIdPProjectIdApiTokensImport } from './routes/_authed/t.$teamId.p.$projectId.api-tokens'
 import { Route as AuthedTTeamIdPProjectIdTemplatesIndexImport } from './routes/_authed/t.$teamId.p.$projectId.templates.index'
 import { Route as AuthedTTeamIdPProjectIdTemplatesNewImport } from './routes/_authed/t.$teamId.p.$projectId.templates.new'
@@ -36,6 +38,12 @@ const LoginRoute = LoginImport.update({
 const AuthedRoute = AuthedImport.update({
   id: '/_authed',
   getParentRoute: () => rootRoute,
+} as any)
+
+const AuthedIndexRoute = AuthedIndexImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthedRoute,
 } as any)
 
 const AuthedJoinTeamInviteCodeRoute = AuthedJoinTeamInviteCodeImport.update({
@@ -85,6 +93,13 @@ const AuthedTTeamIdPProjectIdDomainsRoute =
     getParentRoute: () => AuthedTTeamIdPProjectIdRoute,
   } as any)
 
+const AuthedTTeamIdPProjectIdBillingRoute =
+  AuthedTTeamIdPProjectIdBillingImport.update({
+    id: '/billing',
+    path: '/billing',
+    getParentRoute: () => AuthedTTeamIdPProjectIdRoute,
+  } as any)
+
 const AuthedTTeamIdPProjectIdApiTokensRoute =
   AuthedTTeamIdPProjectIdApiTokensImport.update({
     id: '/api-tokens',
@@ -131,6 +146,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
+    '/_authed/': {
+      id: '/_authed/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof AuthedIndexImport
+      parentRoute: typeof AuthedImport
+    }
     '/_authed/join-team/$inviteCode': {
       id: '/_authed/join-team/$inviteCode'
       path: '/join-team/$inviteCode'
@@ -150,6 +172,13 @@ declare module '@tanstack/react-router' {
       path: '/api-tokens'
       fullPath: '/t/$teamId/p/$projectId/api-tokens'
       preLoaderRoute: typeof AuthedTTeamIdPProjectIdApiTokensImport
+      parentRoute: typeof AuthedTTeamIdPProjectIdImport
+    }
+    '/_authed/t/$teamId/p/$projectId/billing': {
+      id: '/_authed/t/$teamId/p/$projectId/billing'
+      path: '/billing'
+      fullPath: '/t/$teamId/p/$projectId/billing'
+      preLoaderRoute: typeof AuthedTTeamIdPProjectIdBillingImport
       parentRoute: typeof AuthedTTeamIdPProjectIdImport
     }
     '/_authed/t/$teamId/p/$projectId/domains': {
@@ -215,6 +244,7 @@ declare module '@tanstack/react-router' {
 
 interface AuthedTTeamIdPProjectIdRouteChildren {
   AuthedTTeamIdPProjectIdApiTokensRoute: typeof AuthedTTeamIdPProjectIdApiTokensRoute
+  AuthedTTeamIdPProjectIdBillingRoute: typeof AuthedTTeamIdPProjectIdBillingRoute
   AuthedTTeamIdPProjectIdDomainsRoute: typeof AuthedTTeamIdPProjectIdDomainsRoute
   AuthedTTeamIdPProjectIdLogsRoute: typeof AuthedTTeamIdPProjectIdLogsRoute
   AuthedTTeamIdPProjectIdMembersRoute: typeof AuthedTTeamIdPProjectIdMembersRoute
@@ -229,6 +259,7 @@ const AuthedTTeamIdPProjectIdRouteChildren: AuthedTTeamIdPProjectIdRouteChildren
   {
     AuthedTTeamIdPProjectIdApiTokensRoute:
       AuthedTTeamIdPProjectIdApiTokensRoute,
+    AuthedTTeamIdPProjectIdBillingRoute: AuthedTTeamIdPProjectIdBillingRoute,
     AuthedTTeamIdPProjectIdDomainsRoute: AuthedTTeamIdPProjectIdDomainsRoute,
     AuthedTTeamIdPProjectIdLogsRoute: AuthedTTeamIdPProjectIdLogsRoute,
     AuthedTTeamIdPProjectIdMembersRoute: AuthedTTeamIdPProjectIdMembersRoute,
@@ -249,11 +280,13 @@ const AuthedTTeamIdPProjectIdRouteWithChildren =
   )
 
 interface AuthedRouteChildren {
+  AuthedIndexRoute: typeof AuthedIndexRoute
   AuthedJoinTeamInviteCodeRoute: typeof AuthedJoinTeamInviteCodeRoute
   AuthedTTeamIdPProjectIdRoute: typeof AuthedTTeamIdPProjectIdRouteWithChildren
 }
 
 const AuthedRouteChildren: AuthedRouteChildren = {
+  AuthedIndexRoute: AuthedIndexRoute,
   AuthedJoinTeamInviteCodeRoute: AuthedJoinTeamInviteCodeRoute,
   AuthedTTeamIdPProjectIdRoute: AuthedTTeamIdPProjectIdRouteWithChildren,
 }
@@ -264,9 +297,11 @@ const AuthedRouteWithChildren =
 export interface FileRoutesByFullPath {
   '': typeof AuthedRouteWithChildren
   '/login': typeof LoginRoute
+  '/': typeof AuthedIndexRoute
   '/join-team/$inviteCode': typeof AuthedJoinTeamInviteCodeRoute
   '/t/$teamId/p/$projectId': typeof AuthedTTeamIdPProjectIdRouteWithChildren
   '/t/$teamId/p/$projectId/api-tokens': typeof AuthedTTeamIdPProjectIdApiTokensRoute
+  '/t/$teamId/p/$projectId/billing': typeof AuthedTTeamIdPProjectIdBillingRoute
   '/t/$teamId/p/$projectId/domains': typeof AuthedTTeamIdPProjectIdDomainsRoute
   '/t/$teamId/p/$projectId/logs': typeof AuthedTTeamIdPProjectIdLogsRoute
   '/t/$teamId/p/$projectId/members': typeof AuthedTTeamIdPProjectIdMembersRoute
@@ -278,11 +313,12 @@ export interface FileRoutesByFullPath {
 }
 
 export interface FileRoutesByTo {
-  '': typeof AuthedRouteWithChildren
   '/login': typeof LoginRoute
+  '/': typeof AuthedIndexRoute
   '/join-team/$inviteCode': typeof AuthedJoinTeamInviteCodeRoute
   '/t/$teamId/p/$projectId': typeof AuthedTTeamIdPProjectIdRouteWithChildren
   '/t/$teamId/p/$projectId/api-tokens': typeof AuthedTTeamIdPProjectIdApiTokensRoute
+  '/t/$teamId/p/$projectId/billing': typeof AuthedTTeamIdPProjectIdBillingRoute
   '/t/$teamId/p/$projectId/domains': typeof AuthedTTeamIdPProjectIdDomainsRoute
   '/t/$teamId/p/$projectId/logs': typeof AuthedTTeamIdPProjectIdLogsRoute
   '/t/$teamId/p/$projectId/members': typeof AuthedTTeamIdPProjectIdMembersRoute
@@ -297,9 +333,11 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/_authed': typeof AuthedRouteWithChildren
   '/login': typeof LoginRoute
+  '/_authed/': typeof AuthedIndexRoute
   '/_authed/join-team/$inviteCode': typeof AuthedJoinTeamInviteCodeRoute
   '/_authed/t/$teamId/p/$projectId': typeof AuthedTTeamIdPProjectIdRouteWithChildren
   '/_authed/t/$teamId/p/$projectId/api-tokens': typeof AuthedTTeamIdPProjectIdApiTokensRoute
+  '/_authed/t/$teamId/p/$projectId/billing': typeof AuthedTTeamIdPProjectIdBillingRoute
   '/_authed/t/$teamId/p/$projectId/domains': typeof AuthedTTeamIdPProjectIdDomainsRoute
   '/_authed/t/$teamId/p/$projectId/logs': typeof AuthedTTeamIdPProjectIdLogsRoute
   '/_authed/t/$teamId/p/$projectId/members': typeof AuthedTTeamIdPProjectIdMembersRoute
@@ -315,9 +353,11 @@ export interface FileRouteTypes {
   fullPaths:
     | ''
     | '/login'
+    | '/'
     | '/join-team/$inviteCode'
     | '/t/$teamId/p/$projectId'
     | '/t/$teamId/p/$projectId/api-tokens'
+    | '/t/$teamId/p/$projectId/billing'
     | '/t/$teamId/p/$projectId/domains'
     | '/t/$teamId/p/$projectId/logs'
     | '/t/$teamId/p/$projectId/members'
@@ -328,11 +368,12 @@ export interface FileRouteTypes {
     | '/t/$teamId/p/$projectId/templates'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | ''
     | '/login'
+    | '/'
     | '/join-team/$inviteCode'
     | '/t/$teamId/p/$projectId'
     | '/t/$teamId/p/$projectId/api-tokens'
+    | '/t/$teamId/p/$projectId/billing'
     | '/t/$teamId/p/$projectId/domains'
     | '/t/$teamId/p/$projectId/logs'
     | '/t/$teamId/p/$projectId/members'
@@ -345,9 +386,11 @@ export interface FileRouteTypes {
     | '__root__'
     | '/_authed'
     | '/login'
+    | '/_authed/'
     | '/_authed/join-team/$inviteCode'
     | '/_authed/t/$teamId/p/$projectId'
     | '/_authed/t/$teamId/p/$projectId/api-tokens'
+    | '/_authed/t/$teamId/p/$projectId/billing'
     | '/_authed/t/$teamId/p/$projectId/domains'
     | '/_authed/t/$teamId/p/$projectId/logs'
     | '/_authed/t/$teamId/p/$projectId/members'
@@ -386,12 +429,17 @@ export const routeTree = rootRoute
     "/_authed": {
       "filePath": "_authed.tsx",
       "children": [
+        "/_authed/",
         "/_authed/join-team/$inviteCode",
         "/_authed/t/$teamId/p/$projectId"
       ]
     },
     "/login": {
       "filePath": "login.tsx"
+    },
+    "/_authed/": {
+      "filePath": "_authed/index.tsx",
+      "parent": "/_authed"
     },
     "/_authed/join-team/$inviteCode": {
       "filePath": "_authed/join-team.$inviteCode.tsx",
@@ -402,6 +450,7 @@ export const routeTree = rootRoute
       "parent": "/_authed",
       "children": [
         "/_authed/t/$teamId/p/$projectId/api-tokens",
+        "/_authed/t/$teamId/p/$projectId/billing",
         "/_authed/t/$teamId/p/$projectId/domains",
         "/_authed/t/$teamId/p/$projectId/logs",
         "/_authed/t/$teamId/p/$projectId/members",
@@ -414,6 +463,10 @@ export const routeTree = rootRoute
     },
     "/_authed/t/$teamId/p/$projectId/api-tokens": {
       "filePath": "_authed/t.$teamId.p.$projectId.api-tokens.tsx",
+      "parent": "/_authed/t/$teamId/p/$projectId"
+    },
+    "/_authed/t/$teamId/p/$projectId/billing": {
+      "filePath": "_authed/t.$teamId.p.$projectId.billing.tsx",
       "parent": "/_authed/t/$teamId/p/$projectId"
     },
     "/_authed/t/$teamId/p/$projectId/domains": {

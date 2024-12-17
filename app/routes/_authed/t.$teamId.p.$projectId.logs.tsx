@@ -25,6 +25,20 @@ export const Route = createFileRoute("/_authed/t/$teamId/p/$projectId/logs")({
 			page: z.number().int().min(1).optional().default(1),
 		}),
 	),
+	loaderDeps({ search }) {
+		return {
+			page: search.page,
+		};
+	},
+	async loader({ params, context, deps }) {
+		await context.queryClient.ensureQueryData(
+			projectLogsOptions({
+				teamId: params.teamId,
+				projectId: params.projectId,
+				page: deps.page,
+			}),
+		);
+	},
 });
 
 function RouteComponent() {

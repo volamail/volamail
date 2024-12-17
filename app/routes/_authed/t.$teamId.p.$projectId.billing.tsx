@@ -1,0 +1,104 @@
+import { teamQueryOptions } from "@/modules/organization/queries";
+import { Button } from "@/modules/ui/components/button";
+import { DashboardPageHeader } from "@/modules/ui/components/dashboard-page-header";
+import { Progress } from "@ark-ui/react/progress";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { createFileRoute } from "@tanstack/react-router";
+import { ExternalLinkIcon } from "lucide-react";
+
+export const Route = createFileRoute("/_authed/t/$teamId/p/$projectId/billing")(
+	{
+		component: RouteComponent,
+		async loader({ params, context }) {
+			await context.queryClient.ensureQueryData(
+				teamQueryOptions(params.teamId),
+			);
+		},
+	},
+);
+
+function RouteComponent() {
+	const params = Route.useParams();
+
+	const { data: team } = useSuspenseQuery(teamQueryOptions(params.teamId));
+
+	return (
+		<div className="flex flex-col items-center justify-start h-full py-16 px-8">
+			<div className="flex flex-col gap-8 w-full max-w-3xl">
+				<DashboardPageHeader
+					title="Billing"
+					description="Manage your team's billing information and subscription"
+				/>
+
+				<section className="flex flex-col rounded-xl border dark:border-gray-700 dark:bg-gray-900">
+					<div className="flex flex-col gap-8 p-8">
+						<div className="flex justify-between items-start gap-4">
+							<div className="flex flex-col gap-1">
+								<h3 className="text-lg font-medium">
+									{team.subscription!.tier === "FREE" ? "Free" : "Pro"} plan
+								</h3>
+								<p className="text-sm dark:text-gray-400">
+									{team.subscription!.tier === "FREE"
+										? "Our free plan offers 500 emails per month, 20MB of image storage, 2 projects and 1 domain per project."
+										: team.subscription!.tier === "PRO"
+											? "Our pro plan offers 1000 emails per month, 5 projects and 3 domains per project."
+											: "Customized plan"}
+								</p>
+							</div>
+
+							<span className="text-3xl font-medium shrink-0">
+								${team.subscription!.price}{" "}
+								<span className="text-sm font-normal">
+									{team.subscription!.periodType === "MONTHLY"
+										? "per month"
+										: "per year"}
+								</span>
+							</span>
+						</div>
+
+						<Progress.Root
+							className="w-full flex flex-col gap-2"
+							value={
+								team.subscription!.monthlyQuota -
+								team.subscription!.remainingQuota
+							}
+							min={0}
+							max={team.subscription!.monthlyQuota}
+						>
+							<Progress.ValueText className="font-medium text-sm">
+								{team.subscription!.monthlyQuota -
+									team.subscription!.remainingQuota}{" "}
+								of {team.subscription!.monthlyQuota} emails sent
+							</Progress.ValueText>
+							<Progress.Track className="bg-gray-600 w-full h-2.5 rounded-full relative">
+								<Progress.Range className="bg-green-500 h-full rounded-full" />
+							</Progress.Track>
+						</Progress.Root>
+
+						<Progress.Root
+							className="w-full flex flex-col gap-2"
+							value={team.projects.length}
+							min={0}
+							max={team.subscription!.maxProjects}
+						>
+							<Progress.ValueText className="font-medium text-sm">
+								{team.projects.length} of {team.subscription!.maxProjects}{" "}
+								projects used
+							</Progress.ValueText>
+							<Progress.Track className="relative h-2.5 w-full rounded-full bg-gray-600">
+								<Progress.Range className="h-full rounded-full bg-yellow-500" />
+							</Progress.Track>
+						</Progress.Root>
+
+						<Button
+							trailing={<ExternalLinkIcon className="size-4" />}
+							className="self-end"
+						>
+							Upgrade
+						</Button>
+					</div>
+				</section>
+			</div>
+		</div>
+	);
+}

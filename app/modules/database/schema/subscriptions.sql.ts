@@ -45,6 +45,7 @@ export const subscriptionsTable = pgTable("subscriptions", {
 	periodType: subscriptionPeriodType("period_type").notNull(),
 	storageQuota: integer("storage_quota").notNull(),
 	maxDomains: integer("max_domains").notNull().default(1),
+	maxProjects: integer("max_projects").notNull().default(2),
 	price: numeric("price", {
 		scale: 2,
 		precision: 12,
