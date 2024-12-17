@@ -78,7 +78,7 @@ export function CreateProjectDialog(
 			await navigate({
 				to: "/t/$teamId/p/$projectId/templates",
 				params: {
-					teamId: props.dynamicProps?.teamId,
+					teamId: props.dynamicProps!.teamId,
 					projectId: data.data.id,
 				},
 			});
@@ -90,7 +90,7 @@ export function CreateProjectDialog(
 			data: {
 				id: values.id,
 				name: values.name,
-				teamId: props.dynamicProps?.teamId,
+				teamId: props.dynamicProps!.teamId,
 			},
 		});
 	}

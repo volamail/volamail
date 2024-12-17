@@ -22,7 +22,7 @@ export function RevokeTeamInviteDialog(
 		mutationFn: revokeTeamInviteFn,
 		async onSuccess() {
 			await queryClient.invalidateQueries(
-				teamInvitesOptions(props.dynamicProps?.teamId),
+				teamInvitesOptions(props.dynamicProps!.teamId),
 			);
 
 			toast.success("Invite revoked");
@@ -63,8 +63,10 @@ export function RevokeTeamInviteDialog(
 						loading={mutation.isPending}
 						onClick={() =>
 							mutation.mutate({
-								teamId: props.dynamicProps?.teamId,
-								email: props.dynamicProps?.email,
+								data: {
+									teamId: props.dynamicProps!.teamId,
+									email: props.dynamicProps!.email,
+								},
 							})
 						}
 					>

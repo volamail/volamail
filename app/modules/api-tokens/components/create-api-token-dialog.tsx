@@ -77,9 +77,11 @@ export function CreateApiTokenDialog(props: Props) {
 						className="flex flex-col gap-4"
 						onSubmit={handleSubmit((values) =>
 							mutation.mutate({
-								teamId: props.teamId,
-								projectId: props.projectId,
-								description: values.description,
+								data: {
+									teamId: props.teamId,
+									projectId: props.projectId,
+									description: values.description,
+								},
 							}),
 						)}
 					>

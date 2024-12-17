@@ -59,15 +59,15 @@ function RouteComponent() {
 						<Progress.Root
 							className="flex w-full flex-col gap-2"
 							value={
-								team.subscription?.monthlyQuota -
-								team.subscription?.remainingQuota
+								team.subscription!.monthlyQuota -
+								team.subscription!.remainingQuota
 							}
 							min={0}
 							max={team.subscription?.monthlyQuota}
 						>
 							<Progress.ValueText className="font-medium text-sm">
-								{team.subscription?.monthlyQuota -
-									team.subscription?.remainingQuota}{" "}
+								{team.subscription!.monthlyQuota -
+									team.subscription!.remainingQuota}{" "}
 								of {team.subscription?.monthlyQuota} emails sent
 							</Progress.ValueText>
 							<Progress.Track className="relative h-2.5 w-full rounded-full bg-gray-600">

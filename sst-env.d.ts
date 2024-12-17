@@ -3,6 +3,7 @@
 /* eslint-disable */
 /* deno-fmt-ignore-file */
 import "sst"
+export {}
 declare module "sst" {
   export interface Resource {
     "Bucket": {
@@ -23,6 +24,14 @@ declare module "sst" {
       "type": "sst.aws.SnsTopic"
     }
     "GithubClientSecret": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "StripeSecretKey": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "StripeWebhookSecret": {
       "type": "sst.sst.Secret"
       "value": string
     }

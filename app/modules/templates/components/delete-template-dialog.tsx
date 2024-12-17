@@ -29,8 +29,8 @@ export function DeleteTemplateDialog(
 			navigate({
 				to: "/t/$teamId/p/$projectId/templates",
 				params: {
-					teamId: dynamicProps?.teamId,
-					projectId: dynamicProps?.projectId,
+					teamId: dynamicProps!.teamId,
+					projectId: dynamicProps!.projectId,
 				},
 			});
 		},
@@ -55,9 +55,9 @@ export function DeleteTemplateDialog(
 						onClick={() =>
 							mutation.mutate({
 								data: {
-									teamId: dynamicProps?.teamId,
-									projectId: dynamicProps?.projectId,
-									slug: dynamicProps?.slug,
+									teamId: dynamicProps!.teamId,
+									projectId: dynamicProps!.projectId,
+									slug: dynamicProps!.slug,
 								},
 							})
 						}

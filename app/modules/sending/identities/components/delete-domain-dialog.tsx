@@ -72,9 +72,11 @@ export function DeleteDomainDialog(props: Props) {
 						loading={mutation.isPending}
 						onClick={() =>
 							mutation.mutate({
-								teamId: props.teamId,
-								projectId: props.projectId,
-								domainId: props.domainId,
+								data: {
+									teamId: props.teamId,
+									projectId: props.projectId,
+									domainId: props.domainId,
+								},
 							})
 						}
 					>

@@ -41,7 +41,7 @@ export const addProjectDomainFn = createServerFn({ method: "POST" })
 			});
 		}
 
-		if (projectDomains.length >= team.subscription?.maxDomains) {
+		if (projectDomains.length >= team.subscription!.maxDomains) {
 			throw createError({
 				status: 429,
 				message: "Max number of domains reached",

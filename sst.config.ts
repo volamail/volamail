@@ -41,6 +41,16 @@ export default $config({
 			process.env.GITHUB_CLIENT_SECRET!,
 		);
 
+		const stripeSecretKey = new sst.Secret(
+			"StripeSecretKey",
+			process.env.STRIPE_SECRET_KEY!,
+		);
+
+		const stripeWebhookSecret = new sst.Secret(
+			"StripeWebhookSecret",
+			process.env.STRIPE_WEBHOOK_SECRET!,
+		);
+
 		sesNotificationsTopic.subscribe("WebEmailNotificationsSubscriber", {
 			handler: "functions/email-notifications-handler.handler",
 			link: [databaseUrlSecret],
@@ -59,6 +69,8 @@ export default $config({
 				sesNotificationsTopic,
 				databaseUrlSecret,
 				githubClientSecret,
+				stripeSecretKey,
+				stripeWebhookSecret,
 			],
 			domain: $dev
 				? undefined
@@ -94,5 +106,7 @@ export default $config({
 				command: "bun db studio",
 			},
 		});
+
+		return undefined;
 	},
 });

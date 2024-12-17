@@ -11,5 +11,6 @@
     "paths": {
       "@/*": ["app/*"]
     }
-  }
+  },
+  "exclude": ["node_modules", ".sst"]
 }

@@ -22,7 +22,7 @@ export function ResendTeamInviteDialog(
 		mutationFn: sendTeamInviteFn,
 		async onSuccess() {
 			await queryClient.invalidateQueries(
-				teamInvitesOptions(props.dynamicProps?.teamId),
+				teamInvitesOptions(props.dynamicProps!.teamId),
 			);
 
 			toast.success("Invite resent");

@@ -46,10 +46,18 @@ export const createTeamFn = createServerFn({ method: "POST" })
 			return err("TEAM_ID_TAKEN" as const);
 		}
 
-		const { defaultProjectId } = await createTeam({
-			id: data.id,
-			name: data.name,
-			userId: user.id,
+		const { defaultProjectId } = await db.transaction(async (db) => {
+			const { defaultProjectId } = await createTeam({
+				id: data.id,
+				name: data.name,
+			});
+
+			await db.insert(teamMembersTable).values({
+				userId: user.id,
+				teamId: data.id,
+			});
+
+			return { defaultProjectId };
 		});
 
 		return ok({

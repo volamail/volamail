@@ -49,8 +49,10 @@ export function InviteMemberDialog(props: Props) {
 
 	function handleSubmit(values: z.infer<typeof formSchema>) {
 		mutation.mutate({
-			teamId: props.teamId,
-			email: values.email,
+			data: {
+				teamId: props.teamId,
+				email: values.email,
+			},
 		});
 	}
 

@@ -42,7 +42,7 @@ function RouteComponent() {
 					description="Manage the domains registered for this project"
 					trailing={
 						domains.length > 0 &&
-						(domains.length < team.subscription?.maxDomains ? (
+						(domains.length < team.subscription!.maxDomains ? (
 							<RegisterDomainDialog
 								teamId={params.teamId}
 								projectId={params.projectId}

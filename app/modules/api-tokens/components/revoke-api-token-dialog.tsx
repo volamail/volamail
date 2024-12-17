@@ -69,9 +69,11 @@ export function RevokeApiTokenDialog(props: Props) {
 						loading={mutation.isPending}
 						onClick={() =>
 							mutation.mutate({
-								teamId: props.teamId,
-								projectId: props.projectId,
-								tokenId: props.tokenId,
+								data: {
+									teamId: props.teamId,
+									projectId: props.projectId,
+									tokenId: props.tokenId,
+								},
 							})
 						}
 					>
