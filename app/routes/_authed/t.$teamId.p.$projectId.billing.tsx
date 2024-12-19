@@ -1,4 +1,8 @@
-import { teamQueryOptions } from "@/modules/organization/queries";
+import {
+	teamQueryOptions,
+	teamUsageOptions,
+} from "@/modules/organization/queries";
+import { UpgradePlanDialog } from "@/modules/payments/components/upgrade-plan-dialog";
 import { Button } from "@/modules/ui/components/button";
 import { DashboardPageHeader } from "@/modules/ui/components/dashboard-page-header";
 import { Progress } from "@/modules/ui/components/progress";
@@ -10,9 +14,10 @@ export const Route = createFileRoute("/_authed/t/$teamId/p/$projectId/billing")(
 	{
 		component: RouteComponent,
 		async loader({ params, context }) {
-			await context.queryClient.ensureQueryData(
-				teamQueryOptions(params.teamId),
-			);
+			await Promise.all([
+				context.queryClient.ensureQueryData(teamQueryOptions(params.teamId)),
+				context.queryClient.ensureQueryData(teamUsageOptions(params.teamId)),
+			]);
 		},
 	},
 );
@@ -21,6 +26,7 @@ function RouteComponent() {
 	const params = Route.useParams();
 
 	const { data: team } = useSuspenseQuery(teamQueryOptions(params.teamId));
+	const { data: usage } = useSuspenseQuery(teamUsageOptions(params.teamId));
 
 	return (
 		<div className="flex h-full flex-col items-center justify-start px-8 py-16">
@@ -39,9 +45,9 @@ function RouteComponent() {
 								</h3>
 								<p className="text-sm dark:text-gray-400">
 									{team.subscription?.tier === "FREE"
-										? "Our free plan offers 500 emails per month, 20MB of image storage, 2 projects and 1 domain per project."
+										? "Our entry plan to get you started with Volamail."
 										: team.subscription?.tier === "PRO"
-											? "Our pro plan offers 1000 emails per month, 5 projects and 3 domains per project."
+											? "Our premium plan with advanced features."
 											: "Customized plan"}
 								</p>
 							</div>
@@ -59,30 +65,13 @@ function RouteComponent() {
 						<Progress
 							label="Emails"
 							trend="positive"
-							value={
-								team.subscription!.monthlyQuota -
-								team.subscription!.remainingQuota
-							}
+							value={usage.emails.used}
 							min={0}
-							max={team.subscription?.monthlyQuota}
-							valueText={`${team.subscription!.monthlyQuota - team.subscription!.remainingQuota} of ${team.subscription?.monthlyQuota} emails sent`}
+							max={usage.emails.max}
+							valueText={`${usage.emails.used} of ${usage.emails.max} emails sent`}
 						/>
 
-						<Progress
-							label="Projects"
-							trend="positive"
-							value={team.projects.length}
-							min={0}
-							max={team.subscription!.maxProjects}
-							valueText={`${team.projects.length} of ${team.subscription?.maxProjects} projects used`}
-						/>
-
-						<Button
-							trailing={<ExternalLinkIcon className="size-4" />}
-							className="self-end"
-						>
-							Upgrade
-						</Button>
+						<UpgradePlanDialog />
 					</div>
 				</section>
 			</div>

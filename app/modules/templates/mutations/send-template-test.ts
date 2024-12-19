@@ -2,7 +2,7 @@ import { db } from "@/modules/database";
 import { emailsTable } from "@/modules/database/schema";
 import { serverEnv } from "@/modules/environment/server";
 import {
-	lowerTeamEmailQuota,
+	getTeamRemainingEmailQuota,
 	shouldLowerQuota,
 } from "@/modules/payments/quota";
 import { teamAuthorizationMiddleware } from "@/modules/rpcs/server-functions";
@@ -44,12 +44,13 @@ export const sendTemplateTestFn = createServerFn({ method: "POST" })
 		});
 
 		if (shouldLowerQuota()) {
-			try {
-				await lowerTeamEmailQuota(data.teamId);
-			} catch {
+			const remainingQuota = await getTeamRemainingEmailQuota(data.teamId);
+
+			if (remainingQuota <= 0) {
 				throw createError({
 					status: 429,
 					statusMessage: "Quota reached",
+					message: "The team's email quota has been reached",
 				});
 			}
 		}

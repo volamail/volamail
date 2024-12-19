@@ -11,18 +11,15 @@ export const SUBSCRIPTION_TIERS = [
 export const SUBSCRIPTION_QUOTAS = {
 	FREE: {
 		emails: 500,
-		storage: 20000,
 		projects: 2,
 	},
 	PRO: {
 		emails: 10000,
-		storage: 50000,
 		projects: 5,
 	},
 } satisfies {
 	[K in (typeof SUBSCRIPTION_TIERS)[number]]?: {
 		emails: number;
-		storage: number;
 		projects: number;
 	};
 };

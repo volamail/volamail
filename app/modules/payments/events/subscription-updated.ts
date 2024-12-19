@@ -1,6 +1,6 @@
 import { db } from "@/modules/database";
 import { subscriptionsTable, teamsTable } from "@/modules/database/schema";
-import { differenceInMonths } from "date-fns";
+import { addDays, differenceInMonths } from "date-fns";
 import { eq } from "drizzle-orm";
 import type Stripe from "stripe";
 import { SUBSCRIPTION_QUOTAS, SUBSCRIPTION_TYPE_CUSTOM } from "../constants";
@@ -41,13 +41,7 @@ export async function handleSubscriptionUpdatedEvent(
 			? subscriptionMeta.monthly_email_quota
 			: SUBSCRIPTION_QUOTAS[subscriptionMeta.type].emails;
 
-	const storageQuota =
-		subscriptionMeta.type === SUBSCRIPTION_TYPE_CUSTOM
-			? subscriptionMeta.storage
-			: SUBSCRIPTION_QUOTAS[subscriptionMeta.type].storage;
-
-	// TODO: Make this work with more than one item in the subscription
-	// eg. with per-seat pricing
+	// TODO: Make this work with more than one item in the subscription (eg. per-seat pricing)
 	const price = subscription.items.data[0].price.unit_amount! / 100;
 
 	const didTierChange = team.subscription.tier !== subscriptionMeta.type;
@@ -63,12 +57,11 @@ export async function handleSubscriptionUpdatedEvent(
 						: "ACTIVE",
 			renewsAt: new Date(subscription.current_period_end * 1000),
 			periodType: isYearly ? "ANNUAL" : "MONTHLY",
-			monthlyQuota: monthlyEmailQuota,
-			storageQuota: storageQuota,
+			monthlyEmailQuota: monthlyEmailQuota,
 			tier: subscriptionMeta.type,
 			price: price.toFixed(2),
 			lastRefilledAt: didTierChange ? new Date() : undefined,
-			remainingQuota: didTierChange ? monthlyEmailQuota : undefined,
+			refillsAt: didTierChange ? addDays(new Date(), 30) : undefined,
 			providerId: subscription.id,
 		})
 		.where(eq(subscriptionsTable.id, team.subscription.id));

@@ -1,0 +1,1 @@
+ALTER TABLE "subscriptions" ALTER COLUMN "refills_at" DROP DEFAULT;

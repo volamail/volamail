@@ -7,7 +7,7 @@ import {
 	text,
 	timestamp,
 } from "drizzle-orm/pg-core";
-import { nanoid } from "nanoid";
+import { ulid } from "ulid";
 
 import { SUBSCRIPTION_TIERS } from "@/modules/payments/constants";
 import { teamsTable } from "./teams.sql";
@@ -28,7 +28,7 @@ export const subscriptionPeriodType = pgEnum("subscription_period_type", [
 export const subscriptionsTable = pgTable("subscriptions", {
 	id: text("id")
 		.primaryKey()
-		.$defaultFn(() => nanoid(32)),
+		.$defaultFn(() => ulid()),
 	teamId: text("team_id")
 		.notNull()
 		.references(() => teamsTable.id, {
@@ -39,12 +39,11 @@ export const subscriptionsTable = pgTable("subscriptions", {
 	tier: subscriptionTier("tier").notNull(),
 	renewsAt: timestamp("renews_at").notNull(),
 	status: subscriptionStatus("status").notNull(),
-	monthlyQuota: integer("monthly_quota").notNull(),
-	remainingQuota: integer("remaining_quota").notNull(),
+	monthlyEmailQuota: integer("monthly_quota").notNull(),
+	refillsAt: timestamp("refills_at").notNull(),
 	lastRefilledAt: timestamp("last_refilled_at").notNull(),
 	periodType: subscriptionPeriodType("period_type").notNull(),
-	storageQuota: integer("storage_quota").notNull(),
-	maxDomains: integer("max_domains").notNull().default(1),
+	maxDomains: integer("max_domains").notNull().default(2),
 	maxProjects: integer("max_projects").notNull().default(2),
 	price: numeric("price", {
 		scale: 2,

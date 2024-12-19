@@ -38,11 +38,6 @@ export async function handleInvoicePaidEvent(event: Stripe.InvoicePaidEvent) {
 			? subscriptionMeta.monthly_email_quota
 			: SUBSCRIPTION_QUOTAS[subscriptionMeta.type].emails;
 
-	const storageQuota =
-		subscriptionMeta.type === SUBSCRIPTION_TYPE_CUSTOM
-			? subscriptionMeta.storage
-			: SUBSCRIPTION_QUOTAS[subscriptionMeta.type].storage;
-
 	if (team.subscription && team.subscription.tier !== "FREE") {
 		await db
 			.update(subscriptionsTable)
@@ -79,12 +74,11 @@ export async function handleInvoicePaidEvent(event: Stripe.InvoicePaidEvent) {
 				tier: subscriptionMeta.type,
 				renewsAt: new Date(subscription.current_period_end * 1000),
 				status: "ACTIVE",
-				monthlyQuota: monthlyEmailQuota,
-				remainingQuota: monthlyEmailQuota,
+				monthlyEmailQuota: monthlyEmailQuota,
+				refillsAt: new Date(subscription.current_period_end * 1000),
 				lastRefilledAt: new Date(),
 				periodType: isYearly ? "ANNUAL" : "MONTHLY",
 				price: price.toFixed(2),
-				storageQuota,
 				teamId: team.id,
 			})
 			.returning({ id: subscriptionsTable.id });

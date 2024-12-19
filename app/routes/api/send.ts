@@ -6,7 +6,7 @@ import {
 	templatesTable,
 } from "@/modules/database/schema";
 import {
-	lowerTeamEmailQuota,
+	getTeamRemainingEmailQuota,
 	shouldLowerQuota,
 } from "@/modules/payments/quota";
 import { sendEmail } from "@/modules/sending";
@@ -104,14 +104,17 @@ export const APIRoute = createAPIFileRoute("/api/send")({
 
 		const project = token.project;
 		const team = project.team;
-		const subscription = team.subscription;
 
-		if (!subscription || subscription.remainingQuota <= 0) {
-			throw createError({
-				status: 429,
-				statusMessage: "Quota reached",
-				message: "The team's email quota has been reached",
-			});
+		if (shouldLowerQuota()) {
+			const remainingQuota = await getTeamRemainingEmailQuota(team.id);
+
+			if (remainingQuota <= 0) {
+				throw createError({
+					status: 429,
+					statusMessage: "Quota reached",
+					message: "The team's email quota has been reached",
+				});
+			}
 		}
 
 		const domain = getDomainFromAddress(params.from);
@@ -222,10 +225,6 @@ export const APIRoute = createAPIFileRoute("/api/send")({
 			sentAt: new Date(),
 			updatedAt: new Date(),
 		});
-
-		if (shouldLowerQuota()) {
-			await lowerTeamEmailQuota(token.project.teamId);
-		}
 
 		return json({
 			success: true,

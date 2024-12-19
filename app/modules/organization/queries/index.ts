@@ -4,6 +4,7 @@ import { getTeamFn } from "./get-team";
 import { getTeamInviteFn } from "./get-team-invite";
 import { getTeamInvitesFn } from "./get-team-invites";
 import { getTeamMembersFn } from "./get-team-members";
+import { getTeamUsageFn } from "./get-team-usage";
 import { getUserTeamsFn } from "./get-user-teams";
 
 export const projectQueryOptions = (teamId: string, projectId: string) =>
@@ -64,5 +65,17 @@ export const userTeamsOptions = () =>
 		queryKey: ["user", "teams"],
 		queryFn() {
 			return getUserTeamsFn();
+		},
+	});
+
+export const teamUsageOptions = (teamId: string) =>
+	queryOptions({
+		queryKey: ["team", teamId, "usage"],
+		queryFn() {
+			return getTeamUsageFn({
+				data: {
+					teamId,
+				},
+			});
 		},
 	});

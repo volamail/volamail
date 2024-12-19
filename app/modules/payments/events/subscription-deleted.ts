@@ -33,12 +33,11 @@ export async function handleSubscriptionDeletedEvent(
 	await db
 		.update(subscriptionsTable)
 		.set({
-			monthlyQuota: SUBSCRIPTION_QUOTAS[SUBSCRIPTION_TYPE_FREE].emails,
-			remainingQuota: SUBSCRIPTION_QUOTAS[SUBSCRIPTION_TYPE_FREE].emails,
+			monthlyEmailQuota: SUBSCRIPTION_QUOTAS[SUBSCRIPTION_TYPE_FREE].emails,
 			status: "ACTIVE",
 			tier: SUBSCRIPTION_TYPE_FREE,
-			storageQuota: SUBSCRIPTION_QUOTAS[SUBSCRIPTION_TYPE_FREE].storage,
 			lastRefilledAt: new Date(),
+			refillsAt: addDays(new Date(), 30),
 			renewsAt: addDays(new Date(), 30),
 			periodType: "MONTHLY",
 			providerId: null,

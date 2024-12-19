@@ -13,15 +13,15 @@ export async function createFreeTierSubscription(
 		id,
 		teamId,
 		tier: "FREE",
-		remainingQuota: 500,
-		monthlyQuota: 500,
+		monthlyEmailQuota: 500,
 		periodType: "MONTHLY",
+		refillsAt: addDays(new Date(), 30),
 		lastRefilledAt: new Date(),
-		storageQuota: 20000,
 		price: "0.00",
 		renewsAt: addDays(new Date(), 30),
 		status: "ACTIVE",
-		maxDomains: 1,
+		maxDomains: 2,
+		maxProjects: 2,
 	});
 
 	return id;
