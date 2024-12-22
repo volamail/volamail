@@ -33,6 +33,7 @@ export function renderTemplateToHtml(template: {
 			<body
 				style={{
 					backgroundColor: theme.background,
+					padding: "1em",
 				}}
 			>
 				<table width="100%" cellPadding={0} cellSpacing={0} border={0}>

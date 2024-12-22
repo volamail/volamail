@@ -18,17 +18,6 @@ export default $config({
 			"EmailNotificationsTopic",
 		);
 
-		const email = new sst.aws.Email("Email", {
-			sender: process.env.VITE_NOREPLY_EMAIL!,
-			events: [
-				{
-					name: "DeliveryNotification",
-					types: ["delivery", "bounce", "complaint"],
-					topic: sesNotificationsTopic.arn,
-				},
-			],
-		});
-
 		const bucket = new sst.aws.Bucket("Bucket");
 
 		const databaseUrlSecret = new sst.Secret(
@@ -56,15 +45,8 @@ export default $config({
 			link: [databaseUrlSecret],
 		});
 
-		const sesArn = await new Promise((resolve) => {
-			email.nodes.identity.arn.apply((arn) => {
-				resolve(arn.split("/")[0]);
-			});
-		});
-
 		new sst.aws.TanstackStart("Web", {
 			link: [
-				email,
 				bucket,
 				sesNotificationsTopic,
 				databaseUrlSecret,
@@ -82,7 +64,7 @@ export default $config({
 			permissions: [
 				{
 					actions: ["ses:*"],
-					resources: [`${sesArn}/*`],
+					resources: ["*"],
 				},
 				{
 					actions: ["ses:SetIdentityNotificationTopic"],
@@ -95,6 +77,8 @@ export default $config({
 				VITE_NOREPLY_EMAIL: process.env.VITE_NOREPLY_EMAIL!,
 				VITE_SUPPORT_EMAIL: process.env.VITE_SUPPORT_EMAIL!,
 				VITE_GITHUB_CLIENT_ID: process.env.VITE_GITHUB_CLIENT_ID!,
+				VITE_STRIPE_PRO_PLAN_PRICE_ID:
+					process.env.VITE_STRIPE_PRO_PLAN_PRICE_ID!,
 			},
 		});
 
@@ -104,6 +88,13 @@ export default $config({
 			},
 			dev: {
 				command: "bun db studio",
+			},
+		});
+
+		new sst.x.DevCommand("Stripe", {
+			dev: {
+				command:
+					"stripe listen --forward-to localhost:3000/api/internal/stripe/webhook",
 			},
 		});
 

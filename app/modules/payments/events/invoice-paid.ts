@@ -70,7 +70,7 @@ export async function handleInvoicePaidEvent(event: Stripe.InvoicePaidEvent) {
 		await db
 			.insert(subscriptionsTable)
 			.values({
-				providerId: subscription.id,
+				stripeCustomerId: subscription.customer as string,
 				tier: subscriptionMeta.type,
 				renewsAt: new Date(subscription.current_period_end * 1000),
 				status: "ACTIVE",

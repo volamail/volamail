@@ -1,4 +1,4 @@
-import { serverEnv } from "@/modules/environment/server";
+import { env } from "@/modules/env";
 import { GitHub, generateState } from "arctic";
 import { eq } from "drizzle-orm";
 import { Resource } from "sst";
@@ -100,7 +100,7 @@ export async function handleGithubCallback(request: Request) {
 
 function createGithubOauth() {
 	return new GitHub(
-		serverEnv.VITE_GITHUB_CLIENT_ID,
+		env.VITE_GITHUB_CLIENT_ID,
 		Resource.GithubClientSecret.value,
 		`${getOrigin()}/api/internal/auth/oauth/github/callback`,
 	);

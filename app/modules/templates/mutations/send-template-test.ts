@@ -1,6 +1,6 @@
 import { db } from "@/modules/database";
 import { emailsTable } from "@/modules/database/schema";
-import { serverEnv } from "@/modules/environment/server";
+import { env } from "@/modules/env";
 import {
 	getTeamRemainingEmailQuota,
 	shouldLowerQuota,
@@ -57,7 +57,7 @@ export const sendTemplateTestFn = createServerFn({ method: "POST" })
 
 		const email = await sendEmail({
 			from: {
-				address: serverEnv.VITE_NOREPLY_EMAIL,
+				address: env.VITE_NOREPLY_EMAIL,
 				label: "Volamail",
 			},
 			to: user.email,
@@ -67,7 +67,7 @@ export const sendTemplateTestFn = createServerFn({ method: "POST" })
 		});
 
 		await db.insert(emailsTable).values({
-			from: serverEnv.VITE_NOREPLY_EMAIL,
+			from: env.VITE_NOREPLY_EMAIL,
 			to: user.email,
 			subject: template.subject,
 			id: email.MessageId!,

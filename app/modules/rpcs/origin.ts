@@ -1,7 +1,7 @@
-import { serverEnv } from "../environment/server";
+import { env } from "../env";
 
 export function getOrigin() {
 	const protocol = process.env.NODE_ENV === "development" ? "http" : "https";
 
-	return `${protocol}://${serverEnv.VITE_DOMAIN}`;
+	return `${protocol}://${env.VITE_DOMAIN}`;
 }

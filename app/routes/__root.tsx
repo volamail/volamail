@@ -66,6 +66,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
 				<Meta />
 			</head>
 			<body>
+				<div id="banner-container" />
 				{children}
 				<ScrollRestoration />
 				<Scripts />

@@ -1,4 +1,4 @@
-import { clientEnv } from "@/modules/environment/client";
+import { env } from "@/modules/env";
 import { teamInviteOptions } from "@/modules/organization/queries";
 import { acceptTeamInviteFn } from "@/modules/templates/mutations";
 import { Button } from "@/modules/ui/components/button";
@@ -84,9 +84,7 @@ function RouteComponent() {
 							className="mt-6"
 							trailing={<HeadsetIcon className="size-4" />}
 						>
-							<a href={`mailto:${clientEnv.VITE_SUPPORT_EMAIL}`}>
-								Contact support
-							</a>
+							<a href={`mailto:${env.VITE_SUPPORT_EMAIL}`}>Contact support</a>
 						</Button>
 					</div>
 				) : (
@@ -104,9 +102,7 @@ function RouteComponent() {
 							className="mt-6"
 							trailing={<HeadsetIcon className="size-4" />}
 						>
-							<a href={`mailto:${clientEnv.VITE_SUPPORT_EMAIL}`}>
-								Contact support
-							</a>
+							<a href={`mailto:${env.VITE_SUPPORT_EMAIL}`}>Contact support</a>
 						</Button>
 					</div>
 				)}

@@ -40,7 +40,7 @@ export async function handleSubscriptionDeletedEvent(
 			refillsAt: addDays(new Date(), 30),
 			renewsAt: addDays(new Date(), 30),
 			periodType: "MONTHLY",
-			providerId: null,
+			stripeCustomerId: null,
 			price: "0.00",
 		})
 		.where(eq(subscriptionsTable.id, team.subscription.id));

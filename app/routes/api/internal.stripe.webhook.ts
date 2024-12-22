@@ -1,4 +1,4 @@
-import { serverEnv } from "@/modules/environment/server";
+import { env } from "@/modules/env";
 import { handleInvoicePaidEvent } from "@/modules/payments/events/invoice-paid";
 import { handleSubscriptionDeletedEvent } from "@/modules/payments/events/subscription-deleted";
 import { handleSubscriptionUpdatedEvent } from "@/modules/payments/events/subscription-updated";
@@ -10,7 +10,7 @@ import { getEvent, readRawBody } from "vinxi/http";
 
 export const APIRoute = createAPIFileRoute("/api/internal/stripe/webhook")({
 	async POST({ request, params }) {
-		if (serverEnv.VITE_SELF_HOSTED === "true") {
+		if (env.VITE_SELF_HOSTED === "true") {
 			return json({ error: "Not implemented" }, { status: 501 });
 		}
 
@@ -41,6 +41,7 @@ export const APIRoute = createAPIFileRoute("/api/internal/stripe/webhook")({
 			return json({ error: "Invalid stripe-signature" }, { status: 400 });
 		}
 
+		console.log("Received stripe event", event.type);
 		if (event.type === "invoice.paid") {
 			await handleInvoicePaidEvent(event);
 		} else if (event.type === "customer.subscription.updated") {

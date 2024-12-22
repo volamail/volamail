@@ -1,6 +1,6 @@
 import { db } from "@/modules/database";
 import { teamInvitesTable, teamsTable } from "@/modules/database/schema";
-import { serverEnv } from "@/modules/environment/server";
+import { env } from "@/modules/env";
 import { teamAuthorizationMiddleware } from "@/modules/rpcs/server-functions";
 import { zodValidator } from "@/modules/rpcs/validator";
 import { sendEmail } from "@/modules/sending";
@@ -81,7 +81,7 @@ export const sendTeamInviteFn = createServerFn({
 
 		await sendEmail({
 			from: {
-				address: serverEnv.VITE_NOREPLY_EMAIL,
+				address: env.VITE_NOREPLY_EMAIL,
 				label: "Volamail",
 			},
 			to: data.email,

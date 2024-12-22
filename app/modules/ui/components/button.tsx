@@ -49,7 +49,7 @@ export const buttonStyles = tv({
 			color: "primary",
 			variant: "ghost",
 			className:
-				"text-primary-600 dark:text-primary-400 [&:hover:not(:disabled)]:bg-primary-50 ",
+				"text-primary-600 dark:text-primary-400 [&:hover:not(:disabled)]:bg-primary-50 [&:hover:not(:disabled)]:dark:bg-primary-900",
 		},
 		{
 			color: "neutral",

@@ -1,6 +1,5 @@
 import { createConsola } from "consola";
-
-import { clientEnv } from "./environment/client";
+import { env } from "./env";
 
 export const DEFAULT_LOG_LEVEL = "info";
 
@@ -15,5 +14,5 @@ export const logger = createConsola({
 	defaults: {
 		message: "[logger]",
 	},
-	level: LOG_LEVEL_MAP[clientEnv.VITE_LOG_LEVEL ?? DEFAULT_LOG_LEVEL],
+	level: LOG_LEVEL_MAP[env.VITE_LOG_LEVEL ?? DEFAULT_LOG_LEVEL],
 });

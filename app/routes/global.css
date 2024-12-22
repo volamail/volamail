@@ -7,7 +7,7 @@
 }
 
 body {
-  @apply dark:bg-gray-950 overscroll-y-none;
+  @apply dark:bg-gray-950 overscroll-y-none relative;
 }
 
 button,

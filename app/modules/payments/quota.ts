@@ -1,10 +1,10 @@
 import { and, eq, gte, sql } from "drizzle-orm";
 import { db } from "../database";
 import { emailsTable } from "../database/schema";
-import { serverEnv } from "../environment/server";
+import { env } from "../env";
 
 export function shouldLowerQuota(teamId?: string) {
-	return serverEnv.VITE_SELF_HOSTED === "false";
+	return env.VITE_SELF_HOSTED === "false";
 }
 
 export async function getTeamRemainingEmailQuota(teamId: string) {

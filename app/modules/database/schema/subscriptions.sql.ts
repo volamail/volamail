@@ -35,7 +35,7 @@ export const subscriptionsTable = pgTable("subscriptions", {
 			onDelete: "cascade",
 			onUpdate: "cascade",
 		}),
-	providerId: text("provider_id"),
+	stripeCustomerId: text("stripe_customer_id"),
 	tier: subscriptionTier("tier").notNull(),
 	renewsAt: timestamp("renews_at").notNull(),
 	status: subscriptionStatus("status").notNull(),

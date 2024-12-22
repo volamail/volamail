@@ -62,7 +62,7 @@ export async function handleSubscriptionUpdatedEvent(
 			price: price.toFixed(2),
 			lastRefilledAt: didTierChange ? new Date() : undefined,
 			refillsAt: didTierChange ? addDays(new Date(), 30) : undefined,
-			providerId: subscription.id,
+			stripeCustomerId: subscription.customer as string,
 		})
 		.where(eq(subscriptionsTable.id, team.subscription.id));
 }
