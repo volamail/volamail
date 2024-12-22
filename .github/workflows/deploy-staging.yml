@@ -45,12 +45,13 @@ jobs:
       - name: Deploy to Staging
         run: bun run sst deploy --stage staging
         env:
+          ACM_CERTIFICATE_ARN: ${{ vars.ACM_CERTIFICATE_ARN }}
           VITE_SELF_HOSTED: "false"
           VITE_DOMAIN: ${{ vars.DOMAIN }}
           VITE_NOREPLY_EMAIL: ${{ vars.NOREPLY_EMAIL }}
           VITE_SUPPORT_EMAIL: ${{ vars.SUPPORT_EMAIL }}
           VITE_GITHUB_CLIENT_ID: ${{ secrets.GH_CLIENT_ID }}
-          ACM_CERTIFICATE_ARN: ${{ vars.ACM_CERTIFICATE_ARN }}
+          VITE_STRIPE_PRO_PLAN_PRICE_ID: ${{ vars.STRIPE_PRO_PLAN_PRICE_ID }}
 
       - name: Run DB migrations
         run: bun run db migrate
