@@ -62,7 +62,7 @@ export const LocaleTabItem = observer(function LocaleTabItem(
 								variant="ghost"
 								padding="sm"
 								color="neutral"
-								className="dark:hover:bg-gray-700"
+								className="[&:hover:not(:disabled)]:dark:bg-gray-600"
 							>
 								<EllipsisVerticalIcon className="size-4" />
 							</ActionButton>

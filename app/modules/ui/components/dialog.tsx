@@ -24,13 +24,13 @@ export function DialogContent(props: DialogContentProps) {
 
 	return (
 		<Portal>
-			<Dialog.Backdrop className="data-[state=open]:fade-in data-[state=closed]:fade-out fixed inset-0 z-10 bg-black/50 backdrop-blur data-[state=closed]:animate-out data-[state=open]:animate-in" />
+			<Dialog.Backdrop className="fixed inset-0 z-10 bg-black/50 backdrop-blur" />
 
 			<Dialog.Positioner className="fixed top-0 left-0 z-10 flex h-dvh w-screen items-center justify-center">
 				<Dialog.Content
 					{...rest}
 					className={cn(
-						"data-[state=open]:fade-in data-[state=open]:zoom-in-105 data-[state=closed]:fade-out relative z-10 w-full max-w-md rounded-xl border p-6 data-[state=closed]:animate-out data-[state=open]:animate-in dark:border-gray-700 dark:bg-gray-900",
+						"relative z-10 w-full max-w-md rounded-xl border p-6 dark:border-gray-700 dark:bg-gray-900",
 						className,
 					)}
 				>
