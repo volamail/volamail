@@ -23,8 +23,8 @@ function RouteComponent() {
 	});
 
 	return (
-		<GridBgContainer className="flex h-dvh flex-col items-center justify-center bg-grid-small-black/10 dark:bg-grid-small-white/10">
-			<main className="z-10 flex w-full max-w-sm flex-col gap-6 rounded-lg border border-gray-300 bg-gradient-to-br p-12 shadow-2xl dark:border-gray-700 dark:from-gray-900 dark:to-gray-950">
+		<GridBgContainer className="flex h-dvh flex-col items-center justify-center bg-grid-small-black/10 p-4 dark:bg-grid-small-white/10">
+			<main className="z-10 flex w-full max-w-sm flex-col gap-6 rounded-lg border border-gray-300 bg-gradient-to-br p-8 shadow-2xl md:p-12 dark:border-gray-700 dark:from-gray-900 dark:to-gray-950">
 				<div className="flex flex-col gap-2">
 					<h1 className="font-semibold text-2xl">Login</h1>
 					<p className="text-gray-600 text-sm dark:text-gray-400">
