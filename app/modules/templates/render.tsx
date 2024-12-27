@@ -47,7 +47,6 @@ export function renderTemplateToHtml(template: {
 									style={{
 										maxWidth: `${theme.contentMaxWidth}px`,
 										width: "100%",
-										padding: "3em",
 										//border: "1px solid #ddd",
 										backgroundColor: theme.contentBackground,
 										borderRadius: `${theme.contentBorderRadius}px`,

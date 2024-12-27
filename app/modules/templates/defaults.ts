@@ -10,7 +10,13 @@ export function getDummyTemplateTranslationForLanguage(
 			type: "doc",
 			content: [
 				{
-					type: "paragraph",
+					type: "section",
+					content: [
+						{
+							type: "paragraph",
+							text: "My test content",
+						},
+					],
 				},
 			],
 		},
