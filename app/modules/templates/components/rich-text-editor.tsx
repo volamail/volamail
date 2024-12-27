@@ -1,9 +1,10 @@
 import { EditorContent, useEditor } from "@tiptap/react";
 import { observer } from "mobx-react-lite";
-import { getExtensionsFromTheme } from "../editor-extensions";
+import { getExtensionsFromTheme } from "../extensions";
 import { useEditorStore } from "../store";
 import { DEFAULT_THEME } from "../theme";
-import { BubbleMenu } from "./bubble-menu";
+import { ImageBubbleMenu } from "./image-bubble-menu";
+import { TextBubbleMenu } from "./text-bubble-menu";
 
 export const RichTextEditor = observer(() => {
 	const extensions = getExtensionsFromTheme(DEFAULT_THEME);
@@ -30,7 +31,8 @@ export const RichTextEditor = observer(() => {
 
 	return (
 		<div className="relative flex min-h-0 grow flex-col">
-			{editor && <BubbleMenu editor={editor} />}
+			{editor && <TextBubbleMenu editor={editor} />}
+			{editor && <ImageBubbleMenu editor={editor} />}
 			<EditorContent
 				editor={editor}
 				className="relative min-h-0 grow overflow-y-auto p-16"

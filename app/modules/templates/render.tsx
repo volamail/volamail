@@ -2,7 +2,7 @@ import { type JSONContent, getSchema } from "@tiptap/core";
 import { generateHTML } from "@tiptap/html";
 import { Node } from "@tiptap/pm/model";
 import { renderToString } from "react-dom/server";
-import { getExtensionsFromTheme } from "./editor-extensions";
+import { getExtensionsFromTheme } from "./extensions";
 import css from "./template-styles.css?raw";
 import type { Theme } from "./theme";
 
