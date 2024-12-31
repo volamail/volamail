@@ -18,7 +18,7 @@ import {
 	SeparatorHorizontalIcon,
 	StrikethroughIcon,
 } from "lucide-react";
-import { type ComponentProps, useCallback } from "react";
+import { useCallback } from "react";
 import { BubbleMenuButton } from "./bubble-menu-button";
 import { HyperlinkPopover } from "./hyperlink-popover";
 
@@ -125,7 +125,8 @@ export function TextBubbleMenu(props: Props) {
 			tippyOptions={{
 				duration: 125,
 				offset: [0, 4],
-				hideOnClick: true,
+				hideOnClick: "toggle",
+				interactive: true,
 				maxWidth: 600,
 			}}
 		>

@@ -18,15 +18,23 @@ export const SmallText = Node.create({
 	parseHtml() {
 		return [
 			{
-				tag: "small",
+				tag: "p",
+				getAttrs: (node: HTMLElement) =>
+					node.style.fontSize === "small" && null,
 			},
 		];
 	},
 
 	renderHTML({ node, HTMLAttributes }) {
 		return [
-			"small",
-			mergeAttributes(this.options.HTMLAttributes, HTMLAttributes),
+			"p",
+			mergeAttributes(
+				{
+					style: "font-size: small;",
+				},
+				this.options.HTMLAttributes,
+				HTMLAttributes,
+			),
 			0,
 		];
 	},

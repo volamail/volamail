@@ -5,7 +5,10 @@ import { useEditorStore } from "../store";
 import { DEFAULT_THEME } from "../theme";
 import { FloatingMenu } from "./floating-menu";
 import { ImageBubbleMenu } from "./image-bubble-menu";
+import { ImageResizer } from "./image-resizer";
+import { SectionBubbleMenu } from "./section-bubble-menu";
 import { TextBubbleMenu } from "./text-bubble-menu";
+import "../editor.css";
 
 export const RichTextEditor = observer(() => {
 	const extensions = getExtensionsFromTheme(DEFAULT_THEME);
@@ -14,17 +17,16 @@ export const RichTextEditor = observer(() => {
 
 	const editor = useEditor(
 		{
-			immediatelyRender: false,
 			extensions,
 			editorProps: {
 				attributes: {
 					class:
-						"transition-all overflow-hidden [&>table]:m-0 [&>small]:text-gray-400 font-[Helvetica] font-[16px] outline-none prose rounded-[var(--content-border-radius)] max-w-[var(--content-max-width)] mx-auto bg-[var(--content-background)]",
+						"transition-all overflow-hidden [&_img:last-child]:mb-0 [&_img:first-child]:mt-0 [&>table:first-child] [&>table]:m-0 font-[Helvetica] font-[16px] outline-none prose rounded-[var(--content-border-radius)] max-w-[var(--content-max-width)] mx-auto bg-[var(--content-background)]",
 				},
 			},
 			content:
 				store.template.currentTranslation.contents ||
-				"<table><tr><td><p>Zio pera</p></td></tr></table>",
+				"<table><tr><td><p>Start writing here...</p></td></tr></table>",
 			onTransaction({ editor }) {
 				store.template.currentTranslation.setContents(editor.getJSON());
 			},
@@ -33,13 +35,20 @@ export const RichTextEditor = observer(() => {
 	);
 
 	return (
-		<div className="relative flex min-h-0 grow flex-col">
-			{editor && <TextBubbleMenu editor={editor} />}
-			{editor && <ImageBubbleMenu editor={editor} />}
-			{editor && <FloatingMenu editor={editor} />}
+		<div className="relative min-h-0 grow">
+			{editor && (
+				<>
+					<TextBubbleMenu editor={editor} />
+					<ImageBubbleMenu editor={editor} />
+					<FloatingMenu editor={editor} />
+					<SectionBubbleMenu editor={editor} />
+				</>
+			)}
+
 			<EditorContent
 				editor={editor}
-				className="relative min-h-0 grow overflow-y-auto p-16"
+				className="relative h-full overflow-y-auto p-16"
+				id="editor-content"
 				style={{
 					background: store.theme.background,
 					// @ts-expect-error: CSS variable
@@ -47,7 +56,9 @@ export const RichTextEditor = observer(() => {
 					"--content-max-width": `${store.theme.contentMaxWidth}px`,
 					"--content-border-radius": `${store.theme.contentBorderRadius}px`,
 				}}
-			/>
+			>
+				{editor && <ImageResizer editor={editor} />}
+			</EditorContent>
 		</div>
 	);
 });

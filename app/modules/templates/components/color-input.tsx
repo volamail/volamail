@@ -11,7 +11,7 @@ import { PipetteIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { tv } from "tailwind-variants";
 
-const styles = tv({
+export const colorInputStyles = tv({
 	slots: {
 		container: "flex items-center gap-3",
 		control:
@@ -35,6 +35,7 @@ type Props = Omit<ColorPickerRootProps, "onChange" | "defaultValue"> & {
 	label?: ReactNode;
 	defaultValue?: string;
 	onChange?: (value: string) => void;
+	showInput?: boolean;
 	classes?: {
 		label?: string;
 		container?: string;
@@ -53,7 +54,14 @@ type Props = Omit<ColorPickerRootProps, "onChange" | "defaultValue"> & {
 };
 
 export function ColorInput(props: Props) {
-	const { classes, defaultValue, onChange, label, ...rest } = props;
+	const {
+		classes,
+		defaultValue,
+		onChange,
+		label,
+		showInput = true,
+		...rest
+	} = props;
 
 	function handleValueChange(details: ColorPickerValueChangeDetails) {
 		onChange?.(details.value.toString("hex"));
@@ -62,7 +70,7 @@ export function ColorInput(props: Props) {
 	return (
 		<ColorPicker.Root
 			{...rest}
-			className={styles().container({ class: classes?.container })}
+			className={colorInputStyles().container({ class: classes?.container })}
 			defaultValue={defaultValue ? parseColor(defaultValue) : undefined}
 			onValueChange={handleValueChange}
 		>
@@ -72,32 +80,36 @@ export function ColorInput(props: Props) {
 				</ColorPicker.Label>
 			)}
 			<ColorPicker.Control
-				className={styles().control({ class: classes?.control })}
+				className={colorInputStyles().control({ class: classes?.control })}
 			>
 				<ColorPicker.Trigger
-					className={styles().trigger({ class: classes?.trigger })}
+					className={colorInputStyles().trigger({ class: classes?.trigger })}
 				>
 					<ColorPicker.ValueSwatch
-						className={styles().valueSwatch({ class: classes?.valueSwatch })}
+						className={colorInputStyles().valueSwatch({
+							class: classes?.valueSwatch,
+						})}
 					/>
 				</ColorPicker.Trigger>
-				<ColorPicker.ChannelInput
-					className={styles().input({ class: classes?.input })}
-					channel="hex"
-				/>
+				{showInput && (
+					<ColorPicker.ChannelInput
+						className={colorInputStyles().input({ class: classes?.input })}
+						channel="hex"
+					/>
+				)}
 			</ColorPicker.Control>
 			<ColorPicker.Positioner>
 				<ColorPicker.Content
-					className={styles().content({ class: classes?.content })}
+					className={colorInputStyles().content({ class: classes?.content })}
 				>
 					<ColorPicker.Area>
 						<ColorPicker.AreaBackground
-							className={styles().areaBackground({
+							className={colorInputStyles().areaBackground({
 								class: classes?.areaBackground,
 							})}
 						/>
 						<ColorPicker.AreaThumb
-							className={styles().areaThumb({
+							className={colorInputStyles().areaThumb({
 								class: classes?.areaThumb,
 							})}
 						/>
@@ -106,7 +118,7 @@ export function ColorInput(props: Props) {
 						<ColorPicker.EyeDropperTrigger asChild>
 							<ActionButton
 								variant="outline"
-								className={styles().eyeDropperTrigger({
+								className={colorInputStyles().eyeDropperTrigger({
 									class: classes?.eyeDropperTrigger,
 								})}
 							>
@@ -115,17 +127,17 @@ export function ColorInput(props: Props) {
 						</ColorPicker.EyeDropperTrigger>
 						<ColorPicker.ChannelSlider
 							channel="hue"
-							className={styles().channelSliderContainer({
+							className={colorInputStyles().channelSliderContainer({
 								class: classes?.channelSliderContainer,
 							})}
 						>
 							<ColorPicker.ChannelSliderTrack
-								className={styles().channelSliderTrack({
+								className={colorInputStyles().channelSliderTrack({
 									class: classes?.channelSliderTrack,
 								})}
 							/>
 							<ColorPicker.ChannelSliderThumb
-								className={styles().channelSliderThumb({
+								className={colorInputStyles().channelSliderThumb({
 									class: classes?.channelSliderThumb,
 								})}
 							/>

@@ -19,7 +19,7 @@ export function getExtensionsFromTheme(theme: Theme) {
 		}),
 		Section.configure({
 			HTMLAttributes: {
-				style: "padding: 4em; width: 100%;",
+				style: "width: 100%;",
 			},
 		}),
 	];

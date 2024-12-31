@@ -1,0 +1,3 @@
+.ProseMirror-selectednode {
+  @apply outline outline-2 outline-primary-500;
+}

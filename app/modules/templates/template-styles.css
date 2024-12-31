@@ -241,6 +241,14 @@ ol ol {
   margin-bottom: 0.75em;
 }
 
+img:first-child {
+  margin-top: 0;
+}
+
+img:last-child {
+  margin-bottom: 0;
+}
+
 hr + * {
   margin-top: 0;
 }

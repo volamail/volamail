@@ -1,12 +1,9 @@
 import type { EditorState } from "@tiptap/pm/state";
 import type { EditorView } from "@tiptap/pm/view";
 import { type Editor, FloatingMenu as TiptapFloatingMenu } from "@tiptap/react";
-import {
-	Rows2Icon,
-	SeparatorHorizontalIcon,
-	SeparatorVerticalIcon,
-} from "lucide-react";
+import { ImageIcon, Rows2Icon, SeparatorHorizontalIcon } from "lucide-react";
 import { BubbleMenuButton } from "./bubble-menu-button";
+import { ImagePopover } from "./image-popover";
 
 interface Props {
 	editor: Editor;
@@ -47,6 +44,20 @@ export function FloatingMenu({ editor }: Props) {
 				>
 					<SeparatorHorizontalIcon className="size-4" />
 				</BubbleMenuButton>
+
+				<ImagePopover
+					trigger={
+						<BubbleMenuButton aria-label="Insert image">
+							<ImageIcon className="size-4" />
+						</BubbleMenuButton>
+					}
+					onSet={(url) => {
+						editor.commands.insertContent({
+							type: "image",
+							attrs: { src: url },
+						});
+					}}
+				/>
 			</div>
 		</TiptapFloatingMenu>
 	);

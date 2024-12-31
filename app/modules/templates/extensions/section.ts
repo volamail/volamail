@@ -4,6 +4,9 @@ declare module "@tiptap/core" {
 	interface Commands<ReturnType> {
 		section: {
 			setSection: () => ReturnType;
+			setSectionBackgroundColor: (color: string) => ReturnType;
+			setSectionPadding: (padding: string) => ReturnType;
+			unsetSection: () => ReturnType;
 		};
 	}
 }
@@ -24,6 +27,17 @@ export const Section = Node.create({
 				renderHTML: (attributes) => {
 					return {
 						style: `background-color: ${attributes.backgroundColor};`,
+					};
+				},
+			},
+			padding: {
+				default: "4em",
+				parseHTML: (element) => {
+					return element.style.padding;
+				},
+				renderHTML: (attributes) => {
+					return {
+						style: `padding: ${attributes.padding};`,
 					};
 				},
 			},
@@ -76,6 +90,25 @@ export const Section = Node.create({
 								text: "",
 							},
 						],
+					});
+				},
+			unsetSection:
+				() =>
+				({ commands }) => {
+					return commands.deleteNode(this.name);
+				},
+			setSectionBackgroundColor:
+				(color: string) =>
+				({ commands }) => {
+					return commands.updateAttributes(this.name, {
+						backgroundColor: color,
+					});
+				},
+			setSectionPadding:
+				(padding: string) =>
+				({ commands }) => {
+					return commands.updateAttributes(this.name, {
+						padding,
 					});
 				},
 		};
