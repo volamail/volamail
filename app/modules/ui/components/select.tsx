@@ -59,7 +59,7 @@ export function Select(props: SelectProps) {
 			</ArkSelect.Control>
 			<Portal>
 				<ArkSelect.Positioner>
-					<ArkSelect.Content className="z-50 w-[var(--reference-width)] overflow-hidden rounded-md border shadow outline-none dark:border-gray-700 dark:bg-gray-800">
+					<ArkSelect.Content className="data-[state=open]:fade-in data-[state=open]:slide-in-from-top-2 data-[state=closed]:fade-out z-50 w-[var(--reference-width)] overflow-hidden rounded-md border shadow outline-none data-[state=closed]:animate-out data-[state=open]:animate-in dark:border-gray-700 dark:bg-gray-800">
 						{collection.items.map((item) => (
 							<ArkSelect.Item
 								key={item.value}

@@ -25,9 +25,10 @@ export const colorInputStyles = tv({
 		areaThumb: "size-4 rounded-full border border-gray-200 bg-white",
 		eyeDropperTrigger: "p-1",
 		channelSliderContainer: "grow",
-		channelSliderTrack: "h-4 w-full rounded border border-white",
+		channelSliderTrack:
+			"h-4 w-full rounded border border-white dark:border-gray-600",
 		channelSliderThumb:
-			"-translate-x-1/2 -translate-y-1/2 h-5 w-4 rounded border border-white shadow",
+			"-translate-x-1/2 -translate-y-1/2 h-5 w-4 rounded border border-white shadow dark:border-gray-600",
 	},
 });
 
@@ -114,10 +115,10 @@ export function ColorInput(props: Props) {
 							})}
 						/>
 					</ColorPicker.Area>
-					<div className="flex items-center gap-2">
+					<div className="flex items-center gap-4">
 						<ColorPicker.EyeDropperTrigger asChild>
 							<ActionButton
-								variant="outline"
+								color="neutral"
 								className={colorInputStyles().eyeDropperTrigger({
 									class: classes?.eyeDropperTrigger,
 								})}

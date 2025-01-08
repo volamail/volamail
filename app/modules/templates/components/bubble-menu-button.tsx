@@ -13,8 +13,8 @@ export function BubbleMenuButton({
 		<ActionButton
 			color="neutral"
 			className={cn(
-				"rounded border-none p-1.5 dark:bg-gray-900 dark:text-gray-400 hover:dark:text-gray-50",
-				active && "dark:bg-gray-700 dark:text-gray-300",
+				"rounded border-none p-1.5 dark:bg-gray-900 dark:text-gray-500 hover:dark:text-gray-50",
+				active && "dark:text-gray-50",
 				className,
 			)}
 			{...props}

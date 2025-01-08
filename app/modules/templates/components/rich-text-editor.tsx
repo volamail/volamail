@@ -3,7 +3,6 @@ import { observer } from "mobx-react-lite";
 import { getExtensionsFromTheme } from "../extensions";
 import { useEditorStore } from "../store";
 import { DEFAULT_THEME } from "../theme";
-import { FloatingMenu } from "./floating-menu";
 import { ImageBubbleMenu } from "./image-bubble-menu";
 import { ImageResizer } from "./image-resizer";
 import { SectionBubbleMenu } from "./section-bubble-menu";
@@ -40,7 +39,6 @@ export const RichTextEditor = observer(() => {
 				<>
 					<TextBubbleMenu editor={editor} />
 					<ImageBubbleMenu editor={editor} />
-					<FloatingMenu editor={editor} />
 					<SectionBubbleMenu editor={editor} />
 				</>
 			)}

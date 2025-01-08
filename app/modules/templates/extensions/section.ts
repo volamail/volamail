@@ -46,7 +46,9 @@ export const Section = Node.create({
 
 	addOptions() {
 		return {
-			HTMLAttributes: {},
+			HTMLAttributes: {
+				style: "width: 100%;",
+			},
 		};
 	},
 

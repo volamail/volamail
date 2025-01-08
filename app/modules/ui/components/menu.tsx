@@ -10,24 +10,30 @@ import { cn } from "../utils/cn";
 interface Props {
 	placement?: NonNullable<MenuRootProps["positioning"]>["placement"];
 	children: ReactNode | ReactNode[];
-	trigger: ReactNode;
+	trigger?: ReactNode;
 	onSelect?: (details: MenuSelectionDetails) => void;
+	open?: boolean;
+	getAnchorRect?: NonNullable<MenuRootProps["positioning"]>["getAnchorRect"];
 }
 
 export function Menu(props: Props) {
 	return (
 		<ArkMenu.Root
+			open={props.open}
 			positioning={{
 				offset: { mainAxis: 4, crossAxis: 0 },
 				placement: props.placement,
+				getAnchorRect: props.getAnchorRect,
 			}}
 			onSelect={props.onSelect}
 		>
-			<ArkMenu.Trigger asChild>{props.trigger}</ArkMenu.Trigger>
+			{props.trigger && (
+				<ArkMenu.Trigger asChild>{props.trigger}</ArkMenu.Trigger>
+			)}
 
 			<Portal>
 				<ArkMenu.Positioner>
-					<ArkMenu.Content className="z-10 space-y-0.5 rounded-md border p-1 text-sm shadow-2xl outline-none dark:border-gray-800 dark:bg-gray-900">
+					<ArkMenu.Content className="data-[state=open]:fade-in data-[state=open]:slide-in-from-top-1 data-[state=closed]:fade-out z-10 space-y-0.5 rounded-md border p-1 text-sm shadow-2xl outline-none data-[state=closed]:animate-out data-[state=open]:animate-in dark:border-gray-800 dark:bg-gray-900">
 						{props.children}
 					</ArkMenu.Content>
 				</ArkMenu.Positioner>

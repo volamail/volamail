@@ -36,6 +36,7 @@
     "@tiptap/pm": "^2.9.1",
     "@tiptap/react": "^2.9.1",
     "@tiptap/starter-kit": "^2.9.1",
+    "@tiptap/suggestion": "^2.11.0",
     "arctic": "^2.2.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
