@@ -46,6 +46,9 @@ export default $config({
 		});
 
 		new sst.aws.TanstackStart("Web", {
+			server: {
+				runtime: "nodejs22.x",
+			},
 			link: [
 				bucket,
 				sesNotificationsTopic,

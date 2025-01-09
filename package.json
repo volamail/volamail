@@ -12,8 +12,8 @@
   },
   "dependencies": {
     "@ark-ui/react": "^4.7.0",
-    "@aws-sdk/client-ses": "^3.723.0",
-    "@aws-sdk/client-sesv2": "^3.723.0",
+    "@aws-sdk/client-ses": "^3.726.0",
+    "@aws-sdk/client-sesv2": "^3.726.0",
     "@hookform/resolvers": "^3.10.0",
     "@icons-pack/react-simple-icons": "^10.2.0",
     "@oslojs/crypto": "^1.0.1",
@@ -79,7 +79,7 @@
     "babel-plugin-react-compiler": "^19.0.0-beta-df7b47d-20241124",
     "drizzle-kit": "^0.27.2",
     "eslint-plugin-react-compiler": "^19.0.0-beta-df7b47d-20241124",
-    "knip": "^5.41.1",
+    "knip": "^5.42.0",
     "mini-svg-data-uri": "^1.4.4",
     "postcss": "^8.4.49",
     "vite-tsconfig-paths": "^5.1.4"
