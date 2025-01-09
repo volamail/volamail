@@ -86,8 +86,5 @@
   },
   "peerDependencies": {
     "typescript": "^5.6.3"
-  },
-  "overrides": {
-    "nitropack": "npm:nitropack-nightly@latest"
   }
 }
