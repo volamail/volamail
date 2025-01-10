@@ -7,6 +7,5 @@ export default defineConfig({
 	},
 	server: {
 		preset: "aws-lambda",
-		minify: false,
 	},
 });
