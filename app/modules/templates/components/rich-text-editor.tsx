@@ -1,6 +1,7 @@
 import { EditorContent, useEditor } from "@tiptap/react";
 import { observer } from "mobx-react-lite";
 import { getExtensionsFromTheme } from "../extensions";
+import { SlashMenu } from "../extensions/slash-menu";
 import { useEditorStore } from "../store";
 import { DEFAULT_THEME } from "../theme";
 import { ImageBubbleMenu } from "./image-bubble-menu";
@@ -15,7 +16,7 @@ export const RichTextEditor = observer(() => {
 
 	const editor = useEditor(
 		{
-			extensions,
+			extensions: [...extensions, SlashMenu],
 			editorProps: {
 				attributes: {
 					class:

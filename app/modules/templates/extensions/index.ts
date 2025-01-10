@@ -5,7 +5,6 @@ import type { Theme } from "../theme";
 import { CustomDocument } from "./custom-doc";
 import { Image } from "./image";
 import { Section } from "./section";
-import { SlashMenu } from "./slash-menu";
 import { SmallText } from "./small-text";
 
 export function getExtensionsFromTheme(theme: Theme) {
@@ -19,6 +18,5 @@ export function getExtensionsFromTheme(theme: Theme) {
 			types: ["heading", "paragraph", "smallText", "image"],
 		}),
 		Section,
-		SlashMenu,
 	];
 }

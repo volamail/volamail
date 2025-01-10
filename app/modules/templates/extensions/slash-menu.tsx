@@ -3,13 +3,10 @@ import { ReactRenderer } from "@tiptap/react";
 import Suggestion, { type SuggestionOptions } from "@tiptap/suggestion";
 import {
 	BetweenHorizonalEndIcon,
-	BetweenHorizonalStart,
 	Heading1Icon,
 	Heading2Icon,
 	Heading3Icon,
-	ImagePlusIcon,
 	QuoteIcon,
-	SquareSplitVerticalIcon,
 	UnfoldVerticalIcon,
 } from "lucide-react";
 import type { ComponentRef } from "react";
@@ -122,7 +119,7 @@ export const SlashMenu = Extension.create({
 					let popup: Instance[] | null = null;
 
 					return {
-						onStart(params) {
+						async onStart(params) {
 							component = new ReactRenderer(SlashMenuContents, {
 								props: params,
 								editor: params.editor,
