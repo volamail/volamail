@@ -26,18 +26,16 @@ export default $config({
 		);
 
 		// TODO: Make this friendlier for self-hosting
-		const email = $dev
-			? new sst.aws.Email("Email", {
-					sender: process.env.VITE_NOREPLY_EMAIL!,
-					events: [
-						{
-							name: "DeliveryNotification",
-							types: ["delivery", "bounce", "complaint"],
-							topic: sesNotificationsTopic.arn,
-						},
-					],
-				})
-			: sst.aws.Email.get("Email", process.env.VITE_NOREPLY_EMAIL!);
+		const email = new sst.aws.Email("Email", {
+			sender: process.env.VITE_NOREPLY_EMAIL!,
+			events: [
+				{
+					name: "DeliveryNotification",
+					types: ["delivery", "bounce", "complaint"],
+					topic: sesNotificationsTopic.arn,
+				},
+			],
+		});
 
 		const githubClientSecret = new sst.Secret(
 			"GithubClientSecret",
