@@ -58,6 +58,7 @@ export default $config({
 			handler: "functions/email-notifications-handler.handler",
 			link: [databaseUrlSecret],
 		});
+
 		const sesArn = await new Promise((resolve) => {
 			email.nodes.identity.arn.apply((arn) => {
 				resolve(arn.split("/")[0]);

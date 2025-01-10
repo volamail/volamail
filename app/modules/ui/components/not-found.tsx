@@ -16,7 +16,7 @@ export function NotFound() {
 					The page you are looking for does not exist.
 					<br /> Click{" "}
 					<Link
-						href="/"
+						to="/"
 						className="font-medium text-primary-600 hover:text-primary-700 dark:text-primary-500 dark:hover:text-primary-400"
 					>
 						here

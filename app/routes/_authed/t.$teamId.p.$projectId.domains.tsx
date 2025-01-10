@@ -54,7 +54,11 @@ function RouteComponent() {
 									<>
 										Maximum number of domains reached for this project. Go to
 										the{" "}
-										<Link href="/billing" className="dark:text-primary-400">
+										<Link
+											to="/t/$teamId/p/$projectId/billing"
+											params={params}
+											className="dark:text-primary-400"
+										>
 											Billing
 										</Link>{" "}
 										page to upgrade your team's plan.
