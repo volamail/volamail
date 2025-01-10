@@ -1,4 +1,4 @@
-import { env } from "@/modules/env";
+import { clientEnv } from "@/modules/client-env";
 import { handleInvoicePaidEvent } from "@/modules/payments/events/invoice-paid";
 import { handleSubscriptionDeletedEvent } from "@/modules/payments/events/subscription-deleted";
 import { handleSubscriptionUpdatedEvent } from "@/modules/payments/events/subscription-updated";
@@ -10,7 +10,7 @@ import { getEvent, readRawBody } from "vinxi/http";
 
 export const APIRoute = createAPIFileRoute("/api/internal/stripe/webhook")({
 	async POST({ request }) {
-		if (env.VITE_SELF_HOSTED === "true") {
+		if (clientEnv.VITE_SELF_HOSTED === "true") {
 			return json({ error: "Not implemented" }, { status: 501 });
 		}
 

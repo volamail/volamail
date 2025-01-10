@@ -1,5 +1,5 @@
+import { clientEnv } from "@/modules/client-env";
 import { db } from "@/modules/database";
-import { env } from "@/modules/env";
 import { getOrigin } from "@/modules/rpcs/origin";
 import { teamAuthorizationMiddleware } from "@/modules/rpcs/server-functions";
 import { zodValidator } from "@/modules/rpcs/validator";
@@ -44,7 +44,7 @@ export const createProPlanCheckout = createServerFn({ method: "POST" })
 			mode: "subscription",
 			line_items: [
 				{
-					price: env.VITE_STRIPE_PRO_PLAN_PRICE_ID,
+					price: clientEnv.VITE_STRIPE_PRO_PLAN_PRICE_ID,
 					quantity: 1,
 				},
 			],

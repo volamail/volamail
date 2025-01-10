@@ -17,4 +17,4 @@ const schema = z.object({
 		.optional(),
 });
 
-export const env = schema.parse({ ...process.env, ...import.meta.env });
+export const clientEnv = schema.parse({ ...process.env, ...import.meta.env });
