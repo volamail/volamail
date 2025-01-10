@@ -7,7 +7,6 @@ import { ImageBubbleMenu } from "./image-bubble-menu";
 import { ImageResizer } from "./image-resizer";
 import { SectionBubbleMenu } from "./section-bubble-menu";
 import { TextBubbleMenu } from "./text-bubble-menu";
-import "../editor.css";
 
 export const RichTextEditor = observer(() => {
 	const extensions = getExtensionsFromTheme(DEFAULT_THEME);
