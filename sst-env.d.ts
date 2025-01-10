@@ -14,6 +14,11 @@ declare module "sst" {
       "type": "sst.sst.Secret"
       "value": string
     }
+    "Email": {
+      "configSet": string
+      "sender": string
+      "type": "sst.aws.Email"
+    }
     "EmailNotificationsTopic": {
       "arn": string
       "type": "sst.aws.SnsTopic"

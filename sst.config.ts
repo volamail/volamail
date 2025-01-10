@@ -25,6 +25,20 @@ export default $config({
 			process.env.DATABASE_URL!,
 		);
 
+		// TODO: Make this friendlier for self-hosting
+		const email = $dev
+			? new sst.aws.Email("Email", {
+					sender: process.env.VITE_NOREPLY_EMAIL!,
+					events: [
+						{
+							name: "DeliveryNotification",
+							types: ["delivery", "bounce", "complaint"],
+							topic: sesNotificationsTopic.arn,
+						},
+					],
+				})
+			: sst.aws.Email.get("Email", process.env.VITE_NOREPLY_EMAIL!);
+
 		const githubClientSecret = new sst.Secret(
 			"GithubClientSecret",
 			process.env.GITHUB_CLIENT_SECRET!,
@@ -44,12 +58,18 @@ export default $config({
 			handler: "functions/email-notifications-handler.handler",
 			link: [databaseUrlSecret],
 		});
+		const sesArn = await new Promise((resolve) => {
+			email.nodes.identity.arn.apply((arn) => {
+				resolve(arn.split("/")[0]);
+			});
+		});
 
 		new sst.aws.TanstackStart("Web", {
 			server: {
 				runtime: "nodejs22.x",
 			},
 			link: [
+				email,
 				bucket,
 				sesNotificationsTopic,
 				databaseUrlSecret,
@@ -67,7 +87,7 @@ export default $config({
 			permissions: [
 				{
 					actions: ["ses:*"],
-					resources: ["*"],
+					resources: [`${sesArn}/*`],
 				},
 				{
 					actions: ["ses:SetIdentityNotificationTopic"],
@@ -94,12 +114,12 @@ export default $config({
 			},
 		});
 
-		// new sst.x.DevCommand("Stripe", {
-		// 	dev: {
-		// 		command:
-		// 			"stripe listen --forward-to localhost:3000/api/internal/stripe/webhook",
-		// 	},
-		// });
+		new sst.x.DevCommand("Stripe", {
+			dev: {
+				command:
+					"stripe listen --forward-to localhost:3000/api/internal/stripe/webhook",
+			},
+		});
 
 		return undefined;
 	},
