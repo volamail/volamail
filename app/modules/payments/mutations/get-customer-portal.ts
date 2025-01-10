@@ -1,10 +1,9 @@
-import { db } from "@/modules/database";
 import { getOrigin } from "@/modules/rpcs/origin";
 import { teamAuthorizationMiddleware } from "@/modules/rpcs/server-functions";
 import { zodValidator } from "@/modules/rpcs/validator";
 import { createServerFn } from "@tanstack/start";
 import { z } from "zod";
-import { stripe } from "../stripe";
+import { getStripe } from "../stripe";
 
 export const createCustomerPortalSession = createServerFn({ method: "POST" })
 	.middleware([teamAuthorizationMiddleware])
@@ -19,6 +18,8 @@ export const createCustomerPortalSession = createServerFn({ method: "POST" })
 	)
 	.handler(async ({ data }) => {
 		const { teamId, projectToRedirectTo, stripeCustomerId } = data;
+
+		const stripe = getStripe();
 
 		const session = await stripe.billingPortal.sessions.create({
 			customer: stripeCustomerId,

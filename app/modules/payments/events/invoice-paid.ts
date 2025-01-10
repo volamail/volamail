@@ -5,7 +5,7 @@ import { eq } from "drizzle-orm";
 import type Stripe from "stripe";
 import { SUBSCRIPTION_QUOTAS, SUBSCRIPTION_TYPE_CUSTOM } from "../constants";
 import { subscriptionMetaSchema } from "../metadata";
-import { stripe } from "../stripe";
+import { getStripe } from "../stripe";
 
 export async function handleInvoicePaidEvent(event: Stripe.InvoicePaidEvent) {
 	const subscriptionId = event.data.object.subscription;
@@ -13,6 +13,8 @@ export async function handleInvoicePaidEvent(event: Stripe.InvoicePaidEvent) {
 	if (!subscriptionId || typeof subscriptionId !== "string") {
 		throw new Error("Received invoice.paid event without subscription ID");
 	}
+
+	const stripe = getStripe();
 
 	const subscription = await stripe.subscriptions.retrieve(subscriptionId, {
 		expand: ["schedule"],

@@ -94,12 +94,12 @@ export default $config({
 			},
 		});
 
-		new sst.x.DevCommand("Stripe", {
-			dev: {
-				command:
-					"stripe listen --forward-to localhost:3000/api/internal/stripe/webhook",
-			},
-		});
+		// new sst.x.DevCommand("Stripe", {
+		// 	dev: {
+		// 		command:
+		// 			"stripe listen --forward-to localhost:3000/api/internal/stripe/webhook",
+		// 	},
+		// });
 
 		return undefined;
 	},

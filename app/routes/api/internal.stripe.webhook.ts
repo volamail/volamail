@@ -2,14 +2,14 @@ import { env } from "@/modules/env";
 import { handleInvoicePaidEvent } from "@/modules/payments/events/invoice-paid";
 import { handleSubscriptionDeletedEvent } from "@/modules/payments/events/subscription-deleted";
 import { handleSubscriptionUpdatedEvent } from "@/modules/payments/events/subscription-updated";
-import { stripe } from "@/modules/payments/stripe";
+import { getStripe } from "@/modules/payments/stripe";
 import { json } from "@tanstack/start";
 import { createAPIFileRoute } from "@tanstack/start/api";
 import { Resource } from "sst";
 import { getEvent, readRawBody } from "vinxi/http";
 
 export const APIRoute = createAPIFileRoute("/api/internal/stripe/webhook")({
-	async POST({ request, params }) {
+	async POST({ request }) {
 		if (env.VITE_SELF_HOSTED === "true") {
 			return json({ error: "Not implemented" }, { status: 501 });
 		}
@@ -30,6 +30,8 @@ export const APIRoute = createAPIFileRoute("/api/internal/stripe/webhook")({
 		if (!body) {
 			return json({ error: "Missing request body" }, { status: 400 });
 		}
+
+		const stripe = getStripe();
 
 		const event = stripe.webhooks.constructEvent(
 			body,

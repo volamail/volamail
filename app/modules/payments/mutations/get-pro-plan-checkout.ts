@@ -6,7 +6,7 @@ import { zodValidator } from "@/modules/rpcs/validator";
 import { createServerFn } from "@tanstack/start";
 import { z } from "zod";
 import type { subscriptionMetaSchema } from "../metadata";
-import { stripe } from "../stripe";
+import { getStripe } from "../stripe";
 
 export const createProPlanCheckout = createServerFn({ method: "POST" })
 	.middleware([teamAuthorizationMiddleware])
@@ -37,6 +37,8 @@ export const createProPlanCheckout = createServerFn({ method: "POST" })
 			team_id: teamId,
 			type: "PRO",
 		};
+
+		const stripe = getStripe();
 
 		const session = await stripe.checkout.sessions.create({
 			mode: "subscription",
