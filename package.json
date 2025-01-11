@@ -37,7 +37,7 @@
     "@tiptap/react": "^2.11.0",
     "@tiptap/starter-kit": "^2.11.0",
     "@tiptap/suggestion": "^2.11.0",
-    "arctic": "^2.3.3",
+    "arctic": "^3.0.0",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "drizzle-orm": "^0.36.4",
