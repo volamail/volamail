@@ -3,7 +3,11 @@ import { observer } from "mobx-react-lite";
 import { getExtensionsFromTheme } from "../extensions";
 import { SlashMenu } from "../extensions/slash-menu";
 import { useEditorStore } from "../store";
-import { DEFAULT_THEME } from "../theme";
+import {
+	DEFAULT_THEME,
+	EDITOR_STYLE_VARIABLES,
+	getEditorContainerStyle,
+} from "../theme";
 import { ImageBubbleMenu } from "./image-bubble-menu";
 import { ImageResizer } from "./image-resizer";
 import { SectionBubbleMenu } from "./section-bubble-menu";
@@ -20,12 +24,13 @@ export const RichTextEditor = observer(() => {
 			editorProps: {
 				attributes: {
 					class:
-						"transition-all overflow-hidden [&_img:last-child]:mb-0 [&_img:first-child]:mt-0 [&>table:first-child] [&>table]:m-0 font-[Helvetica] font-[16px] outline-none prose rounded-[var(--content-border-radius)] max-w-[var(--content-max-width)] mx-auto bg-[var(--content-background)]",
+						"transition-all overflow-hidden [&_img:last-child]:mb-0 [&_img:first-child]:mt-0 [&>table:first-child] [&>table]:m-0 font-[Helvetica] font-[16px] outline-none prose mx-auto",
+					style: EDITOR_STYLE_VARIABLES,
 				},
 			},
 			content:
 				store.template.currentTranslation.contents ||
-				"<table><tr><td><p>Start writing here...</p></td></tr></table>",
+				"<table><tr><td><p> </p></td></tr></table>",
 			onTransaction({ editor }) {
 				store.template.currentTranslation.setContents(editor.getJSON());
 			},
@@ -47,13 +52,7 @@ export const RichTextEditor = observer(() => {
 				editor={editor}
 				className="relative h-full overflow-y-auto p-16"
 				id="editor-content"
-				style={{
-					background: store.theme.background,
-					// @ts-expect-error: CSS variable
-					"--content-background": store.theme.contentBackground,
-					"--content-max-width": `${store.theme.contentMaxWidth}px`,
-					"--content-border-radius": `${store.theme.contentBorderRadius}px`,
-				}}
+				style={getEditorContainerStyle(store.theme)}
 			>
 				{editor && <ImageResizer editor={editor} />}
 			</EditorContent>

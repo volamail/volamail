@@ -3,7 +3,7 @@ import { type ISimpleType, type Instance, clone, types } from "mobx-state-tree";
 import { createContext, useContext, useState } from "react";
 import { getDummyTemplateTranslationForLanguage } from "./defaults";
 import { TEMPLATE_LANGUAGES, type TemplateLanguage } from "./languages";
-import type { Theme as ThemeType } from "./theme";
+import { DEFAULT_THEME, type Theme as ThemeType } from "./theme";
 
 type Translation = {
 	subject: string;
@@ -93,6 +93,14 @@ const Theme = types
 		contentBackground: types.string,
 		contentMaxWidth: types.number,
 		contentBorderRadius: types.number,
+		contentBorderWidth: types.optional(
+			types.number,
+			DEFAULT_THEME.contentBorderWidth,
+		),
+		contentBorderColor: types.optional(
+			types.string,
+			DEFAULT_THEME.contentBorderColor,
+		),
 	})
 	.actions((self) => ({
 		setBackground(value: string) {
@@ -106,6 +114,12 @@ const Theme = types
 		},
 		setContentBorderRadius(value: number) {
 			self.contentBorderRadius = value;
+		},
+		setContentBorderWidth(value: number) {
+			self.contentBorderWidth = value;
+		},
+		setContentBorderColor(value: string) {
+			self.contentBorderColor = value;
 		},
 	}));
 

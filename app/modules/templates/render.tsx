@@ -36,7 +36,12 @@ export function renderTemplateToHtml(template: {
 					padding: "1em",
 				}}
 			>
-				<table width="100%" cellPadding={0} cellSpacing={0} border={0}>
+				<table
+					width="100%"
+					cellPadding={0}
+					cellSpacing={0}
+					style={{ border: "none" }}
+				>
 					<tbody>
 						<tr>
 							<td>
@@ -47,9 +52,10 @@ export function renderTemplateToHtml(template: {
 									style={{
 										maxWidth: `${theme.contentMaxWidth}px`,
 										width: "100%",
-										//border: "1px solid #ddd",
+										border: `${theme.contentBorderWidth}px solid ${theme.contentBorderColor}`,
 										backgroundColor: theme.contentBackground,
 										borderRadius: `${theme.contentBorderRadius}px`,
+										overflow: "hidden",
 									}}
 								>
 									<tbody>

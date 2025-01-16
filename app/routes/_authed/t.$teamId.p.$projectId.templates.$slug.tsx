@@ -122,6 +122,8 @@ function EditTemplateActions() {
 	}
 
 	function handleSendTest() {
+		console.log({ theme: store.theme });
+
 		toast.promise(
 			() =>
 				sendTestMutation.mutateAsync({

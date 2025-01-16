@@ -18,7 +18,7 @@ import { TextInput } from "@/modules/ui/components/text-input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { CircleCheckBigIcon, Grid2x2PlusIcon, SendIcon } from "lucide-react";
+import { CircleCheckBigIcon, SendIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import slugify from "slugify";
 import { toast } from "sonner";

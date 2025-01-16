@@ -60,14 +60,13 @@ export const Section = Node.create({
 		];
 	},
 
-	renderHTML({ HTMLAttributes, node }) {
+	renderHTML({ HTMLAttributes }) {
 		return [
 			"table",
 			{
-				style: "width: 100%;",
-				"cell-padding": 0,
-				"cell-spacing": 0,
-				border: 0,
+				style: "width: 100%; border: none;",
+				cellpadding: 0,
+				cellspacing: 0,
 			},
 			[
 				"tr",

@@ -12,4 +12,6 @@ export const validTheme = z.object({
 	contentBackground: z.string(),
 	contentMaxWidth: z.number(),
 	contentBorderRadius: z.coerce.number().min(0),
+	contentBorderWidth: z.coerce.number().min(0),
+	contentBorderColor: z.string(),
 });
