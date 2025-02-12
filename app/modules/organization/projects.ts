@@ -1,38 +1,11 @@
 import { and, eq } from "drizzle-orm";
-import * as R from "remeda";
 import { db } from "../database";
 import {
   domainsTable,
   projectsTable,
   teamMembersTable,
-  usersTable,
 } from "../database/schema";
 import { deleteIdentity } from "../sending/identities";
-
-async function getUserDefaultProject(userId: string) {
-  const result = await db.query.usersTable.findFirst({
-    where: eq(usersTable.id, userId),
-    with: {
-      teams: {
-        with: {
-          team: {
-            with: {
-              projects: {
-                limit: 1,
-              },
-            },
-          },
-        },
-      },
-    },
-  });
-
-  if (!result) {
-    throw new Error("User not found");
-  }
-
-  return result.teams[0].team.projects[0];
-}
 
 export async function getUserTeamsWithProjects(userId: string) {
   const teamMemberships = await db.query.teamMembersTable.findMany({

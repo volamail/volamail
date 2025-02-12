@@ -11,7 +11,7 @@ export const Route = createFileRoute("/_authed")({
 			return redirect({
 				to: "/login",
 				search: {
-					next: location.pathname,
+					next: location.pathname !== "/" ? location.pathname : undefined,
 				},
 			});
 		}

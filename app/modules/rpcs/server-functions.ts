@@ -20,7 +20,7 @@ export const authenticationMiddleware = createMiddleware().server(
       throw redirect({
         to: "/login",
         search: {
-          next: url.pathname,
+          next: url.pathname !== "/" ? url.pathname : undefined,
         },
       });
     }
@@ -36,7 +36,7 @@ export const authenticationMiddleware = createMiddleware().server(
       throw redirect({
         to: "/login",
         search: {
-          next: url.pathname,
+          next: url.pathname !== "/" ? url.pathname : undefined,
         },
       });
     }
