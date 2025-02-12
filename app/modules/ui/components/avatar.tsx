@@ -12,7 +12,7 @@ export function Avatar(props: AvatarProps) {
 	return (
 		<ArkAvatar.Root
 			className={cn(
-				"flex size-8 items-center justify-center overflow-hidden rounded-lg border bg-gray-800 dark:border-gray-600",
+				"flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-lg border bg-gray-800 dark:border-gray-600",
 				props.className,
 			)}
 		>

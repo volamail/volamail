@@ -169,6 +169,20 @@
       "when": 1734795454995,
       "tag": "0023_smart_white_queen",
       "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1738532978127,
+      "tag": "0024_flat_hawkeye",
+      "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1739288705874,
+      "tag": "0025_curly_randall_flagg",
+      "breakpoints": true
     }
   ]
 }

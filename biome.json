@@ -26,6 +26,9 @@
       "a11y": {
         "noSvgWithoutTitle": "off"
       },
+      "suspicious": {
+        "noArrayIndexKey": "info"
+      },
       "correctness": {
         "noUnknownFunction": "off"
       },

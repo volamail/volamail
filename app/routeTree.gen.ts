@@ -14,6 +14,7 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as LoginImport } from './routes/login'
 import { Route as AuthedImport } from './routes/_authed'
 import { Route as AuthedIndexImport } from './routes/_authed/index'
+import { Route as VerifyOtpEmailImport } from './routes/verify-otp.$email'
 import { Route as AuthedJoinTeamInviteCodeImport } from './routes/_authed/join-team.$inviteCode'
 import { Route as AuthedTTeamIdPProjectIdImport } from './routes/_authed/t.$teamId.p.$projectId'
 import { Route as AuthedTTeamIdPProjectIdTeamSettingsImport } from './routes/_authed/t.$teamId.p.$projectId.team-settings'
@@ -44,6 +45,12 @@ const AuthedIndexRoute = AuthedIndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AuthedRoute,
+} as any)
+
+const VerifyOtpEmailRoute = VerifyOtpEmailImport.update({
+  id: '/verify-otp/$email',
+  path: '/verify-otp/$email',
+  getParentRoute: () => rootRoute,
 } as any)
 
 const AuthedJoinTeamInviteCodeRoute = AuthedJoinTeamInviteCodeImport.update({
@@ -144,6 +151,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginImport
+      parentRoute: typeof rootRoute
+    }
+    '/verify-otp/$email': {
+      id: '/verify-otp/$email'
+      path: '/verify-otp/$email'
+      fullPath: '/verify-otp/$email'
+      preLoaderRoute: typeof VerifyOtpEmailImport
       parentRoute: typeof rootRoute
     }
     '/_authed/': {
@@ -297,6 +311,7 @@ const AuthedRouteWithChildren =
 export interface FileRoutesByFullPath {
   '': typeof AuthedRouteWithChildren
   '/login': typeof LoginRoute
+  '/verify-otp/$email': typeof VerifyOtpEmailRoute
   '/': typeof AuthedIndexRoute
   '/join-team/$inviteCode': typeof AuthedJoinTeamInviteCodeRoute
   '/t/$teamId/p/$projectId': typeof AuthedTTeamIdPProjectIdRouteWithChildren
@@ -314,6 +329,7 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
+  '/verify-otp/$email': typeof VerifyOtpEmailRoute
   '/': typeof AuthedIndexRoute
   '/join-team/$inviteCode': typeof AuthedJoinTeamInviteCodeRoute
   '/t/$teamId/p/$projectId': typeof AuthedTTeamIdPProjectIdRouteWithChildren
@@ -333,6 +349,7 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/_authed': typeof AuthedRouteWithChildren
   '/login': typeof LoginRoute
+  '/verify-otp/$email': typeof VerifyOtpEmailRoute
   '/_authed/': typeof AuthedIndexRoute
   '/_authed/join-team/$inviteCode': typeof AuthedJoinTeamInviteCodeRoute
   '/_authed/t/$teamId/p/$projectId': typeof AuthedTTeamIdPProjectIdRouteWithChildren
@@ -353,6 +370,7 @@ export interface FileRouteTypes {
   fullPaths:
     | ''
     | '/login'
+    | '/verify-otp/$email'
     | '/'
     | '/join-team/$inviteCode'
     | '/t/$teamId/p/$projectId'
@@ -369,6 +387,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/login'
+    | '/verify-otp/$email'
     | '/'
     | '/join-team/$inviteCode'
     | '/t/$teamId/p/$projectId'
@@ -386,6 +405,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/_authed'
     | '/login'
+    | '/verify-otp/$email'
     | '/_authed/'
     | '/_authed/join-team/$inviteCode'
     | '/_authed/t/$teamId/p/$projectId'
@@ -405,11 +425,13 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   AuthedRoute: typeof AuthedRouteWithChildren
   LoginRoute: typeof LoginRoute
+  VerifyOtpEmailRoute: typeof VerifyOtpEmailRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   AuthedRoute: AuthedRouteWithChildren,
   LoginRoute: LoginRoute,
+  VerifyOtpEmailRoute: VerifyOtpEmailRoute,
 }
 
 export const routeTree = rootRoute
@@ -423,7 +445,8 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/_authed",
-        "/login"
+        "/login",
+        "/verify-otp/$email"
       ]
     },
     "/_authed": {
@@ -436,6 +459,9 @@ export const routeTree = rootRoute
     },
     "/login": {
       "filePath": "login.tsx"
+    },
+    "/verify-otp/$email": {
+      "filePath": "verify-otp.$email.tsx"
     },
     "/_authed/": {
       "filePath": "_authed/index.tsx",

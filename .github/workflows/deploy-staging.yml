@@ -54,6 +54,6 @@ jobs:
           VITE_STRIPE_PRO_PLAN_PRICE_ID: ${{ vars.STRIPE_PRO_PLAN_PRICE_ID }}
 
       - name: Run DB migrations
-        run: bun run db migrate
+        run: bun run drizzle-kit migrate
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}

@@ -55,7 +55,6 @@ export const teamsRelations = relations(teamsTable, ({ many, one }) => ({
 	projects: many(projectsTable),
 	invites: many(teamInvitesTable),
 	members: many(teamMembersTable),
-	personalTeamOwner: one(usersTable),
 	subscription: one(subscriptionsTable),
 }));
 

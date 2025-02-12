@@ -1,4 +1,4 @@
-import { logoutUserFn } from "@/modules/auth/mutations";
+import { authClient } from "@/modules/auth/client";
 import { currentUserQueryOptions } from "@/modules/auth/queries";
 import {
 	useMutation,
@@ -18,7 +18,7 @@ export function SidebarUserSection() {
 
 	const logoutMutation = useMutation({
 		mutationFn() {
-			return logoutUserFn();
+			return authClient.signOut();
 		},
 		async onSuccess() {
 			await navigate({
@@ -33,12 +33,9 @@ export function SidebarUserSection() {
 
 	return (
 		<div className="flex items-center gap-2">
-			<Avatar
-				src={user?.avatarUrl}
-				fallback={user!.name.charAt(0).toUpperCase()}
-			/>
-			<div className="flex grow flex-col">
-				<span className="grow font-medium text-gray-900 text-sm dark:text-gray-50">
+			<Avatar src={user?.image} fallback={user!.name.charAt(0).toUpperCase()} />
+			<div className="flex grow flex-col overflow-hidden">
+				<span className="grow truncate font-medium text-gray-900 text-sm dark:text-gray-50">
 					{user?.name}
 				</span>
 				<span className="text-gray-500 text-xs">Admin</span>

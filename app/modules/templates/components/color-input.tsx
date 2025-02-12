@@ -11,7 +11,7 @@ import { PipetteIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { tv } from "tailwind-variants";
 
-export const colorInputStyles = tv({
+const colorInputStyles = tv({
 	slots: {
 		container: "flex items-center gap-3",
 		control:
