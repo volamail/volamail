@@ -82,7 +82,7 @@ export function Sidebar(props: SidebarProps) {
 					links={[
 						{
 							href: getRelativeHref("billing"),
-							label: "Billing",
+							label: "Billing & Usage",
 							icon: CreditCardIcon,
 						},
 						{

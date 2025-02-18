@@ -1,11 +1,15 @@
 import { authClient } from "@/modules/auth/client";
 import { zodValidator } from "@/modules/rpcs/validator";
 import { Button } from "@/modules/ui/components/button";
+import { Callout } from "@/modules/ui/components/callout";
 import { GridBgContainer } from "@/modules/ui/components/grid-bg-container";
 import { TextInput } from "@/modules/ui/components/text-input";
 import { SiGithub } from "@icons-pack/react-simple-icons";
 import { useMutation } from "@tanstack/react-query";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { SendIcon } from "lucide-react";
+import { useEffect } from "react";
+import { toast } from "sonner";
 import { z } from "zod";
 
 export const Route = createFileRoute("/login")({
@@ -13,6 +17,7 @@ export const Route = createFileRoute("/login")({
 	validateSearch: zodValidator(
 		z.object({
 			next: z.string().optional(),
+			error: z.string().optional(),
 		}),
 	),
 });
@@ -20,6 +25,19 @@ export const Route = createFileRoute("/login")({
 function RouteComponent() {
 	const navigate = useNavigate();
 	const search = Route.useSearch();
+
+	useEffect(() => {
+		if (!search.error) {
+			return;
+		}
+
+		toast.error(
+			search.error
+				.split(":")[1]
+				.replaceAll("_", " ")
+				.replace("UNAUTHORIZED", ""),
+		);
+	}, [search]);
 
 	const {
 		mutate: runLoginWithGithub,
@@ -30,7 +48,37 @@ function RouteComponent() {
 			await authClient.signIn.social({
 				provider: "github",
 				callbackURL: search.next || "/",
+				errorCallbackURL: "/login",
 			});
+		},
+	});
+
+	const { mutate: sendEmailOtp, isPending: sendingEmailOtp } = useMutation({
+		async mutationFn(email: string) {
+			const result = await authClient.emailOtp.sendVerificationOtp({
+				type: "sign-in",
+				email,
+			});
+
+			if (result.error) {
+				throw result.error;
+			}
+
+			return email;
+		},
+		async onSuccess(email) {
+			await navigate({
+				to: "/verify-otp/$email",
+				params: {
+					email,
+				},
+				search: {
+					next: search.next,
+				},
+			});
+		},
+		onError(error) {
+			toast.error(error.message);
 		},
 	});
 
@@ -39,22 +87,7 @@ function RouteComponent() {
 
 		const formData = new FormData(e.target as HTMLFormElement);
 
-		const email = formData.get("email") as string;
-
-		await authClient.emailOtp.sendVerificationOtp({
-			type: "sign-in",
-			email,
-		});
-
-		await navigate({
-			to: "/verify-otp/$email",
-			params: {
-				email,
-			},
-			search: {
-				next: search.next,
-			},
-		});
+		sendEmailOtp(formData.get("email") as string);
 	}
 
 	return (
@@ -94,7 +127,13 @@ function RouteComponent() {
 							required
 						/>
 
-						<Button type="submit" padding="lg" color="neutral">
+						<Button
+							type="submit"
+							padding="lg"
+							color="neutral"
+							trailing={<SendIcon className="size-4" />}
+							loading={sendingEmailOtp}
+						>
 							Sign in with email
 						</Button>
 					</form>

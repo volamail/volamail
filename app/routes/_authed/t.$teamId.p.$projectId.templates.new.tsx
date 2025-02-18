@@ -46,7 +46,7 @@ function RouteComponent() {
 				defaultLanguage={project.defaultTemplateLanguage}
 				theme={project.defaultTheme}
 			>
-				<div className="flex items-center justify-between border-b p-3 dark:border-gray-800">
+				<div className="flex items-center justify-between border-b px-3 py-2 dark:border-gray-800">
 					<div className="flex flex-col">
 						<h3 className="font-medium">New template</h3>
 						<p className="text-gray-500 text-sm">

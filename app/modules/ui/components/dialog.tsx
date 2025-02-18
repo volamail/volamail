@@ -56,6 +56,7 @@ export function useImperativeDialog<T>() {
 
 	const props = useMemo(() => {
 		return {
+			open: dynamicProps !== null,
 			dynamicProps: dynamicProps,
 			onClose: () => setDynamicProps(null),
 		};
@@ -75,7 +76,7 @@ export function useImperativeDialog<T>() {
 	};
 }
 
-export type ImperativeDialogProps<T> = {
+export type ImperativeDialogProps<T = never> = {
 	dynamicProps: T | null;
 	onClose: () => void;
 };

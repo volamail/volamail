@@ -14,3 +14,4 @@ export * from "./template-translations.sql";
 export * from "./users.sql";
 export * from "./verifications.sql";
 export * from "./accounts.sql";
+export * from "./allowlist.sql";

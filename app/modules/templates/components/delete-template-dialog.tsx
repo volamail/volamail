@@ -11,11 +11,12 @@ import { toast } from "sonner";
 import { deleteTemplateFn } from "../mutations";
 
 export function DeleteTemplateDialog(
-	props: ImperativeDialogProps<{
+	// biome-ignore lint/complexity/noBannedTypes: these fucking dialogs suck
+	props: ImperativeDialogProps<{}> & {
 		teamId: string;
 		projectId: string;
 		slug: string;
-	}>,
+	},
 ) {
 	const { dynamicProps, ...rest } = props;
 
@@ -29,8 +30,8 @@ export function DeleteTemplateDialog(
 			navigate({
 				to: "/t/$teamId/p/$projectId/templates",
 				params: {
-					teamId: dynamicProps!.teamId,
-					projectId: dynamicProps!.projectId,
+					teamId: rest.teamId,
+					projectId: rest.projectId,
 				},
 			});
 		},
@@ -55,9 +56,9 @@ export function DeleteTemplateDialog(
 						onClick={() =>
 							mutation.mutate({
 								data: {
-									teamId: dynamicProps!.teamId,
-									projectId: dynamicProps!.projectId,
-									slug: dynamicProps!.slug,
+									teamId: rest.teamId,
+									projectId: rest.projectId,
+									slug: rest.slug,
 								},
 							})
 						}

@@ -3,6 +3,6 @@ import { createAuthClient } from "better-auth/react";
 import { clientEnv } from "../client-env";
 
 export const authClient = createAuthClient({
-	baseURL: `${import.meta.env.PROD ? "https" : "http"}://${clientEnv.VITE_DOMAIN}`,
-	plugins: [emailOTPClient()],
+  baseURL: `${import.meta.env.PROD ? "https" : "http"}://${clientEnv.VITE_DOMAIN}`,
+  plugins: [emailOTPClient()],
 });

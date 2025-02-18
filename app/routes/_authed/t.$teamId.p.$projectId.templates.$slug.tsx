@@ -53,7 +53,7 @@ function RouteComponent() {
 				theme={template.theme}
 				template={template}
 			>
-				<div className="flex items-center justify-between border-b p-3 dark:border-gray-800">
+				<div className="flex items-center justify-between border-b px-3 py-2 dark:border-gray-800">
 					<div className="flex flex-col">
 						<h3 className="font-medium">{template.slug}</h3>
 						<p className="text-gray-500 text-sm">
@@ -83,11 +83,8 @@ function EditTemplateActions() {
 
 	const queryClient = useQueryClient();
 
-	const deleteDialog = useImperativeDialog<{
-		teamId: string;
-		projectId: string;
-		slug: string;
-	}>();
+	// biome-ignore lint/complexity/noBannedTypes: these fucking dialogs suck
+	const deleteDialog = useImperativeDialog<{}>();
 
 	const updateTemplateMutation = useMutation({
 		mutationFn: updateTemplateFn,
@@ -122,8 +119,6 @@ function EditTemplateActions() {
 	}
 
 	function handleSendTest() {
-		console.log({ theme: store.theme });
-
 		toast.promise(
 			() =>
 				sendTestMutation.mutateAsync({
@@ -147,11 +142,7 @@ function EditTemplateActions() {
 
 	function handleMenuSelect(details: MenuSelectionDetails) {
 		if (details.value === "delete") {
-			return deleteDialog.open({
-				teamId: params.teamId,
-				projectId: params.projectId,
-				slug: params.slug,
-			});
+			return deleteDialog.open({});
 		}
 
 		if (details.value === "export") {

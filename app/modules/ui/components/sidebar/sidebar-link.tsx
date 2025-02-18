@@ -3,12 +3,12 @@ import type { ComponentProps } from "react";
 import { type VariantProps, tv } from "tailwind-variants";
 
 const sidebarLinkStyles = tv({
-	base: "inline-flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-sm transition-colors",
+	base: "inline-flex w-full items-center gap-2 rounded-md border border-transparent px-2.5 py-1.5 text-sm outline-none ring-primary-600 transition-colors focus-visible:ring-[1px]",
 	variants: {
 		state: {
 			inactive: "dark:text-gray-500 dark:hover:bg-gray-900",
 			active:
-				"bg-gray-100 ring-[1px] dark:bg-gray-900 dark:text-white dark:ring-gray-800",
+				"bg-gray-100 dark:border-gray-800 dark:bg-gray-900 dark:text-white",
 		},
 		comingSoon: {
 			false: "",

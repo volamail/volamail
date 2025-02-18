@@ -47,7 +47,5 @@ export async function deleteProject(teamId: string, projectId: string) {
 
       await deleteIdentity(row.domain);
     }
-
-    // TODO: Delete media files
   });
 }

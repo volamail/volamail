@@ -1,13 +1,15 @@
 import verificationOtpTemplate from "@/modules/internal-templates/verification-otp.html?raw";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { createAuthMiddleware, emailOTP } from "better-auth/plugins";
+import { APIError } from "better-auth/api";
+import { emailOTP } from "better-auth/plugins";
 import { eq } from "drizzle-orm";
 import { Resource } from "sst";
 import { clientEnv } from "../client-env";
 import { db } from "../database";
 import {
   accountsTable,
+  allowlistTable,
   sessionsTable,
   teamMembersTable,
   usersTable,
@@ -26,34 +28,43 @@ export const auth = betterAuth({
       user: usersTable,
     },
   }),
-  hooks: {
-    after: createAuthMiddleware(async ({ context, path }) => {
-      if (path.startsWith("/callback") && context.newSession) {
-        const user = context.newSession.user;
-
-        const userTeams = await db.query.teamMembersTable.findMany({
-          where: eq(teamMembersTable.userId, user.id),
-        });
-
-        if (userTeams.length > 0) {
-          return;
-        }
-
-        const id = await generateValidTeamIdFromName(`${user.name}'s team`);
-
-        await createTeam({ id, name: `${user.name}'s team` });
-
-        await db.insert(teamMembersTable).values({
-          teamId: id,
-          userId: user.id,
-        });
-      }
-    }),
-  },
   databaseHooks: {
+    verification: {
+      create: {
+        async before(verification) {
+          if (verification.identifier.startsWith("sign-in-otp-")) {
+            const email = verification.identifier.split("sign-in-otp-")[1];
+
+            const allowed = await db.query.allowlistTable.findFirst({
+              where: eq(allowlistTable.email, email),
+            });
+
+            if (!allowed) {
+              throw new APIError("UNAUTHORIZED", {
+                message: "Email's not in allow list",
+              });
+            }
+          }
+        },
+      },
+    },
     user: {
       create: {
         async before(user) {
+          const allowed = await db.query.allowlistTable.findFirst({
+            where: eq(allowlistTable.email, user.email),
+          });
+
+          if (!allowed) {
+            const headers = new Headers();
+
+            headers.set("Redirect", "/login");
+
+            throw new APIError("UNAUTHORIZED", {
+              message: "Email's not in allow list",
+            });
+          }
+
           if (user.email !== user.name) {
             return { data: user };
           }
@@ -64,6 +75,24 @@ export const auth = betterAuth({
               name: user.email.split("@")[0],
             },
           };
+        },
+        async after(user) {
+          const userTeams = await db.query.teamMembersTable.findMany({
+            where: eq(teamMembersTable.userId, user.id),
+          });
+
+          if (userTeams.length > 0) {
+            return;
+          }
+
+          const id = await generateValidTeamIdFromName(`${user.name}'s team`);
+
+          await createTeam({ id, name: `${user.name}'s team` });
+
+          await db.insert(teamMembersTable).values({
+            teamId: id,
+            userId: user.id,
+          });
         },
       },
     },

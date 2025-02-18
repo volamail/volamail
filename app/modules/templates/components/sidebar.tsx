@@ -12,14 +12,14 @@ export function Sidebar() {
 						<Tabs.Indicator className="z-0 h-[var(--height)] w-[var(--width)] rounded-md border border-gray-700 bg-gray-700/50" />
 						<Tabs.Trigger
 							value="theme"
-							className="z-10 inline-flex grow items-center justify-center gap-2 px-3 py-1.5 text-gray-500 text-sm transition-colors data-[selected]:text-gray-50 hover:dark:text-gray-400"
+							className="z-10 inline-flex grow items-center justify-center gap-2 rounded-md px-3 py-1.5 text-gray-500 text-sm outline-none ring-primary-600 transition-colors focus-visible:ring-[1px] data-[selected]:text-gray-50 hover:dark:text-gray-400"
 						>
 							Theme
 							<PaletteIcon className="size-4" />
 						</Tabs.Trigger>
 						<Tabs.Trigger
 							value="locales"
-							className="z-10 inline-flex grow items-center justify-center gap-2 px-3 py-1.5 text-gray-500 text-sm transition-colors data-[selected]:text-gray-50 hover:dark:text-gray-400"
+							className="z-10 inline-flex grow items-center justify-center gap-2 rounded-md px-3 py-1.5 text-gray-500 text-sm outline-none ring-primary-600 transition-colors focus-visible:ring-[1px] data-[selected]:text-gray-50 hover:dark:text-gray-400"
 						>
 							Locale
 							<LanguagesIcon className="size-4" />
