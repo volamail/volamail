@@ -73,7 +73,7 @@
     "autoprefixer": "^10.4.20",
     "aws-lambda": "^1.0.7",
     "dotenv": "^16.4.7",
-    "drizzle-kit": "^0.27.2",
+    "drizzle-kit": "^0.30.0",
     "knip": "^5.44.2",
     "mini-svg-data-uri": "^1.4.4",
     "postcss": "^8.5.2",
