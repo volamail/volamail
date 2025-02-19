@@ -1,0 +1,1 @@
+CREATE INDEX IF NOT EXISTS "team_invites_team_id_idx" ON "team_invites" USING btree ("team_id");

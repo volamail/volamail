@@ -1,0 +1,1 @@
+ALTER TABLE "subscriptions" ADD COLUMN "max_projects" integer DEFAULT 2 NOT NULL;

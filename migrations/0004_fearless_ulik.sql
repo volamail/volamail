@@ -1,0 +1,3 @@
+ALTER TABLE "projects" ALTER COLUMN "default_theme" SET DEFAULT '{"background":"#27272a","contentBackground":"#3f3f46","contentMaxWidth":600,"contentBorderRadius":2}'::jsonb;--> statement-breakpoint
+ALTER TABLE "templates" ALTER COLUMN "theme" SET DEFAULT '{"background":"#27272a","contentBackground":"#3f3f46","contentMaxWidth":600,"contentBorderRadius":2}'::jsonb;--> statement-breakpoint
+ALTER TABLE "templates" ADD COLUMN "modified_at" timestamp DEFAULT now() NOT NULL;

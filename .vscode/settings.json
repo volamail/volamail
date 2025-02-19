@@ -1,16 +1,11 @@
 {
-  "editor.insertSpaces": false,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "[javascript]": {
+  "[javascript][javascriptreact][typescript][typescriptreact]": {
     "editor.defaultFormatter": "biomejs.biome"
   },
-  "[typescript]": {
-    "editor.defaultFormatter": "biomejs.biome"
+  "editor.codeActionsOnSave": {
+    "quickfix.biome": "explicit",
+    "source.organizeImports.biome": "explicit"
   },
-  "[javascriptreact]": {
-    "editor.defaultFormatter": "biomejs.biome"
-  },
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "biomejs.biome"
-  }
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

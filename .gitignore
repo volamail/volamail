@@ -1,47 +1,42 @@
-# dependencies
-node_modules
-.pnp
-.pnp.js
+# Logs
 
-# testing
-coverage
-
-# next.js
-.next/
-out/
-build
-.swc/
-
-# misc
-.DS_Store
-*.pem
-
-# debug
-npm-debug.log*
+logs
+_.log
+npm-debug.log_
 yarn-debug.log*
 yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
 
-# local env files
+# Caches
+
+.cache
+
+# Dependency directories
+
+node_modules/
+
+# TypeScript cache
+
+*.tsbuildinfo
+
+# dotenv environment variable files
+
 .env
-.env.local
 .env.development.local
 .env.test.local
 .env.production.local
+.env.local
 
-# turbo
-.turbo
+# Finder (MacOS) folder config
+.DS_Store
 
-# ui
-dist/
+# Vinxi
+.vinxi
+.output
 
-# astro
-.astro
-
-# fumadocs
-.map.ts
-
-# vercel
+# Vercel
 .vercel
 
-# vinxi
-.vinxi
+# sst
+.sst

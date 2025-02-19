@@ -1,10 +1,15 @@
 name: Deploy to Production
 
-env:
-  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+permissions:
+  id-token: write
+  contents: read
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
@@ -14,34 +19,41 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     steps:
-      - uses: actions/checkout@v4
-        name: Checkout
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v4
-        name: Install pnpm
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
         with:
-          run_install: false
+          role-to-assume: ${{ vars.AWS_ROLE_TO_ASSUME }}
+          role-duration-seconds: 3600
+          aws-region: eu-central-1
 
-      - uses: actions/setup-node@v4
-        name: Install Node.js
-        with:
-          node-version: 20
-          cache: "pnpm"
+      - name: Install dependencies
+        run: bun install
 
-      - name: Install Vercel CLI
-        run: pnpm add -g vercel@latest
+      - name: Set SST secrets
+        run: |
+          bun run sst secret set DatabaseUrl ${{ secrets.DATABASE_URL }} --stage production
+          bun run sst secret set GithubClientSecret ${{ secrets.GH_CLIENT_SECRET }} --stage production
+          bun run sst secret set StripeSecretKey ${{ secrets.STRIPE_SECRET_KEY }} --stage production
+          bun run sst secret set StripeWebhookSecret ${{ secrets.STRIPE_WEBHOOK_SECRET }} --stage production
 
-      - name: Pull Environment Variables
-        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Deploy to Production
+        run: bun run sst deploy --stage production
+        env:
+          ACM_CERTIFICATE_ARN: ${{ vars.ACM_CERTIFICATE_ARN }}
+          VITE_SELF_HOSTED: "false"
+          VITE_DOMAIN: ${{ vars.DOMAIN }}
+          VITE_NOREPLY_EMAIL: ${{ vars.NOREPLY_EMAIL }}
+          VITE_SUPPORT_EMAIL: ${{ vars.SUPPORT_EMAIL }}
+          VITE_GITHUB_CLIENT_ID: ${{ secrets.GH_CLIENT_ID }}
+          VITE_STRIPE_PRO_PLAN_PRICE_ID: ${{ vars.STRIPE_PRO_PLAN_PRICE_ID }}
 
-      - name: Build project
-        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
-
-      - name: Run migrations
-        working-directory: apps/app
-        run: pnpm db migrate
+      - name: Run DB migrations
+        run: bun run drizzle-kit migrate
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-
-      - name: Deploy project
-        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
