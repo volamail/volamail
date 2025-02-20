@@ -11,11 +11,12 @@ permissions:
 on:
   workflow_dispatch:
   push:
-    branches:
-      - main
+    tags:
+      - "*"
 
 jobs:
   deploy-production:
+    if: github.event.base_ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment: production
     steps:
