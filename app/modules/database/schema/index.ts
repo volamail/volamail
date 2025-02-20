@@ -1,5 +1,4 @@
 export * from "./enum/template-languages.sql";
-
 export * from "./api-tokens.sql";
 export * from "./domains.sql";
 export * from "./emails.sql";

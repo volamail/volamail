@@ -12,5 +12,5 @@
       "@/*": ["app/*"]
     }
   },
-  "exclude": ["node_modules", ".sst"]
+  "exclude": ["node_modules", ".sst", ".output"]
 }

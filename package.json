@@ -60,7 +60,7 @@
     "tailwindcss-animate": "^1.0.7",
     "tippy.js": "^6.3.7",
     "ulid": "^2.3.0",
-    "vinxi": "0.5.1",
+    "vinxi": "^0.5.1",
     "zod": "^3.24.2"
   },
   "devDependencies": {
@@ -70,6 +70,7 @@
     "@types/bun": "latest",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
+    "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.20",
     "aws-lambda": "^1.0.7",
     "dotenv": "^16.4.7",
@@ -77,9 +78,7 @@
     "knip": "^5.44.2",
     "mini-svg-data-uri": "^1.4.4",
     "postcss": "^8.5.2",
+    "typescript": "^5.7.3",
     "vite-tsconfig-paths": "^5.1.4"
-  },
-  "peerDependencies": {
-    "typescript": "^5.6.3"
   }
 }

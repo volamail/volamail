@@ -3,7 +3,11 @@ import tsConfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
   vite: {
-    plugins: [tsConfigPaths()],
+    plugins: [
+      tsConfigPaths({
+        projects: ["./tsconfig.json"],
+      }),
+    ],
   },
   server: {
     preset: "aws-lambda",

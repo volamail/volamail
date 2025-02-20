@@ -1,10 +1,10 @@
 import type { QueryClient } from "@tanstack/react-query";
 import {
+	HeadContent,
 	Outlet,
-	ScrollRestoration,
+	Scripts,
 	createRootRouteWithContext,
 } from "@tanstack/react-router";
-import { Meta, Scripts } from "@tanstack/start";
 import type { ReactNode } from "react";
 
 import { Toaster } from "@/modules/ui/components/toast";
@@ -34,17 +34,17 @@ export const Route = createRootRouteWithContext<{
 			},
 		],
 		// Hack to get HMR to work https://github.com/TanStack/router/issues/1992
-		scripts: import.meta.env.DEV
-			? [
-					{
-						type: "module",
-						children: `import RefreshRuntime from "/_build/@react-refresh";
-RefreshRuntime.injectIntoGlobalHook(window)
-window.$RefreshReg$ = () => {}
-window.$RefreshSig$ = () => (type) => type`,
-					},
-				]
-			: [],
+		// 		scripts: import.meta.env.DEV
+		// 			? [
+		// 					{
+		// 						type: "module",
+		// 						children: `import RefreshRuntime from "/_build/@react-refresh";
+		// RefreshRuntime.injectIntoGlobalHook(window)
+		// window.$RefreshReg$ = () => {}
+		// window.$RefreshSig$ = () => (type) => type`,
+		// 					},
+		// 				]
+		// 			: [],
 	}),
 	notFoundComponent: NotFound,
 	component: RootComponent,
@@ -63,12 +63,11 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
 	return (
 		<html lang="en">
 			<head>
-				<Meta />
+				<HeadContent />
 			</head>
 			<body>
 				<div id="banner-container" />
 				{children}
-				<ScrollRestoration />
 				<Scripts />
 			</body>
 		</html>
