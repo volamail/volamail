@@ -4,7 +4,7 @@ import { Button } from "@/modules/ui/components/button";
 import { Callout } from "@/modules/ui/components/callout";
 import { GridBgContainer } from "@/modules/ui/components/grid-bg-container";
 import { TextInput } from "@/modules/ui/components/text-input";
-import { SiGithub } from "@icons-pack/react-simple-icons";
+import { Icon } from "@iconify-icon/react";
 import { useMutation } from "@tanstack/react-query";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { SendIcon } from "lucide-react";
@@ -103,7 +103,7 @@ function RouteComponent() {
 				<div className="flex flex-col gap-4">
 					<Button
 						padding="lg"
-						trailing={<SiGithub className="size-4" />}
+						trailing={<Icon icon="mdi:github" className="text-xl" />}
 						type="submit"
 						loading={loginWithGithubPending || loginWithGithubSuccess}
 						onClick={() => runLoginWithGithub()}
