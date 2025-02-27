@@ -51,7 +51,7 @@
     "remeda": "^2.20.2",
     "slugify": "^1.6.6",
     "sns-payload-validator": "^2.1.0",
-    "sonner": "^1.7.4",
+    "sonner": "^2.0.0",
     "sst": "3.5.1",
     "stripe": "^17.6.0",
     "tailwind-merge": "^2.6.0",
