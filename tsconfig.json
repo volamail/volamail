@@ -8,6 +8,8 @@
     "strictNullChecks": true,
     "baseUrl": ".",
     "noEmit": true,
+    "strict": true,
+    "declaration": false,
     "paths": {
       "@/*": ["app/*"]
     }

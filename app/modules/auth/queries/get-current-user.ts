@@ -4,9 +4,8 @@ import { createServerFn } from "@tanstack/start";
 import { getWebRequest } from "vinxi/http";
 import { auth } from "../auth";
 
-export const getCurrentUserFn = createServerFn({ method: "GET" })
-  .middleware([authenticationMiddleware])
-  .handler(async () => {
+export const getCurrentUserFn = createServerFn({ method: "GET" }).handler(
+  async () => {
     const request = getWebRequest();
 
     const session = await auth.api.getSession({
@@ -26,4 +25,5 @@ export const getCurrentUserFn = createServerFn({ method: "GET" })
       teams,
       defaultProject,
     };
-  });
+  }
+);

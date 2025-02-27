@@ -23,10 +23,10 @@ export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "pg",
     schema: {
-      verification: verificationsTable,
       account: accountsTable,
       session: sessionsTable,
       user: usersTable,
+      verification: verificationsTable,
     },
   }),
   databaseHooks: {
@@ -100,18 +100,22 @@ export const auth = betterAuth({
   },
   plugins: [
     emailOTP({
-      async sendVerificationOTP(data) {
+      async sendVerificationOTP({ email, otp, type }) {
+        if (type !== "sign-in") {
+          return;
+        }
+
         await sendEmail({
           from: {
             address: clientEnv.VITE_NOREPLY_EMAIL,
             label: "Volamail",
           },
-          to: data.email,
+          to: email,
           subject: "Your one-time code",
-          text: `Your one-time code is: ${data.otp}`,
+          text: `Your one-time code is: ${otp}`,
           html: verificationOtpTemplate,
           data: {
-            otp: data.otp,
+            otp,
           },
         });
       },
@@ -121,13 +125,6 @@ export const auth = betterAuth({
     github: {
       clientId: clientEnv.VITE_GITHUB_CLIENT_ID,
       clientSecret: Resource.GithubClientSecret.value,
-    },
-  },
-  user: {
-    additionalFields: {
-      avatarUrl: {
-        type: "string",
-      },
     },
   },
 });
