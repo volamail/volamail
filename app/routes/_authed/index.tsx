@@ -21,4 +21,7 @@ export const Route = createFileRoute("/_authed/")({
 			},
 		});
 	},
+	component: function AuthFallbackRoute() {
+		return null;
+	},
 });

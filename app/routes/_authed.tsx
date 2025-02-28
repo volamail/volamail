@@ -1,5 +1,5 @@
 import { currentUserQueryOptions } from "@/modules/auth/queries";
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authed")({
 	async beforeLoad({ context, location }) {
@@ -17,5 +17,8 @@ export const Route = createFileRoute("/_authed")({
 		}
 
 		return { user };
+	},
+	component: function AuthedLayout() {
+		return <Outlet />;
 	},
 });
