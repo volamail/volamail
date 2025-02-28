@@ -6,6 +6,10 @@ import "sst"
 export {}
 declare module "sst" {
   export interface Resource {
+    "AuthSecret": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
     "Bucket": {
       "name": string
       "type": "sst.aws.Bucket"

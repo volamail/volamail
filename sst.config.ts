@@ -51,6 +51,8 @@ export default $config({
       process.env.STRIPE_WEBHOOK_SECRET!
     );
 
+    const authSecret = new sst.Secret("AuthSecret", process.env.AUTH_SECRET!);
+
     sesNotificationsTopic.subscribe("WebEmailNotificationsSubscriber", {
       handler: "functions/email-notifications-handler.handler",
       link: [databaseUrlSecret],
@@ -74,6 +76,7 @@ export default $config({
         githubClientSecret,
         stripeSecretKey,
         stripeWebhookSecret,
+        authSecret,
       ],
       domain: $dev
         ? undefined

@@ -1,4 +1,5 @@
 import { currentUserQueryOptions } from "@/modules/auth/queries";
+import { clientEnv } from "@/modules/client-env";
 import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authed")({

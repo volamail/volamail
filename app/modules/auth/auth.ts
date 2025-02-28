@@ -19,7 +19,8 @@ import { createTeam, generateValidTeamIdFromName } from "../organization/teams";
 import { sendEmail } from "../sending/methods";
 
 export const auth = betterAuth({
-  baseURL: `${import.meta.env.PROD ? "https" : "http"}://${clientEnv.VITE_DOMAIN}/api/auth`,
+  baseURL: `${import.meta.env.PROD ? "https" : "http"}://${clientEnv.VITE_DOMAIN}`,
+  secret: Resource.AuthSecret.value,
   database: drizzleAdapter(db, {
     provider: "pg",
     schema: {

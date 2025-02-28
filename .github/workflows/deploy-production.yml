@@ -42,6 +42,7 @@ jobs:
           bun run sst secret set GithubClientSecret ${{ secrets.GH_CLIENT_SECRET }} --stage production
           bun run sst secret set StripeSecretKey ${{ secrets.STRIPE_SECRET_KEY }} --stage production
           bun run sst secret set StripeWebhookSecret ${{ secrets.STRIPE_WEBHOOK_SECRET }} --stage production
+          bun run sst secret set AuthSecret ${{ secrets.AUTH_SECRET }} --stage production
 
       - name: Deploy to Production
         run: bun run sst deploy --stage production
