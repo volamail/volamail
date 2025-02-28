@@ -86,9 +86,11 @@ export const auth = betterAuth({
             return;
           }
 
-          const id = await generateValidTeamIdFromName(`${user.name}'s team`);
+          const name = `${user.name}'s team`;
 
-          await createTeam({ id, name: `${user.name}'s team` });
+          const id = await generateValidTeamIdFromName(name);
+
+          await createTeam({ id, name });
 
           await db.insert(teamMembersTable).values({
             teamId: id,

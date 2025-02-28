@@ -3,6 +3,9 @@ import tsConfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
   vite: {
+    build: {
+      sourcemap: true,
+    },
     plugins: [
       tsConfigPaths({
         projects: ["./tsconfig.json"],
@@ -10,6 +13,6 @@ export default defineConfig({
     ],
   },
   server: {
-    preset: "aws-lambda",
+    preset: process.env.CUSTOM_ADAPTER || "aws-lambda",
   },
 });

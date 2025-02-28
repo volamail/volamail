@@ -1,5 +1,4 @@
 import { getUserTeamsWithProjects } from "@/modules/organization/projects";
-import { authenticationMiddleware } from "@/modules/rpcs/server-functions";
 import { createServerFn } from "@tanstack/start";
 import { getWebRequest } from "vinxi/http";
 import { auth } from "../auth";

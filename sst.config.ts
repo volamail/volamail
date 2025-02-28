@@ -100,6 +100,7 @@ export default $config({
         VITE_GITHUB_CLIENT_ID: process.env.VITE_GITHUB_CLIENT_ID!,
         VITE_STRIPE_PRO_PLAN_PRICE_ID:
           process.env.VITE_STRIPE_PRO_PLAN_PRICE_ID!,
+        CUSTOM_ADAPTER: process.env.CUSTOM_ADAPTER || "",
       },
     });
 
