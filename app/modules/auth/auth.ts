@@ -67,7 +67,7 @@ export const auth = betterAuth({
             });
           }
 
-          if (user.email !== user.name) {
+          if (user.email !== user.name && user.name) {
             return { data: user };
           }
 
