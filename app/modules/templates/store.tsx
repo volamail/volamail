@@ -90,7 +90,6 @@ const Template = types
 const Theme = types
 	.model({
 		background: types.string,
-		contentBackground: types.string,
 		contentMaxWidth: types.number,
 		contentBorderRadius: types.number,
 		contentBorderWidth: types.optional(
@@ -105,9 +104,6 @@ const Theme = types
 	.actions((self) => ({
 		setBackground(value: string) {
 			self.background = value;
-		},
-		setContentBackground(value: string) {
-			self.contentBackground = value;
 		},
 		setContentMaxWidth(value: number) {
 			self.contentMaxWidth = value;

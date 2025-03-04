@@ -1,6 +1,5 @@
 export type Theme = {
   background: string;
-  contentBackground: string;
   contentMaxWidth: number;
   contentBorderRadius: number;
   contentBorderWidth: number;
@@ -9,7 +8,6 @@ export type Theme = {
 
 export const DEFAULT_THEME: Theme = {
   background: "#EEEEEE",
-  contentBackground: "#FFFFFF",
   contentMaxWidth: 576,
   contentBorderRadius: 8,
   contentBorderWidth: 1,
@@ -26,7 +24,6 @@ export const CONTENT_BORDER_WIDTH_OPTIONS = [0, 1, 2, 3, 4, 8];
 
 const THEME_VARIABLES_MAP: Record<keyof Theme, string> = {
   background: "--page-background",
-  contentBackground: "--content-background",
   contentMaxWidth: "--content-max-width",
   contentBorderRadius: "--content-border-radius",
   contentBorderWidth: "--content-border-width",
@@ -36,7 +33,6 @@ const THEME_VARIABLES_MAP: Record<keyof Theme, string> = {
 export function getEditorContainerStyle(theme: Theme) {
   return {
     background: theme.background,
-    [THEME_VARIABLES_MAP.contentBackground]: theme.contentBackground,
     [THEME_VARIABLES_MAP.contentMaxWidth]: `${theme.contentMaxWidth}px`,
     [THEME_VARIABLES_MAP.contentBorderRadius]: `${theme.contentBorderRadius}px`,
     [THEME_VARIABLES_MAP.contentBorderWidth]: `${theme.contentBorderWidth}px`,
@@ -47,6 +43,5 @@ export function getEditorContainerStyle(theme: Theme) {
 export const EDITOR_STYLE_VARIABLES = `
 	border-radius: var(${THEME_VARIABLES_MAP.contentBorderRadius});
 	border: var(${THEME_VARIABLES_MAP.contentBorderWidth}) solid var(${THEME_VARIABLES_MAP.contentBorderColor});
-	background-color: var(${THEME_VARIABLES_MAP.contentBackground});
 	max-width: var(${THEME_VARIABLES_MAP.contentMaxWidth});
 `;

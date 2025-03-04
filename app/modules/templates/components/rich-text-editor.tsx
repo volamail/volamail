@@ -24,7 +24,7 @@ export const RichTextEditor = observer(() => {
 			editorProps: {
 				attributes: {
 					class:
-						"transition-all overflow-hidden [&_img:last-child]:mb-0 [&_img:first-child]:mt-0 [&>table:first-child] [&>table]:m-0 font-[Helvetica] font-[16px] outline-none prose mx-auto",
+						"transition-all overflow-hidden [&_img:last-child]:mb-0 [&_img:first-child]:mt-0 [&>table:first-child] [&>table]:m-0 font-[Helvetica] font-[16px] outline-none prose mx-auto bg-white",
 					style: EDITOR_STYLE_VARIABLES,
 				},
 			},

@@ -31,18 +31,6 @@ export const ThemeTab = observer(function ThemeTab() {
 			</ThemeTabSection>
 
 			<ThemeTabSection title="Content" icon={TextSelectIcon}>
-				<ColorInput
-					label="Background"
-					classes={{
-						container: "justify-between",
-						control: "w-28",
-						label: "text-xs dark:text-gray-400",
-						input: "text-xs",
-					}}
-					defaultValue={store.theme.contentBackground}
-					onChange={store.theme.setContentBackground}
-				/>
-
 				<FormGroup
 					label="Width"
 					classes={{
