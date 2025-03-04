@@ -55,7 +55,6 @@ export function renderTemplateToHtml(template: {
 										maxWidth: `${theme.contentMaxWidth}px`,
 										width: "100%",
 										border: `${theme.contentBorderWidth}px solid ${theme.contentBorderColor}`,
-										backgroundColor: theme.contentBackground,
 										borderRadius: `${theme.contentBorderRadius}px`,
 										overflow: "hidden",
 									}}
