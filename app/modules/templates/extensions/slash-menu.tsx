@@ -1,4 +1,4 @@
-import { Extension } from "@tiptap/core";
+import { type Editor, Extension, type Range } from "@tiptap/core";
 import { ReactRenderer } from "@tiptap/react";
 import Suggestion, { type SuggestionOptions } from "@tiptap/suggestion";
 import {
@@ -9,7 +9,7 @@ import {
 	QuoteIcon,
 	UnfoldVerticalIcon,
 } from "lucide-react";
-import type { ComponentRef } from "react";
+import type { ComponentRef, ComponentType } from "react";
 import tippy, { type Instance } from "tippy.js";
 import { SlashMenuContents } from "../components/slash-menu-contents";
 
@@ -24,7 +24,13 @@ export const SlashMenu = Extension.create({
 					props.command({ editor, range });
 				},
 				items: ({ query }) => {
-					const items = [
+					const items: Array<
+						Array<{
+							title: string;
+							icon: ComponentType<{ className?: string }>;
+							command: (props: { editor: Editor; range: Range }) => void;
+						}>
+					> = [
 						[
 							{
 								title: "Heading 1",

@@ -112,7 +112,6 @@ export const SlashMenuContents = forwardRef<SlashMenuContentsRef, Props>(
 			<div className="flex flex-col gap-1 rounded-lg border p-1 shadow-2xl dark:border-gray-700 dark:bg-gray-900">
 				{itemsLength > 0 ? (
 					items.map((group, groupIndex) => (
-						// biome-ignore lint/suspicious/noArrayIndexKey: idk
 						<Fragment key={groupIndex}>
 							{group.map((item, itemIndex) => (
 								<Button
@@ -127,6 +126,7 @@ export const SlashMenuContents = forwardRef<SlashMenuContentsRef, Props>(
 											? "dark:bg-gray-700 hover:dark:bg-gray-700"
 											: "dark:hover:bg-gray-700",
 									)}
+									onClick={() => item.command(props)}
 								>
 									{item.title}
 								</Button>
