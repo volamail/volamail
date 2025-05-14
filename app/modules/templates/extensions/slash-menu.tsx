@@ -7,6 +7,7 @@ import {
 	Heading2Icon,
 	Heading3Icon,
 	QuoteIcon,
+	SquareMousePointerIcon,
 	UnfoldVerticalIcon,
 } from "lucide-react";
 import type { ComponentRef, ComponentType } from "react";
@@ -75,6 +76,13 @@ export const SlashMenu = Extension.create({
 								icon: BetweenHorizonalEndIcon,
 								command: ({ editor, range }) => {
 									editor.chain().focus().deleteRange(range).setSection().run();
+								},
+							},
+							{
+								title: "Insert button",
+								icon: SquareMousePointerIcon,
+								command: ({ editor, range }) => {
+									editor.chain().focus().deleteRange(range).setButton().run();
 								},
 							},
 						],

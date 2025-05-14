@@ -100,6 +100,10 @@ const Theme = types
 			types.string,
 			DEFAULT_THEME.contentBorderColor,
 		),
+		typographyLinkColor: types.optional(
+			types.string,
+			DEFAULT_THEME.typographyLinkColor,
+		),
 	})
 	.actions((self) => ({
 		setBackground(value: string) {
@@ -116,6 +120,9 @@ const Theme = types
 		},
 		setContentBorderColor(value: string) {
 			self.contentBorderColor = value;
+		},
+		setTypographyLinkColor(value: string) {
+			self.typographyLinkColor = value;
 		},
 	}));
 

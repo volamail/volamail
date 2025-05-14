@@ -1,7 +1,7 @@
 import verificationOtpTemplate from "@/modules/internal-templates/verification-otp.html?raw";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { APIError } from "better-auth/api";
+import { APIError, createAuthMiddleware } from "better-auth/api";
 import { emailOTP } from "better-auth/plugins";
 import { eq } from "drizzle-orm";
 import { Resource } from "sst";

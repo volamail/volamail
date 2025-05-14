@@ -87,12 +87,14 @@ export function TextBubbleMenu(props: Props) {
 		from,
 		to,
 		view,
+		element,
 	}: {
 		editor: Editor;
 		view: EditorView;
 		state: EditorState;
 		from: number;
 		to: number;
+		element: HTMLElement;
 	}) {
 		const { doc, selection } = state;
 		const { empty } = selection;
@@ -100,20 +102,19 @@ export function TextBubbleMenu(props: Props) {
 		const isEmptyTextBlock =
 			!doc.textBetween(from, to).length && isTextSelection(state.selection);
 
-		const isChildOfMenu = this.element.contains(document.activeElement);
+		const isChildOfMenu = element.contains(document.activeElement);
 
 		const hasEditorFocus = view.hasFocus() || isChildOfMenu;
 
-		if (
-			!hasEditorFocus ||
-			empty ||
-			isEmptyTextBlock ||
-			!this.editor.isEditable
-		) {
+		if (!hasEditorFocus || empty || isEmptyTextBlock || !editor.isEditable) {
 			return false;
 		}
 
-		return !editor.isActive("horizontalRule") && !editor.isActive("image");
+		return (
+			!editor.isActive("horizontalRule") &&
+			!editor.isActive("image") &&
+			!editor.isActive("button")
+		);
 	}
 
 	return (

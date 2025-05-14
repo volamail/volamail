@@ -1,9 +1,22 @@
-body {
+.root {
   margin: 0;
-  padding: 2em;
-  padding-top: 1em;
+  padding: 3em 2em;
   font-family: "Helvetica", sans-serif;
   font-size: 16px;
+  color: black;
+  background-color: var(--background);
+}
+
+.content {
+  outline: none;
+  max-width: var(--content-max-width);
+  width: 100%;
+  overflow: hidden;
+  margin: 0 auto;
+  border-radius: var(--content-border-radius);
+  border-width: var(--content-border-width);
+  border-style: solid;
+  border-color: var(--content-border-color);
 }
 
 strong {
@@ -276,4 +289,16 @@ h4 + * {
 small {
   color: #a1a1aa;
   font-size: 0.9em;
+}
+
+a {
+  color: var(--typography-link-color);
+  font-weight: bold;
+}
+
+a[data-button="true"] {
+  text-decoration: none;
+  padding: 0.5em 1em;
+  border-radius: 8px;
+  background-color: #ff0000;
 }

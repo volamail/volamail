@@ -4,7 +4,7 @@ import { Node } from "@tiptap/pm/model";
 import { renderToString } from "react-dom/server";
 import { getExtensionsFromTheme } from "./extensions";
 import css from "./template-styles.css?raw";
-import type { Theme } from "./theme";
+import { type Theme, compileTemplateStyles } from "./theme";
 
 export function renderTemplateToHtml(template: {
 	contents: JSONContent;
@@ -21,23 +21,20 @@ export function renderTemplateToHtml(template: {
 
 	contents = contents.replace(P_REGEX, "$1<br>$4");
 
+	const renderedCss = compileTemplateStyles(css, theme);
+
 	return renderToString(
 		<html lang="en">
 			<head>
-				<meta charSet="UTF-8" />
+`				<meta charSet="UTF-8" />
 				<meta httpEquiv="X-UA-Compatible" content="IE=edge" />
 				<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-				<meta name="color-scheme" content="light" />
+				<meta name="color-scheme" content="light" />`
 
 				{/* biome-ignore lint/security/noDangerouslySetInnerHtml: fuck off*/}
-				<style dangerouslySetInnerHTML={{ __html: css }} />
+				<style dangerouslySetInnerHTML={{ __html: renderedCss }} />
 			</head>
-			<body
-				style={{
-					backgroundColor: theme.background,
-					padding: "1em",
-				}}
-			>
+			<body className="root">
 				<table
 					width="100%"
 					cellPadding={0}
@@ -51,13 +48,14 @@ export function renderTemplateToHtml(template: {
 									align="center"
 									cellPadding={0}
 									cellSpacing={0}
-									style={{
-										maxWidth: `${theme.contentMaxWidth}px`,
-										width: "100%",
-										border: `${theme.contentBorderWidth}px solid ${theme.contentBorderColor}`,
-										borderRadius: `${theme.contentBorderRadius}px`,
-										overflow: "hidden",
-									}}
+									className="content"
+									// style={{
+									// 	maxWidth: `${theme.contentMaxWidth}px`,
+									// 	width: "100%",
+									// 	border: `${theme.contentBorderWidth}px solid ${theme.contentBorderColor}`,
+									// 	borderRadius: `${theme.contentBorderRadius}px`,
+									// 	overflow: "hidden",
+									// }}
 								>
 									<tbody>
 										<tr>

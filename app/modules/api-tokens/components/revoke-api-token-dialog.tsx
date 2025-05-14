@@ -25,7 +25,15 @@ export function RevokeApiTokenDialog(props: Props) {
 	const queryClient = useQueryClient();
 
 	const mutation = useMutation({
-		mutationFn: revokeApiTokenFn,
+		mutationFn() {
+			return revokeApiTokenFn({
+				data: {
+					teamId: props.teamId,
+					projectId: props.projectId,
+					tokenId: props.tokenId,
+				},
+			});
+		},
 		async onSuccess() {
 			await queryClient.invalidateQueries({
 				queryKey: projectApiTokensQueryOptions(props.teamId, props.projectId)
@@ -67,15 +75,7 @@ export function RevokeApiTokenDialog(props: Props) {
 					<Button
 						color="red"
 						loading={mutation.isPending}
-						onClick={() =>
-							mutation.mutate({
-								data: {
-									teamId: props.teamId,
-									projectId: props.projectId,
-									tokenId: props.tokenId,
-								},
-							})
-						}
+						onClick={() => mutation.mutate()}
 					>
 						Revoke token
 					</Button>

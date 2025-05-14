@@ -1,18 +1,15 @@
-export type Theme = {
-  background: string;
-  contentMaxWidth: number;
-  contentBorderRadius: number;
-  contentBorderWidth: number;
-  contentBorderColor: string;
-};
+import { logger } from "../logger";
 
-export const DEFAULT_THEME: Theme = {
+export const DEFAULT_THEME = {
   background: "#EEEEEE",
   contentMaxWidth: 576,
   contentBorderRadius: 8,
   contentBorderWidth: 1,
   contentBorderColor: "#D1D5DB",
+  typographyLinkColor: "#0069a8",
 };
+
+export type Theme = typeof DEFAULT_THEME;
 
 export const CONTENT_MAX_WIDTH_OPTIONS = [320, 384, 448, 512, 576, 672, 768];
 
@@ -23,25 +20,56 @@ export const CONTENT_BORDER_RADIUS_OPTIONS = [
 export const CONTENT_BORDER_WIDTH_OPTIONS = [0, 1, 2, 3, 4, 8];
 
 const THEME_VARIABLES_MAP: Record<keyof Theme, string> = {
-  background: "--page-background",
+  background: "--background",
   contentMaxWidth: "--content-max-width",
   contentBorderRadius: "--content-border-radius",
   contentBorderWidth: "--content-border-width",
   contentBorderColor: "--content-border-color",
+  typographyLinkColor: "--typography-link-color",
 };
 
-export function getEditorContainerStyle(theme: Theme) {
-  return {
-    background: theme.background,
-    [THEME_VARIABLES_MAP.contentMaxWidth]: `${theme.contentMaxWidth}px`,
-    [THEME_VARIABLES_MAP.contentBorderRadius]: `${theme.contentBorderRadius}px`,
-    [THEME_VARIABLES_MAP.contentBorderWidth]: `${theme.contentBorderWidth}px`,
-    [THEME_VARIABLES_MAP.contentBorderColor]: theme.contentBorderColor,
-  };
+export function getEditorStyleVariables(theme: Theme) {
+  return Object.entries(theme).reduce(
+    (acc, [key, value]) => {
+      const variable = THEME_VARIABLES_MAP[key as keyof Theme];
+
+      acc[variable] = renderThemeVariable(value);
+
+      return acc;
+    },
+    {} as Record<string, string>
+  );
 }
 
-export const EDITOR_STYLE_VARIABLES = `
-	border-radius: var(${THEME_VARIABLES_MAP.contentBorderRadius});
-	border: var(${THEME_VARIABLES_MAP.contentBorderWidth}) solid var(${THEME_VARIABLES_MAP.contentBorderColor});
-	max-width: var(${THEME_VARIABLES_MAP.contentMaxWidth});
-`;
+export function compileTemplateStyles(styles: string, theme: Theme) {
+  let output = styles;
+
+  const matches = [...styles.matchAll(/var\((--(\w|-)+)\)/g)];
+
+  for (const match of matches) {
+    const variable = match[1];
+    const key = variable
+      .slice(2)
+      .split("-")
+      .map((part, i) =>
+        i > 0 ? part.charAt(0).toUpperCase() + part.slice(1) : part
+      )
+      .join("") as keyof Theme;
+
+    if (!theme[key]) {
+      logger.warn(`Theme variable ${variable} not found`);
+    }
+
+    output = output.replace(match[0], renderThemeVariable(theme[key]));
+  }
+
+  return output;
+}
+
+function renderThemeVariable(value: string | number) {
+  if (typeof value === "number") {
+    return `${value}px`;
+  }
+
+  return value;
+}
