@@ -10,7 +10,7 @@
     "lint": "biome lint ./app"
   },
   "dependencies": {
-    "@ark-ui/react": "^4.9.1",
+    "@ark-ui/react": "^5.0.0",
     "@aws-sdk/client-ses": "^3.750.0",
     "@aws-sdk/client-sesv2": "^3.750.0",
     "@hookform/resolvers": "^3.10.0",
